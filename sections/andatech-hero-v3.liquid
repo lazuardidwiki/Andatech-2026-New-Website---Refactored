@@ -73,26 +73,27 @@
       <div class="at-hero-v3__inner">
 
         <div class="at-hero-v3__bottom">
-          <div class="at-hero-v3__bottom-left">
-            {%- if section.settings.eyebrow != blank -%}
-              <h1 class="at-hero-v3__eyebrow">{{ section.settings.eyebrow | escape }}</h1>
-            {%- endif -%}
+          {%- if section.settings.eyebrow != blank -%}
+            <h1 class="at-hero-v3__eyebrow">{{ section.settings.eyebrow | escape }}</h1>
+          {%- endif -%}
 
-            {%- if section.settings.heading != blank or section.settings.heading_accent != blank -%}
-              <h2 class="at-hero-v3__title">
-                {%- if section.settings.heading != blank -%}
-                  {{ section.settings.heading | escape }}
-                {%- endif -%}
-                {%- if section.settings.heading_accent != blank -%}
-                  {% if section.settings.heading != blank %} {% endif %}<span class="at-hero-v3__title-accent">{{ section.settings.heading_accent | escape }}</span>
-                {%- endif -%}
-              </h2>
-            {%- endif -%}
+          {%- if section.settings.heading != blank or section.settings.heading_accent != blank -%}
+            <h2 class="at-hero-v3__title">
+              {%- if section.settings.heading != blank -%}
+                {{ section.settings.heading | escape }}
+              {%- endif -%}
+              {%- if section.settings.heading_accent != blank -%}
+                {% if section.settings.heading != blank %} {% endif %}<span class="at-hero-v3__title-accent">{{ section.settings.heading_accent | escape }}</span>
+              {%- endif -%}
+            </h2>
+          {%- endif -%}
 
-            {%- if section.settings.body != blank -%}
-              <div class="at-hero-v3__body">{{ section.settings.body }}</div>
-            {%- endif -%}
+          {%- if section.settings.body != blank -%}
+            <div class="at-hero-v3__body">{{ section.settings.body }}</div>
+          {%- endif -%}
 
+          {%- comment -%} ── Actions row: CTAs (left) + certs (right), same eye level ── {%- endcomment -%}
+          <div class="at-hero-v3__actions">
             {%- if section.settings.cta1_label != blank or section.settings.cta2_label != blank -%}
               <div class="at-hero-v3__cta">
                 {%- if section.settings.cta1_label != blank -%}
@@ -110,17 +111,17 @@
                 {%- endif -%}
               </div>
             {%- endif -%}
-          </div>
 
-          {%- if certs != blank -%}
-            <img
-              class="at-hero-v3__certs"
-              src="{{ certs | image_url: width: 800 }}"
-              alt="{{ certs_alt | default: certs.alt | escape }}"
-              width="{{ certs.width }}"
-              height="{{ certs.height }}"
-              loading="lazy">
-          {%- endif -%}
+            {%- if certs != blank -%}
+              <img
+                class="at-hero-v3__certs"
+                src="{{ certs | image_url: width: 800 }}"
+                alt="{{ certs_alt | default: certs.alt | escape }}"
+                width="{{ certs.width }}"
+                height="{{ certs.height }}"
+                loading="lazy">
+            {%- endif -%}
+          </div>
         </div>
 
       </div>

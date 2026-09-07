@@ -71,19 +71,28 @@
   grid-template-rows: 1fr auto;
 }
 
-/* Bottom block: full copy stack on the left, certs pinned bottom-right */
+/* Bottom block: single column stack — eyebrow → heading → body → actions row.
+   Full card width so the actions row inside can push the certs to the right edge. */
 .at-hero-v3__bottom {
   grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Copy items keep their own readable widths, left-aligned to the card edge. */
+.at-hero-v3__bottom > .at-hero-v3__eyebrow,
+.at-hero-v3__bottom > .at-hero-v3__title { max-width: 900px; }
+
+/* Actions row: CTAs on the left, certs pinned to the right edge, vertically
+   centred so both sit on the same eye level regardless of certs height.
+   Extra top margin gives the body a bit more breathing room from the CTAs. */
+.at-hero-v3__actions {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 40px;
-}
-.at-hero-v3__bottom-left {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  max-width: 900px;
+  margin-top: 16px;
 }
 
 /* ── Typography ─────────────────────────────────────────── */
@@ -143,7 +152,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-  margin-top: 16px;
 }
 .at-hero-v3__cta .at-btn:focus-visible {
   outline: 3px solid var(--at-white);
@@ -190,15 +198,18 @@
     text-align: center;
   }
   .at-hero-v3__bottom {
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+  }
+  .at-hero-v3__bottom > .at-hero-v3__eyebrow,
+  .at-hero-v3__bottom > .at-hero-v3__title { max-width: none; }
+  /* Actions row stacks on mobile: CTAs on top, certs below (per spec). */
+  .at-hero-v3__actions {
     flex-direction: column;
     align-items: center;
-    gap: 24px;
-  }
-  .at-hero-v3__bottom-left {
-    max-width: none;
-    align-items: center;
     width: 100%;
-    gap: 20px;
+    gap: 24px;
   }
   .at-hero-v3__body { max-width: none; margin-inline: auto; }
   .at-hero-v3__cta { justify-content: center; }
