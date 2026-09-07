@@ -7,8 +7,10 @@
 
 <section{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handle }}"{% endif %} class="at-solutions{% if section.settings.heading_align == 'center' %} at-solutions--heading-center{% endif %}">
   <div class="at-shell">
-    {%- if section.settings.eyebrow != blank -%}<p class="at-solutions__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
-    <h2 class="at-solutions__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>
+    {%- assign eyebrow_tag = section.settings.eyebrow_tag | default: 'h2' -%}
+    {%- assign heading_tag = section.settings.heading_tag | default: 'h3' -%}
+    {%- if section.settings.eyebrow != blank -%}<{{ eyebrow_tag }} class="at-solutions__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</{{ eyebrow_tag }}>{%- endif -%}
+    <{{ heading_tag }} class="at-solutions__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</{{ heading_tag }}>
     <div class="at-solutions__meta" data-at-rise>
       {%- if section.settings.desc != blank -%}<div class="at-solutions__desc">{{ section.settings.desc }}</div>{%- endif -%}
       {%- if section.settings.link_label != blank -%}<a class="at-solutions__view-all" href="{{ section.settings.link_url | default: '#' }}">{{ section.settings.link_label | escape }} <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 8 16 16M16 16V9.8M16 16H9.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>{%- endif -%}
@@ -90,7 +92,25 @@
     { "type": "select", "id": "heading_align", "label": "Heading alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Centre" }], "default": "left" },
     { "type": "text", "id": "anchor_id", "label": "Optional section anchor", "info": "Example: all-solutions. Leave blank to preserve the existing markup." },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "How We Solve It" },
+    { "type": "select", "id": "eyebrow_tag", "label": "Eyebrow HTML Tag", "options": [
+      { "value": "p",  "label": "Paragraph (p)" },
+      { "value": "h1", "label": "Heading 1 (h1)" },
+      { "value": "h2", "label": "Heading 2 (h2)" },
+      { "value": "h3", "label": "Heading 3 (h3)" },
+      { "value": "h4", "label": "Heading 4 (h4)" },
+      { "value": "h5", "label": "Heading 5 (h5)" },
+      { "value": "h6", "label": "Heading 6 (h6)" }
+    ], "default": "h2" },
     { "type": "text", "id": "heading", "label": "Heading (light)", "default": "We start with the problem," },
+    { "type": "select", "id": "heading_tag", "label": "Heading HTML Tag", "options": [
+      { "value": "p",  "label": "Paragraph (p)" },
+      { "value": "h1", "label": "Heading 1 (h1)" },
+      { "value": "h2", "label": "Heading 2 (h2)" },
+      { "value": "h3", "label": "Heading 3 (h3)" },
+      { "value": "h4", "label": "Heading 4 (h4)" },
+      { "value": "h5", "label": "Heading 5 (h5)" },
+      { "value": "h6", "label": "Heading 6 (h6)" }
+    ], "default": "h3" },
     { "type": "text", "id": "heading_bold", "label": "Heading (bold)", "default": "not the product." },
     { "type": "richtext", "id": "desc", "label": "Description", "default": "<p>Tell us what you need to control and we'll shape the program around it — equipment included.</p>" },
     { "type": "text", "id": "link_label", "label": "Link label", "default": "View all solutions" },

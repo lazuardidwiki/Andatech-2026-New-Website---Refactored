@@ -10,13 +10,18 @@
     </div>
   {%- endif -%}
   <div class="at-shell">
-    {%- if section.settings.eyebrow != blank -%}<p class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
-    <h2 class="at-industry__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>
+    {%- assign eyebrow_tag = section.settings.eyebrow_tag | default: 'h2' -%}
+    {%- assign heading_tag = section.settings.heading_tag | default: 'h3' -%}
+    {%- assign substances_heading_tag = section.settings.substances_heading_tag | default: 'h4' -%}
+    {%- assign screen_heading_tag = section.settings.screen_heading_tag | default: 'h4' -%}
+    {%- assign confirm_heading_tag = section.settings.confirm_heading_tag | default: 'h4' -%}
+    {%- if section.settings.eyebrow != blank -%}<{{ eyebrow_tag }} class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</{{ eyebrow_tag }}>{%- endif -%}
+    <{{ heading_tag }} class="at-industry__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</{{ heading_tag }}>
     {%- if section.settings.desc != blank -%}<div class="at-industry__desc" data-at-rise>{{ section.settings.desc }}</div>{%- endif -%}
 
     <div class="at-testing-pathway__layout">
       <div class="at-testing-pathway__substances" data-at-rise>
-        <h3>{{ section.settings.substances_heading | escape }}</h3>
+        <{{ substances_heading_tag }}>{{ section.settings.substances_heading | escape }}</{{ substances_heading_tag }}>
         <div class="at-testing-pathway__chips">
           {%- for block in section.blocks -%}<span {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</span>{%- endfor -%}
         </div>
@@ -26,7 +31,7 @@
       <div class="at-testing-pathway__flow" data-at-rise>
         <article>
           <span>01</span>
-          <div><h3>{{ section.settings.screen_heading | escape }}</h3>{{ section.settings.screen_desc }}</div>
+          <div><{{ screen_heading_tag }}>{{ section.settings.screen_heading | escape }}</{{ screen_heading_tag }}>{{ section.settings.screen_desc }}</div>
         </article>
         <i aria-hidden="true">↓</i>
         <article>
