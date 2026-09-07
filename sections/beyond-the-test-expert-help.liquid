@@ -1,0 +1,150 @@
+<section class="btt-expert" id="expert-help">
+  <div class="btt-expert__inner">
+
+    <div class="btt-expert__header">
+      <p class="btt-expert__eyebrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        {{ section.settings.eyebrow | default: "Prefer to talk it through?" }}
+      </p>
+      <h2 class="btt-expert__heading">{{ section.settings.heading | default: "Get Expert Help" }}</h2>
+      <p class="btt-expert__sub">{{ section.settings.subtext | default: "Every workplace is different. Send us a few details and one of our compliance specialists will get back to you with tailored guidance — no sales pitch, just practical advice." }}</p>
+    </div>
+
+    <div class="btt-expert__grid">
+
+      <div class="btt-expert__form-wrap">
+        <form
+          id="btt-expert-form"
+          data-portal-id="{{ section.settings.hubspot_portal_id | default: '7005767' }}"
+          data-form-guid="{{ section.settings.hubspot_form_guid | default: 'a309f209-34dc-43ce-9341-892ba33c0090' }}">
+
+          <div class="btt-expert__success" id="btt-expert-success" hidden>
+            <span class="btt-expert__success-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+            </span>
+            <div>
+              <p class="btt-expert__success-title">{{ section.settings.success_title | default: "Thanks — we've got it." }}</p>
+              <p class="btt-expert__success-body">{{ section.settings.success_body | default: "One of our specialists will be in touch within one business day." }}</p>
+            </div>
+          </div>
+
+          <div class="btt-expert__error" id="btt-expert-error" hidden>
+            <p id="btt-expert-error-text">Something went wrong — please try again.</p>
+          </div>
+
+          <div id="btt-expert-fields">
+            <div class="btt-expert__field-row">
+              <div class="btt-expert__field">
+                <label for="ExpertFirstName">First name</label>
+                <input type="text" id="ExpertFirstName" name="firstname" placeholder="Jane" autocomplete="given-name" required>
+              </div>
+              <div class="btt-expert__field">
+                <label for="ExpertLastName">Last name</label>
+                <input type="text" id="ExpertLastName" name="lastname" placeholder="Smith" autocomplete="family-name" required>
+              </div>
+            </div>
+
+            <div class="btt-expert__field-row">
+              <div class="btt-expert__field">
+                <label for="ExpertEmail">Work email</label>
+                <input type="email" id="ExpertEmail" name="email" placeholder="jane@company.com.au" autocomplete="email" required>
+              </div>
+              <div class="btt-expert__field">
+                <label for="ExpertCompany">Company</label>
+                <input type="text" id="ExpertCompany" name="company" placeholder="Company name" autocomplete="organization">
+              </div>
+            </div>
+
+            <div class="btt-expert__field">
+              <label for="ExpertIndustry">Industry</label>
+              <select id="ExpertIndustry" name="industry">
+                <option value="">Select industry</option>
+                <option value="Mining">Mining</option>
+                <option value="Construction">Construction</option>
+                <option value="Transport">Transport</option>
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="btt-expert__field btt-expert__field--message">
+              <label for="ExpertMessage">How can we help?</label>
+              <textarea
+                id="ExpertMessage" name="message" rows="4"
+                placeholder="Tell us a bit about your workplace and what you're trying to solve."
+                required></textarea>
+            </div>
+
+            <button type="submit" class="btt-btn btt-btn--primary btt-btn--specular btt-expert__submit">
+              <span class="btt-expert__submit-label">{{ section.settings.submit_label | default: "Send My Enquiry" }}</span>
+              <span class="btt-btn__icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4l7 8-7 8"/></svg>
+              </span>
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+      <div class="btt-expert__panel">
+        <div class="btt-expert__panel-head">
+          <span>{{ section.settings.panel_title | default: "Our Compliance Specialists" }}</span>
+          <span class="btt-expert__badge">{{ section.settings.panel_badge | default: "Reply within 1 business day" }}</span>
+        </div>
+        <div class="btt-expert__list">
+          {% for block in section.blocks %}
+            {% if block.type == 'expert' %}
+              <div class="btt-expert__item" {{ block.shopify_attributes }}>
+                <span class="btt-expert__avatar">
+                  {% if block.settings.photo %}
+                    <img src="{{ block.settings.photo | image_url: width: 88 }}" alt="" width="44" height="44" loading="lazy">
+                  {% else %}
+                    {{ block.settings.initials | default: "?" }}
+                  {% endif %}
+                </span>
+                <div>
+                  <div class="btt-expert__name">{{ block.settings.name }}</div>
+                  <div class="btt-expert__focus">{{ block.settings.focus }}</div>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "BTT Expert Help",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow text", "default": "Prefer to talk it through?" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Get Expert Help" },
+    { "type": "textarea", "id": "subtext", "label": "Subtext" },
+    { "type": "text", "id": "panel_title", "label": "Panel title", "default": "Our Compliance Specialists" },
+    { "type": "text", "id": "panel_badge", "label": "Panel badge text", "default": "Reply within 1 business day" },
+    { "type": "text", "id": "submit_label", "label": "Submit button label", "default": "Send My Enquiry" },
+    { "type": "text", "id": "success_title", "label": "Success title", "default": "Thanks — we've got it." },
+    { "type": "textarea", "id": "success_body", "label": "Success body" },
+    { "type": "header", "content": "HubSpot" },
+    { "type": "text", "id": "hubspot_portal_id", "label": "HubSpot Portal ID", "default": "7005767" },
+    { "type": "text", "id": "hubspot_form_guid", "label": "HubSpot Form GUID", "default": "a309f209-34dc-43ce-9341-892ba33c0090", "info": "This form's own GUID — different from the Resource Library download form." }
+  ],
+  "blocks": [
+    {
+      "type": "expert",
+      "name": "Expert",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name" },
+        { "type": "image_picker", "id": "photo", "label": "Photo (optional)", "info": "Overrides the initials avatar below if set." },
+        { "type": "text", "id": "initials", "label": "Avatar initials", "info": "e.g. \"SC\" for Sarah Chen" },
+        { "type": "text", "id": "focus", "label": "Focus / specialty" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "BTT Expert Help" }]
+}
+{% endschema %}

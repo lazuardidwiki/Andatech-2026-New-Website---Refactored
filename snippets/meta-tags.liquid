@@ -1,0 +1,114 @@
+{%- if canonical_url="*seq=uniform" -%}
+  <meta name="robots" content="noindex, nofollow">
+{%- endif -%} 
+    
+{% if handle contains 'seq=uniform' %}
+  <meta name="robots" content="noindex, nofollow">
+{% endif %}
+
+{%- if request.path == '/collections/vendors' -%}
+  <meta name="robots" content="noindex">
+{%- endif -%}
+
+{% if request.path contains 'blogs/press-releases/tagged' %}
+  <link rel="canonical" href="https://andatech.com.au/blogs/press-releases">
+{% elsif request.path contains 'blogs/resources/tagged' %}
+  <link rel="canonical" href="https://andatech.com.au/blogs/resources">
+{% else %}
+  <link rel="canonical" href="{{ canonical_url }}">
+{% endif %}
+
+<script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": {{ shop.name | json }},
+    {% if settings.logo %}
+      "logo": {{ settings.logo | image_url: width: 500 | prepend: "https:" | json }},
+    {% endif %}
+    "sameAs": [
+      {{ settings.social_twitter_link | json }},
+      {{ settings.social_facebook_link | json }},
+      {{ settings.social_pinterest_link | json }},
+      {{ settings.social_instagram_link | json }},
+      {{ settings.social_tiktok_link | json }},
+      {{ settings.social_tumblr_link | json }},
+      {{ settings.social_snapchat_link | json }},
+      {{ settings.social_youtube_link | json }},
+      {{ settings.social_vimeo_link | json }}
+    ],
+    "url": {{ request.origin | append: page.url | json }},
+     "contactPoint": [{
+      "@type": "ContactPoint",
+      "telephone": "+61388996900",
+      "contactType": "customer service",
+      "areaServed": ["AU","NZ"],
+      "availableLanguage": "en"
+    },{
+      "@type": "ContactPoint",
+      "telephone": "1300800200",
+      "contactType": "customer service",
+      "contactOption": "TollFree",
+      "areaServed": "AU",
+      "availableLanguage": "en"
+    },{
+      "@type": "ContactPoint",
+      "telephone": "+61388204100",
+      "contactType": "sales",
+      "areaServed": "AU",
+      "availableLanguage": "en"
+    }]
+  },
+  {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Andatech",
+  "image": "https://cdn.shopify.com/s/files/1/0241/5850/2976/files/andatech-vermont-office-australia.webp?v=1686274475",
+  "url": "https://andatech.com.au/",
+  "telephone": "+61388996900",
+  "priceRange": "$19 to $3500",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "9 Trade Place",
+    "addressLocality": "Vermont",
+    "addressRegion": "VIC",
+    "postalCode": "3133",
+    "addressCountry": "AU"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": -37.8351001,
+    "longitude": 145.1865783
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ],
+    "opens": "09:00",
+    "closes": "17:30"
+  } 
+}]
+</script>
+
+{%- if request.page_type == 'index' -%}
+  {% assign potential_action_target = request.origin | append: routes.search_url | append: "?q={search_term_string}" %}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {{ potential_action_target | json }},
+        "query-input": "required name=search_term_string"
+      },
+      "url": {{ request.origin | append: page.url | json }}
+    }
+  </script>
+{%- endif -%}
+

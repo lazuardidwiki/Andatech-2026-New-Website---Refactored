@@ -1,0 +1,100 @@
+<section class="kby-steps" id="how-it-works">
+  <div class="kby-steps__wrap">
+
+    <div class="kby-steps__intro">
+      <div class="kby-steps__head">
+        <span class="kby-solve__kicker">{{ section.settings.kicker | default: "How it works" }}</span>
+        <h2 class="kby-solve__title">
+          <span class="kby-solve__title-line kby-solve__title-line--regular">{{ section.settings.heading_line_1 | default: "Four steps to your" }}</span>
+          <span class="kby-solve__title-line kby-solve__title-line--bold">{{ section.settings.heading_line_2 | default: "discount and giveaway entry" }}</span>
+        </h2>
+        <p class="kby-steps__desc">{{ section.settings.description | default: "From purchase to payout, here's exactly what happens at each stage — and what you need to do to lock in your discount and your shot at the giveaway." }}</p>
+      </div>
+
+      <div class="kby-promo">
+        <p class="kby-promo__label">Promo code</p>
+        <div class="kby-promo__code">
+          <span>{{ section.settings.promo_code | default: "KNOWBEFOREYOUGO" }}</span>
+          <button type="button" class="kby-promo__copy" id="kby-copy-code" data-code="{{ section.settings.promo_code | default: "KNOWBEFOREYOUGO" }}">Copy code</button>
+        </div>
+        <p class="kby-promo__fine">{{ section.settings.promo_note | default: "Applies 10% OFF personal breathalysers at checkout." }}</p>
+      </div>
+    </div>
+
+    <div class="kby-steps__list">
+      {% for block in section.blocks %}
+        <div class="kby-step{% if forloop.first %} is-active{% endif %}" data-kby-step {{ block.shopify_attributes }}>
+          <button type="button" class="kby-step__row" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}">
+            <span class="kby-step__num">{{ forloop.index }}</span>
+            <span class="kby-step__title">{{ block.settings.title | default: "Step" }}</span>
+            <span class="kby-step__chevron" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </button>
+          <div class="kby-step__panel">
+            <div class="kby-step__panel-inner">
+              {%- comment -%}
+                Body copy and the optional link are independent, not
+                either/or — the bug was that a step with both set (Register)
+                only ever rendered the link, silently dropping the body copy.
+              {%- endcomment -%}
+              {%- if block.settings.body != blank -%}
+                <p>{{ block.settings.body }}</p>
+              {%- endif -%}
+              {%- if block.settings.link_text != blank and block.settings.link_url != blank -%}
+                <a href="{{ block.settings.link_url }}" class="kby-solve__cta">
+                  {{ block.settings.link_text }}
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KBYG How It Works",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker" },
+    { "type": "text", "id": "heading_line_1", "label": "Heading — line 1 (regular weight)" },
+    { "type": "text", "id": "heading_line_2", "label": "Heading — line 2 (bold weight)" },
+    { "type": "textarea", "id": "description", "label": "Description" },
+    { "type": "text", "id": "promo_code", "label": "Promo code" },
+    { "type": "text", "id": "promo_note", "label": "Promo note" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "body", "label": "Body copy (optional)" },
+        { "type": "text", "id": "link_text", "label": "Link text (optional, shows alongside body copy)" },
+        { "type": "url", "id": "link_url", "label": "Link URL (optional)" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "default": {
+    "blocks": [
+      { "type": "step", "settings": { "title": "Purchase", "body": "Buy any eligible personal breathalyser unit from andatech.com.au or an approved retailer." } },
+      {
+        "type": "step",
+        "settings": {
+          "title": "Register",
+          "body": "Head to our device registration page and enter your serial number — it only takes a minute, and it's what unlocks calibration reminders and warranty tracking for your unit.",
+          "link_text": "Register your device \u2192",
+          "link_url": "#TBD-device-registration-platform"
+        }
+      },
+      { "type": "step", "settings": { "title": "Claim 10% OFF", "body": "Use the voucher code at checkout on andatech.com.au to take 10% off your personal breathalyser." } },
+      { "type": "step", "settings": { "title": "Win", "body": "Registering your device automatically enters you into this month's draw for one of three $500 live music experiences." } }
+    ]
+  }
+}
+{% endschema %}

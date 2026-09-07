@@ -1,0 +1,338 @@
+/* =====================================================
+   Beyond The Test™ — Knowledge Hub
+   ===================================================== */
+
+.btt-know{
+  background:transparent;
+  padding:100px 48px 80px;
+  position:relative;
+  z-index:1;
+}
+
+/* ===== Header ===== */
+.btt-know__header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:32px;
+  margin-bottom:40px;
+}
+.btt-know__heading{
+  font-family:'Titillium Web',sans-serif;
+  font-size:42px; font-weight:700;
+  color:#111820; line-height:1.15; margin:0 0 10px;
+}
+.btt-know__sub{
+  font-size:16px; color:rgba(17,24,32,.65); line-height:1.6; margin:0;
+}
+
+/* Tab pills */
+.btt-know__tabs{
+  display:flex; gap:8px; flex-shrink:0; padding-top:8px;
+  position:relative; z-index:10;
+}
+.btt-know__tab{
+  background:transparent;
+  border:1.5px solid rgba(17,24,32,.2);
+  border-radius:9999px;
+  padding:8px 20px;
+  font-family:'Titillium Web',sans-serif;
+  font-size:14px; font-weight:600; color:rgba(17,24,32,.65);
+  cursor:pointer;
+  transition:background .2s ease, color .2s ease, border-color .2s ease;
+  white-space:nowrap;
+}
+.btt-know__tab.is-active{
+  background:#95C11F; color:#1F2937; border-color:#95C11F;
+}
+
+/* ===== Bento grid ===== */
+.btt-know__grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  grid-template-rows:280px 200px;
+  gap:14px;
+}
+
+/* Card 1 — featured, spans 2 rows */
+.btt-know__card--1{
+  grid-column:1;
+  grid-row:1/3;
+}
+
+/* Card 2 — top centre */
+.btt-know__card--2{
+  grid-column:2;
+  grid-row:1;
+}
+
+/* Card 3 — top right */
+.btt-know__card--3{
+  grid-column:3;
+  grid-row:1;
+}
+
+/* Card 4 — bottom, spans 2 cols */
+.btt-know__card--4{
+  grid-column:2/4;
+  grid-row:2;
+}
+
+/* ===== Card base ===== */
+/* Outer: no overflow:hidden so filter:drop-shadow shows fully */
+.btt-know__card{
+  position:relative;
+  border-radius:20px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  text-decoration:none;
+  cursor:pointer;
+  transform-style:preserve-3d;
+  transition:transform .15s ease-out, filter .25s ease;
+  filter:drop-shadow(0 6px 20px rgba(17,24,32,.18));
+  will-change:transform;
+}
+@media (max-width:640px){
+  .btt-know__card:hover{ filter:none; }
+}
+.btt-know__card.is-tilting{ transition:none; }
+
+/* Inner: handles overflow:hidden, photo bg, overlay */
+.btt-know__card-inner{
+  position:absolute; inset:0;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);
+  transition:box-shadow .2s ease;
+  background-color:#1F2937;
+  background-image:var(--card-bg);
+  background-size:cover;
+  background-position:center;
+  z-index:0;
+  pointer-events:none;
+}
+
+/* Spotlight effect following cursor */
+.btt-know__card-spotlight {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--sx,50%) var(--sy,50%), rgba(255,255,255,.15) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity .3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Navy gradient overlay */
+.btt-know__card-overlay{
+  position:absolute; inset:0;
+  border-radius:20px;
+  background:linear-gradient(
+    170deg,
+    rgba(17,24,32,.15) 0%,
+    rgba(17,24,32,.6) 45%,
+    rgba(17,24,32,.93) 100%
+  );
+  pointer-events:none;
+  z-index:1;
+}
+
+/* Card layout */
+.btt-know__card-top{
+  position:relative; z-index:2;
+  padding:18px 18px 0;
+}
+.btt-know__card-bottom{
+  position:relative; z-index:2;
+  padding:0 18px 18px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+}
+.btt-know__card-text{ flex:1; min-width:0; }
+
+/* Category badge */
+.btt-know__badge{
+  display:inline-block;
+  font-family:'Titillium Web',sans-serif;
+  font-size:10px; font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase;
+  padding:4px 12px; border-radius:9999px;
+  white-space:nowrap;
+}
+.btt-know__badge--myth{
+  background:rgba(239,68,68,.85); color:#fff;
+}
+.btt-know__badge--update{
+  background:rgba(70,190,196,.85); color:#fff;
+}
+.btt-know__badge--case-study{
+  background:rgba(149,193,31,.9); color:#1F2937;
+}
+
+/* Title + excerpt */
+.btt-know__card-title{
+  font-family:'Titillium Web',sans-serif;
+  font-size:16px; font-weight:700;
+  color:#fff; line-height:1.35; margin:0 0 6px;
+}
+.btt-know__card--1 .btt-know__card-title{ font-size:22px; margin-bottom:10px; }
+.btt-know__card--4 .btt-know__card-title{ font-size:18px; }
+
+.btt-know__card-excerpt{
+  font-size:13px; color:rgba(255,255,255,.72);
+  line-height:1.55; margin:0;
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+/* Footer: read time + arrow */
+.btt-know__card-footer{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:8px;
+  flex-shrink:0;
+}
+.btt-know__read-time{
+  font-size:11px; color:rgba(255,255,255,.55);
+  white-space:nowrap;
+}
+.btt-know__arrow{
+  width:34px; height:34px;
+  border-radius:50%;
+  background:#95C11F;
+  display:flex; align-items:center; justify-content:center;
+  color:#1F2937;
+  transition:background .15s ease, transform .15s ease;
+  flex-shrink:0;
+  overflow:hidden;
+  position:relative;
+}
+.btt-know__arrow svg{ transform:scaleY(-1); }
+.btt-know__arrow::after{
+  content:''; position:absolute; inset:0; border-radius:50%;
+  background:linear-gradient(115deg, transparent 0%, rgba(255,255,255,.5) 50%, transparent 100%);
+  transform:translateX(-100%) skewX(-20deg);
+  transition:transform .5s ease;
+}
+
+/* Card 4 — side-by-side layout on wide card */
+.btt-know__card--4 .btt-know__card-bottom{
+  flex-direction:row; align-items:flex-end;
+}
+
+/* Hidden cards during tab filter */
+.btt-know__card.is-hidden{
+  display:none;
+}
+
+/* ===== Tablet ===== */
+@media (max-width:1024px){
+  .btt-know{ padding:80px 24px; }
+  .btt-know__header{ flex-direction:column; gap:20px; }
+  .btt-know__heading{ font-size:34px; }
+  .btt-know__grid{
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:240px 200px 200px;
+  }
+  .btt-know__card--1{ grid-column:1/3; grid-row:1; }
+  .btt-know__card--2{ grid-column:1; grid-row:2; }
+  .btt-know__card--3{ grid-column:2; grid-row:2; }
+  .btt-know__card--4{ grid-column:1/3; grid-row:3; }
+}
+
+/* ===== Mobile — horizontal scroll ===== */
+@media (max-width:640px){
+  .btt-know{ padding:64px 0 48px; }
+
+  .btt-know__header{
+    padding:0 20px;
+    margin-bottom:28px;
+    flex-direction:column;
+    gap:20px;
+    align-items:flex-start;
+  }
+  .btt-know__heading{ font-size:28px; }
+  /* Tabs: single row, fill container, no wrap */
+  .btt-know__tabs{
+    display:flex;
+    flex-wrap:nowrap;
+    padding:0;
+    gap:8px;
+    width:100%;
+  }
+  .btt-know__tab{
+    flex:1;
+    text-align:center;
+    font-size:13px;
+    padding:6px 14px;
+    white-space:nowrap;
+  }
+
+  .btt-know__grid{
+    display:flex;
+    flex-direction:row;
+    overflow-x:auto;
+    overflow-y:visible;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    gap:12px;
+    padding:12px 20px 28px;
+    scroll-padding-left:20px;
+    scrollbar-width:none;
+    grid-template-columns:unset;
+    grid-template-rows:unset;
+  }
+  .btt-know__grid::-webkit-scrollbar{ display:none; }
+
+  .btt-know__card--1,
+  .btt-know__card--2,
+  .btt-know__card--3,
+  .btt-know__card--4{
+    flex:0 0 82vw;
+    max-width:320px;
+    min-height:240px;
+    height:240px;
+    grid-column:unset;
+    grid-row:unset;
+    scroll-snap-align:start;
+    filter:none;
+    box-shadow:0 6px 24px rgba(17,24,32,.2);
+  }
+  /* Tighter padding on mobile so text has more room */
+  .btt-know__card-top{ padding:14px 14px 0; }
+  .btt-know__card-bottom{ padding:0 14px 14px; }
+}
+
+
+/* =====================================================
+   Hover-only enhancements — gated to real pointer devices.
+   Prevents the mobile "sticky :hover" bug where a tapped
+   card's hover state (shadow lift, spotlight, arrow shine)
+   visually carries over after the tap instead of resetting.
+   ===================================================== */
+@media (hover:hover) and (pointer:fine){
+  .btt-know__tab:not(.is-active):hover{
+    border-color:#111820; color:#111820;
+  }
+  .btt-know__card:hover{
+    filter:drop-shadow(0 12px 32px rgba(17,24,32,.28));
+    transform:translateY(-6px);
+  }
+  .btt-know__card:hover .btt-know__card-inner{ box-shadow:inset 0 0 0 1px #95C11F; }
+  .btt-know__card:hover .btt-know__card-spotlight{ opacity:1; }
+  .btt-know__card:hover .btt-know__arrow::after{
+    transform:translateX(200%) skewX(-20deg);
+  }
+  .btt-know__card:hover .btt-know__arrow{
+    background:#7ba318;
+    transform:scale(1.08);
+  }
+}
+

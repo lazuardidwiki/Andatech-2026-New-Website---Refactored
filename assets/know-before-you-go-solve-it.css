@@ -1,0 +1,103 @@
+/* Full-bleed section — divider lines span the full viewport width edge to
+   edge. Head/row/panel content isn't centered in a max-width box either —
+   same fix as the hero: a centered box's left edge drifts past 48px on
+   wide viewports, so everything here just pads 48px from the true edge
+   instead, to actually line up with the nav and hero. */
+.kby-solve{ padding:80px 0; }
+.kby-solve__head{ padding:0 48px 40px; }
+.kby-solve__kicker{ font-family:'Titillium Web',sans-serif; font-size:12px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--kby-teal); display:block; margin-bottom:8px; }
+.kby-solve__title{ margin:0; }
+.kby-solve__title-line{ display:block; font-family:'Titillium Web',sans-serif; font-size:44px; line-height:1.2; color:var(--kby-ink); }
+.kby-solve__title-line--regular{ font-weight:400; }
+.kby-solve__title-line--bold{ font-weight:700; }
+
+.kby-solve__list{ border-bottom:1px solid var(--kby-border); width:100%; transition:border-color .25s ease; }
+.kby-solve__item{ border-top:1px solid var(--kby-border); transition:border-color .25s ease; }
+
+/* Match the divider lines to the marquee's green during its hover reveal,
+   rather than leaving them a mismatched neutral gray cutting across the
+   green band. Scoped to the hover moment only (not a permanent color
+   change), and skipped on already-expanded rows since the marquee itself
+   doesn't show there either. */
+@media (hover:hover) and (pointer:fine){
+  .kby-solve__item:not(.is-active):hover{ border-top-color:var(--kby-green); }
+  .kby-solve__item:not(.is-active):hover + .kby-solve__item{ border-top-color:var(--kby-green); }
+  .kby-solve__list:has(> .kby-solve__item:last-child:not(.is-active):hover){ border-bottom-color:var(--kby-green); }
+}
+
+.kby-solve__row{
+  position:relative; /* anchors the absolutely-positioned marquee overlay */
+  width:100%; display:block; background:none; border:none; cursor:pointer;
+  padding:0; overflow:hidden;
+}
+.kby-solve__row-inner{
+  position:relative; z-index:1;
+  padding:32px 48px;
+  display:flex; align-items:center; justify-content:space-between;
+  pointer-events:none; /* clicks pass through to the button itself */
+}
+.kby-solve__row-title{
+  font-family:'Titillium Web',sans-serif; font-size:40px; font-weight:300; color:var(--kby-ink);
+}
+.kby-solve__chevron{ color:var(--kby-ink-muted); display:flex; transition:transform .25s ease; }
+.kby-solve__item.is-active .kby-solve__chevron{ transform:rotate(180deg); }
+
+/* ===== Hover marquee (ported from React Bits FlowingMenu) =====
+   Fully off-canvas via translateY, not opacity — this is what actually
+   hides it completely at rest instead of leaving a sliver visible. */
+.kby-solve__marquee{
+  position:absolute; inset:0; z-index:2;
+  overflow:hidden;
+  background:var(--kby-green);
+  transform:translate3d(0, 101%, 0);
+  pointer-events:none;
+}
+.kby-solve__marquee-inner-wrap{ height:100%; width:100%; overflow:hidden; }
+.kby-solve__marquee-inner{
+  display:flex; align-items:center; position:relative; height:100%; width:max-content;
+  will-change:transform;
+}
+.kby-solve__marquee-part{ display:flex; align-items:center; flex-shrink:0; }
+.kby-solve__marquee-part span{
+  font-family:'Titillium Web',sans-serif; font-weight:700; font-size:19px; text-transform:uppercase;
+  color:#16210A; white-space:nowrap; padding:0 16px;
+}
+.kby-solve__marquee-img{
+  width:140px; height:48px; margin:0 16px; border-radius:999px;
+  background-size:cover; background-position:50% 50%; flex-shrink:0;
+}
+
+/* Marquee only on genuinely hoverable pointers — no sticky hover state on
+   touch, and no dead weight animating on devices that will never trigger it. */
+@media not all and (hover:hover) and (pointer:fine){
+  .kby-solve__marquee{ display:none; }
+}
+
+/* ===== Collapsible panel =====
+   JS-driven max-height (element.scrollHeight) rather than a CSS
+   grid-template-rows transition — the fr-unit technique left a visible
+   sliver of the image peeking through on collapsed rows in testing. */
+.kby-solve__panel{ max-height:0; overflow:hidden; transition:max-height .35s ease; }
+.kby-solve__panel-inner{
+  padding:0 48px 32px;
+  display:grid; grid-template-columns:minmax(280px, 480px) 1fr; gap:64px; align-items:center;
+}
+.kby-solve__panel-text p{ font-family:'Titillium Web',sans-serif; font-size:16px; line-height:1.7; color:var(--kby-ink-muted); margin:0 0 14px; }
+.kby-solve__cta{
+  display:inline-flex; align-items:center; gap:6px; font-family:'Titillium Web',sans-serif;
+  font-size:13.5px; font-weight:700; color:var(--kby-teal); text-decoration:none;
+}
+.kby-solve__cta:hover{ text-decoration:underline; }
+.kby-solve__panel-media{ aspect-ratio:21/9; overflow:hidden; border-radius:14px; }
+.kby-solve__panel-media img{ width:100%; height:100%; object-fit:cover; border-radius:14px; display:block; }
+
+@media (max-width:760px){
+  .kby-solve__head{ padding:0 24px 32px; }
+  .kby-solve__title-line{ font-size:30px; }
+  .kby-solve__row-inner{ padding:24px; }
+  .kby-solve__panel-inner{ grid-template-columns:1fr; padding:0 24px 24px; }
+  .kby-solve__row-title{ font-size:26px; }
+  .kby-solve__marquee-part span{ font-size:16px; }
+  .kby-solve__marquee-img{ width:100px; height:36px; }
+  .kby-solve__panel-media{ aspect-ratio:16/9; }
+}

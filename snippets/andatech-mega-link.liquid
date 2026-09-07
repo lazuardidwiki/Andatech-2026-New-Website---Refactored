@@ -1,0 +1,45 @@
+{%- comment -%}
+  One mega-menu link.
+
+  Shopify menus carry a title and URL only, so the optional description comes
+  from the panel block's "Link descriptions" mapping — one line per link, as
+  "Title :: Description" with an optional third segment for a pill tag:
+
+    Managed Compliance Programs :: Devices, calibration & reporting :: Most chosen
+
+  A line whose title matches this link supplies its sub-label and badge.
+
+  Accepts: child (link), map (string, may be blank)
+{%- endcomment -%}
+
+{%- liquid
+  assign desc = ''
+  assign badge = ''
+  if map != blank
+    assign lines = map | strip | newline_to_br | split: '<br />'
+    for line in lines
+      assign pair = line | strip | split: '::'
+      if pair.size > 1
+        assign key = pair[0] | strip
+        if key == child.title
+          assign desc = pair[1] | strip
+          if pair.size > 2
+            assign badge = pair[2] | strip
+          endif
+        endif
+      endif
+    endfor
+  endif
+-%}
+
+<a class="at-mega__link" href="{{ child.url }}">
+  <span class="at-mega__link-title">
+    {{ child.title | escape }}
+    {%- if badge != blank -%}
+      <span class="at-mega__link-badge">{{ badge | escape }}</span>
+    {%- endif -%}
+  </span>
+  {%- if desc != blank -%}
+    <span class="at-mega__link-desc">{{ desc | escape }}</span>
+  {%- endif -%}
+</a>

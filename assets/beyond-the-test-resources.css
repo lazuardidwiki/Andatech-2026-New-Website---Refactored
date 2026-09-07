@@ -1,0 +1,550 @@
+/* =====================================================
+   Beyond The Test™ — Resource Library
+   ===================================================== */
+
+.btt-res{
+  background:transparent;
+  padding:100px 48px 80px;
+  position:relative;
+  z-index:1;
+  overflow-x:hidden;
+}
+
+/* ===== Header ===== */
+.btt-res__header{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  margin-bottom:48px;
+}
+.btt-res__heading{
+  font-family:'Titillium Web',sans-serif;
+  font-size:42px; font-weight:700;
+  color:#111820; line-height:1.15; margin:0 0 10px;
+}
+.btt-res__sub{
+  font-size:16px; color:rgba(17,24,32,.65); line-height:1.6; margin:0;
+}
+.btt-res__view-all{
+  display:flex; align-items:center; gap:6px;
+  background:none; border:none; cursor:pointer;
+  font-family:'Titillium Web',sans-serif;
+  font-size:15px; font-weight:600; color:#95C11F;
+  white-space:nowrap; padding:0;
+  transition:color .15s ease;
+  flex-shrink:0;
+  align-self:flex-start;
+  padding-top:8px;
+}
+.btt-res__view-all svg{ flex-shrink:0; }
+
+/* ===== Gallery wrapper ===== */
+.btt-res__gallery-wrap{
+  position:relative;
+}
+
+.btt-res__gallery{
+  display:flex;
+  gap:20px;
+  overflow-x:auto;
+  overflow-y:visible;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  cursor:grab;
+  
+  /* Desktop Layout:
+     Vertical padding & negative margin expanded to prevent shadow clipping.
+     Horizontal padding & margin set to 0 for standard desktop grid alignment. */
+  padding: 24px 0 40px 0;
+  margin: -24px 0 -40px 0;
+  scroll-padding-left: 0;
+}
+.btt-res__gallery:active{ cursor:grabbing; }
+.btt-res__gallery::-webkit-scrollbar{ display:none; }
+
+.btt-res__gallery-item{
+  flex:0 0 calc(25% - 15px);
+  scroll-snap-align:start;
+  min-width:0;
+}
+
+/* ===== Resource card ===== */
+.btt-res__card{
+  position:relative;
+  background:rgba(17,24,32,.90);
+  backdrop-filter:blur(20px) saturate(140%);
+  -webkit-backdrop-filter:blur(20px) saturate(140%);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 10px 26px rgba(17,24,32,.16), inset 0 1px 0 rgba(255,255,255,.06);
+  display:flex; flex-direction:column;
+  height:100%;
+  transform-style:preserve-3d;
+  transition:transform .2s ease-out, box-shadow .2s ease, border-color .2s ease;
+  cursor:pointer;
+}
+.btt-res__card.is-tilting{ transition:none; }
+
+@property --btt-angle{
+  syntax:'<angle>';
+  initial-value:0deg;
+  inherits:false;
+}
+.btt-res__card::before{
+  content:'';
+  position:absolute; inset:0;
+  border-radius:inherit;
+  padding:1.5px;
+  background:conic-gradient(from var(--btt-angle,0deg),
+    transparent 0deg, transparent 250deg,
+    #46BEC4 290deg, #95C11F 320deg, transparent 350deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  animation:btt-glow-rotate 7s linear infinite;
+  pointer-events:none;
+  z-index:2;
+  display:none; /* Border glow turned off per request — too busy alongside the other sections */
+}
+.btt-res__card.is-tilting{ transition:none; }
+
+.btt-res__card-spotlight{
+  position:absolute; inset:0; border-radius:inherit;
+  background:radial-gradient(circle at var(--sx,50%) var(--sy,50%), rgba(149,193,31,.1) 0%, transparent 55%);
+  opacity:0; transition:opacity .3s ease;
+  pointer-events:none; z-index:1;
+}
+
+/* Badge */
+.btt-res__badge{
+  position:absolute; top:14px; left:50%;
+  transform:translateX(-50%);
+  background:#95C11F; color:#1F2937;
+  font-family:'Titillium Web',sans-serif;
+  font-size:10px; font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase;
+  padding:5px 14px; border-radius:9999px;
+  white-space:nowrap; z-index:3;
+}
+
+/* Image */
+.btt-res__card-img-wrap{
+  width:100%; height:180px;
+  overflow:hidden; flex-shrink:0;
+  position:relative;
+}
+.btt-res__card-img{
+  width:100%; height:100%; object-fit:cover; display:block;
+  transition:transform .4s ease;
+}
+.btt-res__card-img-placeholder{
+  width:100%; height:100%;
+  background:rgba(255,255,255,.05);
+  display:flex; align-items:center; justify-content:center;
+  color:rgba(255,255,255,.4);
+}
+
+/* Card body */
+.btt-res__card-body{
+  padding:20px 20px 16px;
+  display:flex; flex-direction:column; gap:8px; flex:1;
+  position:relative; z-index:1;
+}
+.btt-res__card-category{
+  font-size:11px; font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase;
+  color:#46BEC4; margin:0;
+}
+.btt-res__card-title{
+  font-family:'Titillium Web',sans-serif;
+  font-size:15px; font-weight:700;
+  color:#ffffff; line-height:1.4; margin:0; flex:1;
+}
+.btt-res__card-footer{
+  display:flex; align-items:center;
+  justify-content:space-between;
+  margin-top:auto; padding-top:8px;
+}
+.btt-res__card-read{
+  display:flex; align-items:center; gap:6px;
+  font-size:12px; color:rgba(255,255,255,.55); font-weight:400;
+}
+.btt-res__card-coming{
+  font-size:12px; color:rgba(255,255,255,.55); font-style:italic;
+}
+.btt-res__card-download{
+  width:36px; height:36px; border-radius:50%;
+  background:#95C11F;
+  display:flex; align-items:center; justify-content:center;
+  color:#1F2937; text-decoration:none; flex-shrink:0;
+  transition:background .15s ease, transform .15s ease;
+  overflow:hidden; position:relative;
+}
+.btt-res__card-download::after{
+  content:''; position:absolute; inset:0; border-radius:50%;
+  background:linear-gradient(115deg, transparent 0%, rgba(255,255,255,.55) 50%, transparent 100%);
+  transform:translateX(-100%) skewX(-20deg); transition:transform .55s ease;
+}
+
+/* ===== Controls: dots + nav ===== */
+.btt-res__controls{
+  display:flex; align-items:center;
+  justify-content:space-between;
+  margin-top:28px;
+}
+.btt-res__dots{
+  display:flex; gap:8px; align-items:center;
+}
+.btt-res__dot{
+  width:8px; height:8px; border-radius:50%;
+  background:rgba(17,24,32,.22);
+  border:none; cursor:pointer; padding:0;
+  transition:background .2s ease, transform .2s ease;
+}
+.btt-res__dot.is-active{
+  background:#95C11F; transform:scale(1.35);
+}
+.btt-res__nav{
+  display:flex; gap:10px;
+}
+.btt-res__nav-btn{
+  width:40px; height:40px; border-radius:50%;
+  background:rgba(17,24,32,.06); border:1px solid rgba(17,24,32,.16);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:#111820;
+  transition:border-color .15s ease, background .15s ease;
+}
+
+/* =====================================================
+   MODAL
+   ===================================================== */
+.btt-res__modal{
+  position:fixed; inset:0; z-index:500;
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
+}
+.btt-res__modal.is-open{ pointer-events:auto; }
+.btt-res__modal-backdrop{
+  position:absolute; inset:0;
+  background:rgba(17,24,32,0);
+  backdrop-filter:blur(0px);
+  -webkit-backdrop-filter:blur(0px);
+  transition:background .45s ease, backdrop-filter .45s ease, -webkit-backdrop-filter .45s ease;
+}
+.btt-res__modal.is-open .btt-res__modal-backdrop{
+  background:rgba(17,24,32,.55);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+}
+.btt-res__modal-panel{
+  position:relative; z-index:1;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(16px) saturate(130%);
+  -webkit-backdrop-filter:blur(16px) saturate(130%);
+  border:1px solid rgba(17,24,32,.10);
+  border-radius:24px; padding:44px;
+  width:min(1100px, 92vw); max-height:90vh; overflow-y:auto;
+  box-shadow:0 24px 64px rgba(17,24,32,.20);
+  opacity:0;
+  transform:translateY(20px) scale(.97);
+  transition:transform .4s cubic-bezier(.23,1,.32,1), opacity .35s ease;
+}
+.btt-res__modal.is-open .btt-res__modal-panel{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+.btt-res__modal-panel::before{
+  content:'';
+  position:absolute; inset:0;
+  border-radius:inherit;
+  padding:1.5px;
+  background:conic-gradient(from var(--btt-angle,0deg),
+    transparent 0deg, transparent 250deg,
+    #46BEC4 290deg, #95C11F 320deg, transparent 350deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  animation:btt-glow-rotate 7s linear infinite;
+  pointer-events:none;
+}
+.btt-res__modal-header{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:32px;
+}
+.btt-res__modal-title{
+  font-family:'Titillium Web',sans-serif;
+  font-size:26px; font-weight:700; color:#111820; margin:0;
+}
+.btt-res__modal-close{
+  width:40px; height:40px; border-radius:50%;
+  background:rgba(17,24,32,.06); border:none;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:#111820; transition:background .15s ease;
+}
+
+/* Modal grid 3 cols */
+.btt-res__modal-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+.btt-res__modal-card{
+  position:relative;
+  background:#F4F6F8;
+  border:1px solid rgba(17,24,32,.08);
+  border-radius:18px; overflow:hidden;
+  display:flex; flex-direction:column;
+  box-shadow:0 4px 14px rgba(17,24,32,.08);
+  transform-style:preserve-3d;
+  transition:transform .15s ease-out, box-shadow .25s ease;
+  cursor:pointer;
+}
+.btt-res__modal-card.is-tilting{ transition:none; }
+.btt-res__modal-card .btt-res__card-spotlight{
+  position:absolute; inset:0; border-radius:inherit;
+  background:radial-gradient(circle at var(--sx,50%) var(--sy,50%), rgba(149,193,31,.1) 0%, transparent 55%);
+  opacity:0; transition:opacity .3s ease; pointer-events:none; z-index:1;
+}
+.btt-res__modal-card .btt-res__card-img-wrap{ height:150px; }
+.btt-res__modal-card .btt-res__card-img-placeholder{
+  background:rgba(17,24,32,.05); color:rgba(17,24,32,.35);
+}
+.btt-res__modal-card .btt-res__card-body{ padding:16px 16px 14px; }
+.btt-res__modal-card .btt-res__card-title{ font-size:14px; color:#111820; }
+.btt-res__modal-card .btt-res__card-read,
+.btt-res__modal-card .btt-res__card-coming{ color:rgba(17,24,32,.55); }
+.btt-res__modal-card .btt-res__card-download{
+  width:32px; height:32px;
+}
+
+/* =====================================================
+   Hover-only enhancements — gated to real pointer devices.
+   ===================================================== */
+@media (hover:hover) and (pointer:fine){
+  .btt-res__view-all:hover{ color:#7ba318; }
+  .btt-res__card:hover{
+    box-shadow:0 16px 36px rgba(17,24,32,.22), inset 0 1px 0 rgba(255,255,255,.08);
+    border-color: #95C11F;
+    transform: translateY(-6px);
+  }
+  .btt-res__card:hover .btt-res__card-spotlight{ opacity:1; }
+  .btt-res__card:hover .btt-res__card-img{ transform:scale(1.04); }
+  .btt-res__card:hover .btt-res__card-download::after{
+    transform:translateX(200%) skewX(-20deg);
+  }
+  .btt-res__card-download:hover{ background:#7ba318; }
+  .btt-res__nav-btn:hover{ border-color:#95C11F; background:rgba(149,193,31,.16); }
+  .btt-res__modal-close:hover{ background:rgba(17,24,32,.12); }
+  .btt-res__modal-card:hover{ box-shadow:0 10px 28px rgba(17,24,32,.14); }
+  .btt-res__modal-card:hover .btt-res__card-spotlight{ opacity:1; }
+}
+
+/* ===== Tablet ===== */
+@media (max-width:1024px){
+  .btt-res{ padding:80px 24px; }
+  
+  /* Tablet Bleed Carousel Fix:
+     Negative horizontal margins (-24px) extend track to edge of screen.
+     Internal padding (24px) keeps Card 1 & snap aligned with heading text. */
+  .btt-res__gallery {
+    padding: 24px 24px 40px 24px;
+    margin: -24px -24px -40px -24px;
+    scroll-padding-left: 24px;
+  }
+  .btt-res__gallery-item{ flex:0 0 calc(50% - 10px); }
+  .btt-res__modal-grid{ grid-template-columns:repeat(2,1fr); }
+}
+
+/* ===== Mobile ===== */
+@media (max-width:640px){
+  .btt-res{ padding:64px 20px; }
+  .btt-res__heading{ font-size:30px; }
+  .btt-res__header{ flex-direction:column; align-items:flex-start; gap:12px; margin-bottom:28px; }
+
+  /* Mobile Bleed Carousel Fix:
+     Negative horizontal margins (-20px) cancel section padding to bleed scroll track edge-to-edge.
+     Internal horizontal padding (20px) & scroll-padding-left (20px) preserve Card 1 alignment with text. */
+  .btt-res__gallery {
+    padding: 24px 20px 40px 20px;
+    margin: -24px -20px -40px -20px;
+    scroll-padding-left: 20px;
+  }
+  .btt-res__gallery-item{ 
+    flex:0 0 78vw; 
+    max-width:300px; 
+  }
+  .btt-res__modal-panel{ padding:28px 20px; }
+  .btt-res__modal-grid{ grid-template-columns:1fr; }
+  .btt-res__nav{ display:none; }
+  /* Center dots on mobile */
+  .btt-res__controls{ justify-content:center; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .btt-res__card{ transition:none; }
+  .btt-res__card::before, .btt-res__modal-panel::before{ animation:none; }
+  .btt-res__card:hover{ transform:none; border-color:rgba(255,255,255,.14); }
+  .btt-res__modal-backdrop{ transition:none; }
+  .btt-res__modal-panel{ transition:none; }
+}
+
+/* =====================================================
+   GATE MODAL — download form (no border-glow, kept simple)
+   ===================================================== */
+.btt-res__gate-modal{
+  position:fixed; inset:0; z-index:700;
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
+}
+.btt-res__gate-modal.is-open{ pointer-events:auto; }
+.btt-res__gate-backdrop{
+  position:absolute; inset:0;
+  background:rgba(10,15,20,0);
+  backdrop-filter:blur(0px);
+  -webkit-backdrop-filter:blur(0px);
+  transition:background .35s ease, backdrop-filter .35s ease, -webkit-backdrop-filter .35s ease;
+}
+.btt-res__gate-modal.is-open .btt-res__gate-backdrop{
+  background:rgba(10,15,20,.55);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+}
+.btt-res__gate-panel-frame{
+  position:relative; z-index:1;
+  background:#ffffff;
+  border:1px solid rgba(17,24,32,.10);
+  border-radius:24px;
+  width:min(440px, 92vw);
+  max-height:90vh;
+  overflow:hidden;
+  box-shadow:0 24px 64px rgba(17,24,32,.20);
+  opacity:0;
+  transform:translateY(20px) scale(.97);
+  transition:transform .35s cubic-bezier(.23,1,.32,1), opacity .3s ease;
+}
+.btt-res__gate-modal.is-open .btt-res__gate-panel-frame{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+.btt-res__gate-panel-frame .btt-res__modal-close{
+  position:absolute; top:24px; right:24px; z-index:3;
+}
+.btt-res__gate-panel{
+  position:relative;
+  height:100%;
+  max-height:90vh;
+  overflow-y:auto;
+  padding:40px;
+  box-sizing:border-box;
+}
+.btt-res__gate-scroll-hint{
+  display:none;
+  position:absolute; left:0; right:0; bottom:0; z-index:2;
+  height:48px;
+  align-items:flex-end; justify-content:center;
+  padding-bottom:8px;
+  background:linear-gradient(180deg, transparent, rgba(255,255,255,.95) 65%);
+  pointer-events:none;
+  opacity:1;
+  transition:opacity .3s ease;
+  border-radius:0 0 24px 24px;
+}
+.btt-res__gate-scroll-hint.is-hidden{ opacity:0; }
+.btt-res__gate-scroll-hint svg{
+  color:rgba(17,24,32,.5);
+  animation:btt-res-scroll-hint-bounce 1.6s ease-in-out infinite;
+}
+@keyframes btt-res-scroll-hint-bounce{
+  0%,100%{ transform:translateY(0); opacity:.55; }
+  50%{ transform:translateY(5px); opacity:1; }
+}
+@media (max-width:640px){
+  .btt-res__gate-scroll-hint{ display:flex; }
+}
+@media (prefers-reduced-motion:reduce){
+  .btt-res__gate-scroll-hint svg{ animation:none; }
+}
+.btt-res__gate-eyebrow{
+  font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  color:#95C11F; margin:0 0 8px;
+}
+.btt-res__gate-title{
+  font-family:'Titillium Web',sans-serif;
+  font-size:22px; font-weight:700; color:#111820; margin:0 0 8px;
+}
+.btt-res__gate-sub{
+  font-size:14px; color:rgba(17,24,32,.6); margin:0 0 24px; line-height:1.5;
+}
+.btt-res__gate-field{ margin-bottom:16px; }
+.btt-res__gate-row{ display:flex; gap:12px; }
+.btt-res__gate-row .btt-res__gate-field{ flex:1; min-width:0; }
+.btt-res__gate-field label{
+  display:block; font-size:12.5px; font-weight:600;
+  color:rgba(17,24,32,.7); margin-bottom:6px;
+}
+.btt-res__gate-field input,
+.btt-res__gate-field select{
+  width:100%; padding:12px 14px;
+  background:rgba(17,24,32,.035);
+  border:1.5px solid rgba(17,24,32,.14);
+  border-radius:10px;
+  font-family:'Titillium Web',sans-serif; font-size:14px;
+  color:#111820;
+  transition:border-color .15s ease, background .15s ease;
+  box-sizing:border-box;
+}
+.btt-res__gate-field select{ cursor:pointer; }
+.btt-res__gate-field select option{ background:#ffffff; color:#111820; }
+.btt-res__gate-field input::placeholder{ color:rgba(17,24,32,.35); }
+.btt-res__gate-field input:focus,
+.btt-res__gate-field select:focus{
+  outline:none; border-color:#95C11F; background:rgba(149,193,31,.06);
+}
+/* Chrome/Safari autofill forces its own light background + dark text — this
+   already matches the light theme, so just make sure it uses our exact
+   panel color instead of browser-default white for a seamless blend. */
+.btt-res__gate-field input:-webkit-autofill,
+.btt-res__gate-field input:-webkit-autofill:hover,
+.btt-res__gate-field input:-webkit-autofill:focus,
+.btt-res__gate-field input:-webkit-autofill:active{
+  -webkit-text-fill-color:#111820;
+  -webkit-box-shadow:0 0 0 1000px #ffffff inset;
+  box-shadow:0 0 0 1000px #ffffff inset;
+  border-color:rgba(17,24,32,.14);
+  caret-color:#111820;
+  transition:background-color 5000s ease-in-out 0s;
+}
+.btt-res__gate-consent{
+  display:flex; align-items:flex-start; gap:10px;
+  font-size:12.5px; color:rgba(17,24,32,.6); line-height:1.5;
+  margin-bottom:20px; cursor:pointer;
+}
+.btt-res__gate-consent input{
+  margin-top:2px; flex-shrink:0; width:16px; height:16px; accent-color:#95C11F; cursor:pointer;
+}
+.btt-res__gate-error{
+  font-size:13px; color:#EF4444; margin:0 0 16px;
+  background:rgba(239,68,68,.1); border:1px solid rgba(239,68,68,.3);
+  border-radius:8px; padding:10px 12px;
+}
+.btt-res__gate-submit:disabled{ opacity:.6; cursor:not-allowed; }
+
+@media (max-width:640px){
+  .btt-res__gate-panel-frame{
+    max-height:80vh;
+    max-height:80dvh;
+  }
+  .btt-res__gate-panel{
+    padding:44px 22px 28px;
+    max-height:80vh;
+    max-height:80dvh;
+  }
+  .btt-res__gate-row{ flex-direction:column; gap:0; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .btt-res__gate-backdrop{ transition:none; }
+  .btt-res__gate-panel-frame{ transition:none; }
+}
+

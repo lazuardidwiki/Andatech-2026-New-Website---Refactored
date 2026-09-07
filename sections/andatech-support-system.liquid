@@ -1,0 +1,64 @@
+{%- comment -%} Three-card support system, based on the established ownership card language. {%- endcomment -%}
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-industry.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-alcohol-testing.css' | asset_url | stylesheet_tag }}
+
+<section class="at-support-system"{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handleize }}"{% endif %}>
+  <div class="at-shell">
+    <header class="at-support-system__header">
+      {%- if section.settings.eyebrow != blank -%}<p class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      <h2 class="at-industry__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>
+      {%- if section.settings.description != blank -%}<div class="at-support-system__desc" data-at-rise>{{ section.settings.description }}</div>{%- endif -%}
+    </header>
+
+    <div class="at-support-system__grid">
+      {%- for block in section.blocks -%}
+        <article class="at-support-system__card" data-at-rise {{ block.shopify_attributes }}>
+          {%- if block.settings.badge != blank -%}<span class="at-support-system__badge">{{ block.settings.badge | escape }}</span>{%- endif -%}
+          {%- if block.settings.title != blank -%}<h3 class="at-support-system__title">{{ block.settings.title | escape }}</h3>{%- endif -%}
+          {%- if block.settings.description != blank -%}<div class="at-support-system__copy">{{ block.settings.description }}</div>{%- endif -%}
+          {%- if block.settings.cta_label != blank -%}<a class="at-support-system__link" href="{{ block.settings.cta_url | default: '#' }}">{{ block.settings.cta_label | escape }} <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>{%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Support System Cards",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "beyond-the-device" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "BEYOND THE DEVICE" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "Reliable testing needs" },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "a support system." },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>A useful proposal separates what Andatech can coordinate from what remains an employer and workplace responsibility.</p>" }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Support card",
+      "limit": 3,
+      "settings": [
+        { "type": "text", "id": "badge", "label": "Badge", "default": "CALIBRATION" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Keep the sensor accurate and ready." },
+        { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Plan recurring calibration through Andatech's NATA-accredited laboratory and reduce avoidable downtime.</p>" },
+        { "type": "text", "id": "cta_label", "label": "Link label", "default": "Explore Calibration" },
+        { "type": "url", "id": "cta_url", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Support System Cards",
+      "blocks": [
+        { "type": "card", "settings": { "badge": "CALIBRATION", "title": "Keep the sensor accurate and ready.", "description": "<p>Plan recurring calibration through Andatech's NATA-accredited laboratory and reduce avoidable downtime.</p>", "cta_label": "Explore Calibration" } },
+        { "type": "card", "settings": { "badge": "PEOPLE & POLICY", "title": "Make the process as reliable as the device.", "description": "<p>Define who tests, when testing occurs, how results are handled and what competency each role needs.</p>", "cta_label": "Discuss Policy & Training" } },
+        { "type": "card", "settings": { "badge": "REPORTING", "title": "Turn individual tests into visible evidence.", "description": "<p>Selected workplace devices connect with Andalink for centralised records, device visibility and reporting.</p>", "cta_label": "Explore Andalink" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

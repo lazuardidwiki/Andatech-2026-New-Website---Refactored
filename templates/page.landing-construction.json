@@ -1,0 +1,862 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "show_page_title": true,
+        "heading_align": "text-center"
+      }
+    },
+    "background_video_CiBgGa": {
+      "type": "background-video",
+      "blocks": {
+        "heading_mTQCQy": {
+          "type": "heading",
+          "settings": {
+            "heading": "Build a safer site with smarter drug and alcohol testing",
+            "heading_size": "h1",
+            "heading_h1": true
+          }
+        },
+        "text_j6gYJr": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Construction is one of Australia’s most high-risk industries, where safety lapses can have serious—or even fatal—consequences. In fact, construction consistently ranks among the top industries for workplace injuries and fatalities, often linked to impairment on the job.<br/><br/>That’s why implementing a reliable drug and alcohol testing program isn’t just about ticking a compliance box—it’s about protecting lives, reducing downtime, and building a safety-first culture on-site.<br/><br/>At Andatech, we provide the tools and support to help construction companies of all sizes manage risk, stay compliant, and keep their teams safe. From high-accuracy breathalysers to rapid drug screening kits, our solutions make it easier to identify impairment and make informed decisions—before incidents occur.</p>",
+            "enlarge_text": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_mTQCQy",
+        "text_j6gYJr"
+      ],
+      "settings": {
+        "video_shopify": "shopify://files/videos/Construction industry background video.mp4",
+        "video_external": "",
+        "video_description": "",
+        "video_height": "sm",
+        "overlay_text_align": "text-center",
+        "overlay_position": "justify-center items-center",
+        "mob_center_text": true,
+        "color_scheme": "white",
+        "transparent_content_color": "#ffffff",
+        "tint_color": "#000000",
+        "tint_opacity": 55,
+        "lazyload": true,
+        "prevent_animation": false
+      }
+    },
+    "rich_text_xVfAkU": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_HHCygx": {
+          "type": "heading",
+          "settings": {
+            "heading": "Ensure a safe construction site for your workers",
+            "heading_size": "h3",
+            "heading_h1": false
+          }
+        },
+        "text_mWwcEB": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Eliminate the risks of employees working under the influence.</p>",
+            "enlarge_text": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_HHCygx",
+        "text_mWwcEB"
+      ],
+      "disabled": true,
+      "custom_css": [
+        "div {margin-bottom: 0; padding-bottom: 0px;}"
+      ],
+      "settings": {
+        "text_position": "justify-center",
+        "text_align": "text-center",
+        "mob_center_text": true,
+        "wide": false,
+        "color_scheme": "1",
+        "full_width": true,
+        "prevent_animation": false
+      }
+    },
+    "rich_text_q9jbda": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_Dp6chz": {
+          "type": "heading",
+          "settings": {
+            "heading": "Drug and alcohol-related incidents in the construction industry at a glance",
+            "heading_size": "h3",
+            "heading_h1": false
+          }
+        },
+        "text_CdE7jK": {
+          "type": "text",
+          "settings": {
+            "text": "",
+            "enlarge_text": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_Dp6chz",
+        "text_CdE7jK"
+      ],
+      "settings": {
+        "text_position": "justify-center",
+        "text_align": "text-center",
+        "mob_center_text": true,
+        "wide": false,
+        "color_scheme": "1",
+        "full_width": true,
+        "prevent_animation": false
+      }
+    },
+    "icons_with_text_JCTaWJ": {
+      "type": "icons-with-text",
+      "blocks": {
+        "item_KCrwVc": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "custom_icon": "shopify://shop_images/medicine-icon.webp",
+            "heading": "1 in 20 Australian workers",
+            "text": "<p>have admitted to working under the influence of alcohol at some point in their career, and one in 50 have used other drugs in the workplace</p><p><em>— Alcohol and drug foundation (2024)</em></p>",
+            "link": "https://adf.org.au/insights/aod-workplace-safety/"
+          }
+        },
+        "item_jYe46A": {
+          "type": "item",
+          "settings": {
+            "icon": "price_tag",
+            "custom_icon": "shopify://shop_images/grave-icon.webp",
+            "heading": "100 deaths",
+            "text": "<p>Among machinery operators, drivers, technicians and trades workers in Australia</p><p><em>— Safe Work Australia (2024)</em></p>",
+            "link": "https://data.safeworkaustralia.gov.au/insights/key-whs-statistics-australia/latest-release"
+          }
+        },
+        "item_f9KA9x": {
+          "type": "item",
+          "settings": {
+            "icon": "scissors",
+            "heading": "23%",
+            "text": "<p>of all workplace fatalities in Australia occurred within the construction industry. (45 fatalities in 2023) </p><p><em>Safe Work Australia (2024)</em></p>",
+            "link": "https://data.safeworkaustralia.gov.au/insights/key-whs-statistics-australia/latest-release"
+          }
+        },
+        "item_ygV97r": {
+          "type": "item",
+          "settings": {
+            "icon": "return",
+            "custom_icon": "shopify://shop_images/hospital-icon.webp",
+            "heading": "16,600 serious claims",
+            "text": "<p>serious claims in the construction industry with 17.2 incidence rate per 1,000 workers. The second highest in Australia</p><p><em>— Safe Work Australia (2024)</em></p>",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_KCrwVc",
+        "item_jYe46A",
+        "item_f9KA9x",
+        "item_ygV97r"
+      ],
+      "custom_css": [
+        "p.m-0.icons-with-text__title.text-body-extra_large {font-size: 30px;}"
+      ],
+      "settings": {
+        "heading": "",
+        "heading_align": "text-start",
+        "icon_size": 80,
+        "title_type_scale": "extra_large",
+        "text_type_scale": "medium",
+        "icon_position": "above",
+        "mobile_stack": false,
+        "section_height": "default",
+        "color_scheme": "1",
+        "full_width": true,
+        "dividers": "none",
+        "prevent_animation": false
+      }
+    },
+    "media_with_text_nAW7Dz": {
+      "type": "media-with-text",
+      "blocks": {
+        "heading_Y7BbFb": {
+          "type": "heading",
+          "settings": {
+            "heading": "Leave no doubt and enjoy peace of mind.",
+            "heading_size": "h4",
+            "heading_h1": false
+          }
+        },
+        "text_a3KCrm": {
+          "type": "text",
+          "settings": {
+            "text": "<p>With high-risk tasks, heavy machinery, and tight deadlines, there’s no room for impairment on-site. Regular drug and alcohol testing isn’t just a box to tick — it’s one of the most effective ways to reduce incidents, prevent costly downtime, and protect the people who keep your projects moving.<br/><br/>🛠️ Ready to take the next step?</p>",
+            "enlarge_text": false
+          }
+        },
+        "button_hNJqyC": {
+          "type": "button",
+          "settings": {
+            "button_label": "Download the D&A Testing Checklist for the construction industry",
+            "button_link": "https://cdn.shopify.com/s/files/1/0241/5850/2976/files/Andatech_D_A_Policy_Checklist_Construction.pdf?v=1737096561",
+            "button_style": "btn btn--primary"
+          }
+        }
+      },
+      "block_order": [
+        "heading_Y7BbFb",
+        "text_a3KCrm",
+        "button_hNJqyC"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/Contruction-Industry-Square.webp",
+        "video_external": "",
+        "video_description": "",
+        "video_autoplay": false,
+        "layout": "left",
+        "image_fit": "cover",
+        "media_width": 50,
+        "media_scale": 100,
+        "text_align": "text-start",
+        "color_scheme": "none",
+        "only_content_color_scheme": false
+      }
+    },
+    "rich_text_ntFrjR": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_Uqk4Vk": {
+          "type": "heading",
+          "settings": {
+            "heading": "Drug and alcohol testing in the construction industry: Best practices",
+            "heading_size": "h3",
+            "heading_h1": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_Uqk4Vk"
+      ],
+      "settings": {
+        "text_position": "justify-center",
+        "text_align": "text-center",
+        "mob_center_text": true,
+        "wide": false,
+        "color_scheme": "none",
+        "full_width": true,
+        "prevent_animation": false
+      }
+    },
+    "slideshow_tqyFUR": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_McpjPC": {
+          "type": "slide",
+          "settings": {
+            "image_desktop": "shopify://shop_images/Pre-employment_drug_testing_d6650c58-202d-4b10-959b-e1716ea47742.jpg",
+            "url": "",
+            "overlay_position": "justify-end items-center",
+            "overlay_text_align": "text-end",
+            "mob_center_text": false,
+            "subheading": "Start with a safe crew.",
+            "heading": "Pre-employment testing",
+            "heading_size": "h0",
+            "heading_h1": false,
+            "text": "<p>Test all new hires before they set foot on site to ensure they’re fit for duty from day one.</p>",
+            "enlarge_text": true,
+            "button_1_label": "Discover more about pre-employment drug and alcohol testing",
+            "button_1_link": "https://andatech.com.au/blogs/resources/pre-employment-drug-and-alcohol-testing-in-australia",
+            "button_1_style": "btn btn--primary",
+            "button_2_label": "",
+            "button_2_link": "",
+            "button_2_style": "btn btn--primary",
+            "transparent_content_color": "#ffffff",
+            "countdown_show": false,
+            "countdown_end_date": "",
+            "countdown_end_time": "",
+            "countdown_end_text": "",
+            "enlarge_end_text": false,
+            "countdown_hide_on_end": false,
+            "use_custom_colors": false,
+            "count_color": "#ffffff",
+            "bg_color": "#070707",
+            "bg_grad": ""
+          }
+        },
+        "slide_9tJNhR": {
+          "type": "slide",
+          "settings": {
+            "image_desktop": "shopify://shop_images/Random_drug_testing_3aabef7e-4ea6-43b8-a744-1671cf64c6f3.jpg",
+            "url": "",
+            "overlay_position": "justify-start items-center",
+            "overlay_text_align": "text-start",
+            "mob_center_text": false,
+            "subheading": "Stay unpredictable.",
+            "heading": "Random testing",
+            "heading_size": "h0",
+            "heading_h1": false,
+            "text": "<p>Unscheduled testing keeps everyone accountable and helps deter on-site drug or alcohol use.</p>",
+            "enlarge_text": true,
+            "button_1_label": "All about random drug testing",
+            "button_1_link": "https://andatech.com.au/blogs/resources/random-drug-testing-at-the-workplace",
+            "button_1_style": "btn btn--primary",
+            "button_2_label": "",
+            "button_2_link": "",
+            "button_2_style": "btn btn--primary",
+            "transparent_content_color": "#ffffff",
+            "countdown_show": false,
+            "countdown_end_date": "",
+            "countdown_end_time": "",
+            "countdown_end_text": "",
+            "enlarge_end_text": false,
+            "countdown_hide_on_end": false,
+            "use_custom_colors": false,
+            "count_color": "#ffffff",
+            "bg_color": "#070707",
+            "bg_grad": ""
+          }
+        },
+        "slide_XKWH3x": {
+          "type": "slide",
+          "settings": {
+            "image_desktop": "shopify://shop_images/Post-incident_drug_testing_e26d9e46-6ed1-4b15-adb7-21b1834b0a7e.jpg",
+            "url": "",
+            "overlay_position": "justify-end items-center",
+            "overlay_text_align": "text-end",
+            "mob_center_text": false,
+            "subheading": "Act fast after an incident.",
+            "heading": "Post-incident testing",
+            "heading_size": "h0",
+            "heading_h1": false,
+            "text": "<p>Testing immediately after an accident helps identify if impairment played a role — and protects your business from liability.</p>",
+            "enlarge_text": true,
+            "button_1_label": "",
+            "button_1_link": "",
+            "button_1_style": "btn btn--primary",
+            "button_2_label": "",
+            "button_2_link": "",
+            "button_2_style": "btn btn--primary",
+            "transparent_content_color": "#ffffff",
+            "countdown_show": false,
+            "countdown_end_date": "",
+            "countdown_end_time": "",
+            "countdown_end_text": "",
+            "enlarge_end_text": false,
+            "countdown_hide_on_end": false,
+            "use_custom_colors": false,
+            "count_color": "#ffffff",
+            "bg_color": "#070707",
+            "bg_grad": ""
+          }
+        },
+        "slide_PgAakb": {
+          "type": "slide",
+          "settings": {
+            "image_desktop": "shopify://shop_images/Reasonable_suspicion_drug_testing_94afd554-3c86-4d2b-8af0-9ee0835debca.jpg",
+            "url": "",
+            "overlay_position": "justify-start items-center",
+            "overlay_text_align": "text-start",
+            "mob_center_text": false,
+            "subheading": "Trust your gut (and the signs).",
+            "heading": "Reasonable suspicion testing",
+            "heading_size": "h0",
+            "heading_h1": false,
+            "text": "<p>If someone’s acting off, test them. Sudden changes in behaviour or performance shouldn’t be ignored.</p>",
+            "enlarge_text": true,
+            "button_1_label": "",
+            "button_1_link": "",
+            "button_1_style": "btn btn--primary",
+            "button_2_label": "",
+            "button_2_link": "",
+            "button_2_style": "btn btn--primary",
+            "transparent_content_color": "#ffffff",
+            "countdown_show": false,
+            "countdown_end_date": "",
+            "countdown_end_time": "",
+            "countdown_end_text": "",
+            "enlarge_end_text": false,
+            "countdown_hide_on_end": false,
+            "use_custom_colors": false,
+            "count_color": "#ffffff",
+            "bg_color": "#070707",
+            "bg_grad": ""
+          }
+        },
+        "slide_pK4PJ4": {
+          "type": "slide",
+          "settings": {
+            "image_desktop": "shopify://shop_images/FAQs_on_breathalysers_3.jpg",
+            "url": "",
+            "overlay_position": "justify-start items-center",
+            "overlay_text_align": "text-start",
+            "mob_center_text": false,
+            "subheading": "Accuracy matters.",
+            "heading": "Use certified equipment",
+            "heading_size": "h0",
+            "heading_h1": false,
+            "text": "<p>Always test with AS/NZS-compliant drug test kits and certified breathalysers to ensure reliable results and meet legal requirements.</p>",
+            "enlarge_text": true,
+            "button_1_label": "Shop certified breathalysers",
+            "button_1_link": "shopify://collections/breathalysers",
+            "button_1_style": "btn btn--primary",
+            "button_2_label": "Shop drug test kits",
+            "button_2_link": "shopify://collections/drug-test-kits",
+            "button_2_style": "btn btn--primary",
+            "transparent_content_color": "#ffffff",
+            "countdown_show": false,
+            "countdown_end_date": "",
+            "countdown_end_time": "",
+            "countdown_end_text": "",
+            "enlarge_end_text": false,
+            "countdown_hide_on_end": false,
+            "use_custom_colors": false,
+            "count_color": "#ffffff",
+            "bg_color": "#070707",
+            "bg_grad": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_McpjPC",
+        "slide_9tJNhR",
+        "slide_XKWH3x",
+        "slide_PgAakb",
+        "slide_pK4PJ4"
+      ],
+      "settings": {
+        "height_mode": "fixed",
+        "fixed_height_desktop": 710,
+        "fixed_height_mobile": 350,
+        "mobile_stacked": false,
+        "nav_style": "slideshow_nav_lines",
+        "pagination_color": "#ffffff",
+        "nav_position": "justify-center",
+        "transition": "slide-fade",
+        "autoplay": true,
+        "slider_pause": false,
+        "autoplay_speed": 4,
+        "color_scheme": "white",
+        "full_width": false,
+        "tint_color": "#000000",
+        "tint_opacity": 40,
+        "accessibility_info": "",
+        "prevent_animation": true
+      }
+    },
+    "image_banner_VCbYww": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_WhmYH6": {
+          "type": "heading",
+          "settings": {
+            "heading": "Maintain an alcohol & drug-free working environment for your workers.",
+            "heading_size": "h3",
+            "heading_h1": false
+          }
+        },
+        "text_kHb4r9": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Ensure zero risk of accidents at construction sites caused by alcohol & drug influence. In compliance with Australian Standards.</p>",
+            "enlarge_text": false
+          }
+        },
+        "button_a7CjKB": {
+          "type": "button",
+          "settings": {
+            "button_1_label": "Tell us your needs to get started",
+            "button_1_link": "https://andatech.com.au/pages/talk-to-sales",
+            "button_1_style": "btn btn--primary",
+            "button_2_label": "Learn more about on-site alcohol & drug testing",
+            "button_2_link": "https://andatech.com.au/pages/onsite-alcohol-drug-testing",
+            "button_2_style": "link"
+          }
+        }
+      },
+      "block_order": [
+        "heading_WhmYH6",
+        "text_kHb4r9",
+        "button_a7CjKB"
+      ],
+      "custom_css": [
+        "p,h2,a {color: #fff;}"
+      ],
+      "settings": {
+        "image_desktop": "shopify://shop_images/Construction_in_progress.webp",
+        "url": "",
+        "height_mode": "fixed",
+        "fixed_height_desktop": 450,
+        "fixed_height_mobile": 350,
+        "overlay_position": "justify-center items-center",
+        "overlay_text_align": "text-center",
+        "mob_center_text": false,
+        "mobile_stacked": false,
+        "color_scheme": "white",
+        "full_width": false,
+        "transparent_content_color": "#8dc63f",
+        "tint_color": "#000000",
+        "tint_opacity": 45,
+        "prevent_animation": false
+      }
+    },
+    "faq_R8tiWc": {
+      "type": "faq",
+      "blocks": {
+        "question_GGeXb6": {
+          "type": "question",
+          "settings": {
+            "icon": "none",
+            "heading": "Is drug and alcohol testing mandatory in the construction industry?",
+            "text": "<p>While not federally mandated in all cases, many construction companies implement drug and alcohol testing to meet WHS obligations under the <a href=\"https://www.safeworkaustralia.gov.au/law-and-regulation/model-whs-laws\" target=\"_blank\" title=\"Model WHS Laws\">Model WHS Laws</a> and industry codes. It’s considered best practice to reduce risks on high-hazard work sites.</p>"
+          }
+        },
+        "question_3HgVzx": {
+          "type": "question",
+          "settings": {
+            "icon": "none",
+            "heading": "When should workers be tested on a construction site?",
+            "text": "<p>Testing is commonly conducted:</p><ul><li>Before site entry or shift start (pre-start)</li><li>Randomly during operations (<a href=\"https://andatech.com.au/blogs/resources/random-drug-testing-at-the-workplace\" target=\"_blank\" title=\"Random drug testing best practices\">random drug testing</a>)</li><li>After a workplace incident or near miss</li><li>If impairment is suspected</li><li>Before returning to work after leave or rehab </li></ul>"
+          }
+        },
+        "question_AAwjNX": {
+          "type": "question",
+          "settings": {
+            "icon": "none",
+            "heading": "What types of drug tests are used in construction?",
+            "text": "<p>Most construction sites use:<br/><br/><a href=\"https://andatech.com.au/collections/saliva-drug-test-kits\" target=\"_blank\" title=\"Saliva drug test kits from Andatech\">Saliva drug tests</a> – Detect recent drug use, ideal for on-site random testing</p><p><a href=\"https://andatech.com.au/collections/urine-drug-test-kits\" target=\"_blank\" title=\"Urine drug test kits from Andatech\">Urine drug tests</a> – Provide a longer detection window for scheduled screening</p><p><a href=\"https://andatech.com.au/collections/breathalysers\" target=\"_blank\" title=\"Andatech breathalysers\">Breathalysers</a> – Check blood alcohol concentration (BAC) quickly and accurately</p>"
+          }
+        },
+        "question_9TE8Vp": {
+          "type": "question",
+          "settings": {
+            "icon": "none",
+            "heading": "What substances are typically screened for?",
+            "text": "<p>Construction drug and alcohol testing commonly targets:</p><ul><li>AMP – Amphetamines</li><li>COC – Cocaine</li><li>MET – Methamphetamines</li><li>OPI – Opiates</li><li>THC – Tetrahydrocannabinol (Cannabis)</li><li>BZO – Benzodiazepines</li><li>OXY – Oxycodone</li><li>K2 – Synthetic Cannabinoids (e.g. \"Spice\")</li><li>Alcohol – Ethanol (via breath testing)</li></ul>"
+          }
+        },
+        "question_XWxjLR": {
+          "type": "question",
+          "settings": {
+            "icon": "none",
+            "heading": "What happens if a worker refuses a drug or alcohol test?",
+            "text": "<p>Refusal to undergo testing can be treated as a breach of company policy and may result in disciplinary action or removal from site — especially where zero-tolerance rules apply. This should be clearly outlined in your workplace D&A policy.</p>"
+          }
+        },
+        "question_c7jkaa": {
+          "type": "question",
+          "settings": {
+            "icon": "none",
+            "heading": "Can Andatech help us implement a compliant testing program?",
+            "text": "<p>Yes — Andatech supplies Australian Standards-certified breathalysers and drug test kits for construction sites, and offers expert support to help businesses roll out effective and compliant testing procedures.</p><p>Book a <a href=\"https://andatech.com.au/pages/talk-to-sales\" target=\"_blank\" title=\"Book a free consultation with Andatech\">free consultation</a> with us to get started on your alcohol and drug testing program!</p>"
+          }
+        }
+      },
+      "block_order": [
+        "question_GGeXb6",
+        "question_3HgVzx",
+        "question_AAwjNX",
+        "question_9TE8Vp",
+        "question_XWxjLR",
+        "question_c7jkaa"
+      ],
+      "settings": {
+        "heading": "Construction industry D&A testing - Frequently asked questions",
+        "heading_align": "text-center",
+        "color_scheme": "1",
+        "full_width": true
+      }
+    },
+    "logo_list_xUjaPb": {
+      "type": "logo-list",
+      "blocks": {
+        "logo_tX4d9B": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/Multiplex-logo.webp",
+            "url": "",
+            "logo_width": 180,
+            "text": ""
+          }
+        },
+        "logo_6XiyCL": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/ProBuild-logo.webp",
+            "url": "",
+            "logo_width": 180,
+            "text": ""
+          }
+        },
+        "logo_z8iX9C": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/Hansenyuncken-logo.webp",
+            "url": "",
+            "logo_width": 180,
+            "text": ""
+          }
+        },
+        "logo_AAHYre": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/Built-logo.webp",
+            "url": "",
+            "logo_width": 180,
+            "text": ""
+          }
+        },
+        "logo_8jUcLw": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/Watpac-logo.webp",
+            "url": "",
+            "logo_width": 180,
+            "text": ""
+          }
+        }
+      },
+      "block_order": [
+        "logo_tX4d9B",
+        "logo_6XiyCL",
+        "logo_z8iX9C",
+        "logo_AAHYre",
+        "logo_8jUcLw"
+      ],
+      "settings": {
+        "title": "Our clients from the construction industry",
+        "heading_align": "text-center",
+        "button_label": "",
+        "button_link": "",
+        "layout": "grid",
+        "spacing": 32,
+        "logo_grid_align": "justify-center",
+        "color_scheme": "none",
+        "full_width": false
+      }
+    },
+    "rich_text_zJNJfJ": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_pyrtXA": {
+          "type": "heading",
+          "settings": {
+            "heading": "Accurate & reliable breath alcohol testing on-site",
+            "heading_size": "h3",
+            "heading_h1": false
+          }
+        },
+        "text_iCxGVf": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Suit your regular or ad hoc breath alcohol testing needs with our <a href=\"/collections/breathalysers\" title=\"Breathalysers Australia\">breathalyser sales and service</a>. Enjoy peace of mind and extended warranty under the <a href=\"https://andatech.com.au/pages/guarantee\" target=\"_blank\" title=\"Andatech breathalyser guarantee\">Andatech Guarantee</a> with our Australian Standard AS3547 Certified breathalysers.</p>",
+            "enlarge_text": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_pyrtXA",
+        "text_iCxGVf"
+      ],
+      "custom_css": [
+        "a {text-decoration: none;}"
+      ],
+      "settings": {
+        "text_position": "justify-center",
+        "text_align": "text-center",
+        "mob_center_text": true,
+        "wide": false,
+        "color_scheme": "1",
+        "full_width": true,
+        "prevent_animation": true
+      }
+    },
+    "multi_column_YTEfiD": {
+      "type": "multi-column",
+      "blocks": {
+        "column_xiMMJj": {
+          "type": "column",
+          "settings": {
+            "enable_media": true,
+            "image": "shopify://shop_images/Prodigy_S_2e91f91a-62a7-4435-b730-0597be2cf0bc.jpg",
+            "media_scale": 100,
+            "heading": "Andatech Prodigy S",
+            "text": "<p><strong>Reliability guaranteed</strong></p><p>AS3547:2019 certified</p>",
+            "button_label": "View Prodigy S",
+            "button_link": "https://andatech.com.au/products/andatech-prodigy-s"
+          }
+        },
+        "column_gLt47e": {
+          "type": "column",
+          "settings": {
+            "enable_media": true,
+            "image": "shopify://shop_images/andatech-breathalyser-soberlive-frx-webp.webp",
+            "media_scale": 100,
+            "heading": "Andatech Soberlive FRX",
+            "text": "<p><strong>Instant user verification</strong></p><p>Facial recognition feature</p>",
+            "button_label": "View Soberlive FRX",
+            "button_link": "https://andatech.com.au/products/andatech-soberlive-frx"
+          }
+        },
+        "column_gQByx3": {
+          "type": "column",
+          "settings": {
+            "enable_media": true,
+            "image": "shopify://shop_images/Soberpoint3Lite.jpg",
+            "media_scale": 100,
+            "heading": "Andatech Soberpoint 3",
+            "text": "<p><strong>Durable & versatile</strong></p><p>Blow through a straw</p>",
+            "button_label": "View Soberpoint 3",
+            "button_link": "https://andatech.com.au/products/andatech-soberpoint-3"
+          }
+        }
+      },
+      "block_order": [
+        "column_xiMMJj",
+        "column_gLt47e",
+        "column_gQByx3"
+      ],
+      "settings": {
+        "title": "",
+        "heading_align": "text-start",
+        "button_label": "",
+        "button_link": "",
+        "layout": "grid",
+        "column_size": "small",
+        "column_align": "center",
+        "media_align": "text-center",
+        "image_ratio": "shortest",
+        "color_scheme": "none",
+        "button_style": "btn btn--primary"
+      }
+    },
+    "rich_text_7g3gyF": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_mxCAVD": {
+          "type": "heading",
+          "settings": {
+            "heading": "Easy-to-use saliva & urine drug test kits",
+            "heading_size": "h3",
+            "heading_h1": false
+          }
+        },
+        "text_LreEpc": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Shop our range of <a href=\"/pages/drug-testing\" title=\"Drug Testing\">Australian Standard compliant drug test kits</a>. Conduct accurate and reliable drug testing in accordance with your site's alcohol & drug testing policy.</p>",
+            "enlarge_text": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_mxCAVD",
+        "text_LreEpc"
+      ],
+      "custom_css": [
+        "a {text-decoration: none;}"
+      ],
+      "settings": {
+        "text_position": "justify-center",
+        "text_align": "text-center",
+        "mob_center_text": true,
+        "wide": false,
+        "color_scheme": "1",
+        "full_width": true,
+        "prevent_animation": true
+      }
+    },
+    "multi_column_tRDfBk": {
+      "type": "multi-column",
+      "blocks": {
+        "column_Yw4hQA": {
+          "type": "column",
+          "settings": {
+            "enable_media": true,
+            "image": "shopify://shop_images/Drugsense-DSO8-Plus-Saliva-Screen-Test--2_93c24aa1-14bd-415c-bd9f-74c031859ab5.jpg",
+            "media_scale": 100,
+            "heading": "DrugSense DSO8 Plus",
+            "text": "<p><strong>Detect 8 drug groups + alcohol</strong></p><p>Saliva drug test kit</p>",
+            "button_label": "View DSO8 Plus",
+            "button_link": "https://andatech.com.au/products/drugsense-dso8-plus"
+          }
+        },
+        "column_jYDWPA": {
+          "type": "column",
+          "settings": {
+            "enable_media": true,
+            "image": "shopify://shop_images/ToxWipe-7.webp",
+            "media_scale": 100,
+            "heading": "ToxWipe™ 7",
+            "text": "<p><strong>No dry mouth issue</strong></p><p>Saliva drug test kit</p>",
+            "button_label": "View ToxWipe",
+            "button_link": "https://andatech.com.au/products/toxwipe-7"
+          }
+        },
+        "column_eqCiGp": {
+          "type": "column",
+          "settings": {
+            "enable_media": true,
+            "image": "shopify://shop_images/DSU11-1_59826a12-4a54-4b6a-aaa4-986722d9df97.jpg",
+            "media_scale": 100,
+            "heading": "DrugSense DSU11",
+            "text": "<p><strong>Detect 11 drug groups + alcohol</strong></p><p>Urine drug test kit</p>",
+            "button_label": "View DSU11",
+            "button_link": "https://andatech.com.au/products/drugsense-dsu11"
+          }
+        }
+      },
+      "block_order": [
+        "column_Yw4hQA",
+        "column_jYDWPA",
+        "column_eqCiGp"
+      ],
+      "settings": {
+        "title": "",
+        "heading_align": "text-start",
+        "button_label": "",
+        "button_link": "",
+        "layout": "grid",
+        "column_size": "small",
+        "column_align": "center",
+        "media_align": "text-center",
+        "image_ratio": "shortest",
+        "color_scheme": "none",
+        "button_style": "btn btn--primary"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "background_video_CiBgGa",
+    "rich_text_xVfAkU",
+    "rich_text_q9jbda",
+    "icons_with_text_JCTaWJ",
+    "media_with_text_nAW7Dz",
+    "rich_text_ntFrjR",
+    "slideshow_tqyFUR",
+    "image_banner_VCbYww",
+    "faq_R8tiWc",
+    "logo_list_xUjaPb",
+    "rich_text_zJNJfJ",
+    "multi_column_YTEfiD",
+    "rich_text_7g3gyF",
+    "multi_column_tRDfBk"
+  ]
+}

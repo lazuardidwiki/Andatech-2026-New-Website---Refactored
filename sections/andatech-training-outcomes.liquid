@@ -1,0 +1,109 @@
+{%- comment -%} Andatech — Training & Education outcome selector. {%- endcomment -%}
+
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-training.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'andatech-site.js' | asset_url }}" defer="defer"></script>
+
+<section class="at-training-outcomes"{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handleize }}"{% endif %}>
+  <div class="at-shell">
+    <header class="at-training-outcomes__header" data-at-rise>
+      {%- if section.settings.eyebrow != blank -%}<p class="at-stepper__eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      <h2 class="at-stepper__title">
+        {{ section.settings.heading | escape }}
+        {%- if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif -%}
+      </h2>
+      {%- if section.settings.desc != blank -%}<div class="at-stepper__desc">{{ section.settings.desc }}</div>{%- endif -%}
+    </header>
+
+    <div class="at-training-outcomes__grid">
+      {%- for block in section.blocks -%}
+        <article class="at-training-card" data-at-rise {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            <div class="at-training-card__media">
+              <img
+                src="{{ block.settings.image | image_url: width: 1100 }}"
+                srcset="{{ block.settings.image | image_url: width: 526 }} 526w, {{ block.settings.image | image_url: width: 900 }} 900w, {{ block.settings.image | image_url: width: 1100 }} 1100w"
+                sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1099px) calc(50vw - 44px), 33vw"
+                alt="{{ block.settings.image.alt | default: block.settings.title | escape }}"
+                loading="lazy"
+                width="526"
+                height="172">
+            </div>
+          {%- endif -%}
+
+          <div class="at-training-card__body">
+            {%- if block.settings.eyebrow != blank -%}<p class="at-training-card__eyebrow">{{ block.settings.eyebrow | escape }}</p>{%- endif -%}
+            <h3 class="at-training-card__title">{{ block.settings.title | escape }}</h3>
+            {%- if block.settings.desc != blank -%}<div class="at-training-card__desc">{{ block.settings.desc }}</div>{%- endif -%}
+
+            <dl class="at-training-card__details">
+              {%- if block.settings.detail_1_value != blank -%}
+                <div class="at-training-card__detail">
+                  <dt>{{ block.settings.detail_1_label | escape }}</dt>
+                  <dd>{{ block.settings.detail_1_value | escape }}</dd>
+                </div>
+              {%- endif -%}
+              {%- if block.settings.detail_2_value != blank -%}
+                <div class="at-training-card__detail">
+                  <dt>{{ block.settings.detail_2_label | escape }}</dt>
+                  <dd>{{ block.settings.detail_2_value | escape }}</dd>
+                </div>
+              {%- endif -%}
+            </dl>
+
+            {%- if block.settings.cta_label != blank -%}
+              <a class="at-training-card__link" href="{{ block.settings.cta_url | default: '#' }}">
+                {{ block.settings.cta_label | escape }}
+                <span aria-hidden="true">↗</span>
+              </a>
+            {%- endif -%}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Training outcomes",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "CHOOSE BY OUTCOME" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "What does your team need" },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "to be able to do?" },
+    { "type": "richtext", "id": "desc", "label": "Description", "default": "<p>Start with the outcome, not the course name. Each pathway has a different purpose and credential.</p>" }
+  ],
+  "blocks": [
+    {
+      "type": "outcome",
+      "name": "Outcome card",
+      "limit": 3,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "richtext", "id": "desc", "label": "Description" },
+        { "type": "text", "id": "detail_1_label", "label": "First detail label" },
+        { "type": "text", "id": "detail_1_value", "label": "First detail value" },
+        { "type": "text", "id": "detail_2_label", "label": "Second detail label" },
+        { "type": "text", "id": "detail_2_value", "label": "Second detail value" },
+        { "type": "text", "id": "cta_label", "label": "Link label" },
+        { "type": "url", "id": "cta_url", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Training outcomes",
+      "blocks": [
+        { "type": "outcome" },
+        { "type": "outcome" },
+        { "type": "outcome" }
+      ]
+    }
+  ]
+}
+{% endschema %}

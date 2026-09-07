@@ -1,0 +1,28 @@
+.kby-retail{ padding:80px 48px; }
+.kby-retail__wrap{ display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; }
+.kby-retail__head{ max-width:440px; }
+
+.kby-retail-card{
+  background:var(--kby-navy-raised); border:1px solid var(--kby-border);
+  border-radius:20px; padding:28px;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
+}
+.kby-retail-card__note{ font-size:12.5px; font-style:italic; color:var(--kby-ink-muted); text-align:center; margin:0 0 22px; }
+
+.kby-retail-card__logos{ display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; }
+.kby-retail-logo{
+  display:flex; align-items:center; justify-content:center;
+  background:var(--kby-navy); border:1px solid var(--kby-border-strong); border-radius:10px;
+  padding:14px 10px; text-decoration:none; transition:border-color .2s ease;
+}
+.kby-retail-logo:hover{ border-color:var(--kby-teal); }
+.kby-retail-logo img{ max-width:100%; max-height:28px; display:block; }
+.kby-retail-logo__text{ font-family:'Titillium Web',sans-serif; font-size:12px; font-weight:700; color:var(--kby-ink); text-align:center; }
+
+@media (max-width:820px){
+  .kby-retail__wrap{ grid-template-columns:1fr; }
+}
+@media (max-width:760px){
+  .kby-retail{ padding:56px 24px; }
+  .kby-retail-card__logos{ grid-template-columns:1fr 1fr; }
+}

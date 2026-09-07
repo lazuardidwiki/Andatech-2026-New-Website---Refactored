@@ -1,0 +1,62 @@
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-managed-programs.css' | asset_url | stylesheet_tag }}
+
+<section class="at-mp-comparison"{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handleize }}"{% endif %}>
+  <div class="at-shell">
+    <details{% if section.settings.open_by_default %} open{% endif %}>
+      <summary>{{ section.settings.summary | escape }}</summary>
+      <div class="at-mp-comparison__wrap">
+        <table>
+          <thead><tr><th scope="col">{{ section.settings.column_1 | escape }}</th><th scope="col">{{ section.settings.column_2 | escape }}</th><th scope="col">{{ section.settings.column_3 | escape }}</th><th scope="col">{{ section.settings.column_4 | escape }}</th></tr></thead>
+          <tbody>
+            {%- for block in section.blocks -%}
+              <tr {{ block.shopify_attributes }}><td data-label="{{ section.settings.column_1 | escape }}">{{ block.settings.question | escape }}</td><td data-label="{{ section.settings.column_2 | escape }}">{{ block.settings.answer_1 | escape }}</td><td data-label="{{ section.settings.column_3 | escape }}">{{ block.settings.answer_2 | escape }}</td><td data-label="{{ section.settings.column_4 | escape }}">{{ block.settings.answer_3 | escape }}</td></tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+    </details>
+    {%- if section.settings.note != blank -%}<div class="at-mp-comparison__note">{{ section.settings.note }}</div>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Responsibility comparison",
+  "tag": "section",
+  "class": "at-section",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "responsibility-comparison" },
+    { "type": "text", "id": "summary", "label": "Dropdown label", "default": "Compare responsibilities" },
+    { "type": "checkbox", "id": "open_by_default", "label": "Open by default", "default": false },
+    { "type": "text", "id": "column_1", "label": "First column", "default": "Question" },
+    { "type": "text", "id": "column_2", "label": "Second column", "default": "Organisation-led" },
+    { "type": "text", "id": "column_3", "label": "Third column", "default": "Shared delivery" },
+    { "type": "text", "id": "column_4", "label": "Fourth column", "default": "Coordinated program" },
+    { "type": "richtext", "id": "note", "label": "Supporting note" }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Comparison row",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "textarea", "id": "answer_1", "label": "Organisation-led answer" },
+        { "type": "textarea", "id": "answer_2", "label": "Shared delivery answer" },
+        { "type": "textarea", "id": "answer_3", "label": "Coordinated program answer" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Responsibility comparison",
+      "blocks": [
+        { "type": "row" },
+        { "type": "row" },
+        { "type": "row" }
+      ]
+    }
+  ]
+}
+{% endschema %}

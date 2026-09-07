@@ -1,0 +1,127 @@
+/* Same alignment fix as every other section — full width, 48px from the
+   true edge, not centered in a max-width box. */
+.kby-steps{ padding:0 48px 80px; }
+.kby-steps__wrap{ display:grid; grid-template-columns:1fr 1.3fr; gap:56px; align-items:stretch; }
+.kby-steps__intro{ display:flex; flex-direction:column; }
+.kby-steps__head{ margin-bottom:28px; }
+.kby-steps__desc{ font-family:'Titillium Web',sans-serif; font-size:15px; line-height:1.7; color:var(--kby-ink-muted); max-width:440px; margin:16px 0 0; }
+
+/* Pushes the promo card to the bottom of the intro column, so it lines up
+   with the bottom of the steps list on the right rather than floating
+   directly under the description regardless of how tall the steps column is. */
+.kby-promo{ margin-top:auto; }
+
+/* Distributes the four rows across the full height of this column, so it
+   visually fills the same vertical space as the intro column instead of
+   clustering at the top with empty space left underneath. */
+.kby-steps__list{ display:flex; flex-direction:column; justify-content:space-between; height:100%; }
+
+.kby-step{ border-bottom:1px solid var(--kby-border); }
+.kby-step__row{
+  width:100%; display:grid; grid-template-columns:90px 1fr auto; align-items:center; gap:20px;
+  background:none; border:none; cursor:pointer; text-align:left;
+  padding:28px 0;
+}
+
+/* Hover preview on rows that aren't already selected — color changes only,
+   no background tint. Hover-capable pointers only, same guard used
+   throughout this build so it doesn't create a stuck state on tap. */
+@media (hover:hover) and (pointer:fine){
+  .kby-step:not(.is-active) .kby-step__row:hover .kby-step__num{ -webkit-text-stroke-color:rgba(70,190,196,.55); }
+  .kby-step:not(.is-active) .kby-step__row:hover .kby-step__title{ color:var(--kby-ink); }
+  .kby-step:not(.is-active) .kby-step__row:hover .kby-step__chevron{ color:var(--kby-ink); }
+}
+
+/* Large display numeral — solid green when this step is selected, a hollow
+   outline (transparent fill + stroke) otherwise, rather than a small
+   circle-badge. "Selected", not "completed": steps are freely clickable in
+   any order, so this can't read as a progress indicator. */
+.kby-step__num{
+  font-family:'Titillium Web',sans-serif; font-weight:700; font-size:64px; line-height:1;
+  color:transparent; -webkit-text-stroke:1.5px rgba(237,241,244,.28);
+  transition:color .2s ease, -webkit-text-stroke .2s ease, text-shadow .25s ease;
+}
+.kby-step.is-active .kby-step__num{
+  color:var(--kby-green); -webkit-text-stroke:0;
+  text-shadow:0 0 24px rgba(149,193,31,.45);
+}
+
+.kby-step__title{ font-family:'Titillium Web',sans-serif; font-size:22px; font-weight:600; color:var(--kby-ink-muted); transition:color .2s ease; }
+.kby-step.is-active .kby-step__title{ color:var(--kby-ink); font-weight:700; }
+
+.kby-step__chevron{ color:var(--kby-ink-muted); display:flex; transition:transform .25s ease, color .2s ease; }
+.kby-step.is-active .kby-step__chevron{ transform:rotate(180deg); color:var(--kby-ink); }
+
+.kby-step__panel{ max-height:0; overflow:hidden; transition:max-height .3s ease; }
+/* Left padding matches the numeral column + gap (90px + 20px) so the
+   description lines up under the title, not under the numeral. */
+.kby-step__panel-inner > *{ padding:0 0 24px 110px; margin:0; }
+.kby-step__panel-inner p{ font-size:14.5px; color:var(--kby-ink-muted); line-height:1.7; }
+
+.kby-promo{ position:relative; overflow:hidden; background:var(--kby-navy-raised); border:1px solid var(--kby-border); border-radius:14px; padding:24px; box-shadow:0 8px 24px rgba(0,0,0,.25); }
+
+/* Rotating border glow — same technique as the tools card elsewhere in
+   this codebase: a masked ::before shows only a thin ring, and a conic
+   gradient sweeps a teal->green comet around it via an animated custom
+   property. Sits on top of the dashed border rather than replacing it. */
+@property --kby-angle{
+  syntax:'<angle>';
+  initial-value:0deg;
+  inherits:false;
+}
+.kby-promo::before{
+  content:'';
+  position:absolute; inset:0;
+  border-radius:inherit;
+  padding:1.5px;
+  background:conic-gradient(from var(--kby-angle,0deg),
+    transparent 0deg, transparent 250deg,
+    #46BEC4 290deg, #95C11F 320deg, transparent 350deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  animation:kby-glow-rotate 7s linear infinite;
+  pointer-events:none;
+}
+@keyframes kby-glow-rotate{
+  to{ --kby-angle:360deg; }
+}
+@media (prefers-reduced-motion: reduce){
+  .kby-promo::before{ animation:none; }
+}
+.kby-promo__label{ font-size:12px; color:var(--kby-ink-muted); text-transform:uppercase; letter-spacing:1px; margin:0 0 10px; }
+.kby-promo__code{
+  font-family:monospace; font-size:19px; font-weight:700; color:var(--kby-green);
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  background:#0B1116; padding:14px 16px; border-radius:10px;
+}
+.kby-promo__copy{
+  font-family:'Titillium Web',sans-serif; font-size:12px; font-weight:700;
+  background:var(--kby-navy); color:var(--kby-ink); border:1px solid var(--kby-border-strong);
+  padding:8px 12px; border-radius:8px; cursor:pointer;
+}
+.kby-promo__copy:hover{ border-color:var(--kby-teal); color:var(--kby-teal); }
+.kby-promo__fine{ font-size:12px; color:var(--kby-ink-muted); margin:12px 0 0; }
+
+@media (max-width:820px){
+  .kby-steps__wrap{ grid-template-columns:1fr; }
+  /* display:contents removes .kby-steps__intro's own box without touching
+     markup — its children (head, promo) become direct items of the
+     .kby-steps__wrap grid, which is what lets `order` move the promo card
+     below the steps list here without duplicating any content. */
+  .kby-steps__intro{ display:contents; }
+  .kby-steps__head{ order:1; margin-bottom:0; }
+  .kby-steps__list{ order:2; height:auto; }
+  .kby-promo{ order:3; margin-top:32px; text-align:center; }
+  .kby-promo__code{ flex-direction:column; align-items:stretch; gap:12px; }
+  .kby-promo__code span{ text-align:center; }
+  .kby-promo__code span{ font-size:16px; word-break:break-all; }
+  .kby-promo__copy{ width:100%; text-align:center; }
+}
+@media (max-width:760px){
+  .kby-steps{ padding:0 24px 56px; }
+  .kby-step__row{ grid-template-columns:56px 1fr auto; gap:14px; padding:20px 0; }
+  .kby-step__num{ font-size:40px; }
+  .kby-step__title{ font-size:18px; }
+  .kby-step__panel-inner > *{ padding-left:70px; }
+}

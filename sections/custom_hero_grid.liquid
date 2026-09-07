@@ -1,0 +1,296 @@
+{% comment %}
+  Safe-Mode: Andatech Hero (Mobile Bulletproof)
+  Author: Customized for Guaranteed Mobile Display
+{% endcomment %}
+
+<style>
+  /* Scoping variables */
+  #shopify-section-{{ section.id }} {
+    --anda-green: {{ section.settings.primary_color }};
+    --anda-dark: {{ section.settings.text_color }};
+    --bg-gradient-start: {{ section.settings.bg_color_1 }};
+    --bg-gradient-end: {{ section.settings.bg_color_2 }};
+  }
+
+  /* WRAPPER */
+  #shopify-section-{{ section.id }} .anda-section-container {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    overflow: hidden;
+    padding-bottom: 60px;
+    width: 100%;
+  }
+
+  /* FLEX LAYOUT */
+  #shopify-section-{{ section.id }} .anda-intro {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    padding: 80px 40px;
+    min-height: 550px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* TEXT SIDE */
+  #shopify-section-{{ section.id }} .info {
+    flex: 1;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
+    z-index: 2;
+  }
+
+  #shopify-section-{{ section.id }} .info h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--anda-dark);
+    margin: 0 0 20px 0;
+  }
+
+  #shopify-section-{{ section.id }} .info p {
+    font-size: 1.15rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 30px;
+  }
+
+  /* IMAGE SIDE - CONTAINER */
+  #shopify-section-{{ section.id }} .split-images {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 15px; /* Gap between panels */
+    max-width: 650px;
+    height: 400px;
+  }
+
+  /* INDIVIDUAL PANELS */
+  #shopify-section-{{ section.id }} .hero-panel {
+    flex: 1;
+    height: 100%;
+    border-radius: 20px;
+    border: 3px solid var(--anda-green);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+    overflow: hidden;
+    position: relative;
+    background: #e0e0e0; 
+  }
+
+  /* THE IMAGE (Object Fit Method) */
+  #shopify-section-{{ section.id }} .hero-panel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures image fills the panel height */
+    display: block;
+    
+    /* CRITICAL: Force the image to be 300% width of the panel so we see only a slice */
+    width: 300%; 
+    max-width: none;
+  }
+
+  /* Panel 1 (Left): Show Left 0% */
+  #shopify-section-{{ section.id }} .panel-left img {
+    object-position: 0% 50%;
+    margin-left: 0; 
+  }
+
+  /* Panel 2 (Center): Show Center 50% & Bounce Up */
+  #shopify-section-{{ section.id }} .panel-center {
+    transform: translateY(-30px);
+  }
+  #shopify-section-{{ section.id }} .panel-center img {
+    object-position: 50% 50%;
+    margin-left: -100%; /* Shift left by 1 panel width */
+  }
+
+  /* Panel 3 (Right): Show Right 100% */
+  #shopify-section-{{ section.id }} .panel-right img {
+    object-position: 100% 50%;
+    margin-left: -200%; /* Shift left by 2 panel widths */
+  }
+
+  /* BUTTON STYLES */
+  #shopify-section-{{ section.id }} .anda-btn {
+    display: inline-block;
+    padding: 15px 40px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    color: white;
+    background: var(--anda-green);
+    background: linear-gradient(45deg, var(--anda-green) 0%, #6fa32e 100%);
+    box-shadow: 0 4px 15px rgba(141, 198, 63, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  #shopify-section-{{ section.id }} .anda-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(141, 198, 63, 0.6);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    #shopify-section-{{ section.id }} .anda-intro {
+      flex-direction: column-reverse; 
+      padding: 60px 20px;
+      gap: 50px;
+    }
+
+    #shopify-section-{{ section.id }} .info {
+      align-items: center;
+      max-width: 100%;
+      text-align: center;
+    }
+    
+    #shopify-section-{{ section.id }} .info h1 {
+      font-size: 2.5rem; /* Smaller Font on Mobile */
+    }
+
+    #shopify-section-{{ section.id }} .split-images {
+      width: 100%;
+      /* Explicit Mobile Height */
+      height: 300px; 
+    }
+  }
+
+  @media (max-width: 500px) {
+    #shopify-section-{{ section.id }} .split-images {
+      height: 250px; /* Even smaller for phones */
+      gap: 8px;
+    }
+    
+    #shopify-section-{{ section.id }} .hero-panel {
+      border-width: 2px;
+      border-radius: 12px;
+    }
+    
+    /* On tiny screens, adjust the shift logic slightly if needed, 
+       but percentages should hold up. */
+  }
+</style>
+
+<div class="anda-section-container">
+  <section class="anda-intro">
+    
+    <div class="info">
+      <h1>{{ section.settings.heading }}</h1>
+      <p>{{ section.settings.description | newline_to_br }}</p>
+      {% if section.settings.btn_link != blank %}
+        <a href="{{ section.settings.btn_link }}" class="anda-btn">{{ section.settings.btn_text }}</a>
+      {% endif %}
+    </div>
+
+    <div class="split-images">
+      {% if section.settings.hero_main_image != blank %}
+        
+        <div class="hero-panel panel-left">
+          {{ section.settings.hero_main_image | image_url: width: 1200 | image_tag: loading: 'eager' }}
+        </div>
+        
+        <div class="hero-panel panel-center">
+          {{ section.settings.hero_main_image | image_url: width: 1200 | image_tag: loading: 'eager' }}
+        </div>
+        
+        <div class="hero-panel panel-right">
+          {{ section.settings.hero_main_image | image_url: width: 1200 | image_tag: loading: 'eager' }}
+        </div>
+
+      {% else %}
+        <div class="hero-panel" style="background: #ccc;"></div>
+        <div class="hero-panel panel-center" style="background: #999;"></div>
+        <div class="hero-panel" style="background: #ccc;"></div>
+      {% endif %}
+    </div>
+
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Hero (Mobile Bulletproof)",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_main_image",
+      "label": "Main Hero Image",
+      "info": "Upload ONE wide image. It will be automatically split across 3 panels."
+    },
+    {
+      "type": "header",
+      "content": "Text Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Andatech Solutions"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Explore our range of professional safety equipment."
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text",
+      "default": "Explore"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "primary_color",
+      "label": "Primary Accent",
+      "default": "#8dc63f"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "bg_color_1",
+      "label": "Gradient Start",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "bg_color_2",
+      "label": "Gradient End",
+      "default": "#f4f4f4"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero (Mobile Bulletproof)"
+    }
+  ]
+}
+{% endschema %}

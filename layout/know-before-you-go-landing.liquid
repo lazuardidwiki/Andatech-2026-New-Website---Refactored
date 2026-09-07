@@ -1,0 +1,215 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111820">
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- else -%}
+    <meta name="description" content="Australia's strict 0.00% BAC limit for P-platers means guesswork can cost a licence. Check your BAC before you drive — plus 10% off personal breathalysers.">
+  {%- endif -%}
+
+  <title>{{ page_title }}</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-P4WPHJP');</script>
+  <!-- End Google Tag Manager -->
+
+  <!-- HubSpot — deferred until the visitor interacts, same pattern as Beyond
+       The Test. The giveaway form here will need to POST directly to
+       api.hsforms.com/submissions/v3 via fetch() rather than depend on this
+       script, for the same reason: paid traffic landing on this page
+       shouldn't compete with HubSpot's tracking bundle for first render. -->
+  <script>
+    (function(){
+      var EVENTS = ['pointerdown', 'touchstart', 'keydown'];
+      var loaded = false;
+      function loadHubSpot(){
+        if (loaded) return;
+        loaded = true;
+        for (var i = 0; i < EVENTS.length; i++){ window.removeEventListener(EVENTS[i], loadHubSpot); }
+        var s = document.createElement('script');
+        s.type = 'text/javascript'; s.id = 'hs-script-loader'; s.async = true; s.defer = true;
+        s.src = 'https://js-ap1.hs-scripts.com/7005767.js';
+        document.head.appendChild(s);
+      }
+      for (var i = 0; i < EVENTS.length; i++){ window.addEventListener(EVENTS[i], loadHubSpot, { passive: true }); }
+      window.addEventListener('load', function(){
+        setTimeout(function(){
+          if (window.requestIdleCallback) requestIdleCallback(loadHubSpot, { timeout: 4000 });
+          else loadHubSpot();
+        }, 5000);
+      });
+    })();
+  </script>
+
+  {% render 'meta-tags' %}
+  {%- render 'doc-head-core' -%}
+  {%- render 'doc-head-social' -%}
+
+  {{ content_for_header }}
+
+  {{ 'know-before-you-go-base.css' | asset_url | stylesheet_tag }}
+  {{ 'know-before-you-go-dotfield.css' | asset_url | stylesheet_tag }}
+  {{ 'know-before-you-go-hero.css' | asset_url | stylesheet_tag }}
+  {{ 'know-before-you-go-solve-it.css' | asset_url | stylesheet_tag }}
+  {{ 'know-before-you-go-how-it-works.css' | asset_url | stylesheet_tag }}
+  {{ 'know-before-you-go-giveaway.css' | asset_url | stylesheet_tag }}
+  {{ 'know-before-you-go-edu-hub.css' | asset_url | stylesheet_tag }}
+  {{ 'know-before-you-go-retailers.css' | asset_url | stylesheet_tag }}
+  {{ 'know-before-you-go-collection.css' | asset_url | stylesheet_tag }}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer="defer"></script>
+  <script src="{{ 'know-before-you-go-base.js' | asset_url }}" defer="defer"></script>
+  <!-- Dot-field temporarily disabled for a loading-feel comparison — uncomment to re-enable.
+  <script src="{{ 'know-before-you-go-dotfield.js' | asset_url }}" defer="defer"></script>
+  -->
+  <script src="{{ 'know-before-you-go-solve-it.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'know-before-you-go-how-it-works.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'know-before-you-go-giveaway.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'know-before-you-go-edu-hub.js' | asset_url }}" defer="defer"></script>
+</head>
+<body>
+
+<div class="kby-dotfield" id="kby-dotfield" aria-hidden="true"></div>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P4WPHJP"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<a class="kby-skip-link" href="#main-content">
+  {{- 'accessibility.skip_to_content' | t -}}
+</a>
+
+<nav class="kby-nav">
+  <div class="kby-nav__bg"></div>
+  <div class="kby-nav__inner">
+
+    <!-- Logo doubles as "home" — no separate back/search icons on this page -->
+    <a href="{{ shop.url }}" class="kby-nav__logo" aria-label="Andatech home">
+      <img src="https://cdn.shopify.com/s/files/1/0241/5850/2976/files/Logomark_SVG.svg?v=1784364652" alt="Andatech" class="kby-nav__logo-img">
+      <span class="kby-nav__logo-text">Know Before You Go</span>
+    </a>
+
+    <nav class="kby-nav__menu-pill">
+      <a href="#why-test">Why Test</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#giveaway">Giveaway</a>
+      <a href="#edu-hub">Edu Hub</a>
+      <a href="#retailers">Retailers</a>
+    </nav>
+
+    <div class="kby-nav__actions">
+      <a href="/collections/personal-breathalysers" class="kby-btn kby-btn--primary kby-btn--nav kby-btn--specular">Shop Breathalysers</a>
+      <button class="kby-nav__hamburger" id="kby-menu-toggle" aria-label="Open menu" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="kby-drawer-overlay" id="kby-drawer-overlay"></div>
+<div class="kby-drawer" id="kby-drawer">
+  <button class="kby-drawer__close" id="kby-drawer-close" aria-label="Close menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <a href="#why-test">Why Test</a>
+  <a href="#how-it-works">How It Works</a>
+  <a href="#giveaway">Giveaway</a>
+  <a href="#edu-hub">Edu Hub</a>
+  <a href="#retailers">Retailers</a>
+  <a href="/collections/personal-breathalysers" class="kby-btn kby-btn--primary">Shop Breathalysers</a>
+</div>
+
+<main id="main-content">
+  {{ content_for_layout }}
+</main>
+
+<!-- Footer reused directly from Beyond The Test (.btt-footer) — same content
+     structure Dwiki's Figma export shows: brand mark, Contact Us block,
+     Solutions links, certs/social, copyright bar. Loads the BTT footer
+     styles from landing.css, which already ships that component. -->
+{{ 'landing.css' | asset_url | stylesheet_tag }}
+<footer class="btt-footer">
+  <div class="btt-footer__inner">
+
+    <div class="btt-footer__top">
+      <div class="btt-footer__col btt-footer__col--brand">
+        <div class="btt-footer__brand">
+          <img src="https://cdn.shopify.com/s/files/1/0241/5850/2976/files/Logomark_SVG.svg?v=1784364652" alt="" class="btt-footer__logomark">
+        </div>
+        <div class="btt-footer__contact">
+          <p class="btt-footer__col-heading">Contact Us</p>
+          <p class="btt-footer__contact-line">Address: 9 Trade Pl, Vermont VIC 3133</p>
+          <p class="btt-footer__contact-line">Business Hours: Monday to Friday, 9am to 5.30pm (AEST)</p>
+          <a href="https://andatech.com.au/pages/talk-to-sales" class="btt-footer__contact-link">Request Information</a>
+          <a href="https://andatech.com.au/pages/support" class="btt-footer__contact-link">Service Information</a>
+        </div>
+      </div>
+
+      <div class="btt-footer__col btt-footer__col--links">
+        <p class="btt-footer__col-heading">Solutions</p>
+        <ul class="btt-footer__link-list">
+          <li><a href="#">Workplace Alcohol &amp; Drug Testing</a></li>
+          <li><a href="#">Personal Alcohol &amp; Drug Testing</a></li>
+          <li><a href="#">Drug Testing</a></li>
+          <li><a href="#">Customer Success</a></li>
+          <li><a href="#">Calibration &amp; Servicing</a></li>
+          <li><a href="#">Data Management System (Andalink)</a></li>
+          <li><a href="#">News &amp; Updates</a></li>
+        </ul>
+      </div>
+
+      <div class="btt-footer__col btt-footer__col--meta">
+        <img
+          src="https://cdn.shopify.com/s/files/1/0241/5850/2976/files/Certification_Logo_Collection_White_a938641b-83ba-4d6a-966e-66434f3c57c0.webp?v=1781655073"
+          alt="Andatech certifications: Australian Standard AS3547, ISO 9001, ilac-MRA and NATA accredited"
+          class="btt-footer__certs" loading="lazy">
+
+        <nav class="btt-footer__social" aria-label="Social media">
+          <a href="https://www.facebook.com/andatech.australia" aria-label="Facebook" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="https://www.youtube.com/@andatechmedia" aria-label="YouTube" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://www.instagram.com/andatech.au/" aria-label="Instagram" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+          </a>
+          <a href="https://www.tiktok.com/@andatech.au" aria-label="TikTok" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/company/andatech/" aria-label="LinkedIn" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="btt-footer__bottom">
+      <p class="btt-footer__copy">&copy; {{ 'now' | date: '%Y' }} Andatech. All rights reserved.</p>
+      <nav class="btt-footer__links" aria-label="Legal">
+        <a href="#">Contact Support</a>
+        <a href="#">Refund Policy</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Settings</a>
+      </nav>
+    </div>
+
+  </div>
+</footer>
+
+</body>
+</html>

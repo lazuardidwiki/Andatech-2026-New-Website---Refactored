@@ -1,0 +1,447 @@
+{%- comment -%}
+  Andatech — Header, nav and mega menu.
+
+  Structure only: the nav and every mega panel are driven by the menu chosen in
+  "Main menu" below, so whatever you build in Content → Menus renders here. One
+  top-level link = one nav button = one panel.
+
+  Per-link descriptions can't live in a Shopify menu (menus carry title + URL
+  only), so each panel block takes a "Title :: Description" mapping instead —
+  see the Link descriptions field.
+
+  Feature card imagery is per-panel block settings for the same reason.
+{%- endcomment -%}
+
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-header.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'andatech-site.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'andatech-header.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign main_menu = linklists[section.settings.menu]
+-%}
+
+{%- comment -%} ── Utility bar ───────────────────────────────────────── {%- endcomment -%}
+{%- if section.settings.show_utility -%}
+  <div class="at-utility">
+    <div class="at-shell at-utility__inner">
+      {%- if section.settings.util_1_label != blank -%}
+        <a class="at-utility__link" href="{{ section.settings.util_1_url | default: '#' }}">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4.5M12 17.2v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          {{ section.settings.util_1_label | escape }}
+        </a>
+      {%- endif -%}
+      {%- if section.settings.util_2_label != blank -%}
+        <a class="at-utility__link" href="{{ section.settings.util_2_url | default: '#' }}">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.5 3.5h3l1.5 4-2 1.4a12 12 0 0 0 6.1 6.1l1.4-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.7a2 2 0 0 1 2-2.2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+          {{ section.settings.util_2_label | escape }}
+        </a>
+      {%- endif -%}
+      {%- if section.settings.util_cta_label != blank -%}
+        <a class="at-utility__cta" href="{{ section.settings.util_cta_url | default: '#' }}">{{ section.settings.util_cta_label | escape }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{%- comment -%} ── Header ────────────────────────────────────────────── {%- endcomment -%}
+{%- if main_menu.links.size == 0 and request.design_mode -%}
+  <p style="padding:12px 24px;background:#FFF4CE;color:#5B4B00;font:14px/1.4 system-ui;margin:0">
+    Andatech Header: no menu selected yet. Pick one under <strong>Main menu</strong> — the nav,
+    the mega panels and the mobile drawer are all built from it.
+  </p>
+{%- endif -%}
+
+<header class="at-header" data-at-header>
+  <div class="at-shell at-header__inner">
+
+    <a class="at-header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+      {%- if section.settings.logo != blank -%}
+        <img src="{{ section.settings.logo | image_url: width: 420 }}"
+             alt="{{ shop.name | escape }}"
+             width="{{ section.settings.logo.width }}" height="{{ section.settings.logo.height }}">
+      {%- else -%}
+        <span>{{ shop.name }}</span>
+      {%- endif -%}
+    </a>
+
+    {%- if main_menu.links.size > 0 -%}
+      <nav class="at-nav" aria-label="Primary">
+        <ul class="at-nav__list">
+          {%- for link in main_menu.links -%}
+            <li class="at-nav__item">
+              {%- if link.links.size > 0 -%}
+                {%- comment -%}
+                  Label wrapped in a span so the CSS can stack a hidden bold
+                  ::before clone in the same grid cell. That reserves the
+                  700-weight width up front, so opening a panel no longer
+                  re-flows the (centre-anchored) nav row out from under the
+                  cursor. data-label carries the text for the clone.
+                {%- endcomment -%}
+                <button class="at-nav__btn" type="button"
+                        data-menu="{{ link.handle }}" data-label="{{ link.title | escape }}" aria-expanded="false"><span>{{ link.title | escape }}</span></button>
+              {%- else -%}
+                <a class="at-nav__btn" href="{{ link.url }}" data-label="{{ link.title | escape }}"><span>{{ link.title | escape }}</span></a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    <div class="at-header__tools">
+      <button class="at-iconbtn" type="button" data-at-search-open aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      {%- assign at_cart_count = cart.item_count | default: 0 -%}
+      <a class="at-iconbtn at-header__cart" href="{{ routes.cart_url }}" data-at-cart aria-label="{% if at_cart_count > 0 %}Cart, {{ at_cart_count }} items{% else %}Cart{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 4h2.2l2 11.2a1.6 1.6 0 0 0 1.6 1.3h8.5a1.6 1.6 0 0 0 1.6-1.2L21 8H6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.5" cy="20" r="1.4" fill="currentColor"/><circle cx="17.5" cy="20" r="1.4" fill="currentColor"/></svg>
+        {%- comment -%}
+          Rendered server-side so the badge is correct at first paint and does not
+          flash in on every navigation. andatech-site.js re-checks /cart.js after
+          load and silently corrects it if this value was stale (instant.page
+          prefetch / bfcache serve HTML snapshotted before the cart changed).
+        {%- endcomment -%}
+        <span class="at-cart-count" data-at-cart-count {% if at_cart_count == 0 %}hidden{% endif %} aria-hidden="true">{{ at_cart_count }}</span>
+      </a>
+      <a class="at-iconbtn" href="{{ routes.account_url }}" aria-label="Account">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8.5" r="3.7" stroke="currentColor" stroke-width="1.8"/><path d="M4.8 20a7.2 7.2 0 0 1 14.4 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </a>
+      {%- if main_menu.links.size > 0 -%}
+        <button class="at-burger" type="button" data-at-burger aria-label="Menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      {%- endif -%}
+    </div>
+
+  </div>
+</header>
+
+{%- comment -%}
+  ── Search overlay ──────────────────────────────────────────────────────
+  Sibling of <header>, not a child. .at-search-modal is position:fixed, and
+  .at-header--hidden puts transform:translateY(-100%) on the header while the
+  smart-header hides it. A transformed ancestor becomes the containing block
+  for fixed descendants, so nested here the overlay would be clipped to the
+  88px header box instead of the viewport.
+{%- endcomment -%}
+<div class="at-search-modal" data-at-search role="dialog" aria-modal="true" aria-label="Search">
+  <div class="at-search-modal__panel">
+    <form class="at-search-modal__form" action="{{ routes.search_url }}" method="get" role="search">
+      <svg class="at-search-modal__search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.2" stroke="currentColor" stroke-width="1.7"/><path d="m15.4 15.4 4.5 4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <input class="at-search-modal__input" type="search" name="q"
+             placeholder="{{ section.settings.search_placeholder | default: 'Search products, guides and support' | escape }}"
+             autocomplete="off" data-at-search-input>
+      <button class="at-search-modal__clear" type="button" data-at-search-clear aria-label="Clear search" hidden>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="currentColor"/><path d="m9 9 6 6m0-6-6 6" stroke="var(--at-white)" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <button class="at-search-modal__close" type="button" data-at-search-close aria-label="Close search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </form>
+    <div class="at-search-modal__suggestions" data-at-search-quick-links>
+      <p class="at-search-modal__suggestion-label">Quick Links</p>
+      <div class="at-search-modal__suggestion-links at-search-modal__quick-links">
+        {%- for link in main_menu.links limit: 4 -%}
+          <a href="{{ link.url }}"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>{{ link.title | escape }}</span></a>
+        {%- endfor -%}
+      </div>
+    </div>
+    <div class="at-search-modal__results" data-at-search-results hidden aria-live="polite"></div>
+    <p class="at-search-modal__hint">Press Enter to search, Esc to close.</p>
+  </div>
+</div>
+
+
+{%- comment -%}
+  ── Mega menu ───────────────────────────────────────────────────────────
+  Sibling of <header> for the same reason as the search overlay above: the
+  panel is position:fixed at top:var(--at-mega-top), and .at-header--hidden's
+  transform would otherwise re-root it to the header's box — measured as an
+  exact 56px (utility-bar height) jump, twice per scroll gesture because the
+  header transitions that transform over 360ms.
+  andatech-site.js measures the header's bottom edge into --at-mega-top.
+{%- endcomment -%}
+{%- if main_menu.links.size > 0 -%}
+  <div class="at-mega" data-at-mega hidden>
+    <nav class="at-mobile-nav" aria-label="Mobile navigation">
+      <div class="at-mobile-nav__topbar">
+        <span class="at-mobile-nav__title">Menu</span>
+        <button class="at-mobile-nav__close at-burger" type="button" data-at-mobile-nav-close aria-label="Close menu" aria-expanded="true">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <ul class="at-mobile-nav__list" data-at-mobile-nav-root role="list">
+        {%- for link in main_menu.links -%}
+          <li class="at-mobile-nav__item">
+            {%- if link.links.size > 0 -%}
+              <button class="at-mobile-nav__trigger" type="button" data-at-mobile-nav-open="{{ link.handle }}" aria-expanded="false">
+                <span>{{ link.title | escape }}</span>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            {%- else -%}
+              <a class="at-mobile-nav__direct-link" href="{{ link.url }}">{{ link.title | escape }}</a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+        <li class="at-mobile-nav__item at-mobile-nav__item--account">
+          <a class="at-mobile-nav__direct-link" href="{{ routes.account_url }}">
+            {%- if customer -%}My account{%- else -%}Sign in{%- endif -%}
+          </a>
+        </li>
+      </ul>
+      {%- for link in main_menu.links -%}
+        {%- if link.links.size > 0 -%}
+          <section class="at-mobile-nav__subpanel" data-at-mobile-nav-panel="{{ link.handle }}" hidden aria-label="{{ link.title | escape }}">
+            <button class="at-mobile-nav__back" type="button" data-at-mobile-nav-back>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 5-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Back
+            </button>
+            <p class="at-mobile-nav__subheading">{{ link.title | escape }}</p>
+            <a class="at-mobile-nav__view-all" href="{{ link.url }}">View all {{ link.title | escape }}</a>
+            <ul class="at-mobile-nav__sublist" role="list">
+              {%- for child in link.links -%}
+                <li><a href="{{ child.url }}">{{ child.title | escape }}<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+              {%- endfor -%}
+            </ul>
+          </section>
+        {%- endif -%}
+      {%- endfor -%}
+    </nav>
+    {%- for link in main_menu.links -%}
+      {%- if link.links.size > 0 -%}
+
+        {%- comment -%} Find the block configured for this menu item, matched by title. {%- endcomment -%}
+        {%- assign panel_block = blank -%}
+        {%- for b in section.blocks -%}
+          {%- if b.settings.link_name != blank and b.settings.link_name == link.title -%}
+            {%- assign panel_block = b -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- comment -%} Header row is identical in both layouts, so build it once. {%- endcomment -%}
+        {%- capture panel_header -%}
+          <div class="at-mega__header">
+            <span class="at-mega__label">{{ link.title | escape }}</span>
+            <a class="at-mega__view-all" href="{{ link.url }}">
+              {{ section.settings.view_all_prefix | default: 'View all' }} {{ link.title | downcase | escape }}
+              <span class="at-mega__arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M17 7v7.6M17 7H9.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </a>
+          </div>
+        {%- endcapture -%}
+
+        <div class="at-mega__panel" data-panel="{{ link.handle }}">
+
+        {%- if panel_block != blank and panel_block.settings.layout == 'cards' -%}
+          {%- comment -%}
+            Image-card layout (Industries, Knowledge Centre). The menu still drives
+            the structure and the URLs; each child link's picture comes from a
+            "Panel card" block matched on panel name + link title, because a
+            Shopify menu cannot carry an image.
+          {%- endcomment -%}
+          {{ panel_header }}
+          <div class="at-mega__visual-grid{% if link.links.size <= 3 %} at-mega__visual-grid--3{% endif %}">
+            {%- for child in link.links -%}
+              {%- assign card = blank -%}
+              {%- for c in section.blocks -%}
+                {%- if c.type == 'card' and c.settings.panel_name == link.title and c.settings.item_title == child.title -%}
+                  {%- assign card = c -%}
+                {%- endif -%}
+              {%- endfor -%}
+              <a class="at-mega__visual-card" href="{{ child.url }}"{% if card != blank %} {{ card.shopify_attributes }}{% endif %}>
+                {%- if card != blank and card.settings.image != blank -%}
+                  <img src="{{ card.settings.image | image_url: width: 700 }}" alt="" loading="eager" fetchpriority="low" decoding="async" width="700" height="{{ 700 | divided_by: card.settings.image.aspect_ratio | round }}">
+                {%- endif -%}
+                <div class="at-mega__visual-body">
+                  <span class="at-mega__visual-title">{{ child.title | escape }}</span>
+                  {%- if card != blank and card.settings.desc != blank -%}
+                    <span class="at-mega__visual-desc">{{ card.settings.desc | escape }}</span>
+                  {%- endif -%}
+                </div>
+                {%- comment -%} Points down-right, matching the design. Not the same arrow as "View all", which points up-right. {%- endcomment -%}
+                <span class="at-mega__visual-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 8 16 16M16 16V9.8M16 16H9.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </a>
+            {%- endfor -%}
+          </div>
+
+          {%- if request.design_mode and link.links.size > 0 -%}
+            {%- assign card_count = 0 -%}
+            {%- for c in section.blocks -%}
+              {%- if c.type == 'card' and c.settings.panel_name == link.title -%}{%- assign card_count = card_count | plus: 1 -%}{%- endif -%}
+            {%- endfor -%}
+            {%- if card_count == 0 -%}
+              <p style="padding:10px 24px;background:#FFF4CE;color:#5B4B00;font:14px/1.4 system-ui;margin:0">
+                “{{ link.title }}” is set to image cards but has no <strong>Panel card</strong> blocks yet.
+                Add one per link, setting <em>Panel</em> to “{{ link.title }}” and <em>Link title</em> to the exact child link name.
+              </p>
+            {%- endif -%}
+          {%- endif -%}
+
+        {%- else -%}
+
+          <div class="at-mega__columns{% unless panel_block != blank and panel_block.settings.card_image != blank %} at-mega__columns--visual{% endunless %}">
+
+            {%- if panel_block != blank and panel_block.settings.card_image != blank -%}
+              <div class="at-mega__card-col">
+                <a class="at-mega__card{% if panel_block.settings.card_light %} at-mega__card--light{% endif %}"
+                   href="{{ panel_block.settings.card_url | default: link.url }}">
+                  <img class="at-mega__card-img" src="{{ panel_block.settings.card_image | image_url: width: 900 }}" alt="" loading="eager" fetchpriority="low" decoding="async" width="900" height="{{ 900 | divided_by: panel_block.settings.card_image.aspect_ratio | round }}">
+                  <div class="at-mega__card-body">
+                    {%- if panel_block.settings.card_title != blank -%}
+                      <p class="at-mega__card-title">{{ panel_block.settings.card_title | escape }}</p>
+                    {%- endif -%}
+                    {%- comment -%}
+                      Wrapped in a block-level element rather than a paragraph tag:
+                      card_desc is a richtext setting, so Shopify emits its own
+                      paragraph. Nesting paragraphs is invalid and the browser closes
+                      the outer one early, which drops the text out of
+                      .at-mega__card-desc and hands it to Clean Canvas's base styles
+                      (navy, oversized) instead of white 16px.
+                    {%- endcomment -%}
+                    {%- if panel_block.settings.card_desc != blank -%}
+                      <div class="at-mega__card-desc">{{ panel_block.settings.card_desc }}</div>
+                    {%- endif -%}
+                    {%- if panel_block.settings.card_cta != blank -%}
+                      <span class="at-btn at-btn--green at-btn--sm">{{ panel_block.settings.card_cta | escape }}
+                        <i class="at-btn__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i>
+                      </span>
+                    {%- endif -%}
+                  </div>
+                </a>
+              </div>
+            {%- endif -%}
+
+            <div class="at-mega__main">
+              {{ panel_header }}
+
+              {%- comment -%}
+                Two rendering modes:
+                  1. GROUPED — panel block's "Link groups" setting is populated. Each
+                     line becomes one labelled column: `Group name :: Title, Title, Title`.
+                     Titles are matched to the menu children by exact text, same
+                     rule that already governs link_descriptions and Panel cards.
+                  2. AUTO-SPLIT — default when Link groups is blank. The children
+                     are split into two equal columns with no headings, preserving
+                     the original behaviour for every existing panel.
+              {%- endcomment -%}
+              {%- if panel_block != blank and panel_block.settings.link_groups != blank -%}
+                <div class="at-mega__links-grid">
+                  {%- assign group_lines = panel_block.settings.link_groups | strip | newline_to_br | split: '<br />' -%}
+                  {%- for gline in group_lines -%}
+                    {%- assign gparts = gline | strip | split: '::' -%}
+                    {%- if gparts.size >= 2 -%}
+                      {%- assign group_name = gparts[0] | strip -%}
+                      {%- assign titles = gparts[1] | split: ',' -%}
+                      <div>
+                        {%- if group_name != blank -%}
+                          <span class="at-mega__col-label">{{ group_name | escape }}</span>
+                        {%- endif -%}
+                        {%- for t in titles -%}
+                          {%- assign wanted = t | strip -%}
+                          {%- for child in link.links -%}
+                            {%- if child.title == wanted -%}
+                              {%- render 'andatech-mega-link', child: child, map: panel_block.settings.link_descriptions -%}
+                            {%- endif -%}
+                          {%- endfor -%}
+                        {%- endfor -%}
+                      </div>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              {%- else -%}
+                {%- assign half = link.links.size | plus: 1 | divided_by: 2 -%}
+                <div class="at-mega__links-grid">
+                  <div>
+                    {%- for child in link.links -%}
+                      {%- if forloop.index0 < half -%}
+                        {%- render 'andatech-mega-link', child: child, map: panel_block.settings.link_descriptions -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                  <div>
+                    {%- for child in link.links -%}
+                      {%- if forloop.index0 >= half -%}
+                        {%- render 'andatech-mega-link', child: child, map: panel_block.settings.link_descriptions -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+
+          </div>
+
+        {%- endif -%}
+        </div>
+
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <div class="at-scrim" data-at-scrim></div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Andatech Header",
+  "tag": "header",
+  "class": "at-header-section",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Main menu",
+      "info": "Top-level links become nav buttons. Any link with children opens a mega panel.", "default": "main-menu" },
+    { "type": "image_picker", "id": "logo", "label": "Logo", "info": "Light-mode logo — navy wordmark." },
+    { "type": "text", "id": "view_all_prefix", "label": "View-all prefix", "default": "View all" },
+    { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Search products, guides and support" },
+    { "type": "header", "content": "Utility bar" },
+    { "type": "checkbox", "id": "show_utility", "label": "Show utility bar", "info": "Hidden on mobile by design.", "default": true },
+    { "type": "text", "id": "util_1_label", "label": "Link 1 label", "default": "Emergency Portal" },
+    { "type": "url", "id": "util_1_url", "label": "Link 1 URL" },
+    { "type": "text", "id": "util_2_label", "label": "Link 2 label", "default": "1300 800 200" },
+    { "type": "url", "id": "util_2_url", "label": "Link 2 URL" },
+    { "type": "text", "id": "util_cta_label", "label": "Button label", "default": "Book Consultation" },
+    { "type": "url", "id": "util_cta_url", "label": "Button URL" }
+  ],
+  "blocks": [
+    {
+      "type": "panel",
+      "name": "Mega panel",
+      "limit": 10,
+      "settings": [
+        { "type": "paragraph", "content": "Add one block per top-level menu item you want a feature card or link descriptions on. Match it by typing the menu link's exact name below." },
+        { "type": "text", "id": "link_name", "label": "Menu link name", "info": "Must match the top-level link exactly, e.g. Solutions." },
+        { "type": "select", "id": "layout", "label": "Panel layout", "default": "links",
+          "info": "Image cards is the Industries / Knowledge Centre treatment — add a Panel card block per link to supply the pictures.",
+          "options": [
+            { "value": "links", "label": "Text links" },
+            { "value": "cards", "label": "Image cards" } ] },
+        { "type": "header", "content": "Feature card" },
+        { "type": "image_picker", "id": "card_image", "label": "Card image", "info": "Leave empty for a links-only panel." },
+        { "type": "text", "id": "card_title", "label": "Card title" },
+        { "type": "richtext", "id": "card_desc", "label": "Card description" },
+        { "type": "text", "id": "card_cta", "label": "Card button label" },
+        { "type": "url", "id": "card_url", "label": "Card link" },
+        { "type": "checkbox", "id": "card_light", "label": "Light card", "info": "White card with a product shot, as used on Managed Programs.", "default": false },
+        { "type": "header", "content": "Link descriptions" },
+        { "type": "textarea", "id": "link_descriptions", "label": "Descriptions",
+          "info": "Shopify menus store a title and URL only, so sub-labels live here. One per line, as: Link title :: Description — add a third :: segment for a pill tag, e.g. Managed Compliance Programs :: Devices, calibration & reporting, run for you :: Most chosen" },
+        { "type": "header", "content": "Link groups (optional)" },
+        { "type": "textarea", "id": "link_groups", "label": "Groups",
+          "info": "Splits the panel into labelled columns instead of the default 50/50 auto-split. One group per line, as: Group name :: Link title, Link title, Link title. Titles must match the menu links exactly. Leave blank to keep the auto-split. Example for Service & Support: Service & Calibration :: Book Calibration, Track a Device, Certificates & Records, Shop Consumables" }
+      ]
+    },
+    {
+      "type": "card",
+      "name": "Panel card",
+      "limit": 24,
+      "settings": [
+        { "type": "paragraph", "content": "One block per link in an image-card panel. The menu still supplies the link and its URL — this block only adds the picture and sub-label, which a Shopify menu cannot carry." },
+        { "type": "text", "id": "panel_name", "label": "Panel", "info": "The top-level menu link this card belongs to, e.g. Industries." },
+        { "type": "text", "id": "item_title", "label": "Link title", "info": "Must match the child link exactly, e.g. Heavy Industries." },
+        { "type": "image_picker", "id": "image", "label": "Card image" },
+        { "type": "text", "id": "desc", "label": "Sub-label", "info": "e.g. Mining, construction, energy." }
+      ]
+    }
+  ],
+  "presets": [ { "name": "Andatech Header" } ]
+}
+{% endschema %}

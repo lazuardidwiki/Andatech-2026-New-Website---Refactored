@@ -1,0 +1,244 @@
+{% comment %}
+  Large Card Section
+  - Originally "Why Choose Andatech"
+  - Renamed and Fixed for stability.
+{% endcomment %}
+
+<style>
+  /* --- Section Styling --- */
+  #shopify-section-{{ section.id }} .why-choose-section {
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .why-choose-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  /* --- Header Styling --- */
+  .why-choose-heading {
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 15px;
+  }
+
+  .why-choose-description {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #666;
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+  }
+
+  /* --- Card Grid Styling --- */
+  .why-choose-grid {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  /* --- Individual Card Styling --- */
+  .feature-card {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 30px 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: center;
+    flex: 1 1 300px; /* Grow, shrink, base width */
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+
+  .card-icon {
+    width: 50px;
+    height: auto;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  .card-description {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #666;
+    margin: 0;
+  }
+  
+  .card-description p {
+    margin: 0;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .why-choose-heading {
+      font-size: 24px;
+    }
+    .why-choose-description {
+      font-size: 14px;
+    }
+    .feature-card {
+      max-width: 100%;
+    }
+  }
+</style>
+
+<div class="why-choose-section">
+  <div class="why-choose-container">
+    
+    {% if section.settings.heading != blank %}
+      <h2 class="why-choose-heading">{{ section.settings.heading | escape }}</h2>
+    {% endif %}
+    {% if section.settings.description != blank %}
+      <div class="why-choose-description rte">{{ section.settings.description }}</div>
+    {% endif %}
+
+    <div class="why-choose-grid">
+      {% for block in section.blocks %}
+        <div class="feature-card" {{ block.shopify_attributes }}>
+          {% if block.settings.icon != blank %}
+            <img src="{{ block.settings.icon | image_url: width: 100 }}" 
+                 alt="{{ block.settings.icon.alt | default: block.settings.title }}" 
+                 width="50"
+                 height="50"
+                 class="card-icon">
+          {% endif %}
+          {% if block.settings.title != blank %}
+            <h3 class="card-title">{{ block.settings.title | escape }}</h3>
+          {% endif %}
+          {% if block.settings.description != blank %}
+            <div class="card-description rte">{{ block.settings.description }}</div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Large Card",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why Choose Andatech for Your Integrations?"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Partnering with Andatech ensures you benefit from trusted, Australian Standards Certified testing devices and seamless integration capabilities.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Section Styling"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#f9f9f9"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Feature Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature Title"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Feature description goes here.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Large Card",
+      "blocks": [
+        {
+          "type": "card",
+          "settings": {
+            "title": "Accuracy you can trust",
+            "description": "<p>Via certified breathalysers and drug test kits.</p>"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Enhanced safety",
+            "description": "<p>Through stringent safety protocols and real-time exception alerts.</p>"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Streamlined operations",
+            "description": "<p>With centralised data systems and live monitoring.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

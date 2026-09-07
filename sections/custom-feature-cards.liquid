@@ -1,0 +1,254 @@
+{% comment %}
+  Safe-Mode: Feature Cards (Auto-White Icons)
+  Author: Updated for Andatech / Alcovisor
+{% endcomment %}
+
+<style>
+  #shopify-section-{{ section.id }} .anda-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    width: 100%;
+    max-width: {{ section.settings.max_width }}px;
+    margin: {{ section.settings.margin_top }}px auto {{ section.settings.margin_bottom }}px;
+    padding: 0 16px;
+    font-family: var(--at-font, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  }
+
+  /* Card — clean surface, subtle border, soft depth on hover */
+  #shopify-section-{{ section.id }} .anda-pro-card {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    background: {{ section.settings.card_bg_color }};
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    border-radius: 20px;
+    padding: 28px;
+    transition: border-color .28s ease, transform .35s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow .35s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  #shopify-section-{{ section.id }} .anda-pro-card:hover {
+    transform: translateY(-4px);
+    border-color: {{ section.settings.primary_color | color_modify: 'alpha', 0.35 }};
+    box-shadow: 0 18px 36px -20px {{ section.settings.primary_color | color_modify: 'alpha', 0.35 }};
+  }
+
+  /* Icon — solid primary tile inside the card (contained, not floating) */
+  #shopify-section-{{ section.id }} .anda-card-icon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: {{ section.settings.primary_color }};
+    box-shadow: 0 6px 14px -6px {{ section.settings.primary_color | color_modify: 'alpha', 0.55 }};
+    transition: transform .35s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow .28s ease;
+  }
+  #shopify-section-{{ section.id }} .anda-pro-card:hover .anda-card-icon {
+    transform: scale(1.06) rotate(-2deg);
+    box-shadow: 0 10px 20px -6px {{ section.settings.primary_color | color_modify: 'alpha', 0.65 }};
+  }
+
+  #shopify-section-{{ section.id }} .anda-card-icon img {
+    display: block;
+    width: 60%;
+    height: 60%;
+    object-fit: contain;
+    {% if section.settings.force_white_icons %}
+      filter: brightness(0) invert(1);
+      -webkit-filter: brightness(0) invert(1);
+    {% endif %}
+  }
+
+  /* Title — title case, weightier, letter-spacing tightened */
+  #shopify-section-{{ section.id }} .anda-pro-card h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: {{ section.settings.text_color }};
+  }
+
+  /* Description */
+  #shopify-section-{{ section.id }} .anda-pro-card p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: {{ section.settings.desc_color }};
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #shopify-section-{{ section.id }} .anda-pro-card,
+    #shopify-section-{{ section.id }} .anda-pro-card:hover,
+    #shopify-section-{{ section.id }} .anda-card-icon,
+    #shopify-section-{{ section.id }} .anda-pro-card:hover .anda-card-icon {
+      transition: none;
+      transform: none;
+    }
+  }
+</style>
+
+<div class="anda-card-grid">
+  {% for block in section.blocks %}
+    <div class="anda-pro-card" {{ block.shopify_attributes }}>
+      
+      <div class="anda-card-icon">
+        {% if block.settings.custom_icon != blank %}
+          {{ block.settings.custom_icon | image_url: width: 200 | image_tag: loading: 'lazy', alt: block.settings.title }}
+        {% else %}
+          <div style="width: 10px; height: 10px; background: white; border-radius: 50%;"></div>
+        {% endif %}
+      </div>
+
+      <h3>{{ block.settings.title }}</h3>
+      <p>{{ block.settings.description }}</p>
+    </div>
+  {% endfor %}
+</div>
+
+{% schema %}
+{
+  "name": "Feature Cards (Upload)",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Icon Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "force_white_icons",
+      "label": "Force Icons to White",
+      "default": true,
+      "info": "Turn this ON to make black/colored icons pure white automatically."
+    },
+    {
+      "type": "header",
+      "content": "Global Colors"
+    },
+    {
+      "type": "color",
+      "id": "primary_color",
+      "label": "Primary Accent (Circle/Bar)",
+      "default": "#8dc63f"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Title Text Color",
+      "default": "#2c3e50"
+    },
+    {
+      "type": "color",
+      "id": "desc_color",
+      "label": "Description Text Color",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 800,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "label": "Section Max Width",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Feature Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Upload Icon Image",
+          "info": "Transparent PNG recommended. It will turn white if the setting is checked."
+        },
+        {
+          "type": "range",
+          "id": "icon_size",
+          "min": 10,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "label": "Icon Scale (Height)",
+          "default": 25,
+          "info": "Adjusts how large the icon is inside the circle."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Describe the feature here."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Feature Cards (Upload)",
+      "blocks": [
+        {
+          "type": "card",
+          "settings": {
+            "title": "Precision",
+            "description": "Upload a black icon, see it turn white."
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Efficiency",
+            "description": "Upload a black icon, see it turn white."
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Reliability",
+            "description": "Upload a black icon, see it turn white."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

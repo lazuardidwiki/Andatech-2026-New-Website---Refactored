@@ -1,0 +1,237 @@
+{%- style -%}
+  .fx-section-{{ section.id }} {
+    --bg-dark: {{ section.settings.bg_color }};
+    --fx-red: {{ section.settings.accent_color }};
+    --speed: {{ section.settings.anim_speed }}s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 0;
+  }
+
+  .fx-card {
+    background-color: var(--bg-dark);
+    width: {{ section.settings.card_size }}px;
+    height: {{ section.settings.card_size }}px;
+    border-radius: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    font-family: sans-serif;
+  }
+
+  /* --- ANIMATION ELEMENTS (BREATHING) --- */
+  .pulse-dots, .outline-ring {
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .pulse-dots {
+    position: absolute;
+    width: 140%;
+    height: 140%;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.2) 20%, transparent 50%);
+    background-size: 8px 8px; 
+    mask-image: radial-gradient(circle, black 5%, transparent 65%);
+    -webkit-mask-image: radial-gradient(circle, black 5%, transparent 65%);
+    animation: breathe-dots var(--speed) infinite ease-in-out alternate;
+  }
+
+  .outline-ring {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border: {{ section.settings.outline_thickness }}px solid var(--fx-red);
+    border-radius: 18px;
+    animation: breathe-ring var(--speed) infinite ease-in-out alternate;
+  }
+
+  /* --- THE MORPHING BOX --- */
+  /* --- THE MORPHING BOX --- */
+  /* --- THE MORPHING BOX --- */
+  .logo-box {
+    background-color: var(--fx-red);
+    width: 70px;
+    height: 70px;
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0; /* Removed padding for the small state */
+    box-sizing: border-box;
+    text-align: center;
+    position: relative;
+    overflow: hidden; /* Keeps description hidden while small */
+  }
+
+  .logo-text {
+    color: white;
+    font-weight: 700;
+    font-size: 26px;
+    transition: all 0.4s ease;
+    margin: 0;
+    line-height: 1;
+    white-space: nowrap; /* PREVENTS STACKING */
+    display: block;
+    flex-shrink: 0; /* Prevents it from being squeezed */
+  }
+
+  .description-content {
+    color: white;
+    font-size: 16px;
+    line-height: 1.4;
+    opacity: 0;
+    transition: all 0.4s ease;
+    position: absolute; 
+    width: 85%;
+    /* Start it below the box so it doesn't overlap FX */
+    top: 100%; 
+    pointer-events: none;
+  }
+
+  /* --- ACTIVE STATE (MORPH) --- */
+  .fx-card.is-active .logo-box {
+    width: 100%;
+    height: 100%;
+    border-radius: 44px;
+    padding: 30px; /* Add padding back once expanded */
+  }
+
+  .fx-card.is-active .logo-text {
+    font-size: 32px;
+    /* Adjust this to move the FX heading up or down when open */
+    transform: translateY(-10px); 
+  }
+
+  .fx-card.is-active .description-content {
+    opacity: 1;
+    position: relative;
+    top: 0;
+    margin-top: 10px;
+    pointer-events: auto;
+  }
+
+  /* --- ACTIVE STATE (MORPH) --- */
+  .fx-card.is-active .logo-box {
+    width: 100%;
+    height: 100%;
+    border-radius: 44px;
+    /* When active, we switch to standard flex spacing */
+    justify-content: center; 
+  }
+
+  .fx-card.is-active .logo-text {
+    font-size: 32px;
+    transform: translateY(-20px); /* Moves heading up to make room for text */
+  }
+
+  .fx-card.is-active .description-content {
+    opacity: 1;
+    position: relative; /* Brings it back into the flow */
+    top: 0;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  /* Keyframes */
+  @keyframes breathe-dots {
+    0% { transform: scale(0.7); opacity: 0.3; }
+    100% { transform: scale(1.1); opacity: 1; }
+  }
+  @keyframes breathe-ring {
+    0% { transform: scale(1); opacity: 0.2; }
+    100% { transform: scale(2.2); opacity: 0.8; }
+  }
+{%- endstyle -%}
+
+<div class="fx-section-{{ section.id }}">
+  <div class="fx-card" id="FXCard-{{ section.id }}">
+    <div class="pulse-dots"></div>
+    <div class="outline-ring"></div>
+    
+    <div class="logo-box">
+      <h2 class="logo-text">{{ section.settings.logo_text }}</h2>
+      <div class="description-content">
+        {{ section.settings.description_text }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const card = document.getElementById('FXCard-{{ section.id }}');
+    card.addEventListener('click', function() {
+      this.classList.toggle('is-active');
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "FX Morphing Card",
+  "settings": [
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Heading / Logo Text",
+      "default": "FX"
+    },
+    {
+      "type": "richtext",
+      "id": "description_text",
+      "label": "Description Text",
+      "default": "<p>The sensor is now cleared and ready for the next reading. Please wait for the signal.</p>"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Card Background",
+      "default": "#1a1f2b"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Morphed Card)",
+      "default": "#d6544e"
+    },
+    {
+      "type": "range",
+      "id": "outline_thickness",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Outline Thickness",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "anim_speed",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Animation Speed",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "card_size",
+      "min": 250,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "label": "Card Size",
+      "default": 320
+    }
+  ],
+  "presets": [{ "name": "FX Morphing Card" }]
+}
+{% endschema %}

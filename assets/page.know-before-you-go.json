@@ -1,0 +1,42 @@
+{
+  "layout": "know-before-you-go-landing",
+  "sections": {
+    "hero": {
+      "type": "know-before-you-go-hero",
+      "settings": {}
+    },
+    "why-test": {
+      "type": "know-before-you-go-solve-it",
+      "settings": {}
+    },
+    "how-it-works": {
+      "type": "know-before-you-go-how-it-works",
+      "settings": {}
+    },
+    "giveaway": {
+      "type": "know-before-you-go-giveaway",
+      "settings": {}
+    },
+    "edu-hub": {
+      "type": "know-before-you-go-edu-hub",
+      "settings": {}
+    },
+    "retailers": {
+      "type": "know-before-you-go-retailers",
+      "settings": {}
+    },
+    "shop": {
+      "type": "know-before-you-go-collection",
+      "settings": {}
+    }
+  },
+  "order": [
+    "hero",
+    "why-test",
+    "how-it-works",
+    "giveaway",
+    "edu-hub",
+    "retailers",
+    "shop"
+  ]
+}

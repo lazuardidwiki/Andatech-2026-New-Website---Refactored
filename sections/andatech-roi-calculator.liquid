@@ -1,0 +1,805 @@
+{%- comment -%}
+  Andatech — ROI Calculator (overlay modal variant).
+
+  A banner card with a CTA opens a full-screen overlay containing the same
+  two-step readiness + transparent cost comparison used on the standalone
+  ROI Calculator page. The modal is moved to <body> on load so it escapes
+  the section wrapper's zoom transform.
+
+  Uses visitor-entered figures only — no hidden benchmark rates.
+  Classes are `at-` prefixed; styling lives in andatech-site.css and
+  andatech-mcp.css.
+{%- endcomment -%}
+
+{%- comment -%}
+  Split from the andatech-home monolith on 2026-09-05. This section now loads
+  its own scoped ROI stylesheet + script instead of the 336 KB andatech-site.css
+  and 76 KB andatech-site.js. The monolith is still loaded elsewhere on this
+  page (via other homepage sections), so no page suddenly loses styles.
+{%- endcomment -%}
+{{ 'andatech-roi.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-mcp.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'andatech-roi.js' | asset_url }}" defer="defer"></script>
+
+<style>
+  /* ── Field groups inside the overlay ──────────────────── */
+  .at-roi-modal .at-roi-calc__field-group { margin-top: 24px; }
+  .at-roi-modal .at-roi-calc__field-group + .at-roi-calc__field-group {
+    margin-top: 28px; border-top: 1px solid #E5E7EB; padding-top: 24px;
+  }
+  .at-roi-modal .at-roi-calc__group-label {
+    font-size: 11px; font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--at-teal-deep, #2A8F8F);
+    margin: 0 0 4px;
+  }
+  .at-roi-modal .at-roi-calc__group-hint {
+    font-size: 13px; color: var(--at-body-color, #495563);
+    line-height: 1.5; margin: 0 0 20px;
+  }
+
+  /* ── Negative values ─────────────────────────────────── */
+  .at-roi-modal .at-mcp-readiness__result-row strong.is-negative { color: #9B1C12; }
+  .at-roi-modal .at-mcp-readiness__result-row--primary.is-negative-row { background: #FEF2F2; }
+  .at-roi-modal .at-mcp-readiness__result-row--primary.is-negative-row strong { color: #9B1C12; }
+  .at-roi-modal .at-mcp-readiness__result-row--summary { border-top: 2px solid #DDE0E3; border-bottom: 0; }
+  .at-roi-modal .at-mcp-readiness__result-row--summary strong { font-size: 17px; }
+  .at-roi-modal .at-mcp-readiness__result-row--summary.is-negative-row strong { color: #9B1C12; }
+
+  /* ── Modal-specific overrides ────────────────────────── */
+  .at-roi-modal .at-mcp-readiness__stepper { margin-top: 24px; margin-bottom: 28px; }
+  .at-roi-modal .at-mcp-readiness__calculator {
+    gap: clamp(20px, 3vw, 40px);
+  }
+  .at-roi-modal .at-mcp-readiness__form { padding: clamp(20px, 2.5vw, 32px); }
+  .at-roi-modal .at-mcp-readiness__score-head { padding: 20px 24px; }
+  .at-roi-modal .at-mcp-readiness__result-list { padding: 10px 24px; }
+  .at-roi-modal .at-mcp-readiness__result-row { min-height: 50px; font-size: 13px; }
+  .at-roi-modal .at-mcp-readiness__result-row strong { font-size: 15px; }
+  .at-roi-modal .at-mcp-readiness__priorities { padding: 20px 24px 24px; }
+  .at-roi-modal .at-mcp-readiness__method { margin-top: 20px; }
+
+  @media (max-width: 767px) {
+    .at-roi-modal .at-mcp-readiness__calculator { grid-template-columns: 1fr; }
+    .at-roi-modal .at-mcp-readiness__fields { grid-template-columns: 1fr; }
+    .at-roi-modal .at-mcp-readiness__questions { grid-template-columns: 1fr; }
+    .at-roi-modal .at-mcp-readiness__actions--split {
+      flex-direction: column-reverse; align-items: center;
+    }
+  }
+</style>
+
+{%- comment -%} ── Banner: what the page shows ─────────────────────── {%- endcomment -%}
+<section class="at-roi-banner">
+  <div class="at-shell">
+    <div class="at-roi-banner__card" data-at-rise>
+
+      <div class="at-roi-banner__content">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="at-roi__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="at-roi__title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+        {%- if section.settings.desc != blank -%}
+          <div class="at-roi__desc">{{ section.settings.desc }}</div>
+        {%- endif -%}
+        <div class="at-roi-banner__cta">
+          <button type="button" class="at-btn at-btn--green"
+                  data-at-roi-open="at-roi-modal-{{ section.id }}">
+            {{ section.settings.open_label | escape }}
+            <i class="at-btn__arrow" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor"
+                      stroke-width="2.2" stroke-linecap="round"
+                      stroke-linejoin="round"/>
+              </svg>
+            </i>
+          </button>
+        </div>
+      </div>
+
+      {%- if section.settings.banner_image != blank -%}
+        <div class="at-roi-banner__media">
+          <img src="{{ section.settings.banner_image | image_url: width: 1440 }}"
+               alt="{{ section.settings.banner_image.alt | escape }}"
+               width="{{ section.settings.banner_image.width }}"
+               height="{{ section.settings.banner_image.height }}"
+               loading="lazy">
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</section>
+
+{%- comment -%} ── Overlay: the calculator ────────────────────────────
+  Moved to <body> on load so it escapes the section wrapper's zoom. {%- endcomment -%}
+<div class="at-roi-modal"
+     id="at-roi-modal-{{ section.id }}"
+     role="dialog" aria-modal="true"
+     aria-labelledby="at-roi-modal-title-{{ section.id }}"
+     hidden
+     data-at-roi-modal>
+
+  <div class="at-roi-modal__panel" style="max-width: 1280px;">
+
+    {%- comment -%} Header — stays fixed while the body scrolls. {%- endcomment -%}
+    <div class="at-roi-modal__head">
+      <div>
+        <h3 class="at-roi-modal__title"
+            id="at-roi-modal-title-{{ section.id }}">
+          {{ section.settings.modal_title }}
+        </h3>
+        {%- if section.settings.modal_sub != blank -%}
+          <p class="at-roi-modal__sub">{{ section.settings.modal_sub | escape }}</p>
+        {%- endif -%}
+      </div>
+      <button type="button" class="at-roi-modal__close"
+              data-at-roi-close
+              aria-label="{{ section.settings.close_label | escape }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+             aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    {%- comment -%} Scrollable body — contains the full two-step calculator. {%- endcomment -%}
+    <div class="at-roi-modal__body" data-roi-calculator-modal>
+
+      {%- comment -%} ── Stepper tabs ──────────────────── {%- endcomment -%}
+      <div class="at-mcp-readiness__stepper" role="tablist"
+           aria-label="Calculator steps">
+        <button class="at-mcp-readiness__step-pill is-active"
+                type="button" role="tab" aria-selected="true"
+                data-step-tab="1">Step 1: Readiness</button>
+        <button class="at-mcp-readiness__step-pill"
+                type="button" role="tab" aria-selected="false"
+                data-step-tab="2">Step 2: Your Numbers</button>
+      </div>
+
+      {%- comment -%} ══ PANEL 1 — Readiness ═══════════ {%- endcomment -%}
+      <div class="at-mcp-readiness__step-content is-active"
+           data-step-panel="1">
+
+        <div class="at-mcp-readiness__questions">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'question' -%}
+              <div class="at-mcp-readiness__q-card"
+                   data-readiness-q
+                   data-gap-label="{{ block.settings.gap_label | default: block.settings.question | escape }}"
+                   {{ block.shopify_attributes }}>
+                <h3>{{ block.settings.question | escape }}</h3>
+                <div class="at-mcp-readiness__pills" role="group"
+                     aria-label="{{ block.settings.question | escape }}">
+                  <button class="at-mcp-readiness__pill" type="button"
+                          data-answer="yes" data-score="2"
+                          aria-pressed="false">Yes</button>
+                  <button class="at-mcp-readiness__pill" type="button"
+                          data-answer="no" data-score="0"
+                          aria-pressed="false">No</button>
+                  <button class="at-mcp-readiness__pill" type="button"
+                          data-answer="unsure" data-score="1"
+                          aria-pressed="false">Unsure</button>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        <p class="at-mcp-readiness__error" data-validation-msg
+           role="alert" hidden>
+          Please answer every readiness question before continuing.
+        </p>
+
+        <div class="at-mcp-readiness__actions">
+          <button class="at-btn at-btn--green" type="button" data-next-step>
+            Next: Estimate ROI
+            <i class="at-btn__arrow" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor"
+                      stroke-width="2.2" stroke-linecap="round"
+                      stroke-linejoin="round"/>
+              </svg>
+            </i>
+          </button>
+        </div>
+      </div>
+
+      {%- comment -%} ══ PANEL 2 — Transparent cost comparison ═══ {%- endcomment -%}
+      <div class="at-mcp-readiness__step-content"
+           data-step-panel="2" hidden>
+
+        <div class="at-mcp-readiness__calculator">
+
+          {%- comment -%} ── Form ─────────────────────── {%- endcomment -%}
+          <form class="at-mcp-readiness__form" data-roi-form novalidate>
+            <div class="at-mcp-readiness__form-head">
+              <h3>Your operating numbers</h3>
+              <p>Enter your organisation's current or planned figures.
+                 Use zero where a cost does not apply.</p>
+            </div>
+
+            <div class="at-roi-calc__field-group">
+              <p class="at-roi-calc__group-label">Program scale</p>
+              <p class="at-roi-calc__group-hint">
+                Context for your results — does not change the formula.
+              </p>
+              <div class="at-mcp-readiness__fields">
+                <label class="at-mcp-readiness__field">
+                  <span>Number of employees</span>
+                  <input type="number" min="0" step="1" inputmode="numeric"
+                         value="{{ section.settings.default_employees }}"
+                         data-roi-input="employees">
+                </label>
+                <label class="at-mcp-readiness__field">
+                  <span>Number of sites</span>
+                  <input type="number" min="0" step="1" inputmode="numeric"
+                         value="{{ section.settings.default_sites }}"
+                         data-roi-input="sites">
+                </label>
+                <label class="at-mcp-readiness__field">
+                  <span>Collectors required</span>
+                  <input type="number" min="0" step="1" inputmode="numeric"
+                         value="{{ section.settings.default_collectors }}"
+                         data-roi-input="collectors">
+                </label>
+              </div>
+            </div>
+
+            <div class="at-roi-calc__field-group">
+              <p class="at-roi-calc__group-label">Current delivery</p>
+              <p class="at-roi-calc__group-hint">
+                Annual testing activity and current outsourced costs.
+              </p>
+              <div class="at-mcp-readiness__fields">
+                <label class="at-mcp-readiness__field">
+                  <span>Estimated tests per year</span>
+                  <input type="number" min="0" step="1" inputmode="numeric"
+                         value="{{ section.settings.default_tests }}"
+                         data-roi-input="tests">
+                </label>
+                <label class="at-mcp-readiness__field">
+                  <span>Average outsourced cost per test</span>
+                  <span class="at-mcp-readiness__money">
+                    <span aria-hidden="true">$</span>
+                    <input type="number" min="0" step="1" inputmode="decimal"
+                           value="{{ section.settings.default_test_cost }}"
+                           data-roi-input="test-cost">
+                  </span>
+                </label>
+                <label class="at-mcp-readiness__field">
+                  <span>Annual callout, travel and related costs</span>
+                  <span class="at-mcp-readiness__money">
+                    <span aria-hidden="true">$</span>
+                    <input type="number" min="0" step="1" inputmode="decimal"
+                           value="{{ section.settings.default_other_cost }}"
+                           data-roi-input="other-cost">
+                  </span>
+                </label>
+                <label class="at-mcp-readiness__field">
+                  <span>Testing planned to move in-house</span>
+                  <span class="at-mcp-readiness__percent">
+                    <input type="number" min="0" max="100" step="1"
+                           inputmode="numeric"
+                           value="{{ section.settings.default_internal_share }}"
+                           data-roi-input="internal-share">
+                    <span aria-hidden="true">%</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div class="at-roi-calc__field-group">
+              <p class="at-roi-calc__group-label">Proposed program</p>
+              <p class="at-roi-calc__group-hint">
+                Figures from planning, a scoped proposal or your own estimates.
+              </p>
+              <div class="at-mcp-readiness__fields">
+                <label class="at-mcp-readiness__field">
+                  <span>One-off setup, equipment and training</span>
+                  <span class="at-mcp-readiness__money">
+                    <span aria-hidden="true">$</span>
+                    <input type="number" min="0" step="1" inputmode="decimal"
+                           value="{{ section.settings.default_setup_cost }}"
+                           data-roi-input="setup-cost">
+                  </span>
+                </label>
+                <label class="at-mcp-readiness__field">
+                  <span>Ongoing annual program cost</span>
+                  <span class="at-mcp-readiness__money">
+                    <span aria-hidden="true">$</span>
+                    <input type="number" min="0" step="1" inputmode="decimal"
+                           value="{{ section.settings.default_ongoing_cost }}"
+                           data-roi-input="ongoing-cost">
+                  </span>
+                </label>
+              </div>
+            </div>
+          </form>
+
+          {%- comment -%} ── Results ──────────────────── {%- endcomment -%}
+          <div class="at-mcp-readiness__results" aria-live="polite"
+               aria-atomic="false">
+            <div class="at-mcp-readiness__score-head">
+              <div>
+                <p>Your readiness score</p>
+                <strong data-readiness-score>0%</strong>
+              </div>
+              <span data-readiness-label>Complete Step 1</span>
+            </div>
+            <div class="at-mcp-readiness__result-list">
+              <div class="at-mcp-readiness__result-row">
+                <span>Current annual outsourced cost</span>
+                <strong data-roi-out="external">$0</strong>
+              </div>
+              <div class="at-mcp-readiness__result-row">
+                <span>Cost potentially avoided</span>
+                <strong data-roi-out="avoided">$0</strong>
+              </div>
+              <div class="at-mcp-readiness__result-row">
+                <span>Estimated year-one program cost</span>
+                <strong data-roi-out="year-one-cost">$0</strong>
+              </div>
+              <div class="at-mcp-readiness__result-row at-mcp-readiness__result-row--primary">
+                <span>Indicative year-one net difference</span>
+                <strong data-roi-out="year-one-net">$0</strong>
+              </div>
+              <div class="at-mcp-readiness__result-row">
+                <span>Indicative ongoing annual difference</span>
+                <strong data-roi-out="ongoing-net">$0</strong>
+              </div>
+              <div class="at-mcp-readiness__result-row">
+                <span>Indicative year-one ROI</span>
+                <strong data-roi-out="roi">&mdash;</strong>
+              </div>
+              <div class="at-mcp-readiness__result-row">
+                <span>Indicative payback period</span>
+                <strong data-roi-out="payback">&mdash;</strong>
+              </div>
+              <div class="at-mcp-readiness__result-row at-mcp-readiness__result-row--summary">
+                <span>Projected 3-year cumulative value</span>
+                <strong data-roi-out="three-year">$0</strong>
+              </div>
+            </div>
+            <div class="at-mcp-readiness__priorities">
+              <h3>Capability priorities</h3>
+              <p data-priority-summary>
+                Complete the readiness questions to see suggested priorities.
+              </p>
+              <ul data-priority-list></ul>
+            </div>
+          </div>
+        </div>
+
+        {%- comment -%} ── Calculation method ──────── {%- endcomment -%}
+        <details class="at-mcp-readiness__method">
+          <summary>
+            How the estimate is calculated
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 aria-hidden="true">
+              <path d="m5 9 7 7 7-7" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </summary>
+          <div>
+            <p><strong>Current outsourced cost</strong> = annual tests
+               &times; outsourced cost per test + annual callout, travel
+               and related costs.</p>
+            <p><strong>Cost potentially avoided</strong> = current outsourced
+               cost &times; the percentage of testing planned to move
+               in-house.</p>
+            <p><strong>Year-one program cost</strong> = one-off setup cost
+               + ongoing annual program cost.</p>
+            <p><strong>Year-one net difference</strong> = cost potentially
+               avoided &minus; year-one program cost.</p>
+            <p><strong>Year-one ROI</strong> = (cost potentially avoided
+               &minus; year-one program cost) &divide; year-one program
+               cost &times; 100.</p>
+            <p><strong>Payback period</strong> = one-off setup cost &divide;
+               (monthly ongoing annual difference). Shown only when
+               the ongoing annual difference is positive.</p>
+            <p><strong>3-year cumulative value</strong> = (cost potentially
+               avoided &times; 3) &minus; one-off setup cost &minus;
+               (ongoing annual program cost &times; 3).</p>
+            <p>The estimator does not assign a financial value to safety,
+               compliance, incident avoidance or productivity.</p>
+          </div>
+        </details>
+
+        {%- if section.settings.disclaimer != blank -%}
+          <div class="at-mcp-readiness__fine-print">
+            {{ section.settings.disclaimer }}
+          </div>
+        {%- endif -%}
+
+        <div class="at-mcp-readiness__actions at-mcp-readiness__actions--split">
+          <button class="at-btn at-btn--outline-dark" type="button"
+                  data-back-step>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                 aria-hidden="true">
+              <path d="m14 5.5-6.5 6.5 6.5 6.5" stroke="currentColor"
+                    stroke-width="2.2" stroke-linecap="round"
+                    stroke-linejoin="round"/>
+            </svg>
+            Back to Readiness
+          </button>
+          {%- if section.settings.results_cta_label != blank -%}
+            <a class="at-btn at-btn--green"
+               href="{{ section.settings.results_cta_url | default: '#contact' }}">
+              {{ section.settings.results_cta_label | escape }}
+              <i class="at-btn__arrow" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor"
+                        stroke-width="2.2" stroke-linecap="round"
+                        stroke-linejoin="round"/>
+                </svg>
+              </i>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- comment -%} ═══════════════════════════════════════════════════
+  JavaScript — modal open/close + the same readiness & ROI logic.
+═══════════════════════════════════════════════════ {%- endcomment -%}
+<script>
+(function () {
+  /* ── Modal open / close ────────────────────────────────── */
+  var modal = document.getElementById('at-roi-modal-{{ section.id }}');
+  if (!modal) return;
+
+  /* Move to <body> so it escapes the section wrapper's zoom transform.
+     A fixed child of a zoomed ancestor has its inset scaled, leaving a
+     strip along two edges. */
+  document.body.appendChild(modal);
+
+  var opener = document.querySelector(
+    '[data-at-roi-open="at-roi-modal-{{ section.id }}"]'
+  );
+  var closers = [].slice.call(modal.querySelectorAll('[data-at-roi-close]'));
+  var previousFocus = null;
+
+  function open() {
+    previousFocus = document.activeElement;
+    modal.hidden = false;
+    requestAnimationFrame(function () {
+      modal.classList.add('at-is-on');
+    });
+    document.documentElement.style.overflow = 'hidden';
+    var first = modal.querySelector('[data-at-roi-close]');
+    if (first) first.focus();
+  }
+
+  function close() {
+    modal.classList.remove('at-is-on');
+    document.documentElement.style.overflow = '';
+    var dur = 300;
+    setTimeout(function () { modal.hidden = true; }, dur);
+    if (previousFocus) previousFocus.focus();
+  }
+
+  if (opener) opener.addEventListener('click', open);
+  closers.forEach(function (btn) { btn.addEventListener('click', close); });
+
+  modal.addEventListener('click', function (e) {
+    if (e.target === modal) close();
+  });
+
+  modal.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { e.stopPropagation(); close(); }
+  });
+
+  /* ── Calculator logic (scoped to the modal body) ───────── */
+  var root = modal.querySelector('[data-roi-calculator-modal]');
+  if (!root) return;
+
+  var tabs       = [].slice.call(root.querySelectorAll('[data-step-tab]'));
+  var panels     = [].slice.call(root.querySelectorAll('[data-step-panel]'));
+  var questions  = [].slice.call(root.querySelectorAll('[data-readiness-q]'));
+  var validation = root.querySelector('[data-validation-msg]');
+  var nextBtn    = root.querySelector('[data-next-step]');
+  var backBtn    = root.querySelector('[data-back-step]');
+
+  var currency = new Intl.NumberFormat('en-AU', {
+    style: 'currency', currency: 'AUD', maximumFractionDigits: 0
+  });
+
+  function numeric(name) {
+    var el = root.querySelector('[data-roi-input="' + name + '"]');
+    var v = el ? Number(el.value) : 0;
+    return Number.isFinite(v) && v > 0 ? v : 0;
+  }
+
+  function setOutput(name, text, negative) {
+    var el = root.querySelector('[data-roi-out="' + name + '"]');
+    if (!el) return;
+    el.textContent = text;
+    el.classList.toggle('is-negative', !!negative);
+    var row = el.closest('.at-mcp-readiness__result-row');
+    if (row) row.classList.toggle('is-negative-row', !!negative);
+  }
+
+  /* ── Readiness ─────────────────────────────────────────── */
+  function readinessResult() {
+    var total = 0, answered = 0, gaps = [];
+    questions.forEach(function (q) {
+      var active = q.querySelector('.at-mcp-readiness__pill.is-active');
+      if (!active) return;
+      answered++;
+      total += Number(active.dataset.score || 0);
+      if (active.dataset.answer !== 'yes') gaps.push(q.dataset.gapLabel);
+    });
+    var max = questions.length * 2;
+    return {
+      answered: answered,
+      percentage: max > 0 ? Math.round((total / max) * 100) : 0,
+      gaps: gaps
+    };
+  }
+
+  function scoreLabel(pct) {
+    if (pct >= 85) return 'Strong foundations';
+    if (pct >= 65) return 'Good base, with gaps';
+    if (pct >= 40) return 'Several priorities to address';
+    return 'Foundations need attention';
+  }
+
+  function updateReadiness() {
+    var r = readinessResult();
+    var scoreEl = root.querySelector('[data-readiness-score]');
+    var labelEl = root.querySelector('[data-readiness-label]');
+    if (scoreEl) scoreEl.textContent = r.percentage + '%';
+    if (labelEl) {
+      labelEl.textContent = r.answered === questions.length
+        ? scoreLabel(r.percentage) : 'Complete Step 1';
+    }
+    var summary = root.querySelector('[data-priority-summary]');
+    var list    = root.querySelector('[data-priority-list]');
+    if (summary) {
+      if (r.answered < questions.length)
+        summary.textContent = 'Complete the readiness questions to see suggested priorities.';
+      else if (r.gaps.length === 0)
+        summary.textContent = 'No immediate gaps were identified. Validate through a formal program review.';
+      else
+        summary.textContent = r.gaps.length + (r.gaps.length === 1 ? ' readiness priority identified.' : ' readiness priorities identified.');
+    }
+    if (list) {
+      list.innerHTML = '';
+      r.gaps.forEach(function (gap) {
+        var li = document.createElement('li');
+        li.textContent = gap;
+        list.appendChild(li);
+      });
+      var sites = numeric('sites'), collectors = numeric('collectors');
+      if ((collectors || sites) && r.answered === questions.length) {
+        var li = document.createElement('li');
+        li.textContent = 'Plan role coverage for ' + collectors + (collectors === 1 ? ' collector' : ' collectors') + ' across ' + sites + (sites === 1 ? ' site.' : ' sites.');
+        list.appendChild(li);
+      }
+    }
+  }
+
+  /* ── ROI calculation ───────────────────────────────────── */
+  function compute() {
+    var tests         = numeric('tests');
+    var testCost      = numeric('test-cost');
+    var otherCost     = numeric('other-cost');
+    var internalShare = Math.min(100, numeric('internal-share')) / 100;
+    var setupCost     = numeric('setup-cost');
+    var ongoingCost   = numeric('ongoing-cost');
+
+    var external    = (tests * testCost) + otherCost;
+    var avoided     = external * internalShare;
+    var yearOneCost = setupCost + ongoingCost;
+    var yearOneNet  = avoided - yearOneCost;
+    var ongoingNet  = avoided - ongoingCost;
+
+    var roi;
+    if (yearOneCost > 0)       roi = (yearOneNet / yearOneCost) * 100;
+    else if (avoided > 0)      roi = Infinity;
+    else                       roi = null;
+
+    var payback;
+    if (setupCost === 0 && ongoingNet > 0) payback = 0;
+    else if (ongoingNet > 0)               payback = setupCost / (ongoingNet / 12);
+    else                                   payback = null;
+
+    var threeYearNet = (avoided * 3) - setupCost - (ongoingCost * 3);
+
+    return {
+      external: external, avoided: avoided, yearOneCost: yearOneCost,
+      yearOneNet: yearOneNet, ongoingNet: ongoingNet, roi: roi,
+      payback: payback, threeYearNet: threeYearNet
+    };
+  }
+
+  function updateResults() {
+    updateReadiness();
+    var c = compute();
+    setOutput('external',      currency.format(c.external));
+    setOutput('avoided',       currency.format(c.avoided));
+    setOutput('year-one-cost', currency.format(c.yearOneCost));
+    setOutput('year-one-net',  currency.format(c.yearOneNet),  c.yearOneNet < 0);
+    setOutput('ongoing-net',   currency.format(c.ongoingNet),  c.ongoingNet < 0);
+
+    var roiText;
+    if (c.roi === null)        roiText = '—';
+    else if (!isFinite(c.roi)) roiText = '∞';
+    else                       roiText = Math.round(c.roi) + '%';
+    setOutput('roi', roiText, isFinite(c.roi) && c.roi < 0);
+
+    var paybackText;
+    if (c.payback === null)    paybackText = 'Not recoverable from these inputs';
+    else if (c.payback === 0)  paybackText = 'Immediate';
+    else if (c.payback < 1)    paybackText = 'Under 1 month';
+    else if (c.payback > 120)  paybackText = '10+ years';
+    else                       paybackText = c.payback.toFixed(1) + ' months';
+    setOutput('payback', paybackText);
+
+    setOutput('three-year', currency.format(c.threeYearNet), c.threeYearNet < 0);
+  }
+
+  /* ── Step navigation ───────────────────────────────────── */
+  function showStep(step, focus) {
+    tabs.forEach(function (tab) {
+      var active = tab.dataset.stepTab === String(step);
+      tab.classList.toggle('is-active', active);
+      tab.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    panels.forEach(function (panel) {
+      var active = panel.dataset.stepPanel === String(step);
+      panel.classList.toggle('is-active', active);
+      panel.hidden = !active;
+      if (active && focus) {
+        panel.setAttribute('tabindex', '-1');
+        panel.focus({ preventScroll: true });
+      }
+    });
+    if (step === 2) updateResults();
+    /* Scroll the modal body to the top */
+    var body = modal.querySelector('.at-roi-modal__body');
+    if (body) body.scrollTop = 0;
+  }
+
+  function continueToStep2() {
+    var firstMissing = questions.find(function (q) {
+      return !q.querySelector('.at-mcp-readiness__pill.is-active');
+    });
+    questions.forEach(function (q) {
+      q.classList.toggle('is-error', q === firstMissing);
+    });
+    if (firstMissing) {
+      if (validation) validation.hidden = false;
+      var btn = firstMissing.querySelector('button');
+      if (btn) btn.focus();
+      return;
+    }
+    if (validation) validation.hidden = true;
+    showStep(2, true);
+  }
+
+  /* ── Wire up readiness pills ───────────────────────────── */
+  questions.forEach(function (q) {
+    var pills = [].slice.call(q.querySelectorAll('.at-mcp-readiness__pill'));
+    pills.forEach(function (pill) {
+      pill.addEventListener('click', function () {
+        pills.forEach(function (p) {
+          var on = p === pill;
+          p.classList.toggle('is-active', on);
+          p.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+        q.classList.remove('is-error');
+        if (validation && questions.every(function (item) {
+          return item.querySelector('.at-mcp-readiness__pill.is-active');
+        })) validation.hidden = true;
+        updateReadiness();
+      });
+    });
+  });
+
+  /* ── Wire up tabs + nav buttons ────────────────────────── */
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      if (tab.dataset.stepTab === '2') continueToStep2();
+      else showStep(1, false);
+    });
+  });
+  if (nextBtn) nextBtn.addEventListener('click', continueToStep2);
+  if (backBtn) backBtn.addEventListener('click', function () { showStep(1, true); });
+
+  /* ── Wire up form inputs for live recalculation ────────── */
+  [].slice.call(root.querySelectorAll('[data-roi-input]')).forEach(
+    function (input) { input.addEventListener('input', updateResults); }
+  );
+
+  updateReadiness();
+  updateResults();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Andatech ROI Calculator",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "ROI Calculator" },
+    { "type": "html", "id": "title", "label": "H2 — Heading", "info": "Wrap words in <strong> for the bold line.",
+      "default": "What could a Managed Program <strong>save you?</strong>" },
+    { "type": "richtext", "id": "desc", "label": "Caption",
+      "default": "<p>Assess your program readiness and then use your own costs to estimate the potential return of bringing testing in-house.</p>" },
+    { "type": "image_picker", "id": "banner_image", "label": "Banner image",
+      "info": "Sits flush to the card's bottom-right corner. A cutout on a transparent background works best." },
+    { "type": "text", "id": "open_label", "label": "Button label", "default": "Calculate your savings" },
+
+    { "type": "header", "content": "Overlay" },
+    { "type": "html", "id": "modal_title", "label": "Overlay heading",
+      "default": "What could a Managed Program save you?" },
+    { "type": "text", "id": "modal_sub", "label": "Overlay subheading",
+      "default": "Two steps — readiness, then your numbers. Results update live." },
+    { "type": "text", "id": "close_label", "label": "Close button label", "info": "For screen readers.", "default": "Close calculator" },
+
+    { "type": "header", "content": "Results CTA & disclaimer" },
+    { "type": "text", "id": "results_cta_label", "label": "Results CTA label", "default": "Discuss Your Results" },
+    { "type": "url", "id": "results_cta_url", "label": "Results CTA link" },
+    { "type": "richtext", "id": "disclaimer", "label": "Disclaimer",
+      "default": "<p>This self-assessment is general information only. Results are indicative, depend entirely on the figures entered, and do not guarantee financial, safety, legal or compliance outcomes. Confirm program scope, applicable laws, standards and costs with qualified advisers and an Andatech compliance specialist.</p>" },
+
+    { "type": "header", "content": "Starting values" },
+    { "type": "paragraph", "content": "Keep monetary values at zero unless Andatech has approved customer-facing assumptions. Visitors enter their own figures." },
+    { "type": "number", "id": "default_employees", "label": "Employees", "default": 0 },
+    { "type": "number", "id": "default_sites", "label": "Sites", "default": 0 },
+    { "type": "number", "id": "default_collectors", "label": "Collectors required", "default": 0 },
+    { "type": "number", "id": "default_tests", "label": "Tests per year", "default": 0 },
+    { "type": "number", "id": "default_test_cost", "label": "Outsourced cost per test ($)", "default": 0 },
+    { "type": "number", "id": "default_other_cost", "label": "Annual callout and related costs ($)", "default": 0 },
+    { "type": "number", "id": "default_internal_share", "label": "Testing planned to move in-house (%)", "default": 0 },
+    { "type": "number", "id": "default_setup_cost", "label": "One-off setup cost ($)", "default": 0 },
+    { "type": "number", "id": "default_ongoing_cost", "label": "Ongoing annual program cost ($)", "default": 0 }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Readiness Question",
+      "limit": 8,
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question",
+          "default": "Do you have a documented D&A policy?" },
+        { "type": "text", "id": "gap_label", "label": "Priority shown for No or Unsure",
+          "default": "Review and document your D&A policy" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Andatech ROI Calculator",
+      "blocks": [
+        { "type": "question", "settings": {
+          "question": "Do you have a current, documented drug and alcohol policy?",
+          "gap_label": "Review policy scope, responsibilities, triggers and review dates." } },
+        { "type": "question", "settings": {
+          "question": "Are your specimen collectors trained for their assigned collection method?",
+          "gap_label": "Confirm collector competency, refresher needs and role coverage." } },
+        { "type": "question", "settings": {
+          "question": "Are collection, chain-of-custody and escalation steps documented?",
+          "gap_label": "Document a repeatable collection, custody and escalation workflow." } },
+        { "type": "question", "settings": {
+          "question": "Are devices, consumables, servicing and calibration records controlled?",
+          "gap_label": "Create an equipment, consumables and service-record register." } },
+        { "type": "question", "settings": {
+          "question": "Are consent, privacy, confidentiality and employee dignity addressed?",
+          "gap_label": "Check consent, privacy, confidentiality and secure access steps." } },
+        { "type": "question", "settings": {
+          "question": "Can you retrieve consistent records across every site and shift?",
+          "gap_label": "Standardise records and reporting across locations and shifts." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

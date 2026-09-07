@@ -1,0 +1,94 @@
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-industry.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-managed-programs.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'andatech-managed-programs.js' | asset_url }}" defer="defer"></script>
+
+<section class="at-mp-lifecycle" id="{{ section.settings.anchor_id | default: section.id | handleize }}" data-at-mp-lifecycle>
+  <div class="at-shell">
+    <div class="at-mp-section-head">
+      {%- if section.settings.eyebrow != blank -%}<p class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      <h2 class="at-industry__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>
+      {%- if section.settings.description != blank -%}<div class="at-industry__desc" data-at-rise>{{ section.settings.description }}</div>{%- endif -%}
+    </div>
+
+    <div class="at-mp-lifecycle__layout">
+      <div class="at-mp-stage__list" role="tablist" aria-label="{{ section.settings.heading | escape }}">
+        {%- for block in section.blocks -%}
+          {%- assign stage_number = forloop.index | prepend: '0' | slice: -2, 2 -%}
+          <div class="at-mp-stage__item" {{ block.shopify_attributes }}>
+            <button class="at-mp-stage__trigger" id="at-mp-tab-{{ section.id }}-{{ forloop.index }}" type="button" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="at-mp-panel-{{ section.id }}-{{ forloop.index }}" tabindex="{% if forloop.first %}0{% else %}-1{% endif %}" data-at-mp-stage>
+              <span class="at-mp-stage__number">{{ stage_number }}</span>
+              <span><span class="at-mp-stage__title">{{ block.settings.title | escape }}</span>{% if block.settings.subtitle != blank %}<span class="at-mp-stage__subtitle">{{ block.settings.subtitle | escape }}</span>{% endif %}</span>
+              <span class="at-mp-stage__plus" aria-hidden="true">+</span>
+            </button>
+            {%- if block.settings.description != blank -%}<div class="at-mp-stage__description">{{ block.settings.description }}</div>{%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <div class="at-mp-lifecycle__panels">
+        {%- for block in section.blocks -%}
+          {%- assign stage_number = forloop.index | prepend: '0' | slice: -2, 2 -%}
+          <article class="at-mp-outcome" id="at-mp-panel-{{ section.id }}-{{ forloop.index }}" role="tabpanel" aria-labelledby="at-mp-tab-{{ section.id }}-{{ forloop.index }}" data-at-mp-panel{% unless forloop.first %} hidden{% endunless %}>
+            {%- if block.settings.image != blank -%}
+              {%- if forloop.first -%}
+                {{ block.settings.image | image_url: width: 1200 | image_tag: class: 'at-mp-outcome__image', loading: 'eager', fetchpriority: 'low', widths: '600, 900, 1200', sizes: '(max-width: 767px) 100vw, 55vw', alt: block.settings.image.alt }}
+              {%- else -%}
+                <img class="at-mp-outcome__image" data-src="{{ block.settings.image | image_url: width: 1200 }}" data-srcset="{{ block.settings.image | image_url: width: 600 }} 600w, {{ block.settings.image | image_url: width: 900 }} 900w, {{ block.settings.image | image_url: width: 1200 }} 1200w" sizes="(max-width: 767px) 100vw, 55vw" alt="{{ block.settings.image.alt | escape }}" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}">
+              {%- endif -%}
+            {%- endif -%}
+            <p class="at-mp-outcome__eyebrow">Stage {{ stage_number }} - {{ block.settings.title | escape }}</p>
+            <h3 class="at-mp-outcome__title">{{ block.settings.outcome_title | escape }}</h3>
+            {%- assign checklist = block.settings.checklist | newline_to_br | split: '<br />' -%}
+            <ul class="at-mp-outcome__list">
+              {%- for item in checklist -%}{%- assign line = item | strip -%}{%- if line != blank -%}<li><span class="at-mp-outcome__check" aria-hidden="true">✓</span><span>{{ line | escape }}</span></li>{%- endif -%}{%- endfor -%}
+            </ul>
+          </article>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Compliance lifecycle",
+  "tag": "section",
+  "class": "at-section",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "lifecycle" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "One linear pathway" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "Six stages." },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "One controlled program." },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Move from workplace context to a program that stays current as people, sites and requirements change.</p>" }
+  ],
+  "blocks": [
+    {
+      "type": "stage",
+      "name": "Stage",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Stage title", "default": "Understand" },
+        { "type": "text", "id": "subtitle", "label": "Short label", "default": "Workplace context" },
+        { "type": "richtext", "id": "description", "label": "Stage description", "default": "<p>Define who is tested, where testing happens and which operating requirements shape the program.</p>" },
+        { "type": "image_picker", "id": "image", "label": "Outcome card image", "info": "Optional. Add the approved image manually in Theme Editor." },
+        { "type": "text", "id": "outcome_title", "label": "Outcome heading", "default": "Workplace context is clearly defined." },
+        { "type": "textarea", "id": "checklist", "label": "Outcome checklist", "info": "One item per line.", "default": "Sites, roles and operating conditions documented\nTesting triggers and relevant requirements understood\nCapability gaps and responsible owners identified" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Compliance lifecycle",
+      "blocks": [
+        { "type": "stage", "settings": { "title": "Understand", "subtitle": "Workplace context" } },
+        { "type": "stage", "settings": { "title": "Design", "subtitle": "Policy and procedures" } },
+        { "type": "stage", "settings": { "title": "Prepare", "subtitle": "People and rollout" } },
+        { "type": "stage", "settings": { "title": "Execute", "subtitle": "Testing in practice" } },
+        { "type": "stage", "settings": { "title": "Connect", "subtitle": "Records and visibility" } },
+        { "type": "stage", "settings": { "title": "Improve", "subtitle": "Review and improvement" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

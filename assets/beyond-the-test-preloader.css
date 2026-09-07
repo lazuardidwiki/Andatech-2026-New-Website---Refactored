@@ -1,0 +1,52 @@
+/* =====================================================
+   Beyond The Test™ — Preloader
+   Fullscreen navy overlay shown until window 'load' fires (or a 9s safety
+   timeout), so the visitor sees an intentional loading moment instead of a
+   blank/half-painted page while the hero's video/collage assets warm up.
+   ===================================================== */
+#btt-preloader{
+  position:fixed; inset:0; z-index:9999;
+  background:
+    radial-gradient(circle at 18% 15%, rgba(70,190,196,.28), transparent 42%),
+    radial-gradient(circle at 82% 78%, rgba(149,193,31,.16), transparent 48%),
+    radial-gradient(circle at 50% 105%, rgba(70,190,196,.12), transparent 55%),
+    linear-gradient(160deg, #10171f 0%, #1F2937 52%, #0c1218 100%);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:28px;
+  transition:opacity .35s ease;
+}
+#btt-preloader.is-hidden{
+  opacity:0;
+  pointer-events:none;
+}
+
+.btt-preloader__logo{
+  display:flex; align-items:center; gap:16px;
+}
+.btt-preloader__logomark{ height:44px; width:auto; display:block; }
+.btt-preloader__divider{ width:1px; height:32px; background:rgba(255,255,255,.3); }
+.btt-preloader__wordmark{
+  font-family:'Titillium Web',sans-serif;
+  font-size:24px; font-weight:700; color:#95C11F; white-space:nowrap;
+}
+.btt-preloader__wordmark sup{ font-size:11px; }
+
+.btt-preloader__pct{
+  font-family:'Titillium Web',sans-serif;
+  font-size:15px; font-weight:600; letter-spacing:.06em;
+  color:rgba(255,255,255,.65);
+  font-variant-numeric:tabular-nums;
+  min-width:3ch; text-align:center;
+}
+
+body.btt-preloading{ overflow:hidden; }
+
+@media (max-width:640px){
+  .btt-preloader__logomark{ height:34px; }
+  .btt-preloader__wordmark{ font-size:19px; }
+  .btt-preloader__divider{ height:26px; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  #btt-preloader{ transition:none; }
+}

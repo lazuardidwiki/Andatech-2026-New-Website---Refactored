@@ -1,0 +1,399 @@
+{% comment %}
+  Integration Features Section
+  - Two modes: Static list (side-by-side) OR Accordion dropdowns.
+  - Dropdown font sizes and toggleable bold text.
+{% endcomment %}
+
+<style>
+  /* --- CSS Variables based on settings --- */
+  #shopify-section-{{ section.id }} .integration-section-wrapper {
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  /* Main Heading Styles */
+  #shopify-section-{{ section.id }} .int-main-heading {
+    color: {{ section.settings.main_heading_color }};
+    font-size: {{ section.settings.main_heading_size }};
+    line-height: 1.2;
+    margin-bottom: 20px;
+  }
+  
+  /* Description Styles */
+  #shopify-section-{{ section.id }} .int-main-desc {
+    color: {{ section.settings.main_desc_color }};
+    font-size: {{ section.settings.main_desc_size }};
+    margin-bottom: 40px;
+    max-width: 800px;
+  }
+
+  /* --- Feature Item Container --- */
+  .feature-item-container {
+    border-bottom: 1px solid #e1e1e1; 
+    padding: 20px 0;
+  }
+  .feature-item-container:last-child { border-bottom: none; }
+
+  /* Header (Icon + Title) */
+  .feature-header {
+    display: flex;
+    align-items: flex-start; 
+    cursor: default;
+  }
+
+  .feature-icon-wrapper {
+    color: {{ section.settings.feature_heading_color }};
+    margin-right: 12px;
+    width: 18px; 
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+    /* Aligns the arrow with the center of the first line of text */
+    margin-top: 5px; 
+  }
+  
+  .feature-icon-svg {
+    width: 100%;
+    height: auto;
+    fill: currentColor;
+    display: block;
+  }
+
+  .feature-heading-text {
+    color: {{ section.settings.feature_heading_color }};
+    font-size: {{ section.settings.feature_heading_size }};
+    /* Toggle Bold vs Normal based on setting */
+    font-weight: {% if section.settings.feature_bold %}700{% else %}400{% endif %};
+    margin: 0;
+    line-height: 1.4;
+    min-width: 250px; /* Ensures the left column has a stable width */
+    padding-right: 20px;
+  }
+
+  .feature-body-content {
+    color: {{ section.settings.feature_body_color }};
+    font-size: {{ section.settings.feature_body_size }};
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* =========================================
+     MODE 1: STATIC Layout (Side-by-Side) 
+  ========================================= */
+  .features-grid-container:not(.mode-accordion) .feature-item-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start; /* Ensures top alignment */
+  }
+
+  .features-grid-container:not(.mode-accordion) .feature-header {
+    flex-basis: 35%; /* Left column width */
+    flex-shrink: 0;
+  }
+  
+  .features-grid-container:not(.mode-accordion) .feature-body-wrapper {
+    flex-basis: 65%; /* Right column width */
+    padding-top: 0; /* Align perfectly with top of heading */
+  }
+  
+  /* Responsive: Stack on mobile */
+  @media only screen and (max-width: 767px) {
+     .features-grid-container:not(.mode-accordion) .feature-item-container {
+       flex-direction: column;
+     }
+     .features-grid-container:not(.mode-accordion) .feature-header {
+       flex-basis: auto; 
+       margin-bottom: 10px;
+     }
+  }
+
+
+  /* =========================================
+     MODE 2: ACCORDION Dropdown (Toggle ON)
+  ========================================= */
+  .features-grid-container.mode-accordion .feature-header {
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .features-grid-container.mode-accordion .feature-body-wrapper {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+      opacity: 0;
+      /* Indent text to align with the heading text (Icon width + margin) */
+      padding-left: 30px; 
+  }
+
+  .feature-item-container.active .feature-icon-wrapper {
+    transform: rotate(90deg);
+  }
+
+  .feature-item-container.active .feature-body-wrapper {
+    opacity: 1;
+    margin-top: 10px;
+  }
+</style>
+
+<div class="integration-section-wrapper">
+  <div class="page-width">
+    
+    {% comment %} --- Main Section Header --- {% endcomment %}
+    {% if section.settings.title != blank %}
+      <h2 class="int-main-heading">{{ section.settings.title | escape }}</h2>
+    {% endif %}
+    {% if section.settings.description != blank %}
+      <div class="int-main-desc rte">{{ section.settings.description }}</div>
+    {% endif %}
+
+
+    {% comment %} --- Features List Container --- {% endcomment %}
+    <div class="features-grid-container {% if section.settings.enable_accordion %}mode-accordion{% endif %}">
+      
+      {% for block in section.blocks %}
+        <div class="feature-item-container js-accordion-item" {{ block.shopify_attributes }}>
+          
+          <div class="feature-header js-accordion-trigger">
+            <div class="feature-icon-wrapper">
+               <svg class="feature-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <h4 class="feature-heading-text">{{ block.settings.feature_title }}</h4>
+          </div>
+
+          <div class="feature-body-wrapper js-accordion-content">
+            <div class="feature-body-content rte">
+              {{ block.settings.feature_text }}
+            </div>
+          </div>
+
+        </div>
+      {% endfor %}
+
+    </div>
+
+  </div>
+</div>
+
+
+{% comment %} --- Javascript for Accordion Mode Only --- {% endcomment %}
+{% if section.settings.enable_accordion %}
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const accordionItems = document.querySelectorAll('#shopify-section-{{ section.id }} .js-accordion-item');
+
+    accordionItems.forEach(item => {
+      const trigger = item.querySelector('.js-accordion-trigger');
+      const content = item.querySelector('.js-accordion-content');
+
+      trigger.addEventListener('click', () => {
+        const isOpen = item.classList.contains('active');
+
+        // Close others
+        accordionItems.forEach(otherItem => {
+          closeItem(otherItem);
+        });
+
+        if (!isOpen) {
+          openItem(item);
+        }
+      });
+    });
+
+    function openItem(item) {
+      const content = item.querySelector('.js-accordion-content');
+      item.classList.add('active');
+      content.style.maxHeight = content.scrollHeight + "px";
+    }
+
+    function closeItem(item) {
+      const content = item.querySelector('.js-accordion-content');
+      item.classList.remove('active');
+      content.style.maxHeight = null; 
+    }
+  });
+</script>
+{% endif %}
+
+
+{% schema %}
+{
+  "name": "Integration Features",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout Mode"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_accordion",
+      "label": "Enable Dropdown/Accordion Mode",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Colors & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Main Heading"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading Text",
+      "default": "Integration Features"
+    },
+    {
+      "type": "color",
+      "id": "main_heading_color",
+      "label": "Heading Color",
+      "default": "#333333"
+    },
+    {
+      "type": "select",
+      "id": "main_heading_size",
+      "label": "Heading Size",
+      "options": [
+        { "value": "64px", "label": "Extra Extra Large" },
+        { "value": "48px", "label": "Extra Large" },
+        { "value": "36px", "label": "Large" },
+        { "value": "28px", "label": "Medium" },
+        { "value": "22px", "label": "Small" },
+        { "value": "18px", "label": "Extra Small" }
+      ],
+      "default": "36px"
+    },
+    {
+      "type": "header",
+      "content": "Main Description"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description Text",
+      "default": "<p>With Andatech's contactless technology...</p>"
+    },
+    {
+      "type": "color",
+      "id": "main_desc_color",
+      "label": "Description Color",
+      "default": "#666666"
+    },
+    {
+      "type": "select",
+      "id": "main_desc_size",
+      "label": "Description Size",
+      "options": [
+        { "value": "24px", "label": "Large" },
+        { "value": "18px", "label": "Medium" },
+        { "value": "16px", "label": "Small" },
+        { "value": "14px", "label": "Extra Small" }
+      ],
+      "default": "16px"
+    },
+    {
+      "type": "header",
+      "content": "Features List Styling"
+    },
+    {
+      "type": "color",
+      "id": "feature_heading_color",
+      "label": "Feature Heading Color",
+      "default": "#7ab53d"
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_bold",
+      "label": "Bold Feature Headings",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "feature_heading_size",
+      "label": "Feature Heading Size",
+      "options": [
+        { "value": "32px", "label": "Extra Large" },
+        { "value": "24px", "label": "Large" },
+        { "value": "20px", "label": "Medium" },
+        { "value": "18px", "label": "Small" },
+        { "value": "16px", "label": "Extra Small" }
+      ],
+      "default": "18px"
+    },
+    {
+      "type": "color",
+      "id": "feature_body_color",
+      "label": "Body Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "select",
+      "id": "feature_body_size",
+      "label": "Body Text Size",
+      "options": [
+        { "value": "20px", "label": "Large" },
+        { "value": "16px", "label": "Medium" },
+        { "value": "14px", "label": "Small" },
+        { "value": "12px", "label": "Extra Small" }
+      ],
+      "default": "14px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "feature_title",
+          "label": "Feature Heading",
+          "default": "Automated Time Tracking"
+        },
+        {
+          "type": "richtext",
+          "id": "feature_text",
+          "label": "Feature Description",
+          "default": "<p>Description of the feature goes here.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Integration Features",
+      "blocks": [
+        { "type": "feature" },
+        { "type": "feature" },
+        { "type": "feature" }
+      ]
+    }
+  ]
+}
+{% endschema %}

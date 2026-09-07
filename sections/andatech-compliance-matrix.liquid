@@ -1,0 +1,75 @@
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-solutions-pages.css' | asset_url | stylesheet_tag }}
+
+<section class="at-compliance-matrix at-compliance-matrix--highlight-{{ section.settings.highlight_column }} at-compliance-matrix--highlight-secondary-{{ section.settings.highlight_column_2 | default: 'none' }}"{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handleize }}"{% endif %}>
+  <div class="at-shell">
+    <div class="at-compliance-matrix__header">
+      {%- if section.settings.eyebrow != blank -%}<p class="at-solutions-page__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      <h2 class="at-solutions-page__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>
+      {%- if section.settings.desc != blank -%}<div class="at-solutions-page__desc" data-at-rise>{{ section.settings.desc }}</div>{%- endif -%}
+    </div>
+    <div class="at-compliance-matrix__wrap" data-at-rise>
+      <table class="at-compliance-matrix__table">
+        <thead><tr><th>{{ section.settings.column_1 | escape }}</th><th>{{ section.settings.column_2 | escape }}</th><th>{{ section.settings.column_3 | escape }}</th><th>{{ section.settings.column_4 | escape }}</th>{% if section.settings.show_column_5 %}<th>{{ section.settings.column_5 | escape }}</th>{% endif %}</tr></thead>
+        <tbody>
+          {%- for block in section.blocks -%}
+            <tr {{ block.shopify_attributes }}>
+              <th scope="row">{{ block.settings.cell_1 | escape }}</th>
+              <td>{{ block.settings.cell_2 | escape }}</td>
+              <td>{{ block.settings.cell_3 | escape }}</td>
+              <td>{%- if block.settings.cell_4_url != blank -%}<a class="at-compliance-matrix__link" href="{{ block.settings.cell_4_url }}">{{ block.settings.cell_4 | escape }}</a>{%- else -%}{{ block.settings.cell_4 | escape }}{%- endif -%}</td>
+              {%- if section.settings.show_column_5 -%}
+                <td>
+                  {%- if block.settings.cell_5_url != blank -%}
+                    <a class="at-compliance-matrix__link" href="{{ block.settings.cell_5_url }}">{{ block.settings.cell_5 | escape }}</a>
+                  {%- else -%}
+                    {{ block.settings.cell_5 | escape }}
+                  {%- endif -%}
+                </td>
+              {%- endif -%}
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Compliance Matrix",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "scope-framework" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "SCOPE FRAMEWORK" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "Four control areas," },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "one governance layer." },
+    { "type": "richtext", "id": "desc", "label": "Description" },
+    { "type": "header", "content": "Column headings" },
+    { "type": "text", "id": "column_1", "label": "Column 1", "default": "Control area" },
+    { "type": "text", "id": "column_2", "label": "Column 2", "default": "Policy" },
+    { "type": "text", "id": "column_3", "label": "Column 3", "default": "People" },
+    { "type": "text", "id": "column_4", "label": "Column 4", "default": "Operational control" },
+    { "type": "text", "id": "column_5", "label": "Column 5", "default": "Records & Review" },
+    { "type": "checkbox", "id": "show_column_5", "label": "Show column 5", "default": true },
+    { "type": "select", "id": "highlight_column", "label": "Green highlight column", "options": [{ "value": "none", "label": "None" }, { "value": "2", "label": "Column 2" }, { "value": "3", "label": "Column 3" }, { "value": "4", "label": "Column 4" }, { "value": "5", "label": "Column 5" }], "default": "none" }
+    ,{ "type": "select", "id": "highlight_column_2", "label": "Second green highlight column", "options": [{ "value": "none", "label": "None" }, { "value": "2", "label": "Column 2" }, { "value": "3", "label": "Column 3" }, { "value": "4", "label": "Column 4" }, { "value": "5", "label": "Column 5" }], "default": "none", "info": "Optional. Existing table instances remain unchanged when set to None." }
+  ],
+  "blocks": [{
+    "type": "row",
+    "name": "Table row",
+    "limit": 12,
+    "settings": [
+      { "type": "text", "id": "cell_1", "label": "Column 1", "default": "Alcohol" },
+      { "type": "text", "id": "cell_2", "label": "Column 2", "default": "Defined triggers and response" },
+      { "type": "text", "id": "cell_3", "label": "Column 3", "default": "Operators and supervisors" },
+      { "type": "text", "id": "cell_4", "label": "Column 4", "default": "Breath testing and device controls" },
+      { "type": "url", "id": "cell_4_url", "label": "Column 4 link", "info": "Optional. When selected, the Column 4 text becomes a link." },
+      { "type": "text", "id": "cell_5", "label": "Column 5", "default": "Results, calibration and actions" },
+      { "type": "url", "id": "cell_5_url", "label": "Column 5 link", "info": "Optional. When selected, the Column 5 text becomes a link." }
+    ]
+  }],
+  "presets": [{ "name": "Compliance Matrix", "blocks": [{ "type": "row" }, { "type": "row" }, { "type": "row" }, { "type": "row" }] }]
+}
+{% endschema %}

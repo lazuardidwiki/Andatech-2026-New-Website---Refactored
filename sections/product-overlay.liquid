@@ -1,0 +1,256 @@
+{% schema %}
+{
+  "name": "Product Layered Display",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "image_picker",
+      "id": "main_image",
+      "label": "Main Back Image (Large)"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Premium Collection"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Explore the fine details of our latest release."
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "floating_image",
+      "name": "Floating Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_border",
+          "label": "Show White Border",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_glass",
+          "label": "Enable Glass Effect",
+          "default": false,
+          "info": "Adds a frosted background behind this specific floating image."
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "min": 10,
+          "max": 80,
+          "step": 5,
+          "unit": "%",
+          "label": "Image Width",
+          "default": 30
+        },
+        {
+          "type": "range",
+          "id": "offset_x",
+          "min": -50,
+          "max": 100,
+          "step": 2,
+          "unit": "%",
+          "label": "Horizontal Position (Left)",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "offset_y",
+          "min": -50,
+          "max": 100,
+          "step": 2,
+          "unit": "%",
+          "label": "Vertical Position (Top)",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "z_index",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "label": "Layer Order (Z-Index)",
+          "default": 5
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Layered Display",
+      "blocks": [
+        { "type": "floating_image" }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .layered-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.bg_color }};
+  }
+  
+  .layered-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .layered-visual-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto 80px auto;
+  }
+
+  .main-img-holder {
+    width: 90%;
+    margin-left: auto;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .layered-main-img {
+    width: 100%;
+    display: block;
+  }
+
+  /* Floating Image Styles */
+  .floating-img-item {
+    position: absolute;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    will-change: transform;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+  }
+
+  .floating-img-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    box-sizing: border-box;
+    z-index: 2;
+  }
+
+  /* White Border Toggle */
+  .has-white-border {
+    border: 6px solid #ffffff;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.15);
+  }
+
+  /* Glass Effect Toggle - Applied to the Floating Image Container */
+  .has-glass-effect {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+
+  /* Hover States */
+  .layered-visual-wrapper:hover .main-img-holder {
+    transform: scale(0.98);
+  }
+  
+  .layered-visual-wrapper:hover .floating-img-item {
+    transform: translateY(-15px) scale(1.03);
+  }
+
+  .layered-text-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 40px auto 0;
+  }
+
+  @media (max-width: 768px) {
+    .layered-visual-wrapper { max-width: 85%; }
+    .floating-img-item { border-width: 3px; } /* Slightly thinner border on mobile */
+  }
+</style>
+
+<div class="layered-section-{{ section.id }}">
+  <div class="layered-container">
+    <div class="layered-visual-wrapper">
+      
+      <div class="main-img-holder">
+        {% if section.settings.main_image != blank %}
+          <img src="{{ section.settings.main_image | image_url: width: 1200 }}" class="layered-main-img" alt="{{ section.settings.title }}">
+        {% else %}
+          {{ 'collection-1' | placeholder_svg_tag: 'layered-main-img' }}
+        {% endif %}
+      </div>
+
+      {% for block in section.blocks %}
+        <div class="floating-img-item 
+                    {% if block.settings.show_border %}has-white-border{% endif %} 
+                    {% if block.settings.enable_glass %}has-glass-effect{% endif %}" 
+             style="width: {{ block.settings.width }}%; 
+                    left: {{ block.settings.offset_x }}%; 
+                    top: {{ block.settings.offset_y }}%; 
+                    z-index: {{ block.settings.z_index }};" 
+             {{ block.shopify_attributes }}>
+          {% if block.settings.image != blank %}
+            <img src="{{ block.settings.image | image_url: width: 600 }}" alt="Product detail">
+          {% else %}
+            {{ 'product-3' | placeholder_svg_tag }}
+          {% endif %}
+        </div>
+      {% endfor %}
+
+    </div>
+
+    <div class="layered-text-content">
+       <h2 style="color: {{ section.settings.text_color }}">{{ section.settings.title }}</h2>
+       <p style="color: {{ section.settings.text_color }}">{{ section.settings.description }}</p>
+    </div>
+  </div>
+</div>

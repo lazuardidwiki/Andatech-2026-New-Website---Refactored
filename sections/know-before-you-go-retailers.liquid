@@ -1,0 +1,61 @@
+<section class="kby-retail" id="retailers">
+  <div class="kby-retail__wrap">
+    <div class="kby-retail__head">
+      <span class="kby-solve__kicker">{{ section.settings.kicker | default: "Find a retailer" }}</span>
+      <h2 class="kby-solve__title">
+        <span class="kby-solve__title-line kby-solve__title-line--regular">{{ section.settings.heading_line_1 | default: "AS3547 certified" }}</span>
+        <span class="kby-solve__title-line kby-solve__title-line--bold">{{ section.settings.heading_line_2 | default: "breathalysers near you" }}</span>
+      </h2>
+    </div>
+
+    <div class="kby-retail-card">
+      <p class="kby-retail-card__note">
+        {{ section.settings.note | default: "Also available at these retailers — opens their store locator in a new tab." }}
+      </p>
+
+      <div class="kby-retail-card__logos">
+        {% for block in section.blocks %}
+          <a href="{{ block.settings.locator_url }}" target="_blank" rel="noopener" class="kby-retail-logo" {{ block.shopify_attributes }}>
+            {%- if block.settings.logo -%}
+              <img src="{{ block.settings.logo | image_url: width: 240 }}" alt="{{ block.settings.name | escape }}" loading="lazy">
+            {%- else -%}
+              <span class="kby-retail-logo__text">{{ block.settings.name | default: "Retailer" }}</span>
+            {%- endif -%}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KBYG Find a Retailer",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker" },
+    { "type": "text", "id": "heading_line_1", "label": "Heading — line 1 (regular weight)" },
+    { "type": "text", "id": "heading_line_2", "label": "Heading — line 2 (bold weight)" },
+    { "type": "textarea", "id": "note", "label": "Note" }
+  ],
+  "blocks": [
+    {
+      "type": "retailer",
+      "name": "Retailer",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Retailer name" },
+        { "type": "image_picker", "id": "logo", "label": "Logo (optional — falls back to text)" },
+        { "type": "url", "id": "locator_url", "label": "Store locator URL" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "default": {
+    "blocks": [
+      { "type": "retailer", "settings": { "name": "Supercheap Auto", "locator_url": "https://www.supercheapauto.com.au/store-locator" } },
+      { "type": "retailer", "settings": { "name": "Autobarn", "locator_url": "https://autobarn.com.au/ab/store-finder" } },
+      { "type": "retailer", "settings": { "name": "Repco", "locator_url": "https://www.repco.com.au/store-finder/store-locator" } },
+      { "type": "retailer", "settings": { "name": "Chemist Warehouse", "locator_url": "https://www.chemistwarehouse.com.au/store-locator" } }
+    ]
+  }
+}
+{% endschema %}

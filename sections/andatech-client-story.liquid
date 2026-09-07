@@ -1,0 +1,119 @@
+{%- comment -%}
+  Andatech — Client Story / Testimonial
+  Image left, quote + stats right. Reusable across landing pages.
+  Styled by andatech-site.css.
+{%- endcomment -%}
+
+{%- comment -%}
+  Split from andatech-site.css on 2026-09-05. This section now loads only
+  the scoped HLTPAT010 stylesheet (11 KB) instead of the 336 KB monolith.
+  Client story is part of the HLTPAT010 course page family.
+{%- endcomment -%}
+{{ 'andatech-hltpat010.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-industry.css' | asset_url | stylesheet_tag }}
+
+<section class="at-client-story" id="{{ section.settings.anchor_id | default: section.id | handleize }}">
+  <div class="at-shell at-client-story__inner">
+
+    {%- if section.settings.image != blank -%}
+      <div class="at-client-story__media" data-at-rise>
+        <img src="{{ section.settings.image | image_url: width: 1200 }}"
+             alt="{{ section.settings.image.alt | default: section.settings.client_name | escape }}"
+             loading="lazy">
+      </div>
+    {%- endif -%}
+
+    <div class="at-client-story__content" data-at-rise>
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="at-industry__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.logo != blank -%}
+        <img class="at-client-story__logo" src="{{ section.settings.logo | image_url: width: 400 }}"
+             alt="{{ section.settings.client_name | escape }} logo"
+             loading="lazy">
+      {%- elsif section.settings.client_name != blank -%}
+        <p class="at-client-story__client-name">{{ section.settings.client_name | escape }}</p>
+      {%- endif -%}
+
+      <blockquote class="at-client-story__quote">
+        <span class="at-client-story__mark" aria-hidden="true">"</span>
+        <p>{{ section.settings.quote }}</p>
+      </blockquote>
+
+      {%- if section.settings.author_name != blank -%}
+        <div class="at-client-story__author">
+          <p class="at-client-story__author-name">{{ section.settings.author_name | escape }}</p>
+          {%- if section.settings.author_title != blank -%}
+            <p class="at-client-story__author-title">{{ section.settings.author_title | escape }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="at-client-story__stats">
+          {%- for block in section.blocks -%}
+            <div class="at-client-story__stat" {{ block.shopify_attributes }}>
+              <span class="at-client-story__stat-number">{{ block.settings.number | escape }}</span>
+              <span class="at-client-story__stat-label">{{ block.settings.label | escape }}</span>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.cta_label != blank -%}
+        <a href="{{ section.settings.cta_url | default: '#' }}" class="at-btn at-btn--green">
+          {{ section.settings.cta_label | escape }}
+          <i class="at-btn__arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </i>
+        </a>
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Client Story",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "client-story" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "CLIENT STORY" },
+    { "type": "header", "content": "Client" },
+    { "type": "text", "id": "client_name", "label": "Client name", "default": "MITRE 10" },
+    { "type": "image_picker", "id": "logo", "label": "Client logo", "info": "Optional. When blank, the client name renders as text." },
+    { "type": "image_picker", "id": "image", "label": "Featured image" },
+    { "type": "header", "content": "Testimonial" },
+    { "type": "textarea", "id": "quote", "label": "Quote", "default": "Our goal wasn't to catch people. It was to make sure everyone went home safely." },
+    { "type": "text", "id": "author_name", "label": "Author name", "default": "Rick Middlecoot" },
+    { "type": "text", "id": "author_title", "label": "Author title", "default": "Mitre 10 Warehouse" },
+    { "type": "header", "content": "CTA" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Read More" },
+    { "type": "url", "id": "cta_url", "label": "Button link" }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "number", "label": "Number", "default": "100%" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Managed by Andatech" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Client Story",
+      "blocks": [
+        { "type": "stat", "settings": { "number": "100%", "label": "Managed by Andatech" } },
+        { "type": "stat", "settings": { "number": "1", "label": "Central drug & alcohol policy across facilities" } },
+        { "type": "stat", "settings": { "number": "20K+", "label": "Workers / contract workers across Australia" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

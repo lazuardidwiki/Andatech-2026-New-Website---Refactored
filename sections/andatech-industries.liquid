@@ -1,0 +1,54 @@
+{%- comment -%} Andatech — Industries grid. Generated from the Phase 1 prototype.
+  Classes are `at-` prefixed; styling lives in andatech-site.css. {%- endcomment -%}
+
+{{ 'andatech-homepage.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'andatech-homepage.js' | asset_url }}" defer="defer"></script>
+
+<section class="at-industries">
+  <div class="at-shell">
+    {%- if section.settings.eyebrow != blank -%}<p class="at-industries__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+    <h2 class="at-industries__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>
+    <div class="at-industries__meta" data-at-rise>
+      {%- if section.settings.desc != blank -%}<div class="at-industries__desc">{{ section.settings.desc }}</div>{%- endif -%}
+      {%- if section.settings.link_label != blank -%}<a class="at-industries__view-all" href="{{ section.settings.link_url | default: '#' }}">{{ section.settings.link_label | escape }} <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 8 16 16M16 16V9.8M16 16H9.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>{%- endif -%}
+    </div>
+    <div class="at-industries__grid" data-at-carousel="ind-{{ section.id }}">
+      {%- for block in section.blocks -%}
+        <a class="at-industries__card{% if forloop.first %} at-industries__card--tall{% endif %}" href="{{ block.settings.url | default: '#' }}" data-at-rise {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 1200 }}" alt="{{ block.settings.image.alt | escape }}" loading="lazy">{%- endif -%}
+          {%- if block.settings.badge != blank -%}<span class="at-industries__badge">{{ block.settings.badge | escape }}</span>{%- endif -%}
+          <div class="at-industries__card-body">
+            <span class="at-industries__card-title">{{ block.settings.title | escape }}</span>
+            {%- if block.settings.desc != blank -%}<span class="at-industries__card-desc">{{ block.settings.desc }}</span>{%- endif -%}
+          </div>
+          <span class="at-industries__arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 8 16 16M16 16V9.8M16 16H9.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+      {%- endfor -%}
+    </div>
+    <div class="at-dots at-industries__dots" data-at-dots="ind-{{ section.id }}"></div>
+
+    {%- if section.settings.mobile_cta_label != blank -%}
+      <div class="at-mobile-cta"><a class="at-btn at-btn--outline-dark at-btn--mobile-only" href="{{ section.settings.link_url | default: '#' }}">{{ section.settings.mobile_cta_label | escape }}</a></div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Andatech Industries", "tag": "section", "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Industries We Serve" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "Compliance looks different" },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "in every sector." },
+    { "type": "richtext", "id": "desc", "label": "Description", "default": "<p>The obligations, the standards and the risk profile all change. Start with yours now.</p>" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "View all industries" },
+    { "type": "url", "id": "link_url", "label": "Link URL" },
+    { "type": "text", "id": "mobile_cta_label", "label": "Mobile button label", "default": "View All Industries" } ],
+  "blocks": [ { "type": "card", "name": "Industry card", "limit": 8, "settings": [
+      { "type": "paragraph", "content": "The first card is automatically the tall feature card. Reorder blocks to change which one it is." },
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "title", "label": "Title" },
+      { "type": "richtext", "id": "desc", "label": "Description" },
+      { "type": "text", "id": "badge", "label": "Badge", "info": "Teal pill — feature card only." },
+      { "type": "url", "id": "url", "label": "Link" } ] } ],
+  "presets": [ { "name": "Andatech Industries", "blocks": [{"type": "card", "settings": {"title": "Heavy Industry", "desc": "<p>Mining, construction and energy. Fitness-for-work<br>programs on rosters and remote sites.</p>", "badge": "AS 3547 - WHS"}}, {"type": "card", "settings": {"title": "Transport &amp; Logistics", "desc": "<p>Road, rail, aviation and maritime.<br>Chain of responsibility built in.</p>"}}, {"type": "card", "settings": {"title": "Government &amp; Critical Services", "desc": "<p>Police, corrections and councils.<br>Evidentiary-grade testing.</p>"}}, {"type": "card", "settings": {"title": "Healthcare &amp; Community", "desc": "<p>Hospitals, aged care and<br>community services.</p>"}}, {"type": "card", "settings": {"title": "Workplace &amp; Corporate", "desc": "<p>Offices, manufacturing<br>and education</p>"}}] } ] }
+{% endschema %}

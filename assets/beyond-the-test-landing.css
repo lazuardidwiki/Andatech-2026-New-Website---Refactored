@@ -1,0 +1,784 @@
+/* ===================================================
+   Beyond The Test™ — Landing Page Styles
+   =================================================== */
+
+html, body {
+  background-color: #F4F6F8;
+  overscroll-behavior: none;
+  height: 100%;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+* { box-sizing: border-box; }
+body { font-family: 'Titillium Web', sans-serif; margin: 0; }
+#ads-agent-host { display: none !important; }
+/* Small buffer only — each section already has its own generous top
+   padding (60-100px depending on breakpoint) for visual breathing room.
+   Keeping this close to the fixed nav's real height would double that
+   padding up with an equal-sized "naked" gap below the nav after an
+   anchor-nav scroll, which felt like landing short of the section instead
+   of on it. Letting the fixed nav overlap into the section's own (empty)
+   padding is safe — there's no text that high up in any section. */
+section[id]{ scroll-margin-top:32px; }
+
+/* ===== Footer — brand / Solutions links / certs+social on top, copyright + legal links below ===== */
+.btt-footer{
+  position:relative;
+  z-index:1;
+  padding:48px 48px 32px;
+  border-radius:24px 24px 0 0;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(70,190,196,.16), transparent 45%),
+    radial-gradient(circle at 85% 90%, rgba(149,193,31,.10), transparent 50%),
+    linear-gradient(160deg, #182230 0%, #141c28 55%, #0d141c 100%);
+  box-shadow:
+    0 -10px 28px rgba(17,24,32,.16),
+    0 -2px 24px rgba(70,190,196,.05);
+}
+.btt-footer__inner{
+  max-width:1400px;
+  margin:0 auto;
+}
+.btt-footer__top{
+  display:grid;
+  grid-template-columns:1fr 1.3fr auto;
+  gap:40px;
+  padding-bottom:32px;
+  align-items:start;
+}
+.btt-footer__col--meta{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:20px;
+}
+
+.btt-footer__brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.btt-footer__logomark{ height:28px; width:auto; display:block; }
+.btt-footer__divider{ width:1px; height:20px; background:rgba(255,255,255,.25); }
+.btt-footer__wordmark{
+  font-family:'Titillium Web',sans-serif;
+  font-size:15px;
+  font-weight:700;
+  color:#95C11F;
+  white-space:nowrap;
+}
+.btt-footer__wordmark sup{ font-size:9px; }
+
+.btt-footer__contact{
+  margin-top:24px;
+}
+.btt-footer__contact-line{
+  font-size:13px;
+  color:rgba(255,255,255,.6);
+  line-height:1.7;
+  margin:0;
+}
+.btt-footer__contact-link{
+  display:block;
+  font-size:13px;
+  color:#fff;
+  text-decoration:underline;
+  text-underline-offset:2px;
+  margin-top:12px;
+  transition:color .15s ease;
+}
+.btt-footer__contact-link:hover{ color:#95C11F; }
+
+.btt-footer__col-heading{
+  font-family:'Titillium Web',sans-serif;
+  font-size:14px;
+  font-weight:700;
+  color:#fff;
+  margin:0 0 16px;
+}
+.btt-footer__link-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.btt-footer__link-list a{
+  font-size:13px;
+  color:rgba(255,255,255,.6);
+  text-decoration:none;
+  transition:color .15s ease;
+}
+.btt-footer__link-list a:hover{ color:#95C11F; }
+
+.btt-footer__certs{
+  height:40px;
+  width:auto;
+  display:block;
+  opacity:.9;
+}
+.btt-footer__social{
+  display:flex;
+  gap:16px;
+}
+.btt-footer__social a{
+  color:rgba(255,255,255,.55);
+  display:flex;
+  transition:color .15s ease;
+}
+.btt-footer__social a:hover{ color:#95C11F; }
+
+.btt-footer__bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:16px;
+  padding-top:24px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.btt-footer__copy{
+  font-size:12.5px;
+  color:rgba(255,255,255,.5);
+  margin:0;
+}
+.btt-footer__links{
+  display:flex;
+  gap:24px;
+  flex-wrap:wrap;
+}
+.btt-footer__links a{
+  font-size:12.5px;
+  color:rgba(255,255,255,.6);
+  text-decoration:none;
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-family:inherit;
+  padding:0;
+  transition:color .15s ease;
+}
+.btt-footer__links a:hover{ color:#95C11F; }
+
+@media (max-width:1024px){
+  .btt-footer__top{
+    grid-template-columns:1fr 1fr;
+  }
+  .btt-footer__col--meta{
+    grid-column:1 / -1;
+    align-items:flex-start;
+  }
+}
+
+@media (max-width:768px){
+  .btt-footer__top{
+    grid-template-columns:1fr;
+    gap:28px;
+  }
+  .btt-footer__col--meta{ align-items:flex-start; }
+}
+
+@media (max-width:640px){
+  .btt-footer{ padding:36px 20px 24px; }
+  .btt-footer__bottom{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:12px;
+  }
+}
+
+/* ===== Nav ===== */
+.btt-nav{
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:100;
+  padding:28px 48px;
+  transform:translateY(0);
+  transition:transform .35s ease;
+}
+.btt-nav.btt-nav--hidden{ transform:translateY(-100%); }
+.btt-nav__bg{
+  position:absolute; inset:0;
+  background:rgba(17,24,32,.9);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  opacity:0;
+  transition:opacity .35s ease;
+  pointer-events:none;
+}
+.btt-nav__bg.is-blurred{
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+.btt-nav__inner{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  min-height:40px;
+}
+
+.btt-nav__logo-compact{ display:none; align-items:center; gap:12px; text-decoration:none; min-width:0; }
+.btt-nav__logomark-img{ height:24px; width:auto; flex-shrink:0; }
+.btt-nav__logo{ display:flex; align-items:center; gap:12px; text-decoration:none; min-width:0; }
+.btt-nav__logo-img{ height:26px; width:auto; flex-shrink:0; }
+.btt-nav__logo-divider{ width:1px; height:18px; background:rgba(255,255,255,.3); flex-shrink:0; }
+.btt-nav__logo-text{ font-family:'Titillium Web',sans-serif; font-size:15px; font-weight:700; color:#95C11F; white-space:nowrap; }
+.btt-nav__tm{ font-size:9px; vertical-align:super; }
+
+.btt-nav__menu-pill{
+  position:absolute; left:50%; top:50%;
+  transform:translate(-50%, -50%);
+  display:flex; gap:4px; padding:6px;
+  background:rgba(255,255,255,.07);
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:9999px; z-index:1;
+}
+.btt-nav__menu-highlight{
+  position:absolute;
+  top:6px; left:6px;
+  height:calc(100% - 12px);
+  border-radius:9999px;
+  background:rgba(255,255,255,.12);
+  opacity:0;
+  transition:transform .35s cubic-bezier(.22,1,.36,1), width .35s cubic-bezier(.22,1,.36,1), opacity .2s ease;
+  pointer-events:none;
+  z-index:0;
+}
+.btt-nav__menu-highlight.is-active{ opacity:1; }
+.btt-nav__menu-pill a{
+  position:relative; z-index:1;
+  padding:10px 18px; border-radius:9999px;
+  font-family:'Titillium Web',sans-serif; font-size:14px; font-weight:600;
+  color:rgba(255,255,255,.88); text-decoration:none; transition:color .2s ease; white-space:nowrap;
+}
+.btt-nav__menu-pill a:hover{ color:#fff; }
+
+.btt-nav__actions{ display:flex; align-items:center; gap:14px; }
+.btt-nav__icon-btn{ background:none; border:none; cursor:pointer; color:#fff; padding:4px; display:flex; align-items:center; text-decoration:none; transition:color .15s ease; }
+.btt-nav__icon-btn:hover{ color:#95C11F; }
+.btt-nav__hamburger{ display:none; background:none; border:none; cursor:pointer; color:#fff; padding:4px; align-items:center; justify-content:center; }
+
+/* ===== Mobile drawer ===== */
+.btt-drawer-overlay{ position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:150; opacity:0; pointer-events:none; transition:opacity .3s ease; }
+.btt-drawer-overlay.active{ opacity:1; pointer-events:auto; }
+.btt-drawer{ position:fixed; top:0; left:0; height:100%; width:280px; background:#111820; z-index:200; transform:translateX(-100%); transition:transform .3s ease; display:flex; flex-direction:column; padding:100px 28px 32px; }
+.btt-drawer.active{ transform:translateX(0); }
+.btt-drawer__menu{ display:flex; flex-direction:column; gap:4px; }
+.btt-drawer__menu a{ color:#fff; font-family:'Titillium Web',sans-serif; font-size:19px; font-weight:600; text-decoration:none; padding:14px 0; border-bottom:1px solid rgba(255,255,255,.08); }
+.btt-drawer__menu a:hover{ color:#95C11F; }
+.btt-drawer__cta{ margin-top:24px; }
+.btt-drawer__footer{ margin-top:auto; border-top:1px solid rgba(255,255,255,.08); padding-top:20px; }
+.btt-drawer__home{ display:flex; align-items:center; gap:10px; color:rgba(255,255,255,.7); font-family:'Titillium Web',sans-serif; font-size:14px; text-decoration:none; }
+.btt-drawer__home:hover{ color:#95C11F; }
+
+@media (max-width: 1200px){
+  .btt-nav{ padding:22px 20px; }
+  .btt-nav__logo{ display:none; }
+  .btt-nav__menu-pill{ display:none; }
+  .btt-nav__actions{ display:none; }
+  .btt-nav__logo-compact{ display:flex; }
+  .btt-nav__hamburger{ display:flex; }
+}
+
+/* ===== Buttons ===== */
+.btt-btn{ display:inline-flex; align-items:center; gap:12px; font-family:'Titillium Web',sans-serif; font-weight:700; font-size:14.5px; text-decoration:none; border-radius:9999px; cursor:pointer; border:none; transition:.15s ease; white-space:nowrap; }
+.btt-btn--primary{ background:#95C11F; color:#1F2937; padding:11px 24px; }
+.btt-btn--primary:hover{ background:#7ba318; }
+.btt-btn--ghost{ background:transparent; color:#fff; border:1.5px solid rgba(149,193,31,.6); padding:11px 24px; }
+.btt-btn--ghost:hover{ border-color:#95C11F; background:rgba(149,193,31,.08); }
+.btt-btn--full{ display:flex; width:100%; justify-content:center; }
+.btt-btn--sm{ padding:8px 18px; font-size:13px; }
+.btt-btn--nav{ background:#95C11F; color:#1F2937; padding:10px 20px; font-size:13.5px; }
+.btt-btn--nav:hover{ background:#7ba318; }
+
+.btt-btn__icon{ width:30px; height:30px; border-radius:50%; background:rgba(31,41,55,.15); display:flex; align-items:center; justify-content:center; color:#1F2937; flex-shrink:0; }
+.btt-btn--primary .btt-btn__icon{ background:none; width:auto; height:auto; border-radius:0; }
+.btt-btn--widget-cta .btt-btn__icon{ background:none; color:#fff; width:auto; height:auto; }
+.btt-btn--widget-cta{ border:1.5px solid rgba(255,255,255,.3); color:#fff; background:transparent; padding:14px 24px; justify-content:center; gap:10px; }
+.btt-btn--widget-cta:hover{ background:rgba(255,255,255,.08); }
+
+/* ===== Hero ===== */
+.btt-hero{
+  position:relative;
+  z-index:1;
+  min-height:100vh; min-height:100svh;
+  display:flex; align-items:center;
+  background:transparent;
+  color:#fff;
+  padding:140px 48px 96px;
+}
+
+/* Wraps all background visuals (media + overlay + fade). No mask needed here —
+   the stats/certification logos now live inside the hero itself (see
+   .btt-hero__stats-strip), so the hero simply hands off to the light page
+   background below it via .btt-hero__bottom-fade. */
+.btt-hero__bg-mask{
+  position:absolute; inset:0;
+}
+
+.btt-hero__bg-video, .btt-hero__bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background-size:cover; background-position:center; }
+.btt-hero__overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(17,24,32,.42) 0%, rgba(17,24,32,.58) 50%, rgba(17,24,32,.88) 100%); z-index:1; }
+
+/* Inner: two columns, stretch so both reach same height */
+.btt-hero__inner{
+  position:relative; z-index:2; width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:stretch;
+  gap:64px;
+  will-change:transform, opacity;
+}
+
+/* Content column: flex column of exactly two groups, each set to fill an
+   equal share of the column's height (mirrors the Figma auto-layout: both
+   groups are "Fill container", not "Hug contents") — group 1 is
+   eyebrow/heading/body/CTA, group 2 is trust logos + stats + accreditation. */
+.btt-hero__content{
+  flex:1; min-width:0; max-width:620px;
+  display:flex; flex-direction:column;
+  gap:40px;
+  padding-bottom:8px;
+}
+
+/* Top group: eyebrow + heading + body + CTAs — anchored to the top of its
+   half (not centered) so it never crowds into the bottom group below it. */
+.btt-hero__top-group{
+  flex:1;
+  display:flex; flex-direction:column;
+  justify-content:flex-start;
+}
+
+.btt-eyebrow{
+  font-size:13px; letter-spacing:.16em; text-transform:uppercase;
+  color:rgba(255,255,255,.85); font-weight:700;
+  margin:0 0 20px;
+}
+
+.btt-hero__title{
+  font-family:'Titillium Web',sans-serif;
+  font-size:48px; font-weight:700; line-height:1.2;
+  margin:0 0 24px;
+}
+
+.btt-hero__title-grad{
+  display:block;
+  padding-bottom:4px;
+  color:#ffffff;
+}
+
+.btt-hero__sub{
+  font-size:16.5px; font-weight:400; color:#D6DBE0;
+  margin:0 0 36px; line-height:1.55;
+}
+.btt-hero__ctas{ display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin:0; }
+
+/* Bottom group: trust logos + stats + accreditation — fills the other half,
+   anchored to the bottom edge so it sits flush with the widget's base. */
+.btt-hero__bottom-group{
+  flex:1;
+  display:flex; flex-direction:column;
+  justify-content:flex-end;
+}
+
+.btt-hero__trust-label{ font-size:13px; font-weight:600; color:rgba(255,255,255,.75); margin:0 0 16px; }
+.btt-hero__trust-logos{
+  display:flex;
+  gap:20px;
+  align-items:center;
+  justify-content:flex-start;
+  flex-wrap:nowrap;
+  max-width:100%;
+  overflow:visible;
+}
+.btt-hero__trust-logos img{ height:28px; width:auto; max-width:90px; object-fit:contain; opacity:.95; flex-shrink:0; }
+
+/* ===== Widget ===== */
+.btt-hero__widget-wrap{ perspective:1200px; flex-shrink:0; }
+.btt-hero__widget{
+  position:relative; width:400px;
+  background:rgba(15,22,30,.45);
+  backdrop-filter:blur(90px) saturate(140%); -webkit-backdrop-filter:blur(90px) saturate(140%);
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:32px; padding:32px; color:#fff;
+  box-shadow:0 24px 60px rgba(0,0,0,.3);
+  transform-style:preserve-3d;
+  transform:rotateX(4deg) rotateY(-6deg);
+  transition:transform .15s ease-out, box-shadow .3s ease;
+  will-change:transform; overflow:hidden;
+  height:100%;
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+.btt-hero__widget.is-tilting{ transition:none; }
+
+@property --btt-angle{
+  syntax:'<angle>';
+  initial-value:0deg;
+  inherits:false;
+}
+.btt-hero__widget::before{
+  content:'';
+  position:absolute; inset:0;
+  border-radius:inherit;
+  padding:1.5px;
+  background:conic-gradient(from var(--btt-angle,0deg),
+    transparent 0deg, transparent 250deg,
+    #46BEC4 290deg, #95C11F 320deg, transparent 350deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  /* The ring only starts turning once the preloader hands over. Previously it
+     span for the whole of the load behind a full-screen overlay, where it
+     could not be seen but still re-rasterised its conic gradient every frame
+     during the busiest part of the page's life.
+
+     Gating via `animation-play-state` rather than by declaring the animation
+     only under `body.btt-preloaded` is deliberate: that descendant selector
+     would outrank the plain `.btt-hero__widget::before{ animation:none }`
+     rules in the mobile and prefers-reduced-motion blocks below and quietly
+     switch the rotation back on for both. Because those blocks set the
+     `animation` shorthand, they reset play-state too, so a paused-by-default
+     animation stays off for them. A paused animation renders no frames. */
+  animation:btt-glow-rotate 7s linear infinite;
+  animation-play-state:paused;
+  pointer-events:none;
+  z-index:3;
+}
+/* `btt-preloaded` is added by beyond-the-test-preloader.js the moment the
+   overlay begins to fade. */
+body.btt-preloaded .btt-hero__widget::before{
+  animation-play-state:running;
+}
+@keyframes btt-glow-rotate{
+  to{ --btt-angle:360deg; }
+}
+.btt-hero__widget-glare{
+  position:absolute; inset:0; border-radius:inherit;
+  background:radial-gradient(circle at var(--glare-x,50%) var(--glare-y,50%), rgba(255,255,255,.25), transparent 55%);
+  opacity:0; transition:opacity .3s ease; pointer-events:none; z-index:2;
+}
+.btt-hero__widget-wrap:hover .btt-hero__widget-glare{ opacity:1; }
+
+.btt-widget__title{ font-size:20px; font-weight:700; margin:0 0 24px; line-height:1.3; text-align:center; position:relative; }
+.btt-widget__gauge{ position:relative; width:150px; height:150px; margin:0 auto 28px; }
+.btt-widget__gauge-svg{ width:100%; height:100%; transform:rotate(-90deg); }
+.btt-widget__gauge-track{ fill:none; stroke:rgba(255,255,255,.2); stroke-width:9; }
+.btt-widget__gauge-fill{ fill:none; stroke:#46BEC4; stroke-width:9; stroke-linecap:round; stroke-dasharray:377; stroke-dashoffset:calc(377 - (377 * var(--score)) / 100); }
+.btt-widget__gauge-label{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; padding:0 20px; text-align:center; perspective:200px; }
+.btt-widget__gauge-value{ font-size:32px; font-weight:700; line-height:1; display:inline-block; transform-origin:50% 50%; backface-visibility:hidden; }
+.btt-widget__gauge-status{ font-size:12px; font-weight:400; color:rgba(255,255,255,.7); line-height:1.3; }
+.btt-widget__list{ list-style:none; padding:0; margin:0 0 28px; position:relative; }
+.btt-widget__list li{ display:flex; align-items:center; font-size:14px; font-weight:400; padding:10px 0; color:#fff; }
+.btt-check{ display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border:1.5px solid #95C11F; border-radius:50%; color:#95C11F; margin-right:12px; flex-shrink:0; }
+.btt-hero__widget .btt-btn{ position:relative; }
+
+@media (max-width: 1024px){
+  .btt-hero__widget{ transform:none !important; height:auto; }
+  .btt-hero__widget-wrap{ perspective:none; }
+  .btt-hero__widget-glare{ display:none; }
+}
+
+/* ===== Stats + certification logos — nested inside the hero's content
+   column, directly below the trust logos (per Keith's feedback), rather
+   than in a separate section. Text stays light since this sits on the
+   hero's dark video/overlay, same treatment as the trust logos above it. ===== */
+.btt-hero__stats-strip{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:24px;
+  margin-top:28px;
+  padding-top:28px;
+  border-top:1px solid rgba(255,255,255,.14);
+}
+.btt-stats{ display:flex; gap:32px; flex-wrap:wrap; }
+.btt-stats__item{ display:flex; flex-direction:column; gap:2px; perspective:150px; }
+.btt-stats__number{ font-size:30px; font-weight:700; color:#ffffff; display:inline-block; transform-origin:50% 50%; backface-visibility:hidden; line-height:1.1; }
+.btt-stats__label{ font-size:12px; font-weight:400; color:rgba(255,255,255,.65); }
+.btt-widget__gauge-value.is-flipping,
+.btt-stats__number.is-flipping{ animation:bttNumberFlip .28s ease; }
+@keyframes bttNumberFlip{ 0%{ transform:rotateX(70deg); opacity:.35; } 100%{ transform:rotateX(0deg); opacity:1; } }
+.btt-cert-logos img{ height:auto; width:100%; max-width:260px; object-fit:contain; opacity:.95; }
+
+/* ===== Any portrait-oriented viewport wider than 1024px (e.g. iPad Pro 13"
+   portrait, ~1032px logical width). Hero now stays full-screen here too —
+   stats/certs living inside the hero content give it enough height that the
+   old "big empty gap under the nav" concern (from when this was shorter)
+   no longer applies. ===== */
+
+/* ===== Tablet (769–1024px) — keep side-by-side, tighten proportions.
+   Previously stacked at ≤1024px, which incorrectly caught iPad Air/Pro 11"
+   widths (768–1024px) and made the widget drop below the text. Only ≤768px
+   genuinely stacks now — see the block below. Hero stays full-screen
+   (min-height:100vh, inherited from the base rule) here too, matching
+   desktop and mobile. ===== */
+@media (min-width:769px) and (max-width:1024px){
+  .btt-hero{ padding:120px 32px 56px; }
+  .btt-hero__inner{ gap:40px; }
+  .btt-hero__content{ max-width:none; flex:1.3; }
+  .btt-hero__widget-wrap{ flex:1; min-width:280px; max-width:340px; }
+  .btt-hero__widget{ width:100%; max-width:340px; }
+  .btt-hero__title{ font-size:32px; }
+  .btt-hero__sub{ font-size:15px; }
+  /* Stats + certs: keep them side-by-side (stats left, certs right) rather
+     than letting the row wrap into an all-left-aligned stack — the column
+     is narrower here, so everything gets tightened to still fit in one row. */
+  .btt-hero__stats-strip{ flex-wrap:nowrap; gap:16px; }
+  .btt-stats{ gap:14px; flex-wrap:nowrap; }
+  .btt-stats__item{ min-width:0; }
+  .btt-stats__number{ font-size:22px; }
+  .btt-stats__label{ font-size:10.5px; line-height:1.25; }
+  .btt-cert-logos{ flex-shrink:0; }
+  .btt-cert-logos img{ max-width:160px; }
+  /* Content column is narrower here — 6 logos in one nowrap row (the
+     desktop default) run wider than the column and, since overflow is
+     visible, spill rightward into the widget. Let them wrap instead. */
+  .btt-hero__trust-logos{ flex-wrap:wrap; row-gap:12px; }
+}
+
+/* ===== Small tablet / phone (≤768px) — actual stack point ===== */
+@media (max-width: 768px){
+  .btt-hero__inner{ flex-direction:column; align-items:stretch; gap:56px; }
+  .btt-hero__content{ max-width:100%; }
+  .btt-hero__widget-wrap{ width:100%; display:flex; justify-content:center; }
+  .btt-hero__widget{ width:100%; max-width:480px; }
+  .btt-hero__title{ font-size:38px; }
+  .btt-hero{ padding:120px 24px 48px; }
+}
+
+@media (min-width: 641px) and (max-width: 768px){
+  .btt-hero__title{ font-size:44px; }
+}
+
+/* ===== Mobile (≤640px) ===== */
+@media (max-width: 640px){
+  .btt-hero{ padding:100px 20px 40px; }
+  .btt-eyebrow{ font-size:9px; margin-bottom:16px; }
+  .btt-hero__title{ font-size:36px; line-height:1.2; margin-bottom:20px; }
+  .btt-hero__sub{ font-size:15px; margin-bottom:32px; }
+  .btt-hero__ctas{ flex-direction:column; align-items:stretch; gap:12px; }
+  .btt-hero__ctas .btt-btn{ width:100%; justify-content:center; padding-top:12px; padding-bottom:12px; }
+  .btt-hero__trust-label{ text-align:center; }
+  .btt-hero__trust-logos{ flex-wrap:wrap; justify-content:center; gap:16px 20px; }
+  .btt-hero__trust-logos img{ height:32px; max-width:90px; flex-shrink:initial; }
+  .btt-hero__inner{ gap:48px; }
+  .btt-hero__widget{ padding:24px; border-radius:24px; background:rgba(15,22,30,.55); backdrop-filter:blur(48px) saturate(140%); -webkit-backdrop-filter:blur(48px) saturate(140%); border-color:rgba(255,255,255,.24); }
+  .btt-widget__gauge{ width:130px; height:130px; }
+  .btt-widget__gauge-label{ padding:0 14px; }
+  .btt-widget__gauge-value{ font-size:27px; }
+  .btt-widget__gauge-status{ font-size:10.5px; }
+  .btt-hero__stats-strip{ flex-direction:column; align-items:center; gap:20px; text-align:center; }
+  .btt-stats{ justify-content:center; gap:16px; width:100%; }
+  .btt-stats__item{ flex:1; align-items:center; text-align:center; min-width:0; }
+  .btt-stats__number{ font-size:26px; }
+  .btt-stats__label{ font-size:11px; line-height:1.3; }
+  .btt-cert-logos img{ max-width:230px; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .btt-widget__gauge-value.is-flipping, .btt-stats__number.is-flipping{ animation:none !important; }
+  .btt-hero__widget::before{ animation:none; }
+}
+
+/* ===== Specular button ===== */
+.btt-btn--specular, .btt-btn--nav{ position:relative; overflow:hidden; }
+.btt-btn--specular::after, .btt-btn--nav::after{ content:''; position:absolute; top:0; left:-60%; width:40%; height:100%; background:linear-gradient(115deg, transparent 0%, rgba(255,255,255,.55) 50%, transparent 100%); transform:skewX(-20deg); transition:left .55s ease; pointer-events:none; }
+.btt-btn--specular:hover::after, .btt-btn--nav:hover::after{ left:130%; }
+
+.btt-hero__bottom-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 180px;
+  background: linear-gradient(180deg,
+    rgba(244,246,248,0) 0%,
+    rgba(244,246,248,.35) 45%,
+    rgba(244,246,248,.75) 75%,
+    rgba(244,246,248,1) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Responsive Mobile Fix */
+@media (max-width: 640px) {
+  .btt-hero__bottom-fade { height: 120px; }
+}
+
+/* =====================================================================
+   MOBILE / TOUCH PERFORMANCE OVERRIDES
+   ---------------------------------------------------------------------
+   landing.css is the last stylesheet loaded in <head>, so this block wins
+   the cascade over every beyond-the-test-*.css file without editing them.
+
+   Three things were making fast scrolling stutter on phones:
+
+   1. ALWAYS-ON `backdrop-filter`. Every glass card
+      (.btt-assess__card, .btt-tools__card, .btt-res__card,
+      .btt-expert__panel, .btt-hero__content) sat over the full-page
+      dot-field canvas. A backdrop-filter has to re-sample and re-blur
+      whatever is behind it, and its backdrop was a canvas that repainted
+      every frame — so the blur could never be cached. .btt-assess__panel
+      and .btt-tools__panel then nested a SECOND backdrop-filter inside the
+      already-blurred card, and .btt-hero__content used blur(90px) over an
+      autoplaying video. Translucency itself is cheap; it is the blur that
+      is not, so the backgrounds below keep the glass look with a solid
+      alpha instead.
+
+   2. `btt-glow-rotate` — an infinite animation driving --btt-angle inside a
+      conic-gradient border. Conic gradients cannot be composited, so each
+      frame re-rasterises the whole border image, on several cards at once,
+      on- and off-screen alike, for the entire session.
+
+   3. Gradient text flow — animating `background-position` on a
+      `background-clip: text` element repaints every glyph on the main
+      thread, forever.
+
+   Desktop keeps all of it; only touch/small viewports are affected.
+
+   ---------------------------------------------------------------------
+   BREAKPOINT — see the matching note on the transparency block at the end
+   of this file. The third clause exists because the 13" iPad Pro is
+   1032 x 1376 logical points, so it clears `max-width: 1024px` in BOTH
+   orientations, and with a Magic Keyboard attached iPadOS reports
+   `hover: hover` / `pointer: fine`, so it clears the second clause too.
+   `any-pointer: coarse` stays true whenever a touchscreen exists at all,
+   which is what actually distinguishes a tablet from a desktop.
+   ===================================================================== */
+@media (max-width: 1024px),
+       (hover: none) and (pointer: coarse),
+       (max-width: 1400px) and (any-pointer: coarse) {
+
+  /* ---- 1. Kill always-on backdrop blur ----
+     Because the dot-field canvas no longer runs at these widths, what sits
+     behind these cards is now the flat #111820 on `.btt-dotfield`. Blurring
+     a flat colour returns that same flat colour, so for everything backed by
+     the page background the blur can simply be dropped and the ORIGINAL
+     background values left untouched — no appearance change at all.
+
+     Opacity is only raised where something with actual detail sits behind
+     the element: the hero video, and page content scrolling behind the nav
+     and the modals. Those four are the only places the look shifts. */
+
+  /* The Get Expert Help cards are not listed here — their backdrop-filter was
+     removed outright in beyond-the-test-expert-help.css when their background
+     went to 94% opacity, so there is nothing left to override. */
+  .btt-assess__card,
+  .btt-tools__card,
+  .btt-res__card,
+  /* These two nest a SECOND backdrop root inside an already-blurred card. */
+  .btt-assess__panel,
+  .btt-tools__panel,
+  .btt-nav__menu-pill{
+    backdrop-filter:none; -webkit-backdrop-filter:none;
+  }
+  .btt-res__card{ transform-style:flat; }
+
+  /* blur(48px) over the autoplaying hero video — the one card with real
+     detail behind it, so it needs the alpha raised to stay legible.
+     Was rgba(15,22,30,.55). */
+  .btt-hero__widget{
+    background:rgba(15,22,30,.88);
+    backdrop-filter:none; -webkit-backdrop-filter:none;
+  }
+
+  /* Fixed, full-width, and on screen for the whole of every scroll, with
+     page content passing behind it. Was rgba(17,24,32,.9) + blur(18px);
+     without the blur that 10% would ghost through sharply. */
+  .btt-nav__bg.is-blurred{
+    background:rgba(17,24,32,.96);
+    backdrop-filter:none; -webkit-backdrop-filter:none;
+  }
+
+  /* Modal glass — was frosted dark; now solid white so the quiz content
+     reads as a light panel on mobile (matching the desktop look). */
+  .btt-assess__modal-panel-frame,
+  .btt-tools__modal-panel-frame{
+    background:#fff;
+    backdrop-filter:none; -webkit-backdrop-filter:none;
+  }
+  .btt-res__modal-panel{
+    background:rgba(24,34,46,.96);
+    backdrop-filter:none; -webkit-backdrop-filter:none;
+  }
+
+  /* Was .65 / .72 with a blur behind it. */
+  .btt-assess__modal.is-open .btt-assess__modal-backdrop,
+  .btt-tools__modal.is-open .btt-tools__modal-backdrop{
+    background:rgba(10,15,20,.86);
+    backdrop-filter:none; -webkit-backdrop-filter:none;
+  }
+  .btt-industries__modal.is-open .btt-industries__modal-backdrop{
+    background:rgba(17,24,32,.88);
+    backdrop-filter:none; -webkit-backdrop-filter:none;
+  }
+
+  /* ---- 2. Freeze the rotating conic-gradient borders ----
+     The border still renders identically — it just stops re-rasterising 60
+     times a second. With no animation --btt-angle falls back to its
+     @property initial-value of 0deg, the same frozen state that
+     `prefers-reduced-motion` visitors already see today. */
+  .btt-hero__widget::before,
+  .btt-assess__card::before,
+  .btt-assess__modal-panel-frame::before,
+  .btt-tools__card::before,
+  .btt-tools__modal-panel-frame::before,
+  .btt-res__card::before,
+  .btt-res__modal-panel::before{
+    animation:none;
+  }
+  /* The Get Expert Help cards are not listed here: their gradient glow was
+     removed outright in beyond-the-test-expert-help.css and replaced with a
+     solid #95C11F border, so there is no pseudo-element left to freeze. */
+
+  /* ---- 3. Static gradient text ----
+     50% 50% matches the resting position the existing
+     `prefers-reduced-motion` rule already uses for this element, so the
+     static colour is the one the design already ships in that mode. */
+  .btt-hero__title-grad,
+  .btt-hero__title-grad.is-flowing{
+    animation:none;
+    background-position:50% 50%;
+  }
+}
+
+/* `will-change: backdrop-filter` is never a useful hint — it pins a live
+   backdrop snapshot layer for the element's whole lifetime. Dropped on every
+   viewport, not just mobile. */
+.btt-assess__modal.is-open .btt-assess__modal-panel-frame,
+.btt-tools__modal.is-open .btt-tools__modal-panel-frame{
+  will-change:transform, opacity;
+}
+
+/* =====================================================================
+   MOBILE CARD OPACITY
+   ---------------------------------------------------------------------
+   Historically these were dropped to ~72% here to let the fixed dot-field
+   canvas show through as texture behind the cards. The dot-field has since
+   been removed and the page moved to a light background. The Resource
+   Library card stayed dark and needs to stay reliably opaque on every
+   viewport — a translucent card would let the light page bleed through and
+   wash out the white text inside it. The Expert Help cards moved to a light
+   gradient of their own since, so they no longer need an override here at
+   all; only the Resources card is left in this block.
+   ---------------------------------------------------------------------
+   BREAKPOINT — the 13" iPad Pro is 1032 x 1376 logical points, so it misses
+   `max-width: 1024px` in portrait as well as landscape, which is why this
+   originally did not apply there. With a Magic Keyboard attached iPadOS also
+   reports `hover: hover` / `pointer: fine`, so the second clause misses it
+   too. The third clause catches it: `any-pointer: coarse` is true whenever
+   the device has a touchscreen at all, regardless of what is plugged in, and
+   is false on an ordinary desktop. The 1400px ceiling keeps large
+   touchscreen desktop monitors out of it.
+   ===================================================================== */
+@media (max-width: 1024px),
+       (hover: none) and (pointer: coarse),
+       (max-width: 1400px) and (any-pointer: coarse) {
+  .btt-res__card{
+    background:rgba(17,24,32,.94);
+  }
+}

@@ -1,0 +1,57 @@
+{%- comment -%} Andatech — Andalink callout. Generated from the Phase 1 prototype.
+  Classes are `at-` prefixed; styling lives in andatech-site.css. {%- endcomment -%}
+
+{{ 'andatech-homepage.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'andatech-homepage.js' | asset_url }}" defer="defer"></script>
+{%- if section.settings.layout == 'featured_pathway' -%}{{ 'andatech-training.css' | asset_url | stylesheet_tag }}{%- endif -%}
+
+<section class="at-andalink{% if section.settings.layout == 'featured_pathway' %} at-andalink--featured-pathway{% endif %}"{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handleize }}"{% endif %}>
+  <div class="at-shell">
+    <div class="at-andalink__card" data-at-rise>
+      <div class="at-andalink__content">
+        {%- if section.settings.logo != blank -%}<img class="at-andalink__logo" src="{{ section.settings.logo | image_url: width: 300 }}" alt="{{ section.settings.logo.alt | default: 'Andalink' | escape }}" loading="lazy">{%- endif -%}
+        {%- if section.settings.eyebrow != blank -%}<p class="at-andalink__eyebrow{% if section.settings.layout == 'featured_pathway' %} at-stepper__eyebrow{% endif %}">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+        <h2 class="at-andalink__title">{{ section.settings.heading }}</h2>
+        {%- if section.settings.desc != blank -%}<div class="at-andalink__desc">{{ section.settings.desc }}</div>{%- endif -%}
+        {%- if section.settings.fine_print != blank -%}<p class="at-andalink__fine-print">{{ section.settings.fine_print | escape }}</p>{%- endif -%}
+        {%- if section.blocks.size > 0 -%}
+          <div class="at-training-facts">
+            {%- for block in section.blocks -%}
+              <div class="at-training-fact" {{ block.shopify_attributes }}>
+                <p class="at-training-fact__value">{{ block.settings.value | escape }}</p>
+                {%- if block.settings.copy != blank -%}<div class="at-training-fact__copy">{{ block.settings.copy }}</div>{%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+        {%- if section.settings.cta_label != blank -%}<a class="at-btn at-btn--green" href="{{ section.settings.cta_url | default: '#' }}">{{ section.settings.cta_label | escape }} <i class="at-btn__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>{%- endif -%}
+      </div>
+      {%- if section.settings.image != blank -%}
+        <div class="at-andalink__media"><img src="{{ section.settings.image | image_url: width: 1600 }}" alt="{{ section.settings.image.alt | escape }}" loading="lazy"></div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Andatech Andalink", "tag": "section", "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor" },
+    { "type": "select", "id": "layout", "label": "Layout", "options": [
+      { "value": "andalink", "label": "Andalink" },
+      { "value": "featured_pathway", "label": "Featured pathway" }
+    ], "default": "andalink" },
+    { "type": "image_picker", "id": "logo", "label": "Andalink wordmark" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "info": "Optional. Used by the featured pathway layout." },
+    { "type": "html", "id": "heading", "label": "H2 — Heading", "info": "Wrap emphasised words in strong tags.", "default": "Alcohol testing programs<br><strong>are managed through</strong><br><strong>Andalink</strong>." },
+    { "type": "richtext", "id": "desc", "label": "Description", "default": "<p>Our compliance platform. Alcohol & drug testing programs are managed with the same team and the same reporting.</p>" },
+    { "type": "text", "id": "fine_print", "label": "Fine print", "info": "Optional small disclaimer text below the description." },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "See How Andalink Fits In" },
+    { "type": "url", "id": "cta_url", "label": "Button link" },
+    { "type": "image_picker", "id": "image", "label": "Feature image", "info": "Sits flush to the card's bottom-right corner." } ],
+  "blocks": [ { "type": "fact", "name": "Pathway fact", "limit": 4, "settings": [
+    { "type": "text", "id": "value", "label": "Highlight" },
+    { "type": "richtext", "id": "copy", "label": "Supporting copy" }
+  ] } ],
+  "presets": [ { "name": "Andatech Andalink" } ] }
+{% endschema %}

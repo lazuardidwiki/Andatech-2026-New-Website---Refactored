@@ -1,0 +1,83 @@
+{%- comment -%}
+  Andatech — HLTPAT010 "Who's Behind the Program"
+  Text block left, RTO card right. Full-bleed background image with gradient
+  overlay matching the Figma design. Styled by andatech-site.css.
+{%- endcomment -%}
+
+{%- comment -%}
+  Split from andatech-site.css on 2026-09-05. This section now loads only
+  the scoped HLTPAT010 stylesheet (11 KB) instead of the 336 KB monolith.
+  Note: this section markup references .at-industry__eyebrow and
+  .at-industry__title — those styles come from other sections on the same page
+  that still load andatech-site.css. If this section is ever placed on a page
+  without any other Andatech section, those two classes will need to be
+  copied into andatech-hltpat010.css.
+{%- endcomment -%}
+{{ 'andatech-hltpat010.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-industry.css' | asset_url | stylesheet_tag }}
+
+<section class="at-h010-rto" id="{{ section.settings.anchor_id | default: section.id | handleize }}">
+  <div class="at-shell at-h010-rto__inner">
+    <div class="at-h010-rto__text">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="at-industry__title" data-at-rise>
+        {{ section.settings.heading | escape }}
+        {%- if section.settings.heading_bold != blank -%}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{%- endif -%}
+      </h2>
+      {%- if section.settings.body != blank -%}
+        <div class="at-industry__desc" data-at-rise>{{ section.settings.body }}</div>
+      {%- endif -%}
+    </div>
+    {%- assign rto_card_tag = 'div' -%}
+    {%- if section.settings.card_url != blank -%}{%- assign rto_card_tag = 'a' -%}{%- endif -%}
+    <{{ rto_card_tag }} class="at-h010-rto__card at-h010-rto__card--overlay{% if section.settings.card_url != blank %} at-h010-rto__card--link{% endif %}" data-at-rise
+      {%- if section.settings.card_url != blank %} href="{{ section.settings.card_url }}"{% if section.settings.card_url contains '://' %} target="_blank" rel="noopener"{% endif %}{% endif -%}>
+      {%- if section.settings.card_image != blank -%}
+        <img class="at-h010-rto__card-bg" src="{{ section.settings.card_image | image_url: width: 1200 }}"
+             alt="{{ section.settings.card_image.alt | default: section.settings.card_title | escape }}"
+             loading="lazy">
+      {%- endif -%}
+      <div class="at-h010-rto__card-content">
+        {%- if section.settings.card_label != blank -%}
+          <span class="at-h010-rto__card-pill">{{ section.settings.card_label | escape }}</span>
+        {%- endif -%}
+        <div class="at-h010-rto__card-text">
+          {%- if section.settings.card_title != blank -%}
+            <h3 class="at-h010-rto__card-title">{{ section.settings.card_title | escape }}</h3>
+          {%- endif -%}
+          {%- if section.settings.card_body != blank -%}
+            <div class="at-h010-rto__card-desc">{{ section.settings.card_body }}</div>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.card_url != blank -%}
+          <span class="at-h010-rto__arrow" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 8 16 16M16 16V9.8M16 16H9.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        {%- endif -%}
+      </div>
+    </{{ rto_card_tag }}>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "HLTPAT010 RTO",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "whos-behind" },
+    { "type": "header", "content": "Left column" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "WHO'S BEHIND THE PROGRAM" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "A nationally recognised" },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "training partner" },
+    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Andatech is an authorised third-party provider delivering specified services on behalf of METEX Solutions Pty Ltd.</p>" },
+    { "type": "header", "content": "Right card" },
+    { "type": "image_picker", "id": "card_image", "label": "Card background image" },
+    { "type": "text", "id": "card_label", "label": "Card label", "default": "RESPONSIBLE RTO" },
+    { "type": "text", "id": "card_title", "label": "Card title", "default": "METEX Solutions Pty Ltd" },
+    { "type": "richtext", "id": "card_body", "label": "Card body", "default": "<p>HLTPAT010 nationally recognised training advertised through Andatech is offered and issued by METEX Solutions Pty Ltd RTO 46448.</p>" },
+    { "type": "url", "id": "card_url", "label": "Card link", "info": "Optional. When set, the whole card becomes clickable and an arrow badge appears bottom-right. External URLs open in a new tab." }
+  ],
+  "presets": [{ "name": "HLTPAT010 RTO" }]
+}
+{% endschema %}

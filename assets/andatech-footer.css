@@ -1,0 +1,190 @@
+/* ══════════════════════════════════════════════════════════════════════
+   ANDATECH — FOOTER STYLESHEET
+   ══════════════════════════════════════════════════════════════════════
+
+   Scope: main desktop footer styles. All .at-footer-* selectors.
+   Extracted from andatech-site.css lines 2539–2591 on 2026-09-05.
+
+   Loaded ONCE from sections/andatech-footer.liquid (on every page via
+   footer-group.json).
+
+   IMPORTANT: mobile responsive fragments for .at-footer are still living
+   inside andatech-site.css (lines ~3951-3966, ~4543-4571, ~4986, ~5176-5200
+   — inside shared @media wrappers). They still apply on every page because
+   the monolith is still loaded elsewhere. When the monolith is finally
+   stripped of already-split modules, those fragments must be rewrapped in
+   their own @media rules and appended here.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════════
+   FOOTER — full-bleed dark navy, rounded
+   ══════════════════════════════════════════════════════════ */
+.at-footer {
+  background: linear-gradient(115deg, #1A2432 0%, #16202D 55%, #121C2A 100%);
+  border-radius: var(--at-r-xl) var(--at-r-xl) 0 0;
+  color: var(--at-white);
+  padding-block: 55px 42px;
+}
+.at-footer__top {
+  display: grid;
+  grid-template-columns: 1.5fr 1.2fr 1fr;
+  gap: clamp(32px, 3.5vw, 60px);
+  padding-bottom: 46px;
+}
+.at-footer__logo { width: 205px; height: auto; margin-bottom: 74px; }
+.at-footer__heading {
+  margin: 0 0 20px;
+  font-size: clamp(16px, 1.16vw, 20px);
+  font-weight: 700;
+  color: var(--at-white);
+}
+.at-footer__block { margin-bottom: 24px; font-size: clamp(14px, 1.16vw, 20px); line-height: 1.5; color: rgba(255,255,255,.86); }
+.at-footer__strong { display: block; margin-top: 26px; font-size: clamp(15px, 1.16vw, 20px); font-weight: 700; color: var(--at-white); }
+.at-footer__list { list-style: none; display: flex; flex-direction: column; gap: 22px; }
+.at-footer__list a {
+  font-size: clamp(14px, 1.16vw, 20px);
+  color: rgba(255,255,255,.86);
+  transition: color .25s var(--at-ease);
+}
+.at-footer__list a:hover { color: var(--at-green); }
+.at-footer__aside { display: flex; flex-direction: column; align-items: flex-end; gap: 44px; }
+.at-footer__certs { width: 264px; max-width: 100%; }
+.at-footer__social { display: flex; gap: 26px; }
+.at-footer__social a { color: var(--at-white); transition: color .25s var(--at-ease), transform .35s var(--at-ease-out); }
+.at-footer__social a:hover { color: var(--at-green); transform: translateY(-2px); }
+.at-footer__social svg { width: 24px; height: 24px; }
+.at-footer__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(255,255,255,.18);
+}
+.at-footer__copy { font-size: clamp(13px, .93vw, 16px); color: rgba(255,255,255,.72); }
+.at-footer__legal { display: flex; flex-wrap: wrap; gap: 38px; }
+.at-footer__legal a {
+  font-size: clamp(13px, .93vw, 16px);
+  color: rgba(255,255,255,.72);
+  transition: color .25s var(--at-ease);
+}
+.at-footer__legal a:hover { color: var(--at-white); }
+
+/* ══════════════════════════════════════════════════════════════════════
+   RESPONSIVE — mobile & tablet overrides
+   ══════════════════════════════════════════════════════════════════════
+
+   These were originally scattered across multiple @media wrappers inside
+   andatech-site.css. Rewrapped and appended here on 2026-09-05 so the
+   footer file works whether or not the monolith is also loaded.
+
+   Note: the mobile @media (max-width: 767px) rules for .at-footer__aside
+   and its children appear TWICE in the monolith (blocks at lines 4528 and
+   5166 — likely a leftover duplicate). Both are preserved to match the
+   original cascade behavior.
+   ══════════════════════════════════════════════════════════════════════ */
+
+
+/* — from andatech-site.css lines 3436-3491, was inside @media (max-width: 1279px) — */
+@media (max-width: 1279px) {
+    .at-footer__top { grid-template-columns: 1fr 1fr; row-gap: 48px; }
+    .at-footer__aside { grid-column: span 2; align-items: flex-start; flex-direction: row; justify-content: space-between; align-items: center; }
+    .at-footer__logo { margin-bottom: 40px; }
+}
+
+/* — from andatech-site.css lines 3630-3967, was inside @media (max-width: 767px) — */
+@media (max-width: 767px) {
+    .at-footer { border-radius: var(--at-r-xl) var(--at-r-xl) 0 0; padding-block: 44px 30px; text-align: center;
+              position: relative; z-index: 1; }
+    .at-footer__top { grid-template-columns: 1fr; row-gap: 40px; padding-bottom: 34px; }
+    .at-footer__logo { width: 172px; margin: 0 auto 30px; }
+    .at-footer__heading { font-size: 16px; margin-bottom: 16px; }
+    .at-footer__block { font-size: 14px; margin-bottom: 14px; }
+    .at-footer__strong { font-size: 14px; margin-top: 18px; text-decoration: underline; }
+    .at-footer__list { gap: 16px; }
+    .at-footer__list a { font-size: 14px; }
+    .at-footer__aside { grid-column: auto; align-items: center; gap: 26px; }
+    .at-footer__certs { width: 220px; }
+    .at-footer__social { gap: 22px; }
+    .at-footer__bottom { flex-direction: column; align-items: center; gap: 18px; padding-top: 24px; }
+    .at-footer__copy { font-size: 13px; }
+    .at-footer__legal { gap: 18px; justify-content: center; }
+    .at-footer__legal a { font-size: 13px; }
+}
+
+/* — from andatech-site.css lines 4528-4599, was inside @media (max-width: 767px) — */
+@media (max-width: 767px) {
+    .at-footer__aside {
+      display: flex;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: flex-start;
+      gap: 22px;
+    }
+    .at-footer__certs { order: 1; }
+    .at-footer__social {
+      order: 2;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      min-height: 28px;
+    }
+    .at-footer__social a {
+      display: grid;
+      flex: 0 0 24px;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      color: var(--at-white);
+    }
+    .at-footer__social svg {
+      display: block;
+      width: 24px;
+      height: 24px;
+      max-width: none;
+      max-height: none;
+    }
+}
+
+/* — from andatech-site.css lines 4983-4987, was inside @media (min-width: 768px) — */
+@media (min-width: 768px) {
+    .at-header-section,
+    .at-section,
+    .at-footer-section { zoom: .9; }
+}
+
+/* — from andatech-site.css lines 5166-5207, was inside @media (max-width: 767px) — */
+@media (max-width: 767px) {
+    .at-footer__aside {
+      display: flex;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: flex-start;
+      gap: 22px;
+    }
+    .at-footer__certs { order: 1; }
+    .at-footer__social {
+      order: 2;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      min-height: 28px;
+    }
+    .at-footer__social a {
+      display: grid;
+      flex: 0 0 24px;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      color: var(--at-white);
+    }
+    .at-footer__social svg {
+      display: block;
+      width: 24px;
+      height: 24px;
+      max-width: none;
+      max-height: none;
+    }
+}

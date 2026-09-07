@@ -1,0 +1,204 @@
+{%- comment -%}
+  Guide 03 — Workplace Compliance Readiness Assessment.
+
+  This renders ONLY as a modal overlay (nothing shows inline on the page).
+  It's opened by any element elsewhere on the page carrying
+  data-open-assessment="guide03" — currently that's the Guide 03 card's
+  button in beyond-the-test-resources.liquid.
+
+  The 8 questions/options are fixed guide content and live in
+  beyond-the-test-guide03-assessment.js rather than in Liquid settings —
+  making all of that theme-editable would mean ~40 separate schema fields
+  for content that shouldn't change without updating the guide itself.
+  Only the parts a merchant would actually want to tweak (CTA copy/link)
+  are exposed below.
+
+  The results reveal is gated behind the same HubSpot form used by the
+  Resource Library's gated downloads (window.BTT_RES_HUBSPOT, set in
+  beyond-the-test-resources.liquid) — one lead form, one place Jenny
+  maintains it, rather than a second HubSpot form to configure.
+{%- endcomment -%}
+
+<div class="btt-g3-modal" id="btt-g3-modal" aria-hidden="true" role="dialog" aria-label="Workplace Compliance Readiness Assessment">
+  <div class="btt-g3-backdrop" id="btt-g3-backdrop"></div>
+  <div class="btt-g3-panel-frame">
+    <button class="btt-g3-close" id="btt-g3-close" type="button" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+
+    <div class="btt-g3-panel" id="btt-g3-panel">
+      <div class="btt-g3__app">
+
+        <div class="btt-g3__topbar">
+          <div class="btt-g3__brand"><b>Beyond the Test&trade;</b> &middot; Guide 03</div>
+          <div class="btt-g3__brand" id="btt-g3-step-indicator"></div>
+        </div>
+
+        <div class="btt-g3__progress-wrap" id="btt-g3-progress-wrap">
+          <div class="btt-g3__progress-label">
+            <span id="btt-g3-progress-text">Section 1 of 8</span>
+            <span id="btt-g3-progress-pct">0%</span>
+          </div>
+          <div class="btt-g3__progress-track"><div class="btt-g3__progress-fill" id="btt-g3-progress-fill"></div></div>
+        </div>
+
+        <!-- INTRO -->
+        <div class="btt-g3__screen is-active" id="btt-g3-intro">
+          <div class="btt-g3__eyebrow">Workplace Compliance Readiness Assessment</div>
+          <h1 class="btt-g3__intro-title">How prepared is your organisation?</h1>
+          <p class="btt-g3__sub">This isn&rsquo;t really about testing devices. It&rsquo;s about the maturity of your entire workplace compliance program. Answer eight short questions and receive your Workplace Compliance Score, your maturity level, and recommended next steps.</p>
+
+          <div class="btt-g3__dim-list">
+            <div>Governance</div>
+            <div>Risk assessment</div>
+            <div>Policy</div>
+            <div>Consultation</div>
+            <div>Supervisor capability</div>
+            <div>Testing</div>
+            <div>Documentation</div>
+            <div>Continuous improvement</div>
+          </div>
+
+          <button class="btt-g3__start-btn" id="btt-g3-start-btn" type="button">Start the assessment &rarr;</button>
+          <div class="btt-g3__time-note">Estimated time: 10 minutes &middot; 8 questions &middot; your score unlocks at the end</div>
+        </div>
+
+        <!-- QUESTION SCREEN -->
+        <div class="btt-g3__screen" id="btt-g3-question">
+          <div class="btt-g3__q-kicker">
+            <div class="btt-g3__num" id="btt-g3-q-num">1</div>
+            <div class="btt-g3__eyebrow" id="btt-g3-q-eyebrow">Governance</div>
+          </div>
+          <h2 class="btt-g3__q-title" id="btt-g3-q-title"></h2>
+          <div class="btt-g3__q-sub" id="btt-g3-q-sub">Score yourself</div>
+          <div id="btt-g3-options"></div>
+          <div class="btt-g3__nav-row">
+            <button class="btt-g3__nav-btn" id="btt-g3-back-btn" type="button">&larr; Back</button>
+            <button class="btt-g3__nav-btn is-primary" id="btt-g3-next-btn" type="button" disabled>Next &rarr;</button>
+          </div>
+        </div>
+
+        <!-- GATE SCREEN — lead capture before the score reveals -->
+        <div class="btt-g3__screen" id="btt-g3-gate">
+          <div class="btt-g3__eyebrow">One last step</div>
+          <h2 class="btt-g3__gate-title">Enter your details to reveal your score</h2>
+          <p class="btt-g3__gate-sub">Your Workplace Compliance Score, maturity level and recommended next steps are ready — just tell us who to send them to.</p>
+
+          <form id="btt-g3-gate-form" novalidate>
+            <div class="btt-g3__gate-row">
+              <div class="btt-g3__gate-field">
+                <label for="btt-g3-gate-firstname">First name</label>
+                <input type="text" id="btt-g3-gate-firstname" name="firstname" autocomplete="given-name" required>
+              </div>
+              <div class="btt-g3__gate-field">
+                <label for="btt-g3-gate-lastname">Last name</label>
+                <input type="text" id="btt-g3-gate-lastname" name="lastname" autocomplete="family-name" required>
+              </div>
+            </div>
+            <div class="btt-g3__gate-field">
+              <label for="btt-g3-gate-email">Work email</label>
+              <input type="email" id="btt-g3-gate-email" name="email" autocomplete="email" required>
+            </div>
+            <div class="btt-g3__gate-row">
+              <div class="btt-g3__gate-field">
+                <label for="btt-g3-gate-jobtitle">Job title</label>
+                <input type="text" id="btt-g3-gate-jobtitle" name="jobtitle" autocomplete="organization-title" required>
+              </div>
+              <div class="btt-g3__gate-field">
+                <label for="btt-g3-gate-company">Company</label>
+                <input type="text" id="btt-g3-gate-company" name="company" autocomplete="organization" required>
+              </div>
+            </div>
+            <div class="btt-g3__gate-field">
+              <label for="btt-g3-gate-industry">Industry</label>
+              <select id="btt-g3-gate-industry" name="industry" required>
+                <option value="" disabled selected>Select your industry</option>
+                <option>Aviation</option>
+                <option>Mining</option>
+                <option>Transport</option>
+                <option>Construction</option>
+                <option>Healthcare</option>
+                <option>Manufacture</option>
+                <option>Maritime</option>
+                <option>Education</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <label class="btt-g3__gate-consent">
+              <input type="checkbox" id="btt-g3-gate-consent" name="consent" required>
+              <span>I agree to receive occasional emails from Andatech about workplace compliance resources. You can unsubscribe anytime.</span>
+            </label>
+
+            <p class="btt-g3__gate-error" id="btt-g3-gate-error" hidden></p>
+
+            <button type="submit" class="btt-g3__nav-btn is-primary" id="btt-g3-gate-submit" disabled>
+              <span class="btt-g3__gate-submit-label">Reveal my results</span>
+            </button>
+          </form>
+          <div class="btt-g3__gate-note">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Your answers are never shared without your details above.
+          </div>
+        </div>
+
+        <!-- RESULTS -->
+        <div class="btt-g3__screen" id="btt-g3-results">
+          <div class="btt-g3__eyebrow">Your results</div>
+          <h2 class="btt-g3__results-heading">Your Workplace Compliance Score</h2>
+          <div class="btt-g3__score-hero">
+            <div class="btt-g3__score-big" id="btt-g3-score-big">0</div>
+            <div class="btt-g3__score-of">/ 100</div>
+          </div>
+          <div class="btt-g3__level-chip" id="btt-g3-level-chip">Level</div>
+
+          <div class="btt-g3__ladder" id="btt-g3-ladder"></div>
+
+          <div class="btt-g3__result-grid">
+            <div class="btt-g3__result-col btt-g3__result-col--strength">
+              <div class="btt-g3__eyebrow">Your strengths</div>
+              <div id="btt-g3-strengths"></div>
+            </div>
+            <div class="btt-g3__result-col btt-g3__result-col--gap">
+              <div class="btt-g3__eyebrow">Opportunities</div>
+              <div id="btt-g3-gaps"></div>
+            </div>
+          </div>
+
+          <div style="margin-top:40px;">
+            <div class="btt-g3__eyebrow">Recommended resources</div>
+            <div class="btt-g3__resource-list" id="btt-g3-resource-list"></div>
+          </div>
+
+          <div class="btt-g3__benchmark">
+            <div class="btt-g3__eyebrow">For context</div>
+            <p style="margin:0;">Typical organisations score in a similar range to this before implementing a structured workplace compliance program — most gains come from formalising governance, documentation and review, not from the testing method itself.</p>
+          </div>
+
+          <div class="btt-g3__cta-block">
+            <div class="btt-g3__eyebrow">Suggested next step</div>
+            <h3>{{ section.settings.cta_heading | default: "Book a Workplace Readiness Review" }}</h3>
+            <p>{{ section.settings.cta_body | default: "A structured conversation about your results, focused on the specific gaps identified above — not a sales pitch about testing devices." }}</p>
+            <a href="{{ section.settings.cta_url | default: 'https://andatech.com.au/pages/talk-to-sales' }}" class="btt-g3__cta-btn">{{ section.settings.cta_label | default: "Book a Readiness Review →" }}</a>
+            <button class="btt-g3__retake-btn" id="btt-g3-retake-btn" type="button">Retake assessment</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "BTT Guide 03 Assessment",
+  "settings": [
+    { "type": "paragraph", "content": "This section renders only as a popup — it has no inline placement on the page. Open it by adding a block to BTT Resources with \u201cOpens as interactive assessment\u201d checked on the Guide 03 resource card." },
+    { "type": "text", "id": "cta_heading", "label": "Result screen CTA heading", "default": "Book a Workplace Readiness Review" },
+    { "type": "textarea", "id": "cta_body", "label": "Result screen CTA body", "default": "A structured conversation about your results, focused on the specific gaps identified above — not a sales pitch about testing devices." },
+    { "type": "text", "id": "cta_label", "label": "Result screen CTA button label", "default": "Book a Readiness Review →" },
+    { "type": "url", "id": "cta_url", "label": "Result screen CTA button link" }
+  ],
+  "presets": [{ "name": "BTT Guide 03 Assessment" }]
+}
+{% endschema %}

@@ -1,0 +1,87 @@
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-about.css' | asset_url | stylesheet_tag }}
+
+<section class="at-about-bento at-about-section"{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handleize }}"{% endif %}>
+  <div class="at-shell">
+    <header class="at-about-section__header">
+      {%- if section.settings.eyebrow != blank -%}<p class="at-about-section__eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 class="at-about-section__title">{{ section.settings.heading }}</h2>{%- endif -%}
+      {%- if section.settings.description != blank -%}<div class="at-about-section__body">{{ section.settings.description }}</div>{%- endif -%}
+    </header>
+
+    <div class="at-about-bento__grid">
+      {%- assign large_index = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- assign is_large = false -%}
+        {%- if block.settings.size == 'large' -%}
+          {%- assign large_index = large_index | plus: 1 -%}
+          {%- assign is_large = true -%}
+        {%- endif -%}
+        <article class="at-about-bento-card at-about-bento-card--{{ block.settings.size }} at-about-bento-card--{{ block.settings.style }}{% if is_large and large_index == 2 %} at-about-bento-card--large-right{% endif %}" {{ block.shopify_attributes }}>
+          {%- if block.settings.style == 'image' and block.settings.image != blank -%}
+            {%- assign card_alt = block.settings.image_alt | default: block.settings.heading -%}
+            {{ block.settings.image | image_url: width: 1600 | image_tag: class: 'at-about-bento-card__image', widths: '480, 720, 960, 1200, 1600', sizes: '(min-width: 1280px) 47vw, (min-width: 768px) 50vw, 100vw', loading: 'lazy', alt: card_alt }}
+          {%- endif -%}
+          <div class="at-about-bento-card__content">
+            {%- if block.settings.eyebrow != blank -%}<p class="at-about-bento-card__eyebrow">{{ block.settings.eyebrow | escape }}</p>{%- endif -%}
+            <h3 class="at-about-bento-card__title">{{ block.settings.heading | escape }}</h3>
+            {%- if block.settings.body != blank -%}<div class="at-about-bento-card__body">{{ block.settings.body }}</div>{%- endif -%}
+          </div>
+          {%- if block.settings.button_link != blank -%}
+            <a class="at-about-bento-card__arrow" href="{{ block.settings.button_link }}" aria-label="{{ block.settings.heading | escape }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 8 16 16M16 16V9.8M16 16H9.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About — Bento directory",
+  "tag": "section",
+  "class": "at-section",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "about-directory" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "What's behind Andatech" },
+    { "type": "html", "id": "heading", "label": "H2 — Heading", "default": "One story,<br><strong>eight different parts.</strong>" },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>A remote mine, a transport depot, a hospital and a family home should not be treated as the same testing environment. Choose your context to see the risks, methods and support that fit.</p>" }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Bento card",
+      "settings": [
+        { "type": "select", "id": "style", "label": "Card style", "default": "solid", "options": [
+          { "value": "solid", "label": "Solid white" },
+          { "value": "image", "label": "Full-bleed image" }
+        ] },
+        { "type": "select", "id": "size", "label": "Card size", "default": "small", "options": [
+          { "value": "small", "label": "Small" },
+          { "value": "wide", "label": "Wide" },
+          { "value": "large", "label": "Large (2 columns)" }
+        ] },
+        { "type": "image_picker", "id": "image", "label": "Background image" },
+        { "type": "text", "id": "image_alt", "label": "Image alt text" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "About" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Card heading" },
+        { "type": "richtext", "id": "body", "label": "Body copy", "default": "<p>Briefly explain what visitors will find here.</p>" },
+        { "type": "url", "id": "button_link", "label": "Card link" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "About — Bento directory", "blocks": [
+      { "type": "card", "settings": { "style": "image", "size": "large", "eyebrow": "Our people", "heading": "Meet the team" } },
+      { "type": "card", "settings": { "style": "solid", "size": "small", "eyebrow": "Innovation", "heading": "Research & development" } },
+      { "type": "card", "settings": { "style": "solid", "size": "small", "eyebrow": "Standards", "heading": "Accreditations & standards" } },
+      { "type": "card", "settings": { "style": "solid", "size": "small", "eyebrow": "Recognition", "heading": "Awards & recognition" } },
+      { "type": "card", "settings": { "style": "solid", "size": "small", "eyebrow": "Network", "heading": "Our partners" } },
+      { "type": "card", "settings": { "style": "image", "size": "large", "eyebrow": "For partners", "heading": "Why partner with Andatech" } },
+      { "type": "card", "settings": { "style": "solid", "size": "wide", "eyebrow": "Results", "heading": "Customer success" } },
+      { "type": "card", "settings": { "style": "solid", "size": "wide", "eyebrow": "Careers", "heading": "Join our team" } }
+    ] }
+  ]
+}
+{% endschema %}

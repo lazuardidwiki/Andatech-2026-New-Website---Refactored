@@ -1,0 +1,530 @@
+{% schema %}
+{
+  "name": "Breathalyzer Game",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Virtual Breath Test"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#8dc63f"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Game Settings"
+    },
+    {
+      "type": "textarea",
+      "id": "success_message",
+      "label": "Success Message",
+      "default": "Test Complete! In a real scenario, this would display your BAC."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Breathalyzer Game"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="breathalyzer-game-section">
+  <div class="game-container">
+    <h2 class="section-title" style="color: {{ section.settings.text_color }}">{{ section.settings.heading }}</h2>
+    
+    <div class="game-card">
+      <div class="screen-display" id="game-screen-{{ section.id }}">
+        <div class="status-text" id="status-text-{{ section.id }}">Ready to Test</div>
+        <div class="bac-reading" id="bac-reading-{{ section.id }}">WAIT</div>
+      </div>
+
+      <div class="interaction-area">
+        
+        <!-- Toggle Switch -->
+        <div class="mode-toggle-container">
+          <label class="switch">
+            <input type="checkbox" id="mic-toggle-{{ section.id }}" checked>
+            <span class="slider round"></span>
+          </label>
+          <span class="mode-label" id="mode-label-{{ section.id }}">Microphone Enabled</span>
+        </div>
+
+        <div class="flow-bar-container">
+          <div class="flow-bar-fill" id="flow-bar-{{ section.id }}"></div>
+          <span class="flow-label">Flow Pressure</span>
+        </div>
+        
+        <p class="instruction" id="instruction-{{ section.id }}">Tap Start and blow into your microphone</p>
+
+        <button id="start-btn-{{ section.id }}" class="action-btn">
+          <svg id="btn-icon-{{ section.id }}" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+          <span id="btn-text-{{ section.id }}">Start Test</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .breathalyzer-game-section {
+    padding: 4rem 1rem;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: {{ section.settings.text_color }};
+    --game-accent: {{ section.settings.accent_color }};
+  }
+
+  .game-container {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .section-title {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .game-card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
+    border: 1px solid #e5e7eb;
+  }
+
+  /* Digital Screen Look */
+  .screen-display {
+    background: #f0fdf4; /* Very light green bg */
+    border: 2px solid var(--game-accent);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+  }
+  
+  .screen-display.recording {
+    background: #ecfdf5;
+    box-shadow: 0 0 15px {{ section.settings.accent_color | color_modify: 'alpha', 0.3 }};
+  }
+  
+  .screen-display.error {
+    background: #fef2f2;
+    border-color: #ef4444;
+  }
+
+  .status-text {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+  }
+
+  .bac-reading {
+    font-family: 'Courier New', monospace;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--game-accent);
+  }
+
+  /* Toggle Switch Styles */
+  .mode-toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+  }
+  
+  .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #e5e7eb;
+    transition: .3s;
+    border-radius: 24px;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  input:checked + .slider {
+    background-color: var(--game-accent);
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(20px);
+  }
+
+  .mode-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: {{ section.settings.text_color }};
+    opacity: 0.8;
+  }
+
+  .flow-bar-container {
+    height: 12px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+
+  .flow-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--game-accent);
+    transition: width 0.1s linear;
+  }
+  
+  .flow-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 0;
+    line-height: 12px;
+    color: rgba(0,0,0,0.4);
+    font-weight: 600;
+  }
+
+  .instruction {
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    opacity: 0.8;
+  }
+
+  .action-btn {
+    background: var(--game-accent);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  .action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px {{ section.settings.accent_color | color_modify: 'alpha', 0.4 }};
+  }
+  
+  .action-btn:active {
+    transform: scale(0.98);
+  }
+  
+  .action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+</style>
+
+<script>
+  (function() {
+    const sectionId = "{{ section.id }}";
+    const startBtn = document.getElementById(`start-btn-${sectionId}`);
+    const btnText = document.getElementById(`btn-text-${sectionId}`);
+    const statusText = document.getElementById(`status-text-${sectionId}`);
+    const readingText = document.getElementById(`bac-reading-${sectionId}`);
+    const flowBar = document.getElementById(`flow-bar-${sectionId}`);
+    const instruction = document.getElementById(`instruction-${sectionId}`);
+    const screen = document.getElementById(`game-screen-${sectionId}`);
+    const micToggle = document.getElementById(`mic-toggle-${sectionId}`);
+    const modeLabel = document.getElementById(`mode-label-${sectionId}`);
+
+    // Game State
+    let useMic = true;
+    let isRecording = false;
+    let blowDuration = 0;
+    const REQUIRED_DURATION = 150; // ticks
+    const THRESHOLD = 15; // Volume threshold
+
+    // Audio Context vars
+    let audioContext, analyser, microphone, javascriptNode;
+    
+    // Manual Interval var
+    let manualInterval;
+
+    // --- INITIALIZATION ---
+    
+    // Initialize UI based on default toggle state
+    updateModeUI();
+
+    // Toggle Listener
+    micToggle.addEventListener('change', (e) => {
+      useMic = e.target.checked;
+      resetGame();
+      updateModeUI();
+    });
+
+    function updateModeUI() {
+      if (useMic) {
+        modeLabel.innerText = "Microphone Enabled";
+        btnText.innerText = "Start Test";
+        instruction.innerText = "Tap Start and blow into your microphone";
+        
+        // Setup Mic Listeners
+        startBtn.onclick = initAudio;
+        startBtn.onmousedown = null;
+        startBtn.onmouseup = null;
+        startBtn.onmouseleave = null;
+        startBtn.ontouchstart = null;
+        startBtn.ontouchend = null;
+      } else {
+        modeLabel.innerText = "Manual Mode";
+        btnText.innerText = "Hold to Blow";
+        instruction.innerText = "Press and hold the button to simulate blowing";
+        
+        // Setup Manual Listeners
+        startBtn.onclick = null;
+        startBtn.onmousedown = startManualBlow;
+        startBtn.onmouseup = stopManualBlow;
+        startBtn.onmouseleave = stopManualBlow;
+        // Touch events need passive: false or prevention
+        startBtn.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          startManualBlow();
+        }, { passive: false });
+        startBtn.addEventListener('touchend', (e) => {
+          e.preventDefault();
+          stopManualBlow();
+        }, { passive: false });
+      }
+    }
+
+    function resetGame() {
+      // Stop any active processes
+      if(audioContext && audioContext.state !== 'closed') {
+        try {
+          if(javascriptNode) javascriptNode.disconnect();
+          if(analyser) analyser.disconnect();
+          if(microphone) microphone.disconnect();
+          audioContext.close();
+        } catch(e) {}
+      }
+      if(manualInterval) clearInterval(manualInterval);
+      
+      isRecording = false;
+      blowDuration = 0;
+      startBtn.disabled = false;
+      flowBar.style.width = "0%";
+      screen.classList.remove('recording');
+      screen.classList.remove('error');
+      screen.style.transform = "none";
+      statusText.innerText = "Ready to Test";
+      readingText.innerText = "WAIT";
+    }
+
+    // --- MIC LOGIC ---
+
+    async function initAudio() {
+      try {
+        startBtn.disabled = true;
+        instruction.innerText = "Accessing microphone...";
+        
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        microphone = audioContext.createMediaStreamSource(stream);
+        javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+
+        analyser.smoothingTimeConstant = 0.8;
+        analyser.fftSize = 1024;
+
+        microphone.connect(analyser);
+        analyser.connect(javascriptNode);
+        javascriptNode.connect(audioContext.destination);
+
+        isRecording = true;
+        btnText.innerText = "Keep Blowing...";
+        statusText.innerText = "Analyzing Flow...";
+        readingText.innerText = "BLOW";
+        instruction.innerText = "Blow steadily into the microphone now!";
+        screen.classList.add('recording');
+        screen.classList.remove('error');
+
+        javascriptNode.onaudioprocess = function() {
+          if(!isRecording) return;
+
+          const array = new Uint8Array(analyser.frequencyBinCount);
+          analyser.getByteFrequencyData(array);
+          let values = 0;
+          const length = array.length;
+          for (let i = 0; i < length; i++) { values += array[i]; }
+          const average = values / length;
+
+          const percentage = Math.min(100, average * 2); 
+          flowBar.style.width = percentage + "%";
+
+          if (average > THRESHOLD) {
+            blowDuration++;
+            screen.style.transform = `translate(${Math.random()*2-1}px, ${Math.random()*2-1}px)`;
+            
+            if (blowDuration > REQUIRED_DURATION) finishTest();
+          } else {
+            if(blowDuration > 0) blowDuration -= 2; // Decay
+            if(blowDuration < 0) blowDuration = 0;
+            screen.style.transform = "none";
+          }
+        };
+
+      } catch (err) {
+        console.error(err);
+        instruction.innerText = "Microphone access denied. Try Manual Mode.";
+        startBtn.disabled = false;
+        screen.classList.add('error');
+        // Auto switch to manual suggestion?
+        micToggle.checked = false;
+        useMic = false;
+        updateModeUI();
+      }
+    }
+
+    // --- MANUAL LOGIC ---
+
+    function startManualBlow() {
+      if (startBtn.disabled) return;
+      
+      isRecording = true;
+      statusText.innerText = "Simulating Flow...";
+      readingText.innerText = "BLOW";
+      screen.classList.add('recording');
+      screen.classList.remove('error');
+      
+      if (manualInterval) clearInterval(manualInterval);
+      
+      // Run loop approx every 20ms to match audio processor speed
+      manualInterval = setInterval(() => {
+        blowDuration++;
+        
+        // Visual fill based on progress + little jitter
+        const progress = (blowDuration / REQUIRED_DURATION) * 100;
+        const jitter = Math.random() * 5;
+        flowBar.style.width = Math.min(100, progress + jitter) + "%";
+        
+        screen.style.transform = `translate(${Math.random()*2-1}px, ${Math.random()*2-1}px)`;
+
+        if (blowDuration > REQUIRED_DURATION) {
+          clearInterval(manualInterval);
+          finishTest();
+        }
+      }, 20); 
+    }
+
+    function stopManualBlow() {
+      if (!isRecording) return;
+      // If user lets go, we stop and reset
+      clearInterval(manualInterval);
+      blowDuration = 0;
+      flowBar.style.width = "0%";
+      screen.style.transform = "none";
+      isRecording = false;
+      
+      statusText.innerText = "Test Aborted";
+      readingText.innerText = "FAIL";
+      screen.classList.remove('recording');
+      
+      setTimeout(() => {
+        statusText.innerText = "Ready to Test";
+        readingText.innerText = "WAIT";
+      }, 1000);
+    }
+
+    // --- COMMON FINISH ---
+
+    function finishTest() {
+      isRecording = false;
+      
+      // Cleanup Audio
+      if(javascriptNode) javascriptNode.disconnect();
+      if(analyser) analyser.disconnect();
+      if(microphone) microphone.disconnect();
+      if(audioContext && audioContext.state !== 'closed') audioContext.close();
+
+      // Cleanup Manual
+      if(manualInterval) clearInterval(manualInterval);
+
+      // Show Result
+      statusText.innerText = "Analysis Complete";
+      readingText.innerText = "0.000"; 
+      instruction.innerText = "{{ section.settings.success_message }}";
+      
+      btnText.innerText = "Test Again";
+      startBtn.disabled = false;
+      flowBar.style.width = "0%";
+      screen.classList.remove('recording');
+      screen.style.transform = "none";
+      
+      // Reset logic
+      blowDuration = 0;
+      
+      // Temporarily remove listeners to prevent immediate re-trigger on mouseup
+      const oldOnMouseUp = startBtn.onmouseup;
+      startBtn.onmouseup = null;
+      setTimeout(() => {
+          if(!useMic) startBtn.onmouseup = oldOnMouseUp;
+      }, 500);
+    }
+  })();
+</script>

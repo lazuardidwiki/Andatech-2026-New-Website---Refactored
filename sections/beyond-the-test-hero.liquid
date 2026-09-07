@@ -1,0 +1,162 @@
+<section class="btt-hero" id="hero">
+
+  <!-- All background visuals (media + overlay + fade) sit in one masked layer.
+       The video/overlay/fade run at full strength right to the bottom edge —
+       the hero hands off directly to the page background below it, so there's
+       no need to fade this layer to reveal anything else. -->
+  <div class="btt-hero__bg-mask">
+
+  {% if section.settings.bg_video_native != blank %}
+    {{ section.settings.bg_video_native | video_tag: autoplay: true, loop: true, muted: true, controls: false, class: 'btt-hero__bg-video', image_size: '1920x' }}
+  {% elsif section.settings.bg_video != blank %}
+    <video class="btt-hero__bg-video" autoplay muted loop playsinline poster="{{ section.settings.bg_image | image_url: width: 1920 }}">
+      <source src="{{ section.settings.bg_video }}" type="video/mp4">
+    </video>
+  {% else %}
+    <div class="btt-hero__bg" {% if section.settings.bg_image %}style="background-image:url('{{ section.settings.bg_image | image_url: width: 1920 }}')"{% endif %}></div>
+  {% endif %}
+
+  <div class="btt-hero__bottom-fade"></div>
+
+  <div class="btt-hero__overlay"></div>
+
+  </div>
+
+  <div class="btt-hero__inner">
+    <div class="btt-hero__content">
+
+      <!-- TOP GROUP: eyebrow + heading + body + CTAs -->
+      <div class="btt-hero__top-group">
+        <p class="btt-eyebrow js-seq" data-seq="0">{{ section.settings.eyebrow | default: "Australia Workplace Compliance Knowledge Centre" }}</p>
+
+        <h1 class="btt-hero__title">
+          <span class="btt-hero__title-grad js-heading-line">Build Safer, More Defensible</span>
+          <span class="btt-hero__title-grad js-heading-line">Workplace Drug &amp; Alcohol Programs</span>
+        </h1>
+
+        <p class="btt-hero__sub js-seq" data-seq="1">{{ section.settings.subtext | default: "Trusted guidance, practical resources, compliance tools and expert advice. Helping Australian organisations reduce risk and protect their people." }}</p>
+
+        <div class="btt-hero__ctas js-seq-group" data-seq="2">
+          <a href="#assessment" class="btt-btn btt-btn--primary btt-btn--specular">
+            {{ section.settings.cta_primary | default: "Start Free Workplace Assessment" }}
+            <span class="btt-btn__icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4l7 8-7 8"/></svg>
+            </span>
+          </a>
+          <a href="{{ section.settings.cta_secondary_url | default: '#resources' }}" class="btt-btn btt-btn--ghost btt-btn--specular">
+            {{ section.settings.cta_secondary | default: "Browse Guides" }}
+          </a>
+        </div>
+      </div>
+
+      <!-- BOTTOM GROUP: trust logos, then stats + certs, pinned to bottom of content column -->
+      {% if section.blocks.size > 0 %}
+      <div class="btt-hero__bottom-group js-seq" data-seq="3">
+        <p class="btt-hero__trust-label">Trusted by organisations across Australia</p>
+        <div class="btt-hero__trust-logos">
+          {% for block in section.blocks %}
+            {% if block.type == 'trust_logo' %}
+              <img
+                src="{{ block.settings.logo | image_url: width: 300 }}"
+                srcset="{{ block.settings.logo | image_url: width: 300 }} 1x, {{ block.settings.logo | image_url: width: 600 }} 2x"
+                alt="{{ block.settings.alt | default: 'Client logo' }}"
+                loading="lazy">
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <!-- Stats + certification logos, sitting directly below the trust
+             logos so they read as part of the same hero moment. -->
+        <div class="btt-hero__stats-strip">
+          <div class="btt-stats">
+            {% for block in section.blocks %}
+              {% if block.type == 'stat' %}
+                <div class="btt-stats__item">
+                  <span class="btt-stats__number">{{ block.settings.number }}</span>
+                  <span class="btt-stats__label">{{ block.settings.label }}</span>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          {% if section.settings.cert_logo_image != blank %}
+          <div class="btt-cert-logos">
+            <img src="{{ section.settings.cert_logo_image | image_url: width: 800 }}" alt="Certifications" loading="lazy">
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+
+    <!-- WIDGET -->
+    <div class="btt-hero__widget-wrap js-seq-widget">
+      <div class="btt-hero__widget" id="btt-tilt-card">
+        <div class="btt-hero__widget-glare"></div>
+        <div>
+          <p class="btt-widget__title">How Ready<br>is Your Workplace?</p>
+          <div class="btt-widget__gauge">
+            <svg viewBox="0 0 130 130" class="btt-widget__gauge-svg">
+              <circle cx="65" cy="65" r="60" class="btt-widget__gauge-track"/>
+              <circle cx="65" cy="65" r="60" class="btt-widget__gauge-fill" style="--score: 0"/>
+            </svg>
+            <div class="btt-widget__gauge-label">
+              <span class="btt-widget__gauge-value" data-target="{{ section.settings.gauge_score | default: 100 }}">0%</span>
+              <span class="btt-widget__gauge-status"
+                data-tier1="{{ section.settings.gauge_tier_1 | default: 'Early stage' }}"
+                data-tier2="{{ section.settings.gauge_tier_2 | default: 'Developing' }}"
+                data-tier3="{{ section.settings.gauge_tier_3 | default: 'Progressing well' }}"
+                data-tier4="{{ section.settings.gauge_tier_4 | default: 'Strong maturity' }}">Preview score</span>
+            </div>
+          </div>
+          <ul class="btt-widget__list">
+            <li><span class="btt-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>Personalised maturity score</li>
+            <li><span class="btt-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>Practical recommendations</li>
+            <li><span class="btt-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>Suggested next steps</li>
+            <li><span class="btt-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>Takes about 30 seconds</li>
+          </ul>
+        </div>
+        <a href="#assessment" class="btt-btn btt-btn--widget-cta btt-btn--full btt-btn--specular">
+          Get your compliance score now
+          <span class="btt-btn__icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4l7 8-7 8"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "BTT Hero",
+  "settings": [
+    { "type": "video", "id": "bg_video_native", "label": "Background video (Shopify upload, optional)" },
+    { "type": "url", "id": "bg_video", "label": "Background video URL (MP4 link)" },
+    { "type": "image_picker", "id": "bg_image", "label": "Fallback / poster image" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow text" },
+    { "type": "richtext", "id": "headline", "label": "Headline (hardcoded — edit in liquid)" },
+    { "type": "textarea", "id": "subtext", "label": "Subtext" },
+    { "type": "text", "id": "cta_primary", "label": "Primary CTA label" },
+    { "type": "text", "id": "cta_secondary", "label": "Secondary CTA label" },
+    { "type": "url", "id": "cta_secondary_url", "label": "Secondary CTA link" },
+    { "type": "image_picker", "id": "cert_logo_image", "label": "Certification logos (single combined image)" },
+    { "type": "range", "id": "gauge_score", "label": "Widget preview score (%)", "min": 0, "max": 100, "step": 1, "default": 100 },
+    { "type": "text", "id": "gauge_tier_1", "label": "Status label — 0 to 25%", "default": "Early stage" },
+    { "type": "text", "id": "gauge_tier_2", "label": "Status label — 25 to 50%", "default": "Developing" },
+    { "type": "text", "id": "gauge_tier_3", "label": "Status label — 50 to 75%", "default": "Progressing well" },
+    { "type": "text", "id": "gauge_tier_4", "label": "Status label — 75 to 100%", "default": "Strong maturity" }
+  ],
+  "blocks": [
+    { "type": "stat", "name": "Stat", "settings": [
+      { "type": "text", "id": "number", "label": "Number", "default": "22+" },
+      { "type": "text", "id": "label", "label": "Label", "default": "years of expertise" }
+    ]},
+    { "type": "trust_logo", "name": "Trust logo", "settings": [
+      { "type": "image_picker", "id": "logo", "label": "Logo (white/mono version)" },
+      { "type": "text", "id": "alt", "label": "Alt text" }
+    ]}
+  ],
+  "presets": [{ "name": "BTT Hero" }]
+}
+{% endschema %}

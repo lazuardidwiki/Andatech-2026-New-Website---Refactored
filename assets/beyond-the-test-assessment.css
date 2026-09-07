@@ -1,0 +1,642 @@
+/* =====================================================
+   Beyond The Test™ — Assessment Section
+   ===================================================== */
+
+.btt-assess{
+  background:transparent;
+  padding:100px 48px;
+  position:relative;
+  z-index:1;
+  overflow:hidden;
+}
+
+/* ===== Inner layout ===== */
+.btt-assess__inner{
+  width:100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display:grid;
+  grid-template-columns: 1fr 480px; 
+  gap:80px;
+  align-items:center;
+}
+
+.btt-assess__card-wrap{
+  perspective:1200px;
+  position: relative;
+}
+
+/* ===== Left column ===== */
+.btt-assess__eyebrow{
+  font-size:13px; font-weight:700;
+  letter-spacing:.16em; text-transform:uppercase;
+  color:#46BEC4; margin:0 0 16px;
+}
+.btt-assess__heading{
+  font-family:'Titillium Web',sans-serif;
+  font-size:42px; font-weight:700;
+  color:#111820; line-height:1.15;
+  margin:0 0 20px;
+}
+.btt-assess__sub{
+  font-size:16px; color:rgba(17,24,32,.65);
+  line-height:1.6; margin:0 0 32px;
+}
+
+.btt-assess__benefits{
+  list-style:none; padding:0; margin:0 0 24px;
+  display:flex; flex-direction:column; gap:14px;
+}
+.btt-assess__benefits li{
+  display:flex; align-items:center; gap:12px;
+  font-size:15px; font-weight:500; color:#111820;
+}
+.btt-assess__check{
+  width:22px; height:22px; border-radius:50%;
+  border:1.5px solid #95C11F;
+  display:flex; align-items:center; justify-content:center;
+  color:#95C11F; flex-shrink:0;
+}
+
+.btt-assess__time-note{
+  display:flex; align-items:center; gap:8px;
+  font-size:13px; font-style:italic; color:rgba(17,24,32,.55);
+  margin:0 0 32px;
+}
+
+.btt-assess__cta{ align-self:flex-start; }
+
+/* =====================================================
+   Right: light gradient preview card with rotating border glow
+   ===================================================== */
+.btt-assess__card{
+  position:relative;
+  background:linear-gradient(160deg, #ffffff 0%, #edf2f4 100%);
+  border:1px solid rgba(17,24,32,.08);
+  border-radius:24px;
+  padding:32px;
+  box-shadow:0 12px 32px rgba(17,24,32,.10), inset 0 1px 0 rgba(255,255,255,.6);
+  transition:transform .15s ease-out, box-shadow .3s ease;
+  will-change:transform;
+  overflow:hidden;
+  z-index: 1;
+  transform:rotateX(4deg) rotateY(-4deg);
+}
+.btt-assess__card.is-tilting{ transition:none; }
+
+/* Rotating conic-gradient border glow (react-bits "border glow" pattern) */
+@property --btt-angle{
+  syntax:'<angle>';
+  initial-value:0deg;
+  inherits:false;
+}
+.btt-assess__card::before{
+  content:'';
+  position:absolute; inset:0;
+  border-radius:inherit;
+  padding:1.5px;
+  background:conic-gradient(from var(--btt-angle,0deg),
+    transparent 0deg, transparent 250deg,
+    #46BEC4 290deg, #95C11F 320deg, transparent 350deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  animation:btt-glow-rotate 7s linear infinite;
+  pointer-events:none;
+  z-index:2;
+  display:none; /* Border glow turned off per request — no longer visible/needed */
+}
+@keyframes btt-glow-rotate{
+  to{ --btt-angle:360deg; }
+}
+
+/* Modal backdrop is translucent + blurred, so the preview card's rotating
+   glow behind it can bleed through as a soft light streak. Hide it while
+   any modal on this section is open. */
+body.btt-modal-open .btt-assess__card::before{
+  opacity:0;
+}
+
+.btt-assess__card-glare{
+  position:absolute; inset:0; border-radius:inherit;
+  background:radial-gradient(circle at var(--gx,50%) var(--gy,50%), rgba(255,255,255,.15), transparent 60%);
+  opacity:0; transition:opacity .3s ease;
+  pointer-events:none; z-index:2;
+}
+
+/* Step indicators */
+.btt-assess__panel-step{
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:12px;
+}
+.btt-assess__step-num{
+  width:28px; height:28px; border-radius:50%;
+  background:#46BEC4; color:#fff;
+  font-family:'Titillium Web',sans-serif;
+  font-size:12px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.btt-assess__step-num--green{ background:#95C11F; }
+.btt-assess__step-label{
+  font-size:12px; font-weight:700; color:#111820;
+  line-height:1.3; margin:0;
+}
+
+/* Panels — lighter nested glass, sitting inside the outer glass card */
+.btt-assess__panels{
+  display:flex; flex-direction:column; gap:10px;
+  position:relative; z-index:1;
+}
+.btt-assess__panel{
+  background:rgba(17,24,32,.035);
+  border:1px solid rgba(17,24,32,.07);
+  border-radius:16px;
+  padding:16px;
+  display:flex; flex-direction:column; gap:10px;
+  position:relative; z-index:1;
+}
+
+.btt-assess__panel-q{
+  font-size:12px; font-weight:600; color:#111820;
+  line-height:1.4; margin:0;
+}
+.btt-assess__panel-opts{
+  display:flex; flex-direction:column; gap:6px;
+}
+.btt-assess__panel-opt{
+  border-radius:8px; padding:8px 10px;
+  font-size:11px; font-weight:500;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.btt-assess__panel-opt--selected{
+  background:rgba(149,193,31,.18); border:1.5px solid #95C11F; color:#111820;
+}
+.btt-assess__panel-opt-text{
+  display:inline-block;
+  transition:opacity .3s ease, transform .3s ease;
+}
+.btt-assess__panel-opt-text.is-swapping{
+  opacity:0;
+  transform:translateY(-6px);
+}
+.btt-assess__panel-opt--ghost{
+  background:rgba(17,24,32,.05); height:28px; border:1.5px solid transparent;
+}
+
+/* =====================================================
+   GLOBAL: HORIZONTAL LINEAR BAR (STEP 2)
+   ===================================================== */
+.btt-assess__panel--score {
+  align-items: flex-start;
+  text-align: left;
+  padding: 16px; 
+  gap: 4px;
+}
+
+.btt-assess__panel-score-inner {
+  align-items: flex-start;
+  width: 100%;
+}
+
+.btt-assess__panel-score-label,
+.btt-assess__gauge-svg {
+  display: none !important; 
+}
+
+.btt-assess__gauge-wrap {
+  width: 100%;
+  height: 10px;
+  background: rgba(17,24,32,.08);
+  border-radius: 99px;
+  margin: 28px 0 8px 0; 
+  position: relative;
+  overflow: visible; 
+}
+
+.btt-assess__gauge-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  background: #EF4444; 
+  border-radius: 99px;
+  width: 0%; 
+}
+
+/* KEEP IN SYNC with the counter in beyond-the-test-assessment.liquid.
+   The bar and the "62%" readout are two separate animations of the same
+   value — this one in CSS, the number in a requestAnimationFrame loop — so
+   the duration, the delay AND the easing curve all have to match, or the
+   number reaches 100% before the bar has finished travelling.
+
+   Easing was cubic-bezier(0.25, 1, 0.5, 1), a very strong ease-out that hit
+   93% within the first half of the run. That crammed the "Early stage",
+   "Developing" and "Progressing well" captions into the opening quarter of
+   the animation — about 150ms each — while "Strong maturity" held the rest.
+   Lengthening the duration alone could not fix that, because the curve
+   front-loads the travel regardless of how long it lasts.
+
+   This gentler curve keeps an ease-out character but distributes the bands
+   far more evenly: roughly 570 / 560 / 690ms for the first three, then 2.2s
+   on the final one. */
+.btt-assess__card-wrap.is-counted .btt-assess__gauge-wrap::after {
+  animation: fillLinearBar 4s cubic-bezier(0.33, 0.55, 0.45, 1) forwards;
+  animation-delay: 0.4s;
+}
+
+@keyframes fillLinearBar {
+  0%   { width: 0%;   background-color: #EF4444; }
+  50%  {              background-color: #46BEC4; }
+  100% { width: 100%; background-color: #95C11F; }
+}
+
+.btt-assess__gauge-inner {
+  position: absolute;
+  right: 0;
+  top: -34px;
+  display: block;
+}
+
+.btt-assess__gauge-pct {
+  font-family: 'Titillium Web', sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #111820 !important;
+  display: block !important;
+}
+.btt-assess__gauge-pct::after {
+  display: none !important; 
+}
+
+.btt-assess__panel-risk {
+  font-size: 12.5px !important; 
+  color: rgba(17,24,32,.65) !important;
+  font-weight: 600 !important;
+  display: block !important;
+}
+.btt-assess__panel-risk::after {
+  display: none !important; 
+}
+
+.btt-assess__recs{
+  display:flex; flex-direction:column; gap:6px;
+}
+.btt-assess__rec{
+  display:flex; align-items:center; gap:7px;
+  font-size:10.5px; font-weight:500; color:#111820;
+  background:rgba(17,24,32,.05); border-radius:8px; padding:6px 8px;
+}
+.btt-assess__rec-check{
+  width:18px; height:18px; border-radius:4px;
+  background:#95C11F; color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+
+/* =====================================================
+   MODAL — light frosted glass, glow border ring on the panel
+   ===================================================== */
+.btt-assess__modal{
+  position:fixed; inset:0; z-index:600;
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
+}
+.btt-assess__modal.is-open{
+  pointer-events:auto;
+}
+.btt-assess__modal-backdrop{
+  position:absolute; inset:0;
+  background:rgba(10,15,20,0);
+  backdrop-filter:blur(0px);
+  -webkit-backdrop-filter:blur(0px);
+  transition:background .45s ease, backdrop-filter .45s ease, -webkit-backdrop-filter .45s ease;
+}
+.btt-assess__modal.is-open .btt-assess__modal-backdrop{
+  background:rgba(10,15,20,.55);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.btt-assess__modal-panel-frame{
+  position:relative; z-index:1;
+  background:#fff;
+  border:1px solid rgba(17,24,32,.10);
+  border-radius:24px;
+  width:min(560px, 92vw);
+  max-height:92vh;
+  overflow:hidden;
+  box-shadow:0 24px 64px rgba(17,24,32,.20);
+  opacity:0;
+  transform:translateY(20px) scale(.97);
+  transition:transform .4s cubic-bezier(.23,1,.32,1), opacity .35s ease;
+}
+.btt-assess__modal.is-open .btt-assess__modal-panel-frame{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+/* Promote the frosted layers only WHILE the modal is open — smooths the open
+   animation and step transitions on mobile, without paying any compositing
+   cost during normal page scroll (the modal is closed then, so this won't apply). */
+.btt-assess__modal.is-open .btt-assess__modal-backdrop{
+  will-change:transform, opacity;
+}
+.btt-assess__modal-panel-frame::before{
+  content:'';
+  position:absolute; inset:0;
+  border-radius:inherit;
+  padding:1.5px;
+  background:conic-gradient(from var(--btt-angle,0deg),
+    transparent 0deg, transparent 250deg,
+    #46BEC4 290deg, #95C11F 320deg, transparent 350deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  animation:btt-glow-rotate 7s linear infinite;
+  pointer-events:none;
+  z-index:2;
+}
+.btt-assess__modal-panel{
+  position:relative;
+  height:100%;
+  max-height:92vh;
+  overflow-y:auto;
+  padding:48px;
+  box-sizing:border-box;
+}
+.btt-assess__modal-close{
+  position:absolute; top:20px; right:20px;
+  width:36px; height:36px; border-radius:50%;
+  background:rgba(17,24,32,.06); border:none;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:#111820;
+  transition:background .15s ease;
+}
+
+.btt-assess__progress-wrap{
+  height:4px; background:rgba(17,24,32,.08);
+  border-radius:9999px; margin-bottom:28px; overflow:hidden;
+  max-width:calc(100% - 48px);
+}
+.btt-assess__progress-bar{
+  height:100%; background:#95C11F;
+  border-radius:9999px;
+  transition:width .4s cubic-bezier(.23,1,.32,1);
+  width:0%;
+}
+
+.btt-assess__modal-step-label{
+  font-size:12px; font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:#2C8B90; margin:0 0 16px;
+}
+.btt-assess__modal-q{
+  font-family:'Titillium Web',sans-serif;
+  font-size:22px; font-weight:700; color:#111820;
+  margin:0 0 28px; line-height:1.35;
+}
+
+.btt-assess__modal-opts{
+  display:flex; flex-direction:column; gap:12px;
+}
+.btt-assess__modal-opt{
+  width:100%; padding:16px 20px;
+  border:1.5px solid rgba(17,24,32,.12);
+  border-radius:12px;
+  font-family:'Titillium Web',sans-serif;
+  font-size:15px; font-weight:600; color:#111820;
+  background:rgba(17,24,32,.035); cursor:pointer; text-align:left;
+  transition:border-color .15s ease, background .15s ease, transform .1s ease;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.btt-assess__modal-opt-arrow{
+  width:28px; height:28px; border-radius:50%;
+  background:#95C11F; color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+  opacity:0; transform:scale(.7);
+  transition:opacity .15s ease, transform .15s ease;
+}
+
+.btt-assess__back{
+  display:inline-flex; align-items:center; gap:6px;
+  border:none; background:none; cursor:pointer; padding:0;
+  margin-top:20px;
+  font-family:'Titillium Web',sans-serif;
+  font-size:13px; font-weight:600; color:rgba(17,24,32,.55);
+  transition:color .15s ease;
+}
+.btt-assess__back:hover{ color:#111820; }
+
+/* Scroll hint — bottom-fixed indicator, only relevant when the modal is short
+   enough to require scrolling (mainly mobile). Lives on the non-scrolling
+   frame so it never moves with the inner content. */
+.btt-assess__scroll-hint{
+  display:none;
+  position:absolute; left:0; right:0; bottom:0; z-index:3;
+  height:52px;
+  align-items:flex-end; justify-content:center;
+  padding-bottom:8px;
+  background:linear-gradient(180deg, transparent, rgba(255,255,255,.92) 65%);
+  pointer-events:none;
+  opacity:1;
+  transition:opacity .3s ease;
+}
+.btt-assess__scroll-hint.is-hidden{ opacity:0; }
+.btt-assess__scroll-hint svg{
+  color:rgba(17,24,32,.5);
+  animation:btt-scroll-hint-bounce 1.6s ease-in-out infinite;
+}
+@keyframes btt-scroll-hint-bounce{
+  0%,100%{ transform:translateY(0); opacity:.55; }
+  50%{ transform:translateY(5px); opacity:1; }
+}
+
+/* ===== Result screen ===== */
+.btt-assess__modal-result-eyebrow{ display: none !important; }
+
+.btt-assess__result-top{
+  display:flex; align-items:center; gap:24px;
+  margin-bottom:28px;
+}
+.btt-assess__result-gauge-wrap{
+  position:relative;
+  width:120px; height:120px; flex-shrink:0;
+  background: transparent !important;
+  border-radius: 50%;
+}
+.btt-assess__result-gauge-wrap circle { fill: transparent !important; }
+.btt-assess__result-gauge-svg{
+  width:100%; height:100%;
+  transform:rotate(-90deg);
+}
+.btt-assess__result-gauge-fill{
+  fill:none; stroke:#95C11F; stroke-width:10;
+  stroke-linecap:round;
+  stroke-dasharray:364;
+  stroke-dashoffset:364;
+  transition:stroke-dashoffset 1.8s cubic-bezier(.23,1,.32,1);
+}
+.btt-assess__result-gauge-inner{
+  position:absolute; inset:0;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  background: transparent !important;
+}
+
+.btt-assess__result-pct{
+  font-family:'Titillium Web',sans-serif;
+  font-size:28px; font-weight:700; color:#111820 !important; line-height:1;
+}
+.btt-assess__result-maturity{
+  font-size:10px; font-weight:600; color:rgba(17,24,32,.55) !important; 
+  text-transform:uppercase; letter-spacing:.08em;
+}
+
+.btt-assess__result-band-title{
+  font-family:'Titillium Web',sans-serif;
+  font-size:20px; font-weight:700; color:#111820; margin:0 0 8px;
+}
+.btt-assess__result-band-body{ font-size:13.5px; color:rgba(17,24,32,.65); line-height:1.6; margin:0; }
+
+.btt-assess__result-recs{ display:flex; flex-direction:column; gap:10px; margin-bottom:28px; }
+.btt-assess__result-rec{
+  display:flex; align-items:center; gap:12px;
+  font-size:14px; font-weight:500; color:#111820; background:rgba(149,193,31,.16); border-radius:10px; padding:12px 16px;
+}
+.btt-assess__result-rec-check{
+  width:22px; height:22px; border-radius:50%; background:#95C11F; color:#fff;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.btt-assess__result-actions{ display:flex; gap:12px; flex-wrap:wrap; }
+.btt-assess__result-actions .btt-btn--ghost{ color:#111820; border-color:rgba(17,24,32,.22); }
+
+/* =====================================================
+   Hover-only enhancements — gated to real pointer devices.
+   ===================================================== */
+@media (hover:hover) and (pointer:fine){
+  .btt-assess__card-wrap:hover .btt-assess__card-glare{ opacity:1; }
+  .btt-assess__modal-close:hover{ background:rgba(17,24,32,.12); }
+  .btt-assess__modal-opt:hover{
+    border-color:#95C11F; background:rgba(149,193,31,.14);
+    transform:translateX(4px);
+  }
+  .btt-assess__modal-opt:hover .btt-assess__modal-opt-arrow{
+    opacity:1; transform:scale(1);
+  }
+  .btt-assess__result-actions .btt-btn--ghost:hover{ border-color:#111820; background:rgba(17,24,32,.06); }
+}
+
+/* =====================================================
+   Tablet — keep side-by-side, tighten proportions instead of stacking.
+   Same rationale as Tools: this used to collapse to a stacked single
+   column at ≤1024px, which caught iPad Air/Pro 11" widths (768–1024px).
+   Only ≤768px genuinely stacks now.
+   ===================================================== */
+@media (max-width:1024px) and (min-width:769px){
+  .btt-assess{ padding:72px 32px; }
+  .btt-assess__inner{
+    grid-template-columns: 1.3fr 1fr;
+    gap:40px;
+  }
+  .btt-assess__card-wrap{ max-width:380px; justify-self:end; }
+  .btt-assess__heading{ font-size:30px; }
+  .btt-assess__sub{ font-size:15px; }
+  .btt-assess__card{ padding:24px; }
+}
+
+/* ===== Small tablet / phone — actual stack point ===== */
+@media (max-width:768px){
+  .btt-assess{ padding:80px 24px; }
+  .btt-assess__inner{
+    grid-template-columns:1fr;
+    gap:48px;
+    display:flex;
+    flex-direction:column;
+  }
+  .btt-assess__heading{ font-size:34px; }
+  .btt-assess__card{ transform:none !important; }
+}
+
+/* ===== Swipe dots — mobile only ===== */
+.btt-assess__swipe-dots{
+  display:none;
+  justify-content:flex-start;
+  gap:6px;
+  margin-top:14px;
+  padding:0 2px;
+}
+.btt-assess__swipe-dot{
+  width:18px; height:4px; border-radius:2px;
+  background:rgba(17,24,32,.18);
+  transition:background .2s ease, width .2s ease;
+}
+.btt-assess__swipe-dot.is-active{
+  background:#95C11F; width:24px;
+}
+
+/* ===== Mobile ===== */
+@media (max-width:640px){
+  .btt-assess{ padding:64px 20px; }
+  .btt-assess__heading{ font-size:28px; }
+  .btt-assess__cta{ width:100%; justify-content:center; }
+
+  .btt-assess__card-wrap{ order:1; width: 100%; }
+  .btt-assess__left{ order:2; }
+
+  .btt-assess__card{
+    padding:20px 0 16px;
+    background:linear-gradient(160deg, #ffffff 0%, #edf2f4 100%);
+    border-color:rgba(17,24,32,.08);
+  }
+  
+  .btt-assess__panels{
+    display:flex !important;
+    flex-direction:row !important;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    gap:12px;
+    padding:0 20px 8px;
+    scroll-padding-left:20px;
+    scrollbar-width:none;
+  }
+  .btt-assess__panels::-webkit-scrollbar{ display:none; }
+  .btt-assess__panel{
+    flex:0 0 82%;
+    scroll-snap-align:start;
+    min-height:200px;
+  }
+
+  .btt-assess__swipe-dots{ display:flex; justify-content:center; padding:0; }
+
+  .btt-assess__modal-result-eyebrow{ text-align:center; }
+  .btt-assess__result-top{ flex-direction:column; align-items:center; text-align:center; gap:16px; }
+  .btt-assess__result-band-title{ text-align:center; }
+  .btt-assess__result-band-body{ text-align:center; }
+  .btt-assess__result-actions{ flex-direction:column; gap:10px; }
+  .btt-assess__result-actions .btt-btn{ width:100%; justify-content:center; }
+  .btt-assess__modal-panel-frame{
+    max-height:80vh;
+    max-height:80dvh;
+    background:#fff;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+  }
+  .btt-assess__modal-panel{
+    padding:32px 20px;
+    max-height:80vh;
+    max-height:80dvh;
+  }
+  .btt-assess__modal-q{ font-size:19px; }
+  .btt-assess__scroll-hint{ display:flex; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .btt-assess__card{ transition:none !important; }
+  .btt-assess__card::before, .btt-assess__modal-panel-frame::before{ animation:none; }
+  .btt-assess__modal-backdrop{ transition:none; }
+  .btt-assess__modal-panel-frame{ transition:none; }
+  .btt-assess__modal-panel{ transition:none; }
+  .btt-assess__result-gauge-fill{ transition:none; }
+  .btt-assess__gauge-wrap::after { animation:none !important; width:100% !important; background-color: #95C11F !important; }
+  .btt-assess__scroll-hint svg{ animation:none; }
+}

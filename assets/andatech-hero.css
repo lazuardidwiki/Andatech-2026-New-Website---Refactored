@@ -1,0 +1,241 @@
+/* ══════════════════════════════════════════════════════════════════════
+   ANDATECH — HERO MODULE STYLESHEET (shared between homepage hero-v2 and legacy hero sections)
+   ══════════════════════════════════════════════════════════════════════
+
+   Extracted from andatech-site.css in original source order (so that a
+   later @media override in the source correctly overrides an earlier base
+   rule in the same file). Regex: \.at-hero(?![a-zA-Z0-9])
+   ══════════════════════════════════════════════════════════════════════ */
+
+.at-hero {
+  position: relative;
+  display: grid;
+  /* 56.3vw is the design's 1728×973 ratio. Below ~1400 the copy is taller than
+     the scaled image, so without a floor the image drops out from behind it.
+     At ≥1280px the desktop rule below takes over so header + hero fills the
+     viewport exactly once the utility bar scrolls off. */
+  min-height: clamp(560px, 56.3vw, 973px);
+  background: var(--at-white);
+  overflow: hidden;
+}
+
+@media (min-width: 1280px) {
+  .at-hero {
+    /* Header + hero == viewport once the utility bar scrolls off.
+       111.112 = 100/0.9 compensates for the .at-section zoom:.9 on desktop.
+       88px = .at-header__inner height (unzoomed). */
+    min-height: calc(111.112vh - 88px);
+    min-height: calc(111.112dvh - 88px);
+  }
+}
+.at-hero__visual {
+  grid-area: 1 / 1;
+  align-self: stretch;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.at-hero__visual picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.at-hero__visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 100% 100%;
+  display: block;
+}
+.at-hero__inner {
+  grid-area: 1 / 1;
+  position: relative;
+  z-index: 1;
+  padding-top: 56px;
+  padding-bottom: 40px;
+}
+.at-hero__content { max-width: 790px; }
+.at-hero__subheading {
+  margin-top: 18px;
+  font-size: clamp(13px, .93vw, 16px);
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--at-muted);
+}
+.at-hero__title {
+  margin: 48px 0 0;
+  font-size: clamp(40px, 4.63vw, 80px);
+  font-weight: 300;
+  line-height: 1.0;
+  letter-spacing: -.01em;
+  color: var(--at-navy);
+  text-wrap: initial;
+}
+.at-hero__title span { display: block; }
+.at-hero__accent {
+  font-weight: 700;
+  padding-bottom: .1em;
+  background: linear-gradient(90deg, var(--at-green) 0%, var(--at-teal) 50%, var(--at-green) 100%);
+  background-size: 300% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: at-hero-accent-shift 4s ease-in-out infinite alternate;
+}
+.at-hero__body {
+  margin-top: 40px;
+  max-width: 740px;
+  font-size: clamp(16px, 1.39vw, 24px);
+  line-height: 1.5;
+  color: var(--at-navy);
+}
+.at-hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin-top: 44px;
+}
+.at-hero__trust {
+  margin-top: 56px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--at-navy);
+}
+.at-hero__certs {
+  width: 339px;
+  max-width: 100%;
+  /* 32px clear of the trust line, measured off the Figma hero frame (text
+     bottom 910, strip top 943). A `top: -26px` nudge used to pull the strip up
+     over the gravel line, which collapsed the visible gap to 4px — the design's
+     own position already clears the gravel, so the offset is gone. */
+  margin-top: 32px;
+}
+.at-js-reveal .at-hero [data-at-rise] {
+  transform: translateY(30px);
+}
+.at-hero__content > [data-at-rise] { --at-stagger: 0; }
+.at-hero__content > [data-at-rise] ~ [data-at-rise] { --at-stagger: 1; }
+.at-hero__content > [data-at-rise] ~ [data-at-rise] ~ [data-at-rise] { --at-stagger: 2; }
+.at-hero__content > [data-at-rise] ~ [data-at-rise] ~ [data-at-rise] ~ [data-at-rise] { --at-stagger: 3; }
+.at-hero__content > [data-at-rise] ~ [data-at-rise] ~ [data-at-rise] ~ [data-at-rise] ~ [data-at-rise] { --at-stagger: 4; }
+.at-hero__content > [data-at-rise] ~ [data-at-rise] ~ [data-at-rise] ~ [data-at-rise] ~ [data-at-rise] ~ [data-at-rise] { --at-stagger: 5; }
+.at-hero__title > [data-at-rise] { --at-stagger: 0; }
+.at-hero__title > [data-at-rise] ~ [data-at-rise] { --at-stagger: 1; }
+.at-hero__title > [data-at-rise] ~ [data-at-rise] ~ [data-at-rise] { --at-stagger: 2; }
+.at-hero [data-at-rise] {
+  animation: at-hero-rise .8s var(--at-ease-out) both;
+  animation-delay: calc(var(--at-stagger, 0) * .07s);
+}
+.at-hero__title [data-at-rise] {
+  display: inline-block;
+  transform-origin: center top;
+  animation: at-hero-title-fold .9s var(--at-ease-out) both;
+  animation-delay: calc(var(--at-stagger, 0) * .07s);
+}
+.at-mega__card-desc > p,
+.at-trust__intro-line > p,
+.at-hero__body > p,
+.at-section__desc > p {
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+}
+@media (prefers-reduced-motion: reduce) {
+  .at-hero__accent { animation: none; background-position: 0% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .at-hero [data-at-rise],
+      .at-hero__title [data-at-rise] {
+        animation: none;
+      }
+}
+@media (max-width: 767px) {
+  .at-hero__subheading { margin-top: 10px; font-size: 11px; letter-spacing: .09em; }
+}
+@media (min-width: 768px) and (max-width: 1279px) {
+  .at-hero {
+        /* Was 136px (header+utility). Changed to 88px so header + hero fills
+           viewport once the utility bar scrolls off — same behavior as desktop. */
+        min-height: calc(111.112vh - 88px);
+        min-height: calc(111.112dvh - 88px);
+      }
+  .at-hero__content { max-width: 46%; }
+  .at-hero__title > span {
+        display: block !important;
+        width: 100%;
+        white-space: normal;
+      }
+  .at-hero__body { max-width: 100%; }
+  .at-hero__cta { gap: 14px; }
+}
+@media (min-width: 768px) and (max-width: 950px) {
+  .at-hero__title { font-size: clamp(30px, 4.4vw, 44px); }
+  .at-hero__body { font-size: 15px; }
+  .at-hero__cta .at-btn { height: 50px; padding-inline: 22px; font-size: 16px; }
+  .at-hero__certs { width: 240px; }
+}
+@media (min-width: 768px) and (max-width: 1279px) and (orientation: portrait) {
+  .at-hero {
+        display: flex;
+        flex-direction: column;
+      }
+  .at-hero__inner {
+        order: 1;
+        padding-top: 38px;
+        padding-bottom: 20px;
+        text-align: center;
+      }
+  .at-hero__content {
+        width: min(100%, 700px);
+        max-width: 700px;
+        margin-inline: auto;
+      }
+  .at-hero__title {
+        margin-top: 24px;
+        font-size: clamp(42px, 5.25vw, 56px);
+      }
+  .at-hero__body {
+        max-width: 650px;
+        margin: 24px auto 0;
+        font-size: 18px;
+      }
+  .at-hero__cta {
+        justify-content: center;
+        margin-top: 30px;
+      }
+  .at-hero__trust,
+      .at-hero__certs { display: none; }
+  .at-hero__visual {
+        order: 2;
+        display: block;
+        flex: 1 1 auto;
+        min-height: 0;
+        width: 100%;
+        height: auto;
+      }
+  .at-hero__visual picture { display: block; height: 100%; }
+  .at-hero__visual img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center bottom;
+      }
+}
+@media (max-width: 767px) {
+  .at-hero { display: flex; flex-direction: column; }
+  .at-hero__inner { order: 1; padding-top: 8px; padding-bottom: 0; text-align: center; }
+  .at-hero__content { max-width: none; }
+  .at-hero .at-label-tag { font-size: 14px; letter-spacing: .12em; color: var(--at-teal); }
+  .at-hero__title { margin-top: 21px; font-size: 36px; line-height: 1; }
+  .at-hero__body { margin-top: 20px; margin-inline: auto; font-size: 16px; line-height: 1.5; }
+  .at-hero__cta { margin-top: 22px; flex-direction: column; align-items: center; gap: 12px; }
+  .at-hero__cta .at-btn { width: 252px; }
+  .at-hero__trust, .at-hero__certs { display: none; }
+  .at-hero__visual { order: 2; width: 100%; margin: 4px 0 0; }
+  .at-hero__visual img { width: 100%; height: auto; max-height: none; object-fit: contain; }
+}

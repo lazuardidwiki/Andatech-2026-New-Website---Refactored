@@ -1,0 +1,213 @@
+{%- style -%}
+  /* Pass the font face */
+  {{ section.settings.font_family | font_face }}
+
+  /* Main Wrapper */
+  .m2-wrapper-{{ section.id }} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 0;
+    /* This variable is set by the editor */
+    --inside-bg: {{ section.settings.inside_color }};
+  }
+
+  .m2-container-{{ section.id }} {
+    position: relative;
+    width: 250px; 
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* THE CARD - Forced to use the variable with highest priority */
+  .m2-{{ section.id }} {
+    position: relative;
+    width: 100%; 
+    height: 100%;
+    /* We use !important to ensure no theme settings override your choice */
+    background-color: var(--inside-bg) !important; 
+    background-image: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    border-radius: 12px;
+    border: 1px solid {{ section.settings.border_color }};
+    z-index: 5;
+  }
+
+  /* Content Container */
+  .m2-{{ section.id }} .logo-content {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 10;
+    {% if section.settings.custom_icon == blank %}
+      justify-content: center;
+      width: 100%;
+    {% endif %}
+  }
+
+  /* Metallic Shine Animation for Icon and Text */
+  .m2-{{ section.id }} .icon-wrapper,
+  .m2-{{ section.id }} .logo-text {
+    background: linear-gradient(135deg, #444 0%, #fff 45%, #888 50%, #fff 55%, #444 100%);
+    background-size: 250% 250%;
+    animation: metallic-shine 4s linear infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  /* Metallic Icon via Mask */
+  .m2-{{ section.id }} .icon-wrapper {
+    width: {{ section.settings.text_size | plus: 15 }}px;
+    height: {{ section.settings.text_size | plus: 15 }}px;
+    -webkit-mask-image: url("{{ section.settings.custom_icon | image_url: width: 300 }}");
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-image: url("{{ section.settings.custom_icon | image_url: width: 300 }}");
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    /* Required to make the background gradient visible through the mask */
+    -webkit-text-fill-color: initial; 
+  }
+
+  /* Metallic Text */
+  .m2-{{ section.id }} .logo-text {
+    font-size: {{ section.settings.text_size }}px;
+    font-family: {{ section.settings.font_family.family }}, {{ section.settings.font_family.fallback_families }};
+    font-weight: {% if section.settings.make_bold %}bold{% else %}normal{% endif %};
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* THE GLOW LAYER */
+  .m2-glow-{{ section.id }} {
+    position: absolute;
+    inset: -4px;
+    border-radius: 16px;
+    background: 
+      radial-gradient(circle at 0 0, {{ section.settings.color_top_left }}, transparent 65%),
+      radial-gradient(circle at 100% 0, {{ section.settings.color_top_right }}, transparent 65%),
+      radial-gradient(circle at 0 100%, {{ section.settings.color_bottom_left }}, transparent 65%),
+      radial-gradient(circle at 100% 100%, {{ section.settings.color_bottom_right }}, transparent 65%);
+    z-index: 1;
+    filter: blur(25px);
+    animation: glow-pulse-{{ section.id }} 3s ease-in-out alternate infinite;
+    pointer-events: none;
+  }
+
+  @keyframes glow-pulse-{{ section.id }} { 
+    from { opacity: 0.7; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1.04); } 
+  }
+
+  @keyframes metallic-shine { 
+    0% { background-position: 100% center; }
+    100% { background-position: -100% center; }
+  }
+{%- endstyle -%}
+
+<div class="m2-wrapper-{{ section.id }}">
+  <div class="m2-container-{{ section.id }}">
+    <div class="m2-glow-{{ section.id }}"></div>
+    <div class="m2-{{ section.id }}">
+      <div class="logo-content">
+        {%- if section.settings.custom_icon != blank -%}
+          <div class="icon-wrapper"></div>
+        {%- endif -%}
+        <span class="logo-text">{{ section.settings.display_text }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom Glow Icon Card",
+  "settings": [
+    {
+      "type": "text",
+      "id": "display_text",
+      "label": "Display Text",
+      "default": "M2"
+    },
+    {
+      "type": "checkbox",
+      "id": "make_bold",
+      "label": "Bold Text",
+      "default": true
+    },
+    {
+      "type": "font_picker",
+      "id": "font_family",
+      "label": "Font Style",
+      "default": "sans-serif"
+    },
+    {
+      "type": "color",
+      "id": "inside_color",
+      "label": "Inside Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_icon",
+      "label": "Custom Icon (Transparent BG)"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Text & Icon Size",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border Color",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Corner Glow Colors"
+    },
+    {
+      "type": "color",
+      "id": "color_top_left",
+      "label": "Top Left Glow",
+      "default": "#e65c00"
+    },
+    {
+      "type": "color",
+      "id": "color_top_right",
+      "label": "Top Right Glow",
+      "default": "#00a6ff"
+    },
+    {
+      "type": "color",
+      "id": "color_bottom_left",
+      "label": "Bottom Left Glow",
+      "default": "#ff0056"
+    },
+    {
+      "type": "color",
+      "id": "color_bottom_right",
+      "label": "Bottom Right Glow",
+      "default": "#6500ff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Glow Icon Card"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,173 @@
+<div class="andatech-follower-container" style="--primary-glow: {{ section.settings.glow_color }};">
+  <div class="outer">
+    <div class="card">
+      <div class="dot"></div>
+      <div class="ray"></div>
+      
+      <div class="text">
+        {%- if section.settings.manual_count != blank -%}
+          {{ section.settings.manual_count }}
+        {%- else -%}
+          {{ section.settings.metaobject_reference.total_followers | default: '0' }}
+        {%- endif -%}
+      </div>
+      
+      <div class="label">{{ section.settings.label_text }}</div>
+      
+      <div class="line topl"></div>
+      <div class="line leftl"></div>
+      <div class="line bottoml"></div>
+      <div class="line rightl"></div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Andatech Follower Count",
+  "settings": [
+    {
+      "type": "color",
+      "id": "glow_color",
+      "label": "Glow Color",
+      "default": "#8dc63f"
+    },
+    {
+      "type": "text",
+      "id": "manual_count",
+      "label": "Total Follower Count (Manual)",
+      "info": "Type your total here (e.g. 750k). Leave blank to use Metaobject data.",
+      "default": "750k"
+    },
+    {
+      "type": "text",
+      "id": "label_text",
+      "label": "Sub-text Label",
+      "default": "Total Followers"
+    }
+  ],
+  "presets": [
+    {
+      "name": "CoolCard"
+    }
+  ]
+}
+{% endschema %}
+
+{% style %}
+.andatech-follower-container {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+  background-color: transparent;
+}
+
+.outer {
+  width: 300px;
+  height: 250px;
+  border-radius: 10px;
+  padding: 1px;
+  background: radial-gradient(circle 230px at 0% 0%, var(--primary-glow), #0c0d0d);
+  position: relative;
+}
+
+.dot {
+  width: 5px;
+  aspect-ratio: 1;
+  position: absolute;
+  background-color: var(--primary-glow);
+  box-shadow: 0 0 15px var(--primary-glow), 0 0 30px var(--primary-glow);
+  border-radius: 100px;
+  z-index: 2;
+  /* Start position matched to the grid lines */
+  top: 10%;
+  right: 10%;
+  /* translate ensures the center of the dot sits on the line */
+  transform: translate(50%, -50%);
+  animation: moveDot 6s linear infinite;
+}
+
+@keyframes moveDot {
+  0%, 100% { top: 10%; right: 10%; }
+  25% { top: 10%; right: 90%; }
+  50% { top: 90%; right: 90%; }
+  75% { top: 90%; right: 10%; }
+}
+
+.card {
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border-radius: 9px;
+  border: solid 1px #202222;
+  background: radial-gradient(circle 280px at 0% 0%, #222, #0c0d0d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-direction: column;
+  color: #fff;
+  overflow: hidden; /* Keeps dot path clean inside the card */
+}
+
+.ray {
+  width: 220px;
+  height: 45px;
+  border-radius: 100px;
+  position: absolute;
+  background-color: var(--primary-glow);
+  opacity: 0.15;
+  box-shadow: 0 0 50px var(--primary-glow);
+  filter: blur(15px);
+  transform-origin: 10%;
+  top: 0%;
+  left: 0;
+  transform: rotate(40deg);
+}
+
+.card .text {
+  font-weight: bolder;
+  font-size: 4rem;
+  background: linear-gradient(45deg, #444 4%, var(--primary-glow), #fff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 10px rgba(141, 198, 63, 0.2));
+}
+
+.label {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.line {
+  position: absolute;
+  background-color: #2c2c2c;
+}
+.topl {
+  top: 10%;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--primary-glow) 30%, #1d1f1f 70%);
+  opacity: 0.4;
+}
+.leftl {
+  left: 10%;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--primary-glow) 30%, #222424 70%);
+  opacity: 0.4;
+}
+.bottoml { 
+  bottom: 10%; 
+  width: 100%;
+  height: 1px;
+}
+.rightl { 
+  right: 10%; 
+  width: 1px; 
+  height: 100%; 
+}
+{% endstyle %}

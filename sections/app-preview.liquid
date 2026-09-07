@@ -1,0 +1,322 @@
+{% schema %}
+{
+  "name": "Andatech App Multi-Layout",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout_mode",
+      "label": "Section Layout",
+      "options": [
+        { "value": "standard", "label": "Text Left, Images Right" },
+        { "value": "reversed", "label": "Images Left, Text Right" },
+        { "value": "stacked", "label": "Centered / Stacked" }
+      ],
+      "default": "standard"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Text Settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Smart Safety Management"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 16,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size",
+      "default": 32
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Access real-time data and compliance logs directly from your smartphone."
+    },
+    {
+      "type": "range",
+      "id": "desc_size",
+      "min": 12,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Description Size",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Green)",
+      "default": "#8DC63F"
+    },
+    {
+      "type": "header",
+      "content": "App Store Badges"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badges",
+      "label": "Show Badges",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "apple_link",
+      "label": "Apple Link"
+    },
+    {
+      "type": "url",
+      "id": "google_link",
+      "label": "Google Link"
+    },
+    {
+      "type": "range",
+      "id": "badge_height",
+      "min": 30,
+      "max": 70,
+      "step": 2,
+      "unit": "px",
+      "label": "Badge Height",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Action Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button",
+      "label": "Show Action Button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "View Compatible Products"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Visuals & Overlap"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_back",
+      "label": "Square Background Image"
+    },
+    {
+      "type": "range",
+      "id": "img_scale",
+      "min": 40,
+      "max": 140,
+      "step": 5,
+      "unit": "%",
+      "label": "Visual Global Scale",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "back_img_pos",
+      "min": -150,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Background Image Shift",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "app_screen",
+      "name": "App Screen",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "screen_image",
+          "label": "Phone Screen Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Andatech Multi-App Layout",
+      "blocks": [ { "type": "app_screen" }, { "type": "app_screen" } ]
+    }
+  ]
+}
+{% endschema %}
+
+<section class="andatech-multi-layout mode-{{ section.settings.layout_mode }} section-{{ section.id }}" style="background-color: {{ section.settings.bg_color }};">
+  <div class="app-container-v3">
+    
+    <div class="text-block-v3" style="border-left: 5px solid {{ section.settings.accent_color }};">
+      <h2 style="color: {{ section.settings.text_color }}; font-size: {{ section.settings.text_size }}px;">
+        {{ section.settings.title }}
+      </h2>
+      <div class="desc-v3" style="color: {{ section.settings.text_color }}; font-size: {{ section.settings.desc_size }}px;">
+        {{ section.settings.description }}
+      </div>
+      
+      {% if section.settings.show_badges %}
+        <div class="badges-v3">
+          {% if section.settings.apple_link != blank %}
+            <a href="{{ section.settings.apple_link }}" target="_blank" class="badge-v3-link">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" style="height: {{ section.settings.badge_height }}px;">
+            </a>
+          {% endif %}
+          {% if section.settings.google_link != blank %}
+            <a href="{{ section.settings.google_link }}" target="_blank" class="badge-v3-link">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" style="height: {{ section.settings.badge_height }}px;">
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if section.settings.show_button and section.settings.button_label != blank %}
+        <div class="cta-v3">
+          <a href="{{ section.settings.button_link }}" class="btn-v3" style="background-color: {{ section.settings.accent_color }}; color: {{ section.settings.btn_text_color }};">
+            {{ section.settings.button_label }}
+            <span class="ar-icon">→</span>
+          </a>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="visual-block-v3" style="transform: scale({{ section.settings.img_scale | divided_by: 100.0 }});">
+      {% if section.settings.image_back != blank %}
+        <div class="back-sq" style="{% if section.settings.layout_mode == 'reversed' %}left{% else %}right{% endif %}: {{ section.settings.back_img_pos }}px;">
+          <img src="{{ section.settings.image_back | image_url: width: 800 }}" loading="lazy">
+        </div>
+      {% endif %}
+
+      <div class="phone-mock-v3">
+        <div class="bezel-v3">
+          <div class="slider-v3" id="sl-{{ section.id }}">
+            {% for block in section.blocks %}
+              <div class="slide-v3">
+                {% if block.settings.screen_image != blank %}
+                   <img src="{{ block.settings.screen_image | image_url: width: 450 }}">
+                {% else %}
+                   {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <button class="ar-v3 p" onclick="moveV3(-1, '{{ section.id }}')">‹</button>
+        <button class="ar-v3 n" onclick="moveV3(1, '{{ section.id }}')">›</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .andatech-multi-layout { padding: 100px 20px; overflow: hidden; font-family: sans-serif; }
+  .app-container-v3 { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 80px; }
+  
+  /* Layout Variations */
+  .mode-reversed .app-container-v3 { flex-direction: row-reverse; }
+  .mode-stacked .app-container-v3 { flex-direction: column; text-align: center; }
+  .mode-stacked .text-block-v3 { border-left: none; border-top: 5px solid {{ section.settings.accent_color }}; padding: 30px 0; }
+  .mode-stacked .badges-v3, .mode-stacked .cta-v3 { justify-content: center; }
+
+  /* Text Zone Styling */
+  .text-block-v3 { flex: 1; padding-left: 40px; }
+  .text-block-v3 h2 { font-weight: 800; margin: 0 0 20px 0; line-height: 1.1; }
+  .desc-v3 { line-height: 1.6; opacity: 0.9; margin-bottom: 30px; }
+  
+  /* Badges Styling */
+  .badges-v3 { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 35px; }
+  .badge-v3-link { transition: transform 0.2s ease; }
+  .badge-v3-link:hover { transform: translateY(-3px); }
+
+  /* New CTA Button Styling */
+  .btn-v3 {
+    display: inline-flex;
+    align-items: center;
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  .btn-v3:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); filter: brightness(1.1); }
+  .ar-icon { margin-left: 12px; transition: transform 0.3s ease; }
+  .btn-v3:hover .ar-icon { transform: translateX(6px); }
+
+  /* Visual Zone Styling */
+  .visual-block-v3 { flex: 0 0 450px; position: relative; height: 550px; display: flex; align-items: center; justify-content: center; }
+  .back-sq { position: absolute; width: 400px; height: 400px; z-index: 1; border-radius: 24px; overflow: hidden; box-shadow: 0 15px 45px rgba(0,0,0,0.06); background: #f4f4f4; }
+  .back-sq img { width: 100%; height: 100%; object-fit: cover; }
+  
+  .phone-mock-v3 { position: relative; width: 240px; height: 500px; z-index: 2; margin-left: 20px; }
+  .bezel-v3 { width: 100%; height: 100%; background: #000; border: 10px solid #000; border-radius: 42px; overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,0.25); }
+  .slider-v3 { display: flex; height: 100%; transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1); }
+  .slide-v3 { min-width: 100%; height: 100%; }
+  .slide-v3 img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* Slider Arrows Styling */
+  .ar-v3 { position: absolute; top: 50%; transform: translateY(-50%); background: #fff; border: none; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.1); font-size: 20px; display: flex; align-items: center; justify-content: center; }
+  .ar-v3:hover { background: {{ section.settings.accent_color }}; color: #fff; }
+  .p { left: -50px; } .n { right: -50px; }
+
+  @media (max-width: 900px) {
+    .andatech-multi-layout { padding: 60px 20px; }
+    .app-container-v3 { flex-direction: column !important; gap: 40px; }
+    .text-block-v3 { padding-left: 20px; border-left-width: 4px; }
+    .visual-block-v3 { transform: scale(0.8) !important; height: 480px; width: 100%; flex: none; }
+    .ar-v3 { top: auto; bottom: -60px; }
+    .p { left: 25%; } .n { right: 25%; }
+  }
+</style>
+
+<script>
+  (function() {
+    window.moveV3 = function(direction, sectionId) {
+      const slider = document.getElementById('sl-' + sectionId);
+      const slides = slider.querySelectorAll('.slide-v3');
+      const totalSlides = slides.length;
+      if (totalSlides === 0) return;
+
+      // Use a data attribute to track index per section
+      let currentIdx = parseInt(slider.getAttribute('data-index') || '0');
+      currentIdx = (currentIdx + direction + totalSlides) % totalSlides;
+      
+      slider.setAttribute('data-index', currentIdx);
+      slider.style.transform = `translateX(-${currentIdx * 100}%)`;
+    };
+  })();
+</script>

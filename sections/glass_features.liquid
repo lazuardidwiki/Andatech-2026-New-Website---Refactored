@@ -1,0 +1,252 @@
+{% comment %}
+  Safe-Mode: Andatech Green Glass (Clickable & Expandable)
+  Author: Customized for Smooth Animation & Links
+{% endcomment %}
+
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v6.0.0-beta1/css/all.css">
+
+<style>
+  /* 1. The Section Background (Pure White) */
+  #shopify-section-{{ section.id }} .glass-section-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: {{ section.settings.padding_y }}px 20px;
+    background-color: #ffffff; /* FORCE WHITE BACKGROUND */
+    overflow: hidden;
+    min-height: 450px;
+  }
+
+  /* 2. The Container */
+  #shopify-section-{{ section.id }} .glass-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; /* Allows wrapping if you add many cards */
+    gap: 0; /* The margin controls the overlap/gap */
+  }
+
+  /* 3. The Glass Card Link Wrapper */
+  #shopify-section-{{ section.id }} .glass-card-link {
+    text-decoration: none; /* Remove blue underline */
+    color: inherit;
+    display: block;
+    position: relative;
+    z-index: 1;
+    /* Rotation Logic happens here on the wrapper now */
+    margin: 0 -45px;
+    transform: rotate(calc(var(--r) * 1deg));
+    transition: 0.5s ease-in-out;
+  }
+
+  /* 4. The Card Visuals */
+  #shopify-section-{{ section.id }} .glass-card {
+    position: relative;
+    width: 200px;
+    height: 260px;
+    
+    /* THE ANDATECH GREEN GLASS FORMULA */
+    background: linear-gradient(135deg, rgba(141, 198, 63, 0.8), rgba(141, 198, 63, 0.4));
+    border: 1px solid rgba(141, 198, 63, 0.5);
+    border-top: 1px solid rgba(141, 198, 63, 0.8);
+    box-shadow: 0 20px 40px rgba(141, 198, 63, 0.25);
+    border-radius: 15px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    
+    /* Transition for the inner scale effect */
+    transition: transform 0.3s ease, background 0.3s ease;
+  }
+
+  /* 5. Container Hover: Straighten & Spread */
+  #shopify-section-{{ section.id }} .glass-container:hover .glass-card-link {
+    transform: rotate(0deg); /* Straighten */
+    margin: 0 20px; /* Spread apart */
+    z-index: 5;
+  }
+
+  /* 6. Specific Card Hover: Lift & Highlight */
+  #shopify-section-{{ section.id }} .glass-card-link:hover .glass-card {
+    transform: scale(1.1); /* Pop up */
+    background: linear-gradient(135deg, rgba(141, 198, 63, 1), rgba(141, 198, 63, 0.7)); /* Brighter Green */
+    box-shadow: 0 30px 60px rgba(141, 198, 63, 0.4);
+  }
+  
+  /* Ensure the hovered link stays on top */
+  #shopify-section-{{ section.id }} .glass-card-link:hover {
+    z-index: 10; 
+  }
+
+  /* 7. The Bottom Text Bar */
+  #shopify-section-{{ section.id }} .glass-card::before {
+    content: attr(data-text);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.1); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+
+  /* 8. Icon Styling */
+  #shopify-section-{{ section.id }} .glass-icon-wrapper {
+    font-size: 4em;
+    color: #fff;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+    padding-bottom: 40px;
+  }
+  
+  #shopify-section-{{ section.id }} .glass-icon-wrapper img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    display: block;
+    filter: brightness(0) invert(1); /* Force White */
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    #shopify-section-{{ section.id }} .glass-container {
+      flex-direction: column;
+    }
+    #shopify-section-{{ section.id }} .glass-card-link {
+      margin: -30px 0; /* Vertical stack overlap */
+      transform: rotate(0deg); /* No rotation on mobile */
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    #shopify-section-{{ section.id }} .glass-container:hover .glass-card-link {
+      margin: 20px 0; /* Vertical spread */
+    }
+  }
+</style>
+
+<div class="glass-section-wrapper">
+  <div class="glass-container">
+    {% for block in section.blocks %}
+      <a href="{{ block.settings.link_url | default: '#' }}" 
+         class="glass-card-link" 
+         style="--r: {{ block.settings.rotation }};"
+         {{ block.shopify_attributes }}>
+         
+        <div class="glass-card" data-text="{{ block.settings.title }}">
+          <div class="glass-icon-wrapper">
+            {% if block.settings.custom_icon != blank %}
+              {{ block.settings.custom_icon | image_url: width: 200 | image_tag: loading: 'lazy' }}
+            {% else %}
+               <i class="fa-solid fa-{{ block.settings.fa_icon }}"></i>
+            {% endif %}
+          </div>
+        </div>
+        
+      </a>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Green Glass (Clickable)",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_y",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Vertical Padding",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Glass Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Feature Name",
+          "default": "Feature"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link to Page"
+        },
+        {
+          "type": "number",
+          "id": "rotation",
+          "label": "Rotation Angle",
+          "default": 0,
+          "info": "Example: Left Card = -15, Center = 0, Right = 15"
+        },
+        {
+          "type": "header",
+          "content": "Icon"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Upload Icon",
+          "info": "Transparent PNG."
+        },
+        {
+          "type": "text",
+          "id": "fa_icon",
+          "label": "FontAwesome Name",
+          "default": "check"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Green Glass (Clickable)",
+      "blocks": [
+        {
+          "type": "card",
+          "settings": {
+            "title": "Specs",
+            "rotation": -15,
+            "fa_icon": "bullseye"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Bluetooth",
+            "rotation": 0,
+            "fa_icon": "bluetooth-b"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Manual",
+            "rotation": 15,
+            "fa_icon": "book"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,148 @@
+{%- comment -%} Alcohol testing environment selector. Tabs change a fully clickable destination card. {%- endcomment -%}
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-industry.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-alcohol-testing.css' | asset_url | stylesheet_tag }}
+
+{%- assign first_pathway = section.blocks.first -%}
+<section class="at-alcohol-pathways" id="{{ section.settings.anchor_id | default: section.id | handleize }}">
+  <div class="at-shell">
+    <header class="at-alcohol-pathways__intro">
+      {%- if section.settings.eyebrow != blank -%}<p class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      <h2 class="at-industry__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>
+      {%- if section.settings.description != blank -%}<div class="at-alcohol-pathways__desc" data-at-rise>{{ section.settings.description }}</div>{%- endif -%}
+    </header>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="at-alcohol-pathways__tabs-wrap" data-at-rise>
+        <div class="at-alcohol-pathways__tabs" role="tablist" aria-label="{{ section.settings.tabs_label | escape }}">
+          {%- for block in section.blocks -%}
+            <button class="at-alcohol-pathways__tab{% if block.id == first_pathway.id %} is-active{% endif %}" id="AlcoholPathTab-{{ section.id }}-{{ forloop.index0 }}" type="button" role="tab" aria-selected="{% if block.id == first_pathway.id %}true{% else %}false{% endif %}" aria-controls="AlcoholPathPanel-{{ section.id }}-{{ forloop.index0 }}" tabindex="{% if block.id == first_pathway.id %}0{% else %}-1{% endif %}" data-alcohol-path-tab="{{ forloop.index0 }}" {{ block.shopify_attributes }}>{{ block.settings.tab_label | escape }}</button>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <div class="at-alcohol-pathways__panels">
+        {%- for block in section.blocks -%}
+          {%- assign is_first = false -%}
+          {%- if block.id == first_pathway.id -%}{%- assign is_first = true -%}{%- endif -%}
+          <div class="at-alcohol-pathways__panel" id="AlcoholPathPanel-{{ section.id }}-{{ forloop.index0 }}" role="tabpanel" aria-labelledby="AlcoholPathTab-{{ section.id }}-{{ forloop.index0 }}" data-alcohol-path-panel="{{ forloop.index0 }}"{% unless is_first %} hidden{% endunless %}>
+            <a class="at-alcohol-pathways__card" href="{{ block.settings.link | default: '#' }}" aria-label="{{ block.settings.link_label | default: block.settings.tab_label | escape }}">
+              <span class="at-alcohol-pathways__media" aria-hidden="true">
+                {%- if block.settings.image != blank -%}
+                  {%- if is_first -%}
+                    {{ block.settings.image | image_url: width: 1600 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '750, 1100, 1600', sizes: '(max-width: 749px) 100vw, min(90vw, 1360px)', alt: '' }}
+                  {%- else -%}
+                    <img data-src="{{ block.settings.image | image_url: width: 1600 }}"
+                         data-srcset="{{ block.settings.image | image_url: width: 750 }} 750w, {{ block.settings.image | image_url: width: 1100 }} 1100w, {{ block.settings.image | image_url: width: 1600 }} 1600w"
+                         sizes="(max-width: 749px) 100vw, min(90vw, 1360px)"
+                         alt="" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}">
+                  {%- endif -%}
+                {%- endif -%}
+              </span>
+              <div class="at-alcohol-pathways__content">
+                {%- if block.settings.category != blank -%}<span class="at-alcohol-pathways__category">{{ block.settings.category | escape }}</span>{%- endif -%}
+                <span class="at-alcohol-pathways__title">{{ block.settings.heading | escape }}{% if block.settings.heading_bold != blank %}<strong>{{ block.settings.heading_bold | escape }}</strong>{% endif %}</span>
+                {%- if block.settings.description != blank -%}<div class="at-alcohol-pathways__copy">{{ block.settings.description }}</div>{%- endif -%}
+                {%- if block.settings.facts != blank -%}
+                  <ul class="at-alcohol-pathways__facts">
+                    {%- assign facts = block.settings.facts | newline_to_br | split: '<br />' -%}
+                    {%- for fact in facts -%}{%- assign fact_text = fact | strip -%}{%- if fact_text != blank -%}<li><img class="at-alcohol-pathways__check" src="{{ 'andatech-square-rounded-check.svg' | asset_url }}" alt="" width="32" height="32">{{ fact_text | escape }}</li>{%- endif -%}{%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
+              <span class="at-alcohol-pathways__arrow" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 9v8H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </a>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+(function () {
+  var root = document.getElementById('{{ section.settings.anchor_id | default: section.id | handleize }}');
+  if (!root || root.dataset.alcoholPathwaysReady) return;
+  root.dataset.alcoholPathwaysReady = 'true';
+  var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-alcohol-path-tab]'));
+  var panels = Array.prototype.slice.call(root.querySelectorAll('[data-alcohol-path-panel]'));
+  function activate(tab) {
+    var index = tab.getAttribute('data-alcohol-path-tab');
+    tabs.forEach(function (item) {
+      var active = item === tab;
+      item.classList.toggle('is-active', active);
+      item.setAttribute('aria-selected', String(active));
+      item.setAttribute('tabindex', active ? '0' : '-1');
+    });
+    panels.forEach(function (panel) {
+      var show = panel.getAttribute('data-alcohol-path-panel') === index;
+      panel.hidden = !show;
+      if (show) {
+        var imgs = panel.querySelectorAll('img[data-src]');
+        for (var i = 0; i < imgs.length; i++) {
+          var img = imgs[i];
+          if (img.dataset.srcset) { img.srcset = img.dataset.srcset; delete img.dataset.srcset; }
+          img.src = img.dataset.src;
+          delete img.dataset.src;
+        }
+      }
+    });
+  }
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () { activate(tab); });
+    tab.addEventListener('keydown', function (event) {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight' && event.key !== 'Home' && event.key !== 'End') return;
+      event.preventDefault();
+      var current = tabs.indexOf(tab);
+      var next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : event.key === 'ArrowRight' ? (current + 1) % tabs.length : (current - 1 + tabs.length) % tabs.length;
+      tabs[next].focus();
+      activate(tabs[next]);
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Alcohol Pathways",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "choose-testing-environment" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "CHOOSE BY TESTING ENVIRONMENT" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "Where will the" },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "alcohol test happen?" },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Start with the setting - not a model name. Each route leads to a focused collection with the relevant devices and supporting information.</p>" },
+    { "type": "text", "id": "tabs_label", "label": "Accessible tab group label", "default": "Alcohol testing environments" }
+  ],
+  "blocks": [
+    {
+      "type": "pathway",
+      "name": "Testing pathway",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "tab_label", "label": "Tab label", "default": "Personal" },
+        { "type": "image_picker", "id": "image", "label": "Card background image" },
+        { "type": "text", "id": "category", "label": "Card eyebrow", "default": "PERSONAL" },
+        { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "Check your BAC" },
+        { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "before making a driving decision." },
+        { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Compact fuel-cell breathalysers for individuals, households and responsible morning-after checks.</p>" },
+        { "type": "textarea", "id": "facts", "label": "Key points", "info": "One point per line.", "default": "Simple, portable and discreet\nModels for first-time and frequent users\nRegular calibration keeps readings reliable" },
+        { "type": "url", "id": "link", "label": "Card link" },
+        { "type": "text", "id": "link_label", "label": "Accessible card link label", "default": "Browse personal breathalysers" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Alcohol Pathways",
+      "blocks": [
+        { "type": "pathway", "settings": { "tab_label": "Personal", "category": "PERSONAL", "heading": "Check your BAC", "heading_bold": "before making a driving decision.", "link_label": "Browse personal breathalysers" } },
+        { "type": "pathway", "settings": { "tab_label": "Workplace", "category": "WORKPLACE", "heading": "Screen where", "heading_bold": "the work happens.", "description": "<p>Portable workplace breathalysers for supervisors, safety teams, mobile sites and flexible screening points.</p>", "facts": "Move between sites, shifts and testing points\nOptions for memory, printing and connectivity\nSelected devices connect with Andalink", "link_label": "Browse workplace breathalysers" } },
+        { "type": "pathway", "settings": { "tab_label": "Wall-Mounted", "category": "WALL-MOUNTED", "heading": "Create one", "heading_bold": "controlled testing point.", "description": "<p>Fixed breath-testing systems for entrances, sites and venues that require repeat screening.</p>", "facts": "Always available at a defined location\nOptions for access control and identity\nSelected devices connect with Andalink", "link_label": "Browse wall-mounted breathalysers" } },
+        { "type": "pathway", "settings": { "tab_label": "Vehicle Interlock", "category": "VEHICLE INTERLOCK", "heading": "Test before", "heading_bold": "the vehicle starts.", "description": "<p>Vehicle interlock systems for voluntary personal use or company vehicle programs.</p>", "facts": "Breath test required before ignition\nInstallation matched to the vehicle\nEvent records support oversight", "link_label": "Browse vehicle interlock breathalysers" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

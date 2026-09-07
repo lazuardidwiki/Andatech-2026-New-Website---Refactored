@@ -1,0 +1,169 @@
+{%- comment -%} Andatech — Sticky in-page navigation for the reusable industry master. {%- endcomment -%}
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-industry.css' | asset_url | stylesheet_tag }}
+
+<nav class="at-industry-nav" aria-label="{{ section.settings.aria_label | escape }}" id="AtIndustryNav-{{ section.id }}">
+  <div class="at-shell at-industry-nav__inner">
+    {%- if section.settings.label != blank -%}<span class="at-industry-nav__label">{{ section.settings.label | escape }}</span>{%- endif -%}
+    <button class="at-industry-nav__mobile-toggle" type="button" aria-expanded="false" aria-controls="AtIndustryNavTrack-{{ section.id }}">
+      <span class="at-industry-nav__mobile-caption">On this page</span>
+      <strong class="at-industry-nav__mobile-current">{{ section.blocks.first.settings.label | default: 'Overview' | escape }}</strong>
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="at-industry-nav__track" id="AtIndustryNavTrack-{{ section.id }}">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.label != blank and block.settings.anchor != blank -%}
+          <a class="at-industry-nav__link{% if forloop.first %} is-active{% endif %}" href="#{{ block.settings.anchor | handleize }}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</nav>
+
+<script>
+(function () {
+  var nav = document.getElementById('AtIndustryNav-{{ section.id }}');
+  if (!nav || nav.dataset.navReady) return;
+  nav.dataset.navReady = 'true';
+  var navSection = nav.closest('.at-industry-nav-section');
+  var links = Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]'));
+  var mobileToggle = nav.querySelector('.at-industry-nav__mobile-toggle');
+  var mobileCurrent = nav.querySelector('.at-industry-nav__mobile-current');
+  var track = nav.querySelector('.at-industry-nav__track');
+  var setMobileOpen = function (open) {
+    if (!mobileToggle || !track) return;
+    mobileToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    track.classList.toggle('is-open', open);
+  };
+  if (mobileToggle) {
+    mobileToggle.addEventListener('click', function () {
+      setMobileOpen(mobileToggle.getAttribute('aria-expanded') !== 'true');
+    });
+  }
+  links.forEach(function (link) {
+    link.addEventListener('click', function () {
+      if (mobileCurrent) mobileCurrent.textContent = link.textContent.trim();
+      setMobileOpen(false);
+    });
+  });
+  document.addEventListener('click', function (event) {
+    if (!nav.contains(event.target)) setMobileOpen(false);
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') setMobileOpen(false);
+  });
+
+  /* Keep the topic navigation in the document flow at all times. It is hidden
+     while Why Andatech passes underneath its sticky line, then becomes the
+     floating page navigation for the remaining sections. Keeping one sticky
+     positioning mode prevents the page-height collapse that caused the jump. */
+  var smartHeader = null;
+  var headerObserver = null;
+  var whySection = document.getElementById('why-andatech');
+  var floatingTicking = false;
+  var resolveWhySection = function () {
+    if (!whySection || !document.documentElement.contains(whySection)) {
+      whySection = document.getElementById('why-andatech');
+    }
+    return whySection;
+  };
+  var getDocumentTop = function (element) {
+    var top = 0;
+    while (element) {
+      top += element.offsetTop || 0;
+      element = element.offsetParent;
+    }
+    return top;
+  };
+  var syncHeaderVisibility = function () {
+    if (!navSection || !smartHeader) return;
+    var floating = navSection.classList.contains('at-industry-nav-section--floating');
+    var hidden = floating && smartHeader.classList.contains('at-header--hidden');
+    navSection.classList.toggle('at-industry-nav-section--hidden', hidden);
+    if (hidden) setMobileOpen(false);
+  };
+  var updateFloatingState = function () {
+    var boundary = resolveWhySection();
+    if (!navSection || !boundary) {
+      floatingTicking = false;
+      return;
+    }
+    var navTop = parseFloat(window.getComputedStyle(navSection).getPropertyValue('--at-industry-nav-top')) || 88;
+    var hasReachedStickyLine = window.scrollY + navTop >= getDocumentTop(navSection);
+    var shouldFloat = boundary.getBoundingClientRect().bottom <= navTop;
+    navSection.classList.toggle('at-industry-nav-section--dormant', hasReachedStickyLine && !shouldFloat);
+    navSection.classList.toggle('at-industry-nav-section--floating', shouldFloat);
+    syncHeaderVisibility();
+    floatingTicking = false;
+  };
+  var requestFloatingUpdate = function () {
+    if (floatingTicking) return;
+    floatingTicking = true;
+    window.requestAnimationFrame(updateFloatingState);
+  };
+  var bindHeaderVisibility = function () {
+    var nextHeader = document.querySelector('.at-header');
+    if (!nextHeader) return;
+    if (nextHeader !== smartHeader) {
+      if (headerObserver) headerObserver.disconnect();
+      smartHeader = nextHeader;
+      if ('MutationObserver' in window) {
+        headerObserver = new MutationObserver(syncHeaderVisibility);
+        headerObserver.observe(smartHeader, { attributes: true, attributeFilter: ['class'] });
+      }
+    }
+    requestFloatingUpdate();
+  };
+  bindHeaderVisibility();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', requestFloatingUpdate, { once: true });
+  } else {
+    requestFloatingUpdate();
+  }
+  window.addEventListener('scroll', requestFloatingUpdate, { passive: true });
+  window.addEventListener('resize', requestFloatingUpdate);
+  document.addEventListener('shopify:section:load', function () {
+    whySection = null;
+    bindHeaderVisibility();
+    requestFloatingUpdate();
+  });
+
+  var targets = links.map(function (link) { return document.querySelector(link.getAttribute('href')); }).filter(Boolean);
+  if (!targets.length || !('IntersectionObserver' in window)) return;
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      links.forEach(function (link) {
+        var active = link.getAttribute('href') === '#' + entry.target.id;
+        link.classList.toggle('is-active', active);
+        if (active && mobileCurrent) mobileCurrent.textContent = link.textContent.trim();
+      });
+    });
+  }, { rootMargin: '-28% 0px -62% 0px', threshold: 0 });
+  targets.forEach(function (target) { observer.observe(target); });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Industry Topic Nav",
+  "tag": "section",
+  "class": "at-section at-industry-nav-section",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Leading label", "default": "Explore this page" },
+    { "type": "text", "id": "aria_label", "label": "Accessibility label", "default": "Industry page topics" }
+  ],
+  "blocks": [{ "type": "link", "name": "Topic link", "limit": 10, "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "Overview" },
+    { "type": "text", "id": "anchor", "label": "Section anchor", "default": "industry-overview", "info": "Use the matching section anchor without #." }
+  ] }],
+  "presets": [{ "name": "Industry Topic Nav", "blocks": [
+    { "type": "link", "settings": { "label": "Overview", "anchor": "industry-overview" } },
+    { "type": "link", "settings": { "label": "Risks", "anchor": "industry-risks" } },
+    { "type": "link", "settings": { "label": "Compliance", "anchor": "industry-compliance" } },
+    { "type": "link", "settings": { "label": "Solutions", "anchor": "industry-solutions" } },
+    { "type": "link", "settings": { "label": "Methods", "anchor": "testing-methods" } },
+    { "type": "link", "settings": { "label": "FAQs", "anchor": "industry-faqs" } }
+  ] }]
+}
+{% endschema %}

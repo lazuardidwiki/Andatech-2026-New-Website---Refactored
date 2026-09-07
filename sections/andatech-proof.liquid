@@ -1,0 +1,101 @@
+{%- comment -%} Andatech — Proof. Generated from the Phase 1 prototype.
+  Classes are `at-` prefixed; styling lives in andatech-site.css. {%- endcomment -%}
+
+{{ 'andatech-homepage.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'andatech-homepage.js' | asset_url }}" defer="defer"></script>
+
+<section class="at-proof at-proof--{{ section.settings.layout }}">
+  <div class="at-shell">
+    {%- if section.settings.eyebrow != blank -%}<p class="at-proof__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+    <h2 class="at-proof__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>
+    <div class="at-proof__meta" data-at-rise>
+      {%- if section.settings.desc != blank -%}<div class="at-proof__desc">{{ section.settings.desc }}</div>{%- endif -%}
+      {%- if section.settings.link_label != blank -%}<a class="at-proof__view-all" href="{{ section.settings.link_url | default: '#' }}">{{ section.settings.link_label | escape }} <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 8 16 16M16 16V9.8M16 16H9.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>{%- endif -%}
+    </div>
+
+    <div class="at-proof__grid">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+
+        {%- when 'feature' -%}
+          <a class="at-proof__card at-proof__card--feature" href="{{ block.settings.url | default: '#' }}" data-at-rise {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 1720 }}" alt="{{ block.settings.image.alt | escape }}" loading="lazy">{%- endif -%}
+            {%- if block.settings.badge != blank -%}<span class="at-proof__badge">{{ block.settings.badge | escape }}</span>{%- endif -%}
+            <div class="at-proof__card-body">
+              {%- if block.settings.logo != blank -%}<img class="at-proof__logo" src="{{ block.settings.logo | image_url: width: 300 }}" alt="{{ block.settings.logo.alt | escape }}" loading="lazy">{%- endif -%}
+              <h3 class="at-proof__card-title">{{ block.settings.title }}</h3>
+              {%- if block.settings.desc != blank -%}<div class="at-proof__card-desc">{{ block.settings.desc }}</div>{%- endif -%}
+            </div>
+            <span class="at-proof__arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 8 16 16M16 16V9.8M16 16H9.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+
+        {%- when 'stats' -%}
+          <div class="at-proof__card" data-at-rise {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 1520 }}" alt="{{ block.settings.image.alt | escape }}" loading="lazy">{%- endif -%}
+            {%- if block.settings.badge != blank -%}<span class="at-proof__badge at-proof__badge--ghost">{{ block.settings.badge | escape }}</span>{%- endif -%}
+            <div class="at-proof__stats">
+              {%- assign rows = block.settings.stats | newline_to_br | split: '<br />' -%}
+              {%- for row in rows -%}
+                {%- assign parts = row | strip | split: '|' -%}
+                {%- if parts.size > 0 and parts[0] != blank -%}
+                  {%- assign rawVal = parts[0] | strip -%}
+                  {%- assign countNum = rawVal | remove: '%' | remove: '+' | remove: 'K' | remove: 'k' | remove: 'M' | remove: 'm' | remove: 'x' | strip -%}
+                  {%- assign countSuffix = rawVal | replace: countNum, '' -%}
+                  <div>
+                    <span class="at-proof__stat-num"><span class="at-proof__stat-count" data-at-count-to="{{ countNum | escape }}">{{ countNum | escape }}</span>{% if countSuffix != blank %}{{ countSuffix | escape }}{% endif %}</span>
+                    <span class="at-proof__stat-label">{{ parts[1] | strip | escape }}</span>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+
+        {%- when 'quote' -%}
+          <div class="at-proof__card" data-at-rise {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 1520 }}" alt="{{ block.settings.image.alt | escape }}" loading="lazy">{%- endif -%}
+            <span class="at-proof__quote-mark" aria-hidden="true">&#8221;</span>
+            <p class="at-proof__quote">{{ block.settings.quote | escape }}</p>
+            {%- if block.settings.attrib != blank -%}<div class="at-proof__attrib">{{ block.settings.attrib }}</div>{%- endif -%}
+          </div>
+
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Andatech Proof", "tag": "section", "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Proof" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "Twenty-two years," },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "and the receipts to show it." },
+    { "type": "richtext", "id": "desc", "label": "Description", "default": "<p>Across mining, transport, government and healthcare. the same standards, applied to very different sites.</p>" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "View all case studies" },
+    { "type": "url", "id": "link_url", "label": "Link URL" },
+    { "type": "select", "id": "layout", "label": "Card layout", "options": [
+      { "value": "proof-grid", "label": "Case study grid" },
+      { "value": "visibility-grid", "label": "Two-card visibility grid" }
+    ], "default": "proof-grid" } ],
+  "blocks": [
+    { "type": "feature", "name": "Feature case study", "limit": 2, "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "image_picker", "id": "logo", "label": "Client logo", "info": "Displayed using the colours in the uploaded file." },
+      { "type": "text", "id": "badge", "label": "Badge" },
+      { "type": "html", "id": "title", "label": "Title", "info": "Wrap a line in <em> for the italic line." },
+      { "type": "richtext", "id": "desc", "label": "Description" },
+      { "type": "url", "id": "url", "label": "Link" } ] },
+    { "type": "stats", "name": "Stats card", "limit": 1, "settings": [
+      { "type": "image_picker", "id": "image", "label": "Background image" },
+      { "type": "text", "id": "badge", "label": "Badge", "default": "What changed" },
+      { "type": "textarea", "id": "stats", "label": "Stats", "info": "One per line, as: value | label",
+        "default": "14 sites | brought onto a single testing policy\n0 findings | at the following external audit\n3 weeks | from agreement to first test on site\n1 place | all calibration records now live" } ] },
+    { "type": "quote", "name": "Quote card", "limit": 1, "settings": [
+      { "type": "image_picker", "id": "image", "label": "Background image" },
+      { "type": "textarea", "id": "quote", "label": "Quote" },
+      { "type": "richtext", "id": "attrib", "label": "Attribution" } ] } ],
+  "presets": [ { "name": "Andatech Proof", "blocks": [
+    { "type": "feature", "settings": { "badge": "Heavy Industry - Mining", "title": "Fitness-for-work across<br>fourteen remote sites,<br><em>on one policy.</em>", "desc": "<p>Rotating crews, inconsistent testing practice site to site, and no single record of who had been tested when. One managed program, one standard, one audit trail.</p>" } },
+    { "type": "stats" },
+    { "type": "quote", "settings": { "quote": "We used to struggle with fragmented testing data, but today all 14 remote sites operate under one clear standard.", "attrib": "<p>Alex Turner, Group Health & Safety Director<br>GLENCORE</p>" } } ] } ] }
+{% endschema %}

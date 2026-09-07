@@ -1,0 +1,122 @@
+{%- comment -%} Andatech — How we solve it. Generated from the Phase 1 prototype.
+  Classes are `at-` prefixed; styling lives in andatech-site.css. {%- endcomment -%}
+
+{{ 'andatech-homepage.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'andatech-homepage.js' | asset_url }}" defer="defer"></script>
+{%- if section.settings.heading_align == 'center' -%}{{ 'andatech-solutions-pages.css' | asset_url | stylesheet_tag }}{%- endif -%}
+
+<section{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handle }}"{% endif %} class="at-solutions{% if section.settings.heading_align == 'center' %} at-solutions--heading-center{% endif %}">
+  <div class="at-shell">
+    {%- if section.settings.eyebrow != blank -%}<p class="at-solutions__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+    <h2 class="at-solutions__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>
+    <div class="at-solutions__meta" data-at-rise>
+      {%- if section.settings.desc != blank -%}<div class="at-solutions__desc">{{ section.settings.desc }}</div>{%- endif -%}
+      {%- if section.settings.link_label != blank -%}<a class="at-solutions__view-all" href="{{ section.settings.link_url | default: '#' }}">{{ section.settings.link_label | escape }} <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 8 16 16M16 16V9.8M16 16H9.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>{%- endif -%}
+    </div>
+
+  </div>{%- comment -%} /at-shell — the list is full-bleed by being outside it {%- endcomment -%}
+
+  <div class="at-solutions__list">
+      {%- for block in section.blocks -%}
+        <details class="at-solutions__item"{% if forloop.first %} open{% endif %} data-at-rise {{ block.shopify_attributes }}>
+          <summary class="at-solutions__trigger">
+            {%- comment -%}
+              Hover marquee removed at merchant request (impressive.media review).
+              To restore: uncomment the block below. JS + CSS remain in place — the
+              marquee simply activates once the DOM element exists again.
+
+              <div class="at-solutions__marquee" aria-hidden="true">
+                <div class="at-solutions__marquee-inner">
+                  {%- for i in (1..8) -%}
+                    <div class="at-solutions__marquee-part">
+                      <span>{{ block.settings.title | escape }}</span>
+                      {%- if block.settings.image != blank -%}
+                        <div class="at-solutions__marquee-img" style="background-image:url('{{ block.settings.image | image_url: width: 300 }}')"></div>
+                      {%- endif -%}
+                    </div>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endcomment -%}
+            <span class="at-solutions__item-title">{{ block.settings.title | escape }}</span>
+            <svg class="at-solutions__icon" width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 9 7 7 7-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </summary>
+          <div class="at-solutions__body">
+            <div class="at-solutions__body-text">
+              {%- if block.settings.lede != blank -%}<p class="at-solutions__eyebrow-inline">{{ block.settings.lede | escape }}</p>{%- endif -%}
+              {%- if block.settings.desc != blank -%}<div class="at-solutions__body-desc">{{ block.settings.desc }}</div>{%- endif -%}
+              {%- if block.settings.cta_label != blank -%}<a class="at-btn at-btn--green" href="{{ block.settings.cta_url | default: '#' }}">{{ block.settings.cta_label | escape }} <i class="at-btn__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>{%- endif -%}
+            </div>
+            <div class="at-solutions__body-media">
+              {%- assign img_loading = 'eager' -%}
+              {%- assign img_fetch = 'low' -%}
+              {%- if forloop.first -%}{%- assign img_fetch = 'high' -%}{%- endif -%}
+              <div class="at-solutions__stack">
+                {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 900 }}" alt="{{ block.settings.image.alt | escape }}" loading="{{ img_loading }}" fetchpriority="{{ img_fetch }}" width="900" height="354">{%- endif -%}
+                {%- if block.settings.image_2 != blank -%}<img src="{{ block.settings.image_2 | image_url: width: 900 }}" alt="" loading="{{ img_loading }}" fetchpriority="{{ img_fetch }}" width="900" height="354">{%- endif -%}
+                {%- if block.settings.image_3 != blank -%}<img src="{{ block.settings.image_3 | image_url: width: 900 }}" alt="" loading="{{ img_loading }}" fetchpriority="{{ img_fetch }}" width="900" height="354">{%- endif -%}
+              </div>
+              {%- assign shown = 0 -%}
+              {%- if block.settings.image != blank -%}{%- assign shown = shown | plus: 1 -%}{%- endif -%}
+              {%- if block.settings.image_2 != blank -%}{%- assign shown = shown | plus: 1 -%}{%- endif -%}
+              {%- if block.settings.image_3 != blank -%}{%- assign shown = shown | plus: 1 -%}{%- endif -%}
+              {%- if shown > 1 -%}
+                <div class="at-solutions__dots at-dots"></div>
+              {%- endif -%}
+            </div>
+          </div>
+        </details>
+      {%- endfor -%}
+  </div>
+
+  <div class="at-shell">
+    {%- if section.settings.m_cta1 != blank or section.settings.m_cta2 != blank -%}
+      <div class="at-mobile-cta at-mobile-cta--pair">
+        {%- if section.settings.m_cta1 != blank -%}<a class="at-btn at-btn--outline-dark at-btn--mobile-only" href="{{ section.settings.m_cta1_url | default: '#' }}">{{ section.settings.m_cta1 | escape }}</a>{%- endif -%}
+        {%- if section.settings.m_cta2 != blank -%}<a class="at-btn at-btn--outline-dark at-btn--mobile-only" href="{{ section.settings.link_url | default: '#' }}">{{ section.settings.m_cta2 | escape }}</a>{%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.footnote_label != blank -%}
+      <p class="at-solutions__footnote" data-at-rise>{{ section.settings.footnote_lead | escape }}
+        <a href="{{ section.settings.footnote_url | default: '#' }}">{{ section.settings.footnote_label | escape }} <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 8 16 16M16 16V9.8M16 16H9.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Andatech Solutions", "tag": "section", "class": "at-section",
+  "settings": [
+    { "type": "select", "id": "heading_align", "label": "Heading alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Centre" }], "default": "left" },
+    { "type": "text", "id": "anchor_id", "label": "Optional section anchor", "info": "Example: all-solutions. Leave blank to preserve the existing markup." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "How We Solve It" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "We start with the problem," },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "not the product." },
+    { "type": "richtext", "id": "desc", "label": "Description", "default": "<p>Tell us what you need to control and we'll shape the program around it — equipment included.</p>" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "View all solutions" },
+    { "type": "url", "id": "link_url", "label": "Link URL" },
+    { "type": "header", "content": "Mobile buttons" },
+    { "type": "text", "id": "m_cta1", "label": "Mobile button 1", "default": "Shop Devices Here" },
+    { "type": "url", "id": "m_cta1_url", "label": "Mobile button 1 link" },
+    { "type": "text", "id": "m_cta2", "label": "Mobile button 2", "default": "View All Solution" },
+    { "type": "header", "content": "Footnote (desktop)" },
+    { "type": "text", "id": "footnote_lead", "label": "Footnote lead-in", "default": "Already know what you need?" },
+    { "type": "text", "id": "footnote_label", "label": "Footnote link label", "default": "Shop devices here" },
+    { "type": "url", "id": "footnote_url", "label": "Footnote link" } ],
+  "blocks": [ { "type": "item", "name": "Solution", "limit": 10, "settings": [
+      { "type": "text", "id": "title", "label": "Title" },
+      { "type": "text", "id": "lede", "label": "Teal lead-in" },
+      { "type": "richtext", "id": "desc", "label": "Description" },
+      { "type": "text", "id": "cta_label", "label": "Button label" },
+      { "type": "url", "id": "cta_url", "label": "Button link" },
+      { "type": "image_picker", "id": "image", "label": "Image 1 (front)", "info": "Also used in the hover marquee." },
+      { "type": "image_picker", "id": "image_2", "label": "Image 2", "info": "Sits behind, offset right and 40px shorter." },
+      { "type": "image_picker", "id": "image_3", "label": "Image 3", "info": "Third in the stack, 80px shorter." } ] } ],
+  "presets": [ { "name": "Andatech Solutions", "blocks": [
+    { "type": "item", "settings": { "title": "Managed Compliance Programs", "lede": "We run the whole thing.", "desc": "<p>Devices, calibration, reporting, training and audit readiness on a single agreement. Powered by Andalink.</p>", "cta_label": "See How It Works" } },
+    { "type": "item", "settings": { "title": "Alcohol Testing", "lede": "Accurate. Certified. Audit-ready.", "desc": "<p>AS 3547 certified breathalysers with NATA-accredited calibration and full chain-of-custody reporting.</p>", "cta_label": "Explore Alcohol Testing" } },
+    { "type": "item", "settings": { "title": "Drug Testing", "lede": "On-site. Oral fluid. Instant results.", "desc": "<p>Oral fluid and urine screening devices for workplace drug testing with lab confirmation pathways.</p>", "cta_label": "Explore Drug Testing" } },
+    { "type": "item", "settings": { "title": "Integrated Compliance", "lede": "One program. Every requirement.", "desc": "<p>Combine alcohol, drug, fatigue and fitness-for-work testing into a single managed program.</p>", "cta_label": "Explore Integrated Compliance" } },
+    { "type": "item", "settings": { "title": "Training & Certification", "lede": "Certified. Nationally recognised.", "desc": "<p>HLTPAT010-aligned training for supervisors and testing officers, delivered on-site or online.</p>", "cta_label": "Explore Training" } },
+    { "type": "item", "settings": { "title": "Software & Reporting", "lede": "Real-time. Paperless. Audit-proof.", "desc": "<p>Andalink software for digital record-keeping, automated reporting and compliance dashboards.</p>", "cta_label": "Explore Software" } } ] } ] }
+{% endschema %}

@@ -1,0 +1,416 @@
+/* ══════════════════════════════════════════════════════════════════════
+   ANDATECH — ROI CALCULATOR STYLESHEET
+   ══════════════════════════════════════════════════════════════════════
+
+   Scope: the ROI calculator promo banner + the overlay it opens.
+   All .at-roi-* selectors. Extracted from andatech-site.css lines 2593–2991
+   on 2026-09-05 as part of the andatech-home split refactor.
+
+   Loaded ONCE per section that uses it: andatech-roi-calculator.liquid and
+   andatech-readiness-roi.liquid. No cascade dependencies on the rest of
+   andatech-site.css — the module uses design tokens (--nx-*, --at-*)
+   declared in :root, which is loaded site-wide.
+
+   NOTE: .at-pricing selectors (Ways to Work cards) are NOT ROI — they
+   stayed in andatech-site.css. Only .at-roi-* rules live here.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════════
+   ROI CALCULATOR  — wireframe screen 10
+   Light throughout: the brief's top-ranked item is "reduce the amount of
+   black", so the result panel is white with a green figure rather than a
+   dark slab.
+   ══════════════════════════════════════════════════════════ */
+/* ── Banner: what the page actually shows ───────────────────
+   The calculator itself lives in an overlay; on the page this is a promo card.
+   Built to the same recipe as .at-andalink — rounded inset card, copy left, the
+   cutout flush to the bottom-right corner rather than floating mid-card. */
+.at-roi-banner { padding-block: clamp(56px, 5.8vw, 100px); background: var(--at-white); }
+.at-roi-banner__card {
+  position: relative;
+  display: flex;
+  min-height: 660px;
+  border: 1px solid var(--at-gray-600);
+  border-radius: var(--at-r-2xl);
+  background: var(--at-gray-50);
+  overflow: hidden;
+}
+/* Distributed down the card rather than bunched at the top. Andalink gets the
+   same look from hardcoded margins (210/52/92px) tuned to its 916px card, which
+   only holds at that one height — this survives a longer heading or caption. */
+.at-roi-banner__content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 64px 52px;
+  max-width: 780px;
+}
+.at-roi-banner__content .at-roi__title { margin-top: 24px; }
+.at-roi-banner__content .at-roi__desc { margin-top: 28px; max-width: 660px; }
+/* auto pushes the CTA to the foot of the card, whatever the copy above does. */
+.at-roi-banner__cta { margin-top: auto; padding-top: 48px; }
+/* Flush to the card's bottom-right corner, same as the Andalink devices.
+   Height is capped to the card: a tall asset at this width would otherwise run
+   ~350px past the top edge and be cropped there, which decapitates a person
+   cutout. `contain` + bottom-right keeps the whole subject and sits it in the
+   corner, as large as will fit. */
+.at-roi-banner__media {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 900px;
+  max-width: 54%;
+  height: 100%;
+}
+.at-roi-banner__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: right bottom;
+}
+
+.at-roi__head { max-width: 760px; }
+.at-roi__eyebrow {
+  margin: 0;
+  font-size: clamp(15px, 1.39vw, 24px);
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--at-teal);
+}
+.at-roi__title {
+  margin: 16px 0 0;
+  font-size: clamp(32px, 3.7vw, 64px);
+  font-weight: 300;
+  line-height: 1.08;
+  color: var(--at-navy);
+}
+.at-roi__title strong { font-weight: 700; }
+.at-roi__desc {
+  margin: 20px 0 0;
+  font-size: clamp(16px, 1.39vw, 24px);
+  line-height: 1.5;
+  color: var(--at-navy);
+}
+
+/* ── Overlay ────────────────────────────────────────────────
+   The JS moves this to <body> on load. It has to escape the section wrapper:
+   the wrapper carries zoom, and a fixed child of a zoomed box has its inset
+   scaled too, so `inset: 0` would cover only 90% of the viewport and leave a
+   strip down two edges. Out at body level it is unzoomed and exact. */
+.at-roi-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 4vh, 48px) var(--at-gutter);
+  background: rgba(10,14,20,.55);
+  opacity: 0;
+  visibility: hidden;
+  /* visibility is discrete: inside a transition it flips at the midpoint, so
+     `visibility .3s` left the overlay hidden for 150ms after opening — long
+     enough that .at-focus() found it out of the tab order and did nothing. Delay
+     it on the way out only, and switch it instantly on the way in. */
+  transition: opacity .3s var(--at-ease), visibility 0s var(--at-ease) .3s;
+}
+.at-roi-modal.at-is-on {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .3s var(--at-ease), visibility 0s var(--at-ease) 0s;
+}
+.at-roi-modal__panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(1180px, 100%);
+  max-height: 100%;
+  /* The panel itself does not scroll — its body does. That keeps the title and
+     the close button permanently in view without the button sitting on top of
+     the figures as it scrolls past. */
+  overflow: hidden;
+  background: var(--at-white);
+  border-radius: var(--at-r-xl);
+  padding: clamp(24px, 3vw, 48px);
+  transform: translateY(12px) scale(.99);
+  transition: transform .35s var(--at-ease-out);
+}
+.at-roi-modal.at-is-on .at-roi-modal__panel { transform: none; }
+.at-roi-modal__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-shrink: 0;
+}
+.at-roi-modal__body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* Room for the focus ring on the first control, which would otherwise be
+     clipped by the scroll container's edge. */
+  padding-top: 4px;
+}
+.at-roi-modal__title {
+  margin: 0 0 4px;
+  font-size: clamp(24px, 2.3vw, 40px);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--at-navy);
+}
+.at-roi-modal__sub { margin: 0; font-size: 16px; line-height: 1.5; color: var(--at-gray-600); }
+/* Lives in the non-scrolling header, so it is always reachable — an absolutely
+   placed button scrolled away with the content and left no way out once you
+   were down at the disclaimer. */
+.at-roi-modal__close {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 44px; height: 44px;
+  border: 1px solid var(--at-gray-200);
+  border-radius: 50%;
+  background: var(--at-white);
+  color: var(--at-navy);
+  cursor: pointer;
+  transition: background .25s var(--at-ease), border-color .25s var(--at-ease);
+}
+.at-roi-modal__close:hover { background: var(--at-gray-50); border-color: var(--at-gray-600); }
+.at-roi-modal__close:focus-visible { outline: 2px solid var(--at-teal); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .at-roi-modal, .at-roi-modal__panel { transition: none; }
+}
+
+.at-roi__panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  /* stretch, not start — the two cards were ending at different heights */
+  align-items: stretch;
+  margin-top: 32px;
+}
+
+/* ── Inputs ─────────────────────────────────────────────── */
+.at-roi__form {
+  display: flex;
+  flex-direction: column;
+  background: var(--at-white);
+  border: 1px solid var(--at-gray-200);
+  border-radius: var(--at-r-xl);
+  padding: clamp(24px, 2.3vw, 40px);
+}
+.at-roi__form-title {
+  margin: 0 0 28px;
+  font-size: clamp(20px, 1.85vw, 32px);
+  font-weight: 700;
+  color: var(--at-navy);
+}
+.at-roi__field + .at-roi__field { margin-top: 22px; }
+.at-roi__label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--at-navy);
+}
+.at-roi__control {
+  width: 100%;
+  height: 60px;
+  padding-inline: 20px;
+  border: 1px solid var(--at-gray-200);
+  border-radius: var(--at-r-md);
+  background: var(--at-white);
+  font-family: inherit;
+  font-size: clamp(16px, 1.16vw, 20px);
+  color: var(--at-navy);
+  transition: border-color .25s var(--at-ease), box-shadow .25s var(--at-ease);
+}
+.at-roi__control:focus {
+  outline: none;
+  border-color: var(--at-teal);
+  box-shadow: 0 0 0 3px rgba(70,190,196,.18);
+}
+/* Native select arrow varies wildly between browsers — draw our own. */
+select.at-roi__control {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 48px;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.at-w3.at-org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231F2937' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 18px center;
+  background-size: 20px;
+}
+.at-roi__hint { margin: 8px 0 0; font-size: 14px; color: var(--at-gray-600); }
+/* No Calculate button: the figure updates as you type, so a button would only
+   ever re-state a number already on screen. */
+.at-roi__live {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 24px;
+  font-size: 14px;
+  color: var(--at-gray-600);
+}
+.at-roi__live svg { flex-shrink: 0; color: var(--at-green-text); }
+
+/* ── Result ─────────────────────────────────────────────── */
+.at-roi__result {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--at-white);
+  border: 1px solid var(--at-gray-200);
+  border-radius: var(--at-r-xl);
+  padding: clamp(24px, 2.3vw, 40px);
+}
+.at-roi__result-label {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--at-gray-600);
+}
+/* Figure and unit on one baseline. They used to be siblings with the unit at
+   .35em — but em resolved against the card's 16px, not the 64px figure, so
+   "/ year" rendered at about 5.6px and dropped onto its own line. */
+.at-roi__amount-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 12px 0 0;
+}
+.at-roi__amount {
+  display: block;
+  font-size: clamp(40px, 4.6vw, 64px);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--at-green-text);
+  font-variant-numeric: tabular-nums;
+}
+.at-roi__amount-unit {
+  font-size: clamp(16px, 1.4vw, 22px);
+  font-weight: 400;
+  color: var(--at-gray-600);
+  white-space: nowrap;
+}
+.at-roi__share { margin: 10px 0 0; font-size: 16px; color: var(--at-gray-600); }
+
+.at-roi__drivers { list-style: none; margin: 28px 0 0; padding: 0; }
+.at-roi__driver {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 1px solid var(--at-gray-200);
+  font-size: clamp(15px, 1.16vw, 20px);
+  color: var(--at-navy);
+}
+.at-roi__driver:last-child { border-bottom: 1px solid var(--at-gray-200); }
+.at-roi__driver-name { display: flex; align-items: center; gap: 12px; }
+.at-roi__driver-name svg { flex-shrink: 0; color: var(--at-green); }
+.at-roi__driver-value { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* Both CTAs fill the card — "fill container" in the Figma sense. */
+.at-roi__ctas { display: flex; flex-direction: column; gap: 12px; margin-top: 32px; }
+.at-roi__ctas .at-btn { width: 100%; height: 48px; padding-inline: 24px; font-size: 15px; gap: 10px; }
+.at-roi__ctas .at-btn__arrow { width: 28px; height: 28px; }
+.at-roi__ctas .at-btn--green:has(.at-btn__arrow) { padding-right: 10px; }
+.at-roi__note { margin: 20px 0 0; font-size: 14px; line-height: 1.5; color: var(--at-gray-600); }
+
+/* Reveal: the figure counts up, the drivers stagger in behind it. */
+.at-roi__result[data-at-roi-state="idle"] .at-roi__drivers,
+.at-roi__result[data-at-roi-state="idle"] .at-roi__share { opacity: .35; }
+.at-roi__drivers, .at-roi__share { transition: opacity .45s var(--at-ease); }
+.at-roi__driver { transition: transform .45s var(--at-ease-out), opacity .45s var(--at-ease); }
+.at-roi__result[data-at-roi-state="idle"] .at-roi__driver { transform: translateY(6px); }
+@media (prefers-reduced-motion: reduce) {
+  .at-roi__driver, .at-roi__drivers, .at-roi__share { transition: none; }
+}
+
+/* Responsive rules live with the component rather than in the block below —
+   the proof-card bug came from a modifier and its base class drifting apart in
+   one long responsive section. */
+/* Tablet — same proportions the Andalink card uses at this width. */
+@media (max-width: 1279px) {
+  .at-roi-banner__card { min-height: 560px; }
+  .at-roi-banner__content { padding: 48px 40px; max-width: 50%; }
+  .at-roi-banner__cta { padding-top: 32px; }
+  .at-roi-banner__media { width: 58%; max-width: 58%; }
+}
+@media (max-width: 1023px) {
+  .at-roi__panel { grid-template-columns: 1fr; gap: 20px; margin-top: 24px; }
+}
+@media (max-width: 767px) {
+  /* Card dissolves and the cutout drops below the copy, full-bleed — exactly
+     what .at-andalink does. The image belongs under the CTA, not above the text. */
+  .at-roi-banner { padding-block: 56px 0; }
+  /* Column, not row: the media goes back into flow here, and the card is a flex
+     container now — left as a row it would land beside the copy again. */
+  .at-roi-banner__card { display: block; min-height: 0; border: 0; border-radius: 0; background: transparent; overflow: visible; }
+  .at-roi-banner__content { display: block; padding: 0; max-width: none; text-align: center; }
+  .at-roi-banner__content .at-roi__head { max-width: none; margin-inline: auto; }
+  .at-roi-banner__cta { margin-top: 32px; padding-top: 0; display: flex; justify-content: center; }
+  .at-roi-banner__media {
+    position: static;
+    width: auto;
+    max-width: none;
+    /* Back to natural height here — the desktop cap and object-fit only make
+       sense while the image is absolutely placed inside a fixed-height card. */
+    height: auto;
+    margin: 40px calc(var(--at-gutter) * -1) 0;
+  }
+  .at-roi-banner__media img { height: auto; object-fit: fill; }
+  .at-roi__head { max-width: none; }
+  .at-roi__title { font-size: 32px; }
+  .at-roi__desc { font-size: 16px; }
+  .at-roi__panel { margin-top: 24px; }
+  .at-roi__form, .at-roi__result { padding: 20px; border-radius: var(--at-r-lg); }
+  .at-roi__form-title { font-size: 20px; margin-bottom: 20px; }
+  .at-roi__control { height: 56px; font-size: 16px; }
+  .at-roi__amount { font-size: 40px; }
+  .at-roi__driver { font-size: 15px; padding: 12px 0; }
+  .at-roi__ctas { flex-direction: column; }
+  .at-roi__ctas .at-btn { width: 100%; }
+
+  /* Overlay dialog on phones — inset from screen edge so it reads as a modal,
+     not a takeover. dvh handles the mobile URL-bar height changes. */
+  .at-roi-modal { padding: 16px; place-items: center; }
+  .at-roi-modal__panel {
+    width: 100%;
+    max-height: calc(100dvh - 32px);
+    min-height: 0;
+    border-radius: var(--at-r-lg);
+    padding: 24px 20px 44px;
+  }
+  .at-roi-modal__head { margin-bottom: 20px; }
+  .at-roi-modal__title { font-size: 22px; margin: 0 0 8px; margin-right: 48px; }
+  .at-roi-modal__sub { font-size: 14px; }
+  .at-roi-modal__close { width: 40px; height: 40px; }
+  /* Scroll hint — chevron bouncing at the panel's bottom edge signals the body
+     scrolls. Panel is overflow:hidden so the chevron never sits over content
+     that has already scrolled past. Desktop doesn't need this. */
+  .at-roi-modal__panel::after {
+    content: "";
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    width: 26px;
+    height: 26px;
+    background: no-repeat center / 20px 20px
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231F2937' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    opacity: .55;
+    pointer-events: none;
+    animation: at-roi-scroll-hint 1.6s ease-in-out infinite;
+  }
+  @keyframes at-roi-scroll-hint {
+    0%, 100% { transform: translate(-50%, 0); opacity: .55; }
+    50%      { transform: translate(-50%, 6px); opacity: .95; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .at-roi-modal__panel::after { animation: none; transform: translateX(-50%); }
+  }
+}

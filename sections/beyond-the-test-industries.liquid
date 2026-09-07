@@ -1,0 +1,188 @@
+<section class="btt-industries" id="industries">
+  <div class="btt-industries__inner">
+
+    <!-- LEFT: heading + actions (desktop) -->
+    <div class="btt-industries__left btt-reveal-up">
+      <div>
+        <div class="btt-industries__eyebrow">Industries we serve</div>
+        <h2 class="btt-industries__heading">{{ section.settings.heading | default: "Scope of Industries" }}</h2>
+        <p class="btt-industries__sub">{{ section.settings.subheading | default: "Get tailored resources, tools and guidance for your sector." }}</p>
+      </div>
+      <button class="btt-industries__expand-btn btt-btn btt-btn--primary btt-btn--specular" id="btt-expand-btn">
+        View All Industries
+        <span class="btt-btn__icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4l7 8-7 8"/></svg>
+        </span>
+      </button>
+    </div>
+
+    <!-- MOBILE header (eyebrow + heading + sub) — order:1 on mobile, shown above carousel -->
+    <div class="btt-industries__mobile-header btt-reveal-up">
+      <div class="btt-industries__eyebrow">Industries we serve</div>
+      <h2 class="btt-industries__heading">{{ section.settings.heading | default: "Scope of Industries" }}</h2>
+      <p class="btt-industries__sub">{{ section.settings.subheading | default: "Get tailored resources, tools and guidance for your sector." }}</p>
+    </div>
+
+    <!-- RIGHT: card swap deck — order:2 on mobile -->
+    <div class="btt-industries__deck-wrap btt-reveal-up btt-reveal-up--delay" id="btt-deck-wrap">
+      <div class="btt-industries__deck" id="btt-deck">
+        {% assign card_index = 0 %}
+        {% for block in section.blocks %}
+          {% if block.type == 'industry' %}
+            <div class="btt-industries__deck-card" data-index="{{ card_index }}" data-link="{{ block.settings.link }}">
+              {%- comment -%}
+                Alt text notes — applies to all three layouts in this file.
+
+                PHOTOS get descriptive alt with a fallback, so the attribute
+                can never render empty if the block's name is left blank in the
+                theme editor. "Mining worksite" rather than bare "Mining": the
+                name already appears as the visible heading just below, so
+                repeating it alone adds nothing for a screen reader user.
+
+                ICONS use alt="" deliberately. They sit directly beside that
+                same visible heading, so alt text would make a screen reader
+                announce the industry twice — "Mining, Mining". An empty alt is
+                the correct accessible choice for an image carrying no
+                information beyond adjacent text.
+
+                Automated SEO scanners cannot distinguish "empty because
+                someone forgot" from "empty because it is decorative", and will
+                flag these as missing alt text. That is a false positive.
+                Filling them in would make the page worse for screen reader
+                users in order to satisfy a checker.
+              {%- endcomment -%}
+              {% if block.settings.photo != blank %}
+                <img src="{{ block.settings.photo | image_url: width: 900 }}" alt="{{ block.settings.name | default: 'Industry' }} worksite" class="btt-industries__deck-photo">
+              {% elsif block.settings.icon != blank %}
+                <img src="{{ block.settings.icon | image_url: width: 400 }}" alt="" class="btt-industries__deck-photo btt-industries__deck-photo--icon">
+              {% endif %}
+              <div class="btt-industries__deck-overlay"></div>
+              <div class="btt-industries__deck-content">
+                <span class="btt-industries__deck-counter">{{ card_index | plus: 1 }}/{{ section.blocks.size }}</span>
+                <h3 class="btt-industries__deck-name">{{ block.settings.name }}</h3>
+                <p class="btt-industries__deck-body">{{ block.settings.body }}</p>
+              </div>
+              {% if block.settings.link != blank %}
+                <a href="{{ block.settings.link }}" class="btt-industries__deck-link" aria-label="View {{ block.settings.name }}" data-deck-link>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                  </svg>
+                </a>
+              {% endif %}
+            </div>
+            {% assign card_index = card_index | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <!-- Dots -->
+      <div class="btt-industries__dots" id="btt-deck-dots">
+        {% assign dot_index = 0 %}
+        {% for block in section.blocks %}
+          {% if block.type == 'industry' %}
+            <button class="btt-industries__dot" data-dot="{{ dot_index }}" aria-label="Industry {{ dot_index | plus: 1 }}"></button>
+            {% assign dot_index = dot_index | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    </div><!-- end deck-wrap -->
+
+    <!-- MOBILE CTA — order:3 on mobile, shown below carousel -->
+    <div class="btt-industries__mobile-cta">
+      <button class="btt-industries__expand-btn btt-btn btt-btn--primary btt-btn--specular btt-btn--full" id="btt-expand-btn-mobile">
+        View All Industries
+        <span class="btt-btn__icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4l7 8-7 8"/></svg>
+        </span>
+      </button>
+    </div>
+
+  </div><!-- end inner -->
+
+<!-- MODAL OVERLAY: desktop expand -->
+<div class="btt-industries__modal" id="btt-modal" aria-hidden="true" role="dialog" aria-label="All Industries">
+  <div class="btt-industries__modal-backdrop" id="btt-modal-backdrop"></div>
+  <div class="btt-industries__modal-panel">
+    <div class="btt-industries__modal-header">
+      <h3 class="btt-industries__modal-title">All Industries</h3>
+      <button class="btt-industries__modal-close" id="btt-modal-close" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="btt-industries__modal-grid">
+      {% for block in section.blocks %}
+        {% if block.type == 'industry' %}
+          <div class="btt-industries__card" data-tilt>
+            <div class="btt-industries__card-spotlight"></div>
+            {% if block.settings.icon != blank %}
+              {%- comment -%} Decorative — the name is the h4 immediately below. {%- endcomment -%}
+              <img src="{{ block.settings.icon | image_url: width: 200 }}" alt="" class="btt-industries__card-icon">
+            {% endif %}
+            <h4 class="btt-industries__card-name">{{ block.settings.name }}</h4>
+            <p class="btt-industries__card-body">{{ block.settings.body }}</p>
+            <a href="{{ block.settings.link | default: '#' }}" class="btt-industries__card-btn" aria-label="{{ block.settings.name }}">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4l7 8-7 8"/></svg>
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE CAROUSEL: shown as full-screen on mobile expand -->
+<div class="btt-industries__mobile-modal" id="btt-mobile-modal" aria-hidden="true">
+  <div class="btt-industries__mobile-modal-inner">
+    <div class="btt-industries__mobile-modal-header">
+      <span>All Industries</span>
+      <button class="btt-industries__modal-close" id="btt-mobile-modal-close" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="btt-industries__carousel" id="btt-carousel">
+      {% for block in section.blocks %}
+        {% if block.type == 'industry' %}
+          <div class="btt-industries__carousel-card">
+            {% if block.settings.photo != blank %}
+              <img src="{{ block.settings.photo | image_url: width: 600 }}" alt="{{ block.settings.name | default: 'Industry' }} worksite" class="btt-industries__carousel-photo">
+            {% elsif block.settings.icon != blank %}
+              {%- comment -%} Decorative — the name is the h4 immediately below. {%- endcomment -%}
+              <img src="{{ block.settings.icon | image_url: width: 200 }}" alt="" class="btt-industries__carousel-icon">
+            {% endif %}
+            <h4 class="btt-industries__carousel-name">{{ block.settings.name }}</h4>
+            <p class="btt-industries__carousel-body">{{ block.settings.body }}</p>
+            <a href="{{ block.settings.link | default: '#' }}" class="btt-industries__card-btn">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4l7 8-7 8"/></svg>
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "BTT Industries",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Section heading", "default": "Scope of Industries" },
+    { "type": "text", "id": "subheading", "label": "Section subheading", "default": "Get tailored resources, tools and guidance for your sector." }
+  ],
+  "blocks": [
+    {
+      "type": "industry",
+      "name": "Industry",
+      "settings": [
+        { "type": "image_picker", "id": "photo", "label": "Background photo" },
+        { "type": "image_picker", "id": "icon", "label": "3D icon (fallback / used in grid)" },
+        { "type": "text", "id": "name", "label": "Industry name", "default": "Aviation" },
+        { "type": "textarea", "id": "body", "label": "Short description", "default": "Ensure CASA-compliant alcohol and drug testing for aviation personnel." },
+        { "type": "url", "id": "link", "label": "Card link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "BTT Industries" }]
+}
+{% endschema %}

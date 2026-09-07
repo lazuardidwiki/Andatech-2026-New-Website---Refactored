@@ -1,0 +1,190 @@
+{%- comment -%}
+  Andatech — Readiness & ROI Estimator (Managed Compliance Programs).
+  Readiness: Yes = 2, Unsure = 1, No = 0. ROI uses visitor-entered figures only.
+{%- endcomment -%}
+
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-industry.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-mcp.css' | asset_url | stylesheet_tag }}
+
+<section class="at-mcp-readiness" id="readiness" data-mcp-readiness>
+  <div class="at-shell">
+    {%- if section.settings.eyebrow != blank -%}<p class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+    <h2 class="at-industry__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>
+    {%- if section.settings.desc != blank -%}<div class="at-mcp-readiness__intro" data-at-rise>{{ section.settings.desc }}</div>{%- endif -%}
+
+    <div class="at-mcp-readiness__stepper" role="tablist" aria-label="Readiness and ROI estimator steps" data-at-rise>
+      <button class="at-mcp-readiness__step-pill is-active" id="McpReadinessStep1-{{ section.id }}" type="button" role="tab" aria-selected="true" aria-controls="McpReadinessPanel1-{{ section.id }}" data-readiness-step="1">Step 1: Readiness</button>
+      <button class="at-mcp-readiness__step-pill" id="McpReadinessStep2-{{ section.id }}" type="button" role="tab" aria-selected="false" aria-controls="McpReadinessPanel2-{{ section.id }}" data-readiness-step="2">Step 2: Your Numbers</button>
+    </div>
+
+    <div class="at-mcp-readiness__step-content is-active" id="McpReadinessPanel1-{{ section.id }}" role="tabpanel" aria-labelledby="McpReadinessStep1-{{ section.id }}" data-readiness-panel="1">
+      <div class="at-mcp-readiness__questions">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'question' -%}
+            <div class="at-mcp-readiness__q-card" data-readiness-question data-gap-label="{{ block.settings.gap_label | default: block.settings.question | escape }}" data-at-rise {{ block.shopify_attributes }}>
+              <h3>{{ block.settings.question | escape }}</h3>
+              <div class="at-mcp-readiness__pills" role="group" aria-label="{{ block.settings.question | escape }}">
+                <button class="at-mcp-readiness__pill" type="button" data-answer="yes" data-score="2" aria-pressed="false">Yes</button>
+                <button class="at-mcp-readiness__pill" type="button" data-answer="no" data-score="0" aria-pressed="false">No</button>
+                <button class="at-mcp-readiness__pill" type="button" data-answer="unsure" data-score="1" aria-pressed="false">Unsure</button>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <p class="at-mcp-readiness__error" data-readiness-error role="alert" hidden>Please answer every readiness question before continuing.</p>
+      <div class="at-mcp-readiness__actions">
+        <button class="at-btn at-btn--green" type="button" data-readiness-next>
+          {{ section.settings.step1_cta | default: 'See Your Score & Estimated ROI' | escape }}
+          <i class="at-btn__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="at-mcp-readiness__step-content" id="McpReadinessPanel2-{{ section.id }}" role="tabpanel" aria-labelledby="McpReadinessStep2-{{ section.id }}" data-readiness-panel="2" hidden>
+      <div class="at-mcp-readiness__calculator">
+        <form class="at-mcp-readiness__form" data-roi-form novalidate>
+          <div class="at-mcp-readiness__form-head">
+            <h3>Your operating numbers</h3>
+            <p>Use your organisation’s current or quoted figures. Enter zero where a cost does not apply.</p>
+          </div>
+          <div class="at-mcp-readiness__fields">
+            <label class="at-mcp-readiness__field"><span>Number of employees</span><input type="number" min="0" step="1" inputmode="numeric" value="{{ section.settings.default_employees }}" data-roi-input="employees"></label>
+            <label class="at-mcp-readiness__field"><span>Number of sites</span><input type="number" min="0" step="1" inputmode="numeric" value="{{ section.settings.default_sites }}" data-roi-input="sites"></label>
+            <label class="at-mcp-readiness__field"><span>Collectors required</span><input type="number" min="0" step="1" inputmode="numeric" value="{{ section.settings.default_collectors }}" data-roi-input="collectors"></label>
+            <label class="at-mcp-readiness__field"><span>Estimated tests per year</span><input type="number" min="0" step="1" inputmode="numeric" value="{{ section.settings.default_tests }}" data-roi-input="tests"></label>
+            <label class="at-mcp-readiness__field"><span>Average outsourced cost per test</span><span class="at-mcp-readiness__money"><span aria-hidden="true">$</span><input type="number" min="0" step="1" inputmode="decimal" value="{{ section.settings.default_test_cost }}" data-roi-input="test-cost"></span></label>
+            <label class="at-mcp-readiness__field"><span>Annual callout, travel and related costs</span><span class="at-mcp-readiness__money"><span aria-hidden="true">$</span><input type="number" min="0" step="1" inputmode="decimal" value="{{ section.settings.default_other_cost }}" data-roi-input="other-cost"></span></label>
+            <label class="at-mcp-readiness__field"><span>Testing planned to move in-house</span><span class="at-mcp-readiness__percent"><input type="number" min="0" max="100" step="1" inputmode="numeric" value="{{ section.settings.default_internal_share }}" data-roi-input="internal-share"><span aria-hidden="true">%</span></span></label>
+            <label class="at-mcp-readiness__field"><span>One-off setup, equipment and training</span><span class="at-mcp-readiness__money"><span aria-hidden="true">$</span><input type="number" min="0" step="1" inputmode="decimal" value="{{ section.settings.default_setup_cost }}" data-roi-input="setup-cost"></span></label>
+            <label class="at-mcp-readiness__field"><span>Ongoing annual program cost</span><span class="at-mcp-readiness__money"><span aria-hidden="true">$</span><input type="number" min="0" step="1" inputmode="decimal" value="{{ section.settings.default_ongoing_cost }}" data-roi-input="ongoing-cost"></span></label>
+          </div>
+        </form>
+
+        <div class="at-mcp-readiness__results" aria-live="polite" aria-atomic="false">
+          <div class="at-mcp-readiness__score-head"><div><p>Your readiness score</p><strong data-readiness-score>0%</strong></div><span data-readiness-label>Complete Step 1</span></div>
+          <div class="at-mcp-readiness__result-list">
+            <div class="at-mcp-readiness__result-row"><span>Current annual outsourced cost</span><strong data-roi-output="external">$0</strong></div>
+            <div class="at-mcp-readiness__result-row"><span>External cost potentially avoided</span><strong data-roi-output="avoided">$0</strong></div>
+            <div class="at-mcp-readiness__result-row"><span>Estimated year-one program cost</span><strong data-roi-output="year-one-cost">$0</strong></div>
+            <div class="at-mcp-readiness__result-row at-mcp-readiness__result-row--primary"><span>Indicative year-one net difference</span><strong data-roi-output="year-one-net">$0</strong></div>
+            <div class="at-mcp-readiness__result-row"><span>Indicative ongoing annual difference</span><strong data-roi-output="ongoing-net">$0</strong></div>
+            <div class="at-mcp-readiness__result-row"><span>Indicative year-one ROI</span><strong data-roi-output="roi">—</strong></div>
+            <div class="at-mcp-readiness__result-row"><span>Indicative payback period</span><strong data-roi-output="payback">—</strong></div>
+          </div>
+          <div class="at-mcp-readiness__priorities"><h3>Capability priorities</h3><p data-capability-summary>Complete the readiness questions to see suggested priorities.</p><ul data-capability-list></ul></div>
+        </div>
+      </div>
+
+      <details class="at-mcp-readiness__method">
+        <summary>How the estimate is calculated <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 9 7 7 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <div>
+          <p><strong>Current outsourced cost</strong> = annual tests × outsourced cost per test + annual callout, travel and related costs.</p>
+          <p><strong>Potentially avoided cost</strong> = current outsourced cost × the percentage of testing planned to move in-house.</p>
+          <p><strong>Year-one ROI</strong> = (potentially avoided cost − one-off setup cost − ongoing annual program cost) ÷ total year-one program cost.</p>
+          <p>The tool does not assign a financial value to safety, compliance, avoided incidents or productivity. Those benefits require organisation-specific evidence.</p>
+        </div>
+      </details>
+      {%- if section.settings.disclaimer != blank -%}<div class="at-mcp-readiness__fine-print">{{ section.settings.disclaimer }}</div>{%- endif -%}
+      <div class="at-mcp-readiness__actions at-mcp-readiness__actions--split">
+        <button class="at-btn at-btn--outline-dark" type="button" data-readiness-back><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m14 5.5-6.5 6.5 6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Readiness</button>
+        {%- if section.settings.results_cta_label != blank -%}<a class="at-btn at-btn--green" href="{{ section.settings.results_cta_url | default: '#contact' }}">{{ section.settings.results_cta_label | escape }} <i class="at-btn__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>{%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  var root = document.querySelector('#readiness[data-mcp-readiness]');
+  if (!root || root.dataset.ready === 'true') return;
+  root.dataset.ready = 'true';
+  var stepButtons = Array.prototype.slice.call(root.querySelectorAll('[data-readiness-step]'));
+  var panels = Array.prototype.slice.call(root.querySelectorAll('[data-readiness-panel]'));
+  var questions = Array.prototype.slice.call(root.querySelectorAll('[data-readiness-question]'));
+  var error = root.querySelector('[data-readiness-error]');
+  var currency = new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: 0 });
+
+  function numeric(name) { var input = root.querySelector('[data-roi-input="' + name + '"]'); var value = input ? Number(input.value) : 0; return Number.isFinite(value) && value > 0 ? value : 0; }
+  function readinessResult() {
+    var total = 0, answered = 0, gaps = [];
+    questions.forEach(function (question) { var active = question.querySelector('.at-mcp-readiness__pill.is-active'); if (!active) return; answered += 1; total += Number(active.dataset.score || 0); if (active.dataset.answer !== 'yes') gaps.push(question.dataset.gapLabel); });
+    return { answered: answered, score: questions.length ? Math.round((total / (questions.length * 2)) * 100) : 0, gaps: gaps };
+  }
+  function scoreLabel(score) { if (score >= 85) return 'Strong foundations'; if (score >= 65) return 'Good base, with gaps'; if (score >= 40) return 'Several priorities to address'; return 'Foundations need attention'; }
+  function setOutput(name, value) { var output = root.querySelector('[data-roi-output="' + name + '"]'); if (output) output.textContent = value; }
+  function updateResults() {
+    var readiness = readinessResult(), score = root.querySelector('[data-readiness-score]'), label = root.querySelector('[data-readiness-label]');
+    if (score) score.textContent = readiness.score + '%';
+    if (label) label.textContent = readiness.answered === questions.length ? scoreLabel(readiness.score) : 'Complete Step 1';
+    var external = (numeric('tests') * numeric('test-cost')) + numeric('other-cost');
+    var avoided = external * (Math.min(100, numeric('internal-share')) / 100);
+    var setupCost = numeric('setup-cost'), ongoingCost = numeric('ongoing-cost'), yearOneCost = setupCost + ongoingCost;
+    var yearOneNet = avoided - yearOneCost, ongoingNet = avoided - ongoingCost;
+    var roi = yearOneCost > 0 ? (yearOneNet / yearOneCost) * 100 : null;
+    var payback = ongoingNet > 0 ? setupCost / (ongoingNet / 12) : null;
+    setOutput('external', currency.format(external)); setOutput('avoided', currency.format(avoided)); setOutput('year-one-cost', currency.format(yearOneCost)); setOutput('year-one-net', currency.format(yearOneNet)); setOutput('ongoing-net', currency.format(ongoingNet));
+    setOutput('roi', roi === null ? '—' : Math.round(roi) + '%'); setOutput('payback', payback === null ? 'Not reached from these inputs' : (payback < 1 ? 'Under 1 month' : payback.toFixed(1) + ' months'));
+    var summary = root.querySelector('[data-capability-summary]'), list = root.querySelector('[data-capability-list]');
+    if (summary) summary.textContent = readiness.gaps.length ? readiness.gaps.length + (readiness.gaps.length === 1 ? ' readiness priority identified.' : ' readiness priorities identified.') : 'No immediate gaps were selected. Validate the result through a formal review.';
+    if (list) { list.innerHTML = ''; readiness.gaps.forEach(function (gap) { var item = document.createElement('li'); item.textContent = gap; list.appendChild(item); }); var sites = numeric('sites'), collectors = numeric('collectors'); if (collectors || sites) { var coverage = document.createElement('li'); coverage.textContent = 'Plan role coverage for ' + collectors + (collectors === 1 ? ' collector' : ' collectors') + ' across ' + sites + (sites === 1 ? ' site.' : ' sites.'); list.appendChild(coverage); } }
+  }
+  function showStep(number, focusPanel) {
+    stepButtons.forEach(function (button) { var active = button.dataset.readinessStep === String(number); button.classList.toggle('is-active', active); button.setAttribute('aria-selected', active ? 'true' : 'false'); });
+    panels.forEach(function (panel) { var active = panel.dataset.readinessPanel === String(number); panel.classList.toggle('is-active', active); panel.hidden = !active; if (active && focusPanel) { panel.setAttribute('tabindex', '-1'); panel.focus({ preventScroll: true }); } });
+    if (number === 2) updateResults();
+  }
+  function continueToCalculator() {
+    var firstMissing = questions.find(function (question) { return !question.querySelector('.at-mcp-readiness__pill.is-active'); });
+    questions.forEach(function (question) { question.classList.toggle('is-error', question === firstMissing); });
+    if (firstMissing) { if (error) error.hidden = false; var firstButton = firstMissing.querySelector('button'); if (firstButton) firstButton.focus(); return; }
+    if (error) error.hidden = true; showStep(2, true);
+  }
+  questions.forEach(function (question) { var buttons = Array.prototype.slice.call(question.querySelectorAll('.at-mcp-readiness__pill')); buttons.forEach(function (button) { button.addEventListener('click', function () { buttons.forEach(function (item) { var active = item === button; item.classList.toggle('is-active', active); item.setAttribute('aria-pressed', active ? 'true' : 'false'); }); question.classList.remove('is-error'); if (error && questions.every(function (item) { return item.querySelector('.at-mcp-readiness__pill.is-active'); })) error.hidden = true; updateResults(); }); }); });
+  stepButtons.forEach(function (button) { button.addEventListener('click', function () { if (button.dataset.readinessStep === '2') continueToCalculator(); else showStep(1, false); }); });
+  var next = root.querySelector('[data-readiness-next]'), back = root.querySelector('[data-readiness-back]');
+  if (next) next.addEventListener('click', continueToCalculator); if (back) back.addEventListener('click', function () { showStep(1, true); });
+  Array.prototype.slice.call(root.querySelectorAll('[data-roi-input]')).forEach(function (input) { input.addEventListener('input', updateResults); });
+  updateResults();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "MCP Readiness & ROI", "tag": "section", "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Readiness & ROI Estimator" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "How ready is your workplace," },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "and what could stronger capability be worth?" },
+    { "type": "richtext", "id": "desc", "label": "Description", "default": "<p>Evaluate your current testing readiness, then compare your own outsourced testing costs with an internal capability model. Results are directional and use only the figures you enter.</p>" },
+    { "type": "text", "id": "step1_cta", "label": "Step 1 next button label", "default": "See Your Score & Estimated ROI" },
+    { "type": "text", "id": "results_cta_label", "label": "Results CTA label", "default": "Discuss Your Results" },
+    { "type": "url", "id": "results_cta_url", "label": "Results CTA link" },
+    { "type": "richtext", "id": "disclaimer", "label": "Calculator disclaimer", "default": "<p>This self-assessment is general information only. Results are indicative, depend entirely on the figures entered, and do not guarantee financial, safety, legal or compliance outcomes. Confirm program scope, applicable laws, standards and costs with qualified advisers and an Andatech compliance specialist.</p>" },
+    { "type": "header", "content": "Starting values" },
+    { "type": "paragraph", "content": "Keep monetary values at zero unless Andatech has approved customer-facing assumptions. Visitors can enter their own figures in the calculator." },
+    { "type": "number", "id": "default_employees", "label": "Employees", "default": 0 },
+    { "type": "number", "id": "default_sites", "label": "Sites", "default": 0 },
+    { "type": "number", "id": "default_collectors", "label": "Collectors required", "default": 0 },
+    { "type": "number", "id": "default_tests", "label": "Tests per year", "default": 0 },
+    { "type": "number", "id": "default_test_cost", "label": "Outsourced cost per test", "default": 0 },
+    { "type": "number", "id": "default_other_cost", "label": "Annual callout and related costs", "default": 0 },
+    { "type": "number", "id": "default_internal_share", "label": "Testing planned to move in-house (%)", "default": 0 },
+    { "type": "number", "id": "default_setup_cost", "label": "One-off setup cost", "default": 0 },
+    { "type": "number", "id": "default_ongoing_cost", "label": "Ongoing annual program cost", "default": 0 }
+  ],
+  "blocks": [{ "type": "question", "name": "Readiness Question", "limit": 8, "settings": [
+    { "type": "text", "id": "question", "label": "Question", "default": "Do you have a documented D&A policy?" },
+    { "type": "text", "id": "gap_label", "label": "Priority shown for No or Unsure", "default": "Document and review your D&A policy" }
+  ] }],
+  "presets": [{ "name": "MCP Readiness & ROI", "blocks": [
+    { "type": "question", "settings": { "question": "Do you have a documented D&A policy?", "gap_label": "Document and review your D&A policy" } },
+    { "type": "question", "settings": { "question": "Are your collectors appropriately trained?", "gap_label": "Confirm collector training and competency" } },
+    { "type": "question", "settings": { "question": "Do you have documented collection procedures?", "gap_label": "Standardise collection procedures across sites and shifts" } },
+    { "type": "question", "settings": { "question": "Can you demonstrate chain of custody?", "gap_label": "Strengthen chain-of-custody records and controls" } },
+    { "type": "question", "settings": { "question": "Is your testing equipment appropriate for your program?", "gap_label": "Review equipment, test methods and maintenance requirements" } },
+    { "type": "question", "settings": { "question": "Are records consistently maintained?", "gap_label": "Create consistent recordkeeping, access and review practices" } }
+  ] }]
+}
+{% endschema %}

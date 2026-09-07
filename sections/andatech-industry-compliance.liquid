@@ -1,0 +1,219 @@
+{%- comment -%} Andatech — Industry compliance requirements. {%- endcomment -%}
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-industry.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign compliance_zoom = section.settings.image_zoom | default: 100 | times: 0.01
+  assign compliance_height = section.settings.desktop_height | default: 860
+  assign compliance_anchor = section.settings.image_anchor | default: 'right bottom'
+-%}
+
+<style>
+  #AtIndustryCompliance-{{ section.id }} {
+    position: relative;
+    min-height: {{ compliance_height }}px;
+    padding-block: 0;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--at-white);
+  }
+  #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    min-height: {{ compliance_height }}px;
+    padding-block: clamp(72px, 7.4vw, 128px);
+  }
+  #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__content {
+    position: relative;
+    z-index: 2;
+    width: min(50%, 820px);
+  }
+  #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__content .at-btn { margin-top: 34px; }
+#AtIndustryCompliance-{{ section.id }} .at-industry-compliance__list {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: clamp(32px, 3vw, 56px);
+  row-gap: 16px;
+  margin-top: 48px;
+}
+  #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--at-navy);
+    font-size: clamp(16px, 1.39vw, 24px);
+    line-height: 1.5;
+  }
+  #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__list li span {
+    flex: 0 0 auto;
+    width: 8px;
+    height: 8px;
+    margin-top: .6em;
+    border: 2px solid var(--at-teal);
+    border-radius: 50%;
+  }
+  #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__visual {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: {{ compliance_anchor }};
+    transform: scale({{ compliance_zoom }});
+    transform-origin: {{ compliance_anchor }};
+  }
+  #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__image--mobile { display: none; }
+  #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__logos {
+    position: absolute;
+    z-index: 3;
+    right: max(var(--at-gutter), 2.78vw);
+    bottom: 24px;
+    width: min(420px, calc(50% - 48px));
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  @media (max-width: 1279px) {
+    #AtIndustryCompliance-{{ section.id }},
+    #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__inner { min-height: 640px; }
+    #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__content { width: 52%; }
+  }
+  @media (max-width: 767px) {
+    #AtIndustryCompliance-{{ section.id }} {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: var(--at-white);
+    }
+    #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__inner {
+      order: 1;
+      align-items: flex-start;
+      min-height: 0;
+      padding: 56px var(--at-gutter) 48px;
+    }
+    #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__content {
+      width: 100%;
+    }
+    #AtIndustryCompliance-{{ section.id }} [data-at-rise] {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+    }
+    #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__content .at-btn { margin-top: 28px; }
+    #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__list {
+      grid-template-columns: 1fr;
+      gap: 0;
+      margin-top: 36px;
+      text-align: center;
+    }
+    #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__list li {
+      justify-content: center;
+      width: 100%;
+      padding: 14px 4px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__list li + li {
+      border-top: 1px solid #DDE0E3;
+    }
+    #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__list li span {
+      display: none;
+    }
+    #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__visual {
+      position: relative;
+      order: 2;
+      inset: auto;
+      height: auto;
+      aspect-ratio: 1 / 1;
+    }
+    #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__image {
+      object-position: {{ compliance_anchor }};
+    }
+    #AtIndustryCompliance-{{ section.id }}.at-industry-compliance--has-mobile-image .at-industry-compliance__image--desktop { display: none; }
+    #AtIndustryCompliance-{{ section.id }}.at-industry-compliance--has-mobile-image .at-industry-compliance__image--mobile { display: block; }
+    #AtIndustryCompliance-{{ section.id }} .at-industry-compliance__logos {
+      right: var(--at-gutter);
+      bottom: var(--at-gutter);
+      width: calc(100% - (var(--at-gutter) * 2));
+      padding: 0;
+    }
+  }
+</style>
+
+<div class="at-industry-anchor" id="{{ section.settings.anchor_id | default: 'industry-compliance' | handleize }}">
+<section class="at-industry at-industry-compliance{% if section.settings.mobile_image != blank %} at-industry-compliance--has-mobile-image{% endif %}" id="AtIndustryCompliance-{{ section.id }}">
+  <div class="at-industry-compliance__visual" aria-hidden="true">
+    {%- if section.settings.image != blank or section.settings.mobile_image != blank -%}
+      {%- assign compliance_fallback_image = section.settings.image | default: section.settings.mobile_image -%}
+      <img class="at-industry-compliance__image at-industry-compliance__image--desktop" src="{{ compliance_fallback_image | image_url: width: 2400 }}" alt="" loading="lazy">
+      {%- if section.settings.mobile_image != blank -%}<img class="at-industry-compliance__image at-industry-compliance__image--mobile" src="{{ section.settings.mobile_image | image_url: width: 1200 }}" alt="" loading="lazy">{%- endif -%}
+    {%- endif -%}
+  </div>
+  <div class="at-shell at-industry-compliance__inner">
+    <div class="at-industry-compliance__content">
+      {%- if section.settings.eyebrow != blank -%}<p class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      <h2 class="at-industry__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>
+      {%- if section.settings.desc != blank -%}<div class="at-industry__desc" data-at-rise>{{ section.settings.desc }}</div>{%- endif -%}
+      {%- if section.settings.cta_label != blank -%}<a class="at-btn at-btn--green" href="{{ section.settings.cta_url | default: '#' }}" data-at-rise>{{ section.settings.cta_label | escape }} <i class="at-btn__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>{%- endif -%}
+      <ul class="at-industry-compliance__list" data-at-rise>
+        {%- for block in section.blocks -%}<li {{ block.shopify_attributes }}><span aria-hidden="true"></span>{{ block.settings.text | escape }}</li>{%- endfor -%}
+      </ul>
+    </div>
+  </div>
+  {%- if section.settings.accreditations != blank -%}<img class="at-industry-compliance__logos" src="{{ section.settings.accreditations | image_url: width: 900 }}" alt="{{ section.settings.accreditations.alt | default: 'Industry accreditations and standards' | escape }}" loading="lazy">{%- endif -%}
+</section>
+</div>
+
+{% schema %}
+{
+  "name": "Industry Compliance",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "industry-compliance" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Standards & Compliance" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "The Industry" },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "Compliance Requirements" },
+    { "type": "richtext", "id": "desc", "label": "Description", "default": "<p>The requirements below inform how testing is planned, documented and applied across safety-critical operations.</p>" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Learn More" },
+    { "type": "url", "id": "cta_url", "label": "Button link" },
+    { "type": "header", "content": "Responsive background images" },
+    { "type": "image_picker", "id": "image", "label": "Desktop industry image" },
+    { "type": "image_picker", "id": "mobile_image", "label": "Mobile industry image", "info": "Shown below 768px. The desktop image is used when this is blank." },
+    { "type": "range", "id": "image_zoom", "label": "Image zoom", "min": 100, "max": 200, "step": 5, "unit": "%", "default": 100, "info": "Increase this only when additional cropping is needed." },
+    { "type": "select", "id": "image_anchor", "label": "Image focal point", "options": [
+      { "value": "right bottom", "label": "Right bottom" },
+      { "value": "right center", "label": "Right centre" },
+      { "value": "center", "label": "Centre" },
+      { "value": "left center", "label": "Left centre" }
+    ], "default": "right bottom" },
+    { "type": "range", "id": "desktop_height", "label": "Section height", "min": 600, "max": 1000, "step": 20, "unit": "px", "default": 860 },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Excavator operating at a heavy industry site" },
+    { "type": "image_picker", "id": "accreditations", "label": "Accreditation strip" }
+  ],
+  "blocks": [{ "type": "requirement", "name": "Requirement", "limit": 12, "settings": [{ "type": "text", "id": "text", "label": "Requirement", "default": "Mine Safety legislation" }] }],
+  "presets": [{ "name": "Industry Compliance", "blocks": [
+    { "type": "requirement", "settings": { "text": "Mine Safety legislation" } },
+    { "type": "requirement", "settings": { "text": "Random Testing" } },
+    { "type": "requirement", "settings": { "text": "WHS Acts" } },
+    { "type": "requirement", "settings": { "text": "Reasonable Cause Testing" } },
+    { "type": "requirement", "settings": { "text": "Chain of Custody" } },
+    { "type": "requirement", "settings": { "text": "Post Incident Testing" } },
+    { "type": "requirement", "settings": { "text": "AS/NZS Standards" } },
+    { "type": "requirement", "settings": { "text": "Fitness for Work Programs" } }
+  ] }]
+}
+{% endschema %}

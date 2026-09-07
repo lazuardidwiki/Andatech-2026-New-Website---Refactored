@@ -1,0 +1,161 @@
+/* ===== Tokens ===== */
+:root{
+  --kby-navy:#111820;
+  --kby-navy-raised:#1B242E;
+  --kby-border:rgba(255,255,255,.10);
+  --kby-border-strong:rgba(255,255,255,.18);
+  --kby-green:#95C11F;
+  --kby-teal:#46BEC4;
+  --kby-amber:#E8A33D;
+  --kby-ink:#EDF1F4;
+  --kby-ink-muted:rgba(237,241,244,.64);
+}
+
+*{ box-sizing:border-box; }
+body{ background:var(--kby-navy); color:var(--kby-ink); font-family:'Titillium Web',sans-serif; margin:0; }
+
+/* The dot-field canvas is position:fixed with z-index:0. Per CSS stacking
+   rules, plain in-flow (non-positioned) content actually paints BEFORE any
+   positioned descendant, regardless of z-index value — so without this,
+   every static section here would render underneath the dot field instead
+   of over it. Giving the whole content wrapper its own stacking context
+   fixes that in one place rather than on every individual section. */
+#main-content{ position:relative; z-index:1; }
+.btt-footer{ position:relative; z-index:1; }
+
+/* Skip link — off-screen until keyboard-focused. This page's layout doesn't
+   load the theme's main.css, so the shared .skip-link/.visually-hidden
+   classes it used to rely on don't exist here — that's why it was showing
+   as an unstyled block instead of being hidden. */
+.kby-skip-link{
+  position:absolute; top:-100px; left:16px; z-index:999;
+  background:var(--kby-green); color:#16210A;
+  font-family:'Titillium Web',sans-serif; font-weight:700; font-size:14px;
+  padding:12px 20px; border-radius:999px; text-decoration:none;
+  transition:top .15s ease;
+}
+.kby-skip-link:focus{ top:16px; }
+
+/* ===== Buttons ===== */
+.kby-btn{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'Titillium Web',sans-serif; font-weight:700; font-size:15px;
+  padding:14px 24px; border-radius:999px; border:1px solid transparent;
+  text-decoration:none; cursor:pointer; transition:background .15s ease, border-color .15s ease, color .15s ease;
+}
+.kby-btn--primary{ background:var(--kby-green); color:#16210A; }
+.kby-btn--primary:hover{ background:#a6d42c; }
+.kby-btn--secondary{ background:transparent; color:var(--kby-ink); border-color:var(--kby-border-strong); }
+.kby-btn--secondary:hover{ border-color:var(--kby-teal); color:var(--kby-teal); }
+.kby-btn--nav{ font-size:14px; padding:11px 22px; }
+
+/* Specular shimmer — ported directly from Beyond The Test's .btt-btn--specular.
+   A skewed white streak sweeps left-to-right across the button on hover. */
+.kby-btn--specular{ position:relative; overflow:hidden; }
+.kby-btn--specular::after{
+  content:''; position:absolute; top:0; left:-60%; width:40%; height:100%;
+  background:linear-gradient(115deg, transparent 0%, rgba(255,255,255,.55) 50%, transparent 100%);
+  transform:skewX(-20deg); transition:left .55s ease; pointer-events:none;
+}
+.kby-btn--specular:hover::after{ left:130%; }
+
+/* ===== Nav =====
+   Fixed, floating glass pill — ported from Beyond The Test's .btt-nav
+   (same padding, blur, hide-on-scroll-down / show-on-scroll-up behavior).
+   Logo doubles as "home" per Dwiki's brief — no separate home/back icon,
+   no search. */
+.kby-nav{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  padding:18px 48px;
+  transform:translateY(0);
+  transition:transform .35s ease;
+}
+.kby-nav.kby-nav--hidden{ transform:translateY(-100%); }
+.kby-nav__bg{
+  position:absolute; inset:0;
+  background:rgba(17,24,32,.9);
+  border-bottom:1px solid var(--kby-border);
+  opacity:0;
+  transition:opacity .35s ease;
+  pointer-events:none;
+}
+.kby-nav__bg.is-blurred{ backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); }
+
+.kby-nav__inner{
+  position:relative;
+  display:flex; align-items:center; justify-content:space-between; gap:24px;
+  min-height:40px;
+}
+
+.kby-nav__logo{ display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--kby-ink); min-width:0; }
+.kby-nav__logo-img{ height:22px; width:auto; flex-shrink:0; display:block; }
+.kby-nav__logo-text{ font-weight:700; font-size:13px; letter-spacing:.3px; white-space:nowrap; }
+
+/* Glass pill, absolutely centered, with a sliding highlight that follows
+   whichever link is hovered (JS adds/positions .kby-nav__menu-highlight). */
+.kby-nav__menu-pill{
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  display:flex; gap:4px; padding:5px;
+  background:rgba(255,255,255,.07);
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:9999px; z-index:1;
+}
+.kby-nav__menu-highlight{
+  position:absolute; top:5px; left:5px; height:calc(100% - 10px);
+  border-radius:9999px; background:rgba(255,255,255,.12); opacity:0;
+  transition:transform .35s cubic-bezier(.22,1,.36,1), width .35s cubic-bezier(.22,1,.36,1), opacity .2s ease;
+  pointer-events:none; z-index:0;
+}
+.kby-nav__menu-highlight.is-active{ opacity:1; }
+.kby-nav__menu-pill a{
+  position:relative; z-index:1; padding:8px 15px; border-radius:9999px;
+  font-family:'Titillium Web',sans-serif; font-size:12.5px; font-weight:600; letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(237,241,244,.88); text-decoration:none; transition:color .2s ease; white-space:nowrap;
+}
+.kby-nav__menu-pill a:hover{ color:#fff; }
+
+.kby-nav__actions{ display:flex; align-items:center; gap:14px; position:relative; z-index:1; }
+
+@media (max-width:900px){
+  .kby-nav{ padding:22px 20px; }
+  .kby-nav__menu-pill{ display:none; }
+  .kby-nav__actions .kby-btn{ display:none; }
+}
+
+.kby-nav__hamburger{
+  display:none; background:none; border:none; color:var(--kby-ink); cursor:pointer; padding:6px;
+  position:relative; z-index:1;
+}
+@media (max-width:900px){
+  .kby-nav__hamburger{ display:flex; }
+}
+
+/* Mobile drawer */
+.kby-drawer-overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:150;
+  opacity:0; pointer-events:none; transition:opacity .25s ease;
+}
+.kby-drawer-overlay.is-active{ opacity:1; pointer-events:auto; }
+.kby-drawer{
+  position:fixed; top:0; right:0; height:100%; width:280px; max-width:80vw;
+  background:var(--kby-navy-raised); border-left:1px solid var(--kby-border);
+  z-index:200; transform:translateX(100%); transition:transform .3s ease;
+  display:flex; flex-direction:column; padding:28px 24px; gap:22px;
+}
+.kby-drawer.is-active{ transform:translateX(0); }
+.kby-drawer a{
+  color:var(--kby-ink); text-decoration:none; font-size:15px; font-weight:600;
+}
+/* .kby-drawer a above has higher specificity than .kby-btn--primary's own
+   color rule (a class+element selector beats a single class), so without
+   this override the Shop Breathalysers link was silently rendering in the
+   light drawer-link color instead of the navy text the button is supposed
+   to have. */
+.kby-drawer .kby-btn--primary{
+  color:#16210A;
+  margin-top:auto;
+}
+.kby-drawer__close{
+  align-self:flex-end; background:none; border:none; color:var(--kby-ink-muted); cursor:pointer;
+}

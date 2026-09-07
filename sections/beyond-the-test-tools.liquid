@@ -1,0 +1,262 @@
+<section class="btt-tools" id="tools">
+  <div class="btt-tools__inner{% if section.settings.layout == 'card_left' %} btt-tools__inner--reversed{% endif %}">
+
+    <!-- Left column: copy + CTA -->
+    <div class="btt-tools__left">
+      <span class="btt-tools__eyebrow">{{ section.settings.eyebrow | default: "Interactive Tool" }}</span>
+      <h2 class="btt-tools__heading">{{ section.settings.heading | default: "Which Testing Approach May Suit Your Workplace?" }}</h2>
+      <p class="btt-tools__sub">{{ section.settings.subtext | default: "Prefer a specific answer over browsing? Four quick questions gets you a tailored recommendation." }}</p>
+
+      <ul class="btt-tools__benefits">
+        <li><span class="btt-tools__check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>{{ section.settings.benefit_1 | default: "No sign-up required" }}</li>
+        <li><span class="btt-tools__check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>{{ section.settings.benefit_2 | default: "Instant, tailored recommendation" }}</li>
+        <li><span class="btt-tools__check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>{{ section.settings.benefit_3 | default: "Practical next steps" }}</li>
+      </ul>
+
+      <div class="btt-tools__time-note">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        {{ section.settings.time_note | default: "Takes about 2 minutes" }}
+      </div>
+
+      <button type="button" class="btt-btn btt-btn--primary btt-btn--specular btt-tools__cta" id="btt-tools-open">
+        {{ section.settings.open_cta_label | default: "Start The Quick Check" }}
+      </button>
+    </div>
+
+    <!-- Right column: 3D tilt preview card -->
+    <div class="btt-tools__card-wrap" id="btt-tools-card-wrap">
+      <div class="btt-tools__card" id="btt-tools-card">
+        <div class="btt-tools__card-glare"></div>
+
+        <div class="btt-tools__panels">
+
+          <!-- Preview panel 1: questions -->
+          <div class="btt-tools__panel">
+            <div class="btt-tools__panel-step">
+              <span class="btt-tools__step-num">1</span>
+              <p class="btt-tools__step-label">Answer 4 quick questions</p>
+            </div>
+            <p class="btt-tools__panel-q">What industry best describes your organisation?</p>
+            <div class="btt-tools__panel-opts">
+              <div class="btt-tools__panel-opt btt-tools__panel-opt--selected">
+                <span class="btt-tools__panel-opt-text" id="btt-tools-cycle-industry">Mining</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+              </div>
+              <div class="btt-tools__panel-opt btt-tools__panel-opt--ghost"></div>
+              <div class="btt-tools__panel-opt btt-tools__panel-opt--ghost"></div>
+            </div>
+          </div>
+
+          <!-- Preview panel 2: matching -->
+          <div class="btt-tools__panel">
+            <div class="btt-tools__panel-step">
+              <span class="btt-tools__step-num btt-tools__step-num--green">2</span>
+              <p class="btt-tools__step-label">Get matched instantly</p>
+            </div>
+            <div class="btt-tools__match-row">
+              <span class="btt-tools__match-chip is-done">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/></svg>
+                Industry
+              </span>
+              <span class="btt-tools__match-chip is-done">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.86L1.82 18a1.5 1.5 0 001.3 2.25h17.76a1.5 1.5 0 001.3-2.25L13.7 3.86a1.5 1.5 0 00-2.6 0z"/></svg>
+                Risk
+              </span>
+              <span class="btt-tools__match-chip is-active">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
+                Objective
+              </span>
+            </div>
+            <p class="btt-tools__match-caption">Matching your answers to the right approach&hellip;</p>
+          </div>
+
+          <!-- Preview panel 3: recommendation -->
+          <div class="btt-tools__panel">
+            <div class="btt-tools__panel-step">
+              <span class="btt-tools__step-num btt-tools__step-num--green">3</span>
+              <p class="btt-tools__step-label">See your recommendation</p>
+            </div>
+            <div class="btt-tools__recs">
+              <div class="btt-tools__rec">
+                <span class="btt-tools__rec-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>
+                Recommended testing approach
+              </div>
+              <div class="btt-tools__rec">
+                <span class="btt-tools__rec-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>
+                Related guides &amp; resources
+              </div>
+              <div class="btt-tools__rec">
+                <span class="btt-tools__rec-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>
+                Book a workplace review
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="btt-tools__swipe-dots">
+        <span class="btt-tools__swipe-dot is-active"></span>
+        <span class="btt-tools__swipe-dot"></span>
+        <span class="btt-tools__swipe-dot"></span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== MODAL: the actual wizard lives here ===== -->
+  <div class="btt-tools__modal" id="btt-tools-modal" aria-hidden="true">
+    <div class="btt-tools__modal-backdrop" id="btt-tools-backdrop"></div>
+    <div class="btt-tools__modal-panel-frame">
+    <div class="btt-tools__modal-panel" role="dialog" aria-modal="true" aria-label="Testing approach quick check">
+      <button class="btt-tools__modal-close" id="btt-tools-close" type="button" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+
+      <!-- Question screen -->
+      <div id="btt-tools-question-screen">
+        <div class="btt-tools__progress-wrap">
+          <div class="btt-tools__progress-bar" id="btt-tools-progress"></div>
+        </div>
+        <span class="btt-tools__modal-step-label" id="btt-tools-step-label">Step 1 of 4</span>
+        <h3 class="btt-tools__modal-q" id="btt-tools-q-text">Industry</h3>
+        <div class="btt-tools__modal-opts" id="btt-tools-opts"></div>
+        <button class="btt-tools__back" id="btt-tools-back" type="button" hidden>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+          Back
+        </button>
+      </div>
+
+      <!-- Result screen -->
+      <div id="btt-tools-result-screen" style="display:none;">
+        <div class="btt-tools__result-top">
+          <span class="btt-tools__result-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+          </span>
+          <div class="btt-tools__result-heading-wrap">
+            <span class="btt-tools__result-eyebrow">Recommended Approach</span>
+            <h3 class="btt-tools__result-title" id="btt-tools-result-title"></h3>
+          </div>
+        </div>
+
+        <p class="btt-tools__result-body" id="btt-tools-result-body"></p>
+
+        <div class="btt-tools__meta" id="btt-tools-meta"></div>
+
+        <span class="btt-tools__resources-label">Related Resources</span>
+        <div class="btt-tools__resources" id="btt-tools-resources"></div>
+
+        <div class="btt-tools__result-actions">
+          <a href="{{ section.settings.book_review_url | default: 'https://andatech.com.au/pages/talk-to-sales' }}" class="btt-btn btt-btn--primary btt-btn--specular">{{ section.settings.book_review_cta_label | default: "Book A Workplace Review" }}</a>
+          <button class="btt-btn btt-btn--ghost" id="btt-tools-restart" type="button">Start Over</button>
+        </div>
+      </div>
+    </div>
+    <div class="btt-tools__scroll-hint" id="btt-tools-scroll-hint" aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+    </div>
+  </div>
+
+  <div class="btt-tools__alert">
+    <span class="btt-tools__alert-icon">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>
+    </span>
+    <p>{{ section.settings.alert_text | default: "This is general educational guidance, not a prescriptive recommendation — consider your own circumstances and seek advice where appropriate." }}</p>
+  </div>
+
+  {%- comment -%} Related-resource data, edited via schema blocks so content can change without touching code {%- endcomment -%}
+  <script type="application/json" id="btt-tools-resources-data">
+    [
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'resource' -%}
+          {
+            "title": {{ block.settings.title | default: "Resource title" | json }},
+            "url": {{ block.settings.url | json }},
+            "tag": {{ block.settings.tag | default: "general" | json }}
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endif -%}
+      {%- endfor -%}
+    ]
+  </script>
+</section>
+
+<!-- COMING SOON MODAL: shown when a related resource has no download link yet -->
+<div class="btt-tools__soon-modal" id="btt-tools-soon-modal" aria-hidden="true" role="dialog" aria-label="Resource coming soon">
+  <div class="btt-tools__soon-backdrop" id="btt-tools-soon-backdrop"></div>
+  <div class="btt-tools__soon-panel">
+    <button class="btt-tools__modal-close" id="btt-tools-soon-close" type="button" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <span class="btt-tools__soon-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+    </span>
+    <h3 class="btt-tools__soon-title">Coming Soon</h3>
+    <p class="btt-tools__soon-body" id="btt-tools-soon-body">This resource is still being finalised — check back shortly, or browse what's already available in the Resource Library.</p>
+    <a href="#resources" class="btt-btn btt-btn--primary btt-btn--full" id="btt-tools-soon-browse">Browse Resource Library</a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "BTT Interactive Tools",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Interactive Tool" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Which Testing Approach May Suit Your Workplace?" },
+    { "type": "textarea", "id": "subtext", "label": "Subtext", "default": "Prefer a specific answer over browsing? Four quick questions gets you a tailored recommendation." },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "default": "text_left",
+      "options": [
+        { "value": "text_left", "label": "Text left, card right (default)" },
+        { "value": "card_left", "label": "Card left, text right" }
+      ]
+    },
+    { "type": "text", "id": "benefit_1", "label": "Benefit 1", "default": "No sign-up required" },
+    { "type": "text", "id": "benefit_2", "label": "Benefit 2", "default": "Instant, tailored recommendation" },
+    { "type": "text", "id": "benefit_3", "label": "Benefit 3", "default": "Practical next steps" },
+    { "type": "text", "id": "time_note", "label": "Time note", "default": "Takes about 2 minutes" },
+    { "type": "text", "id": "open_cta_label", "label": "Open-quiz button label", "default": "Start The Quick Check" },
+    { "type": "text", "id": "book_review_cta_label", "label": "Result screen CTA label", "default": "Book A Workplace Review" },
+    { "type": "url", "id": "book_review_url", "label": "Result screen CTA link" },
+    { "type": "textarea", "id": "alert_text", "label": "Disclaimer text", "default": "This is general educational guidance, not a prescriptive recommendation — consider your own circumstances and seek advice where appropriate." }
+  ],
+  "blocks": [
+    {
+      "type": "resource",
+      "name": "Related resource",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Resource title" },
+        { "type": "url", "id": "url", "label": "Link" },
+        {
+          "type": "select",
+          "id": "tag",
+          "label": "Show when",
+          "default": "general",
+          "options": [
+            { "value": "high_risk", "label": "High / Safety-Critical risk" },
+            { "value": "low_risk", "label": "Low / Moderate risk" },
+            { "value": "post_incident", "label": "Post-Incident objective" },
+            { "value": "pre_employment", "label": "Pre-Employment objective" },
+            { "value": "general", "label": "Always show (fallback)" }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BTT Interactive Tools",
+      "blocks": [
+        { "type": "resource", "settings": { "title": "Building a Defensible Workplace Impairment Management Program", "tag": "high_risk" } },
+        { "type": "resource", "settings": { "title": "Workplace Compliance Readiness Assessment", "tag": "low_risk" } },
+        { "type": "resource", "settings": { "title": "Supervisor Toolkit", "tag": "post_incident" } },
+        { "type": "resource", "settings": { "title": "Pre-Employment Screening Guide", "tag": "pre_employment" } },
+        { "type": "resource", "settings": { "title": "Read the full blog post on this approach", "tag": "general" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

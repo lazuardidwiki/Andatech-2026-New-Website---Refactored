@@ -1,0 +1,362 @@
+{% comment %}
+  Integration Rows Section (Final Layout)
+  - Green Vertical Line added to the left of content.
+  - Arrows removed from bullet points.
+  - Images fully validated with width/height attributes.
+{% endcomment %}
+
+<style>
+  /* --- Section Variables --- */
+  #shopify-section-{{ section.id }} .integration-rows-wrapper {
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    overflow: hidden; 
+  }
+
+  .int-row-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* --- Individual Row Styling --- */
+  .int-row {
+    display: grid;
+    gap: 40px; 
+    align-items: flex-start; /* Align to top for the vertical line look */
+    margin-bottom: {{ section.settings.row_spacing }}px;
+    padding-bottom: {{ section.settings.row_spacing }}px;
+    border-bottom: 1px solid #eee; 
+  }
+  
+  .int-row:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  /* Layouts */
+  .int-row.layout-standard-right { grid-template-columns: 1fr 1fr; }
+  .int-row.layout-standard-left { grid-template-columns: 1fr 1fr; direction: rtl; }
+  .int-row.layout-standard-left > * { direction: ltr; } 
+  
+  .int-row.layout-feature-split {
+    grid-template-columns: 4fr 6fr; 
+  }
+
+  /* --- Column Content (With Green Line) --- */
+  .int-col-content {
+    /* The Green Vertical Line */
+    border-left: 4px solid {{ section.settings.accent_color }};
+    padding-left: 25px; /* Spacing between line and text */
+  }
+
+  .int-col-content h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 15px;
+    line-height: 1.3;
+    margin-top: 0;
+  }
+
+  .int-col-content .rte {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 25px;
+  }
+
+  /* Bullet Points (Standard bullets, no arrows) */
+  .int-col-content .rte ul {
+    list-style-type: none;
+    padding-left: 20px;
+    margin-bottom: 20px;
+  }
+  .int-col-content .rte li {
+    margin-bottom: 10px;
+  }
+
+  /* --- Images --- */
+  .int-image-wrapper img, .int-inline-image img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+    border-radius: 8px; 
+  }
+  
+  .int-inline-image {
+    margin-top: 30px;
+    display: block;
+  }
+
+  /* --- Buttons --- */
+  .int-btn {
+    display: inline-block;
+    background-color: {{ section.settings.accent_color }};
+    color: #fff;
+    padding: 12px 25px;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: background 0.3s;
+    margin-top: 10px;
+  }
+  .int-btn:hover {
+    background-color: {{ section.settings.accent_color | color_darken: 10 }};
+  }
+
+  /* --- Right Side "Feature List" Styling --- */
+  .feature-list-wrapper h4, 
+  .feature-list-wrapper h5, 
+  .feature-list-wrapper strong {
+    display: block;
+    color: {{ section.settings.accent_color }}; 
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    margin-top: 20px;
+  }
+  
+  .feature-list-wrapper h4:first-child { margin-top: 0; }
+
+  .feature-list-wrapper p {
+    background: #f4f6f8; 
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #444;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .int-row, 
+    .int-row.layout-standard-right, 
+    .int-row.layout-standard-left, 
+    .int-row.layout-feature-split {
+      grid-template-columns: 1fr; 
+      gap: 30px;
+    }
+    
+    .int-inline-image {
+      margin-top: 20px;
+      width: 100% !important; 
+    }
+    
+    /* On mobile, maybe reduce the line padding slightly */
+    .int-col-content {
+      padding-left: 20px;
+    }
+  }
+</style>
+
+<div class="integration-rows-wrapper">
+  <div class="int-row-container">
+    
+    {% for block in section.blocks %}
+      <div class="int-row layout-{{ block.settings.layout_type }}" {{ block.shopify_attributes }}>
+        
+        <div class="int-col-content">
+          {% if block.settings.title != blank %}
+            <h3>{{ block.settings.title }}</h3>
+          {% endif %}
+          
+          {% if block.settings.text != blank %}
+            <div class="rte">{{ block.settings.text }}</div>
+          {% endif %}
+
+          {% if block.settings.btn_label != blank %}
+            <a href="{{ block.settings.btn_link }}" class="int-btn">{{ block.settings.btn_label }}</a>
+          {% endif %}
+
+          {% if block.settings.layout_type == 'feature-split' and block.settings.image != blank %}
+             {% assign img_width = block.settings.image_width %}
+             {% assign img_height = img_width | divided_by: block.settings.image.aspect_ratio | round %}
+             
+             <div class="int-inline-image" style="max-width: {{ img_width }}px;">
+               <img src="{{ block.settings.image | image_url: width: 800 }}" 
+                    alt="{{ block.settings.image.alt | default: block.settings.title | escape }}"
+                    width="{{ img_width }}"
+                    height="{{ img_height }}"
+                    loading="lazy">
+             </div>
+          {% endif %}
+        </div>
+
+        <div class="int-col-visual">
+          
+          {% if block.settings.layout_type == 'feature-split' %}
+            <div class="feature-list-wrapper rte">
+              {{ block.settings.feature_list_content }}
+            </div>
+            
+          {% else %}
+            {% if block.settings.image != blank %}
+              {% assign img_width = block.settings.image_width %}
+              {% assign img_height = img_width | divided_by: block.settings.image.aspect_ratio | round %}
+
+              <div class="int-image-wrapper" style="max-width: {{ img_width }}px; margin: 0 auto;">
+                <img src="{{ block.settings.image | image_url: width: 800 }}" 
+                     alt="{{ block.settings.image.alt | default: block.settings.title | escape }}" 
+                     width="{{ img_width }}"
+                     height="{{ img_height }}"
+                     loading="lazy">
+              </div>
+            {% endif %}
+          {% endif %}
+          
+        </div>
+
+      </div>
+    {% endfor %}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Integration Rows",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Line & Btn)",
+      "default": "#7ab53d"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "row_spacing",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Space Between Rows",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Content Row",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Layout"
+        },
+        {
+          "type": "select",
+          "id": "layout_type",
+          "label": "Row Layout",
+          "options": [
+            { "value": "feature-split", "label": "Feature Split (Text Left, List Right)" },
+            { "value": "standard-right", "label": "Standard (Image Right)" },
+            { "value": "standard-left", "label": "Standard (Image Left)" }
+          ],
+          "default": "standard-right"
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Description",
+          "default": "<p>Description text here.</p>"
+        },
+        {
+          "type": "text",
+          "id": "btn_label",
+          "label": "Button Label"
+        },
+        {
+          "type": "url",
+          "id": "btn_link",
+          "label": "Button Link"
+        },
+        {
+          "type": "header",
+          "content": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "range",
+          "id": "image_width",
+          "min": 100,
+          "max": 800,
+          "step": 10,
+          "unit": "px",
+          "label": "Image Width",
+          "default": 400
+        },
+        {
+          "type": "header",
+          "content": "Right Side Content (Feature Split Only)"
+        },
+        {
+          "type": "richtext",
+          "id": "feature_list_content",
+          "label": "Feature List",
+          "default": "<h4>Feature 1</h4><p>Details...</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Integration Rows",
+      "blocks": [
+        { "type": "row", "settings": { "layout_type": "feature-split", "title": "Top Section" } },
+        { "type": "row", "settings": { "layout_type": "standard-right", "title": "Middle Section" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

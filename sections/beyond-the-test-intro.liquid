@@ -1,0 +1,428 @@
+<!-- =====================================================
+   Beyond The Test™ — Intro Section (Text + Scatter Photo Pop-ins)
+   Simple in/out reveal — no scroll-linked progress tracking.
+   ===================================================== -->
+<section class="btt-intro" id="btt-intro-{{ section.id }}">
+  <div class="btt-intro__sticky">
+
+    <!-- Scattered photo blocks — randomised position per page load, all pop
+         in together (staggered) as soon as the section scrolls into view -->
+    <div class="btt-intro__scatter" id="btt-intro-scatter-{{ section.id }}">
+      {% for block in section.blocks %}
+        {% if block.type == 'scatter_image' and block.settings.image != blank %}
+          <div class="btt-intro__scatter-item" data-scatter-item {{ block.shopify_attributes }}>
+            {%- comment -%}
+              These paint at 45–100px on mobile and 90–190px on desktop, but a
+              single 700px source was being fetched and decoded for each one —
+              eight large main-thread decodes, which is exactly what stalls a
+              fast scroll. srcset lets the browser pick a source that matches
+              the real painted size.
+            {%- endcomment -%}
+            <img
+              src="{{ block.settings.image | image_url: width: 400 }}"
+              srcset="{{ block.settings.image | image_url: width: 200 }} 200w,
+                      {{ block.settings.image | image_url: width: 400 }} 400w,
+                      {{ block.settings.image | image_url: width: 700 }} 700w"
+              sizes="(max-width: 640px) 100px, 200px"
+              alt="{{ block.settings.alt | default: '' | escape }}"
+              loading="lazy"
+              decoding="async"
+              width="400"
+              height="400"
+            >
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- Text Overlay -->
+    <div class="btt-intro__inner">
+      <p class="btt-intro__line btt-intro__line--label" data-intro-line="0">
+        {{ section.settings.line_label | default: "Andatech is" }}
+      </p>
+      <div class="btt-intro__highlight">
+        <p class="btt-intro__line btt-intro__line--grad" data-intro-line="1">
+          {{ section.settings.line_grad_1 | default: "Keeping you safe," }}
+        </p>
+        <p class="btt-intro__line btt-intro__line--grad" data-intro-line="2">
+          {{ section.settings.line_grad_2 | default: "improving your life," }}
+        </p>
+        <p class="btt-intro__line btt-intro__line--grad" data-intro-line="3">
+          {{ section.settings.line_grad_3 | default: "ensuring your peace of mind," }}
+        </p>
+      </div>
+      <p class="btt-intro__line btt-intro__line--tail" data-intro-line="4">
+        {{ section.settings.line_tail | default: "wherever you are." }}
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .btt-intro {
+    position: relative;
+    background: transparent;
+    z-index: 10;
+    padding: 100px 48px;
+  }
+
+  .btt-intro__sticky {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  /* ===== Scatter photos — sit directly on the site's global dot-field
+     background. JS randomises each item's slot (position + size) on load;
+     all items fade/slide in together (staggered by transition-delay) the
+     moment the section enters the viewport. ===== */
+  .btt-intro__scatter {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .btt-intro__scatter-item {
+    position: absolute;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 24px rgba(17, 24, 32, .18);
+    opacity: 0;
+    transform: translateY(28px) scale(.94);
+    transition: opacity .6s cubic-bezier(.23, 1, .32, 1), transform .6s cubic-bezier(.23, 1, .32, 1);
+    /* `will-change` removed: it permanently promoted all eight scatter photos
+       to their own GPU layers for the whole page lifetime. The transition
+       already promotes each layer for the duration it actually runs. */
+  }
+
+  .btt-intro__scatter.is-visible .btt-intro__scatter-item {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .btt-intro__scatter-item:nth-child(1) { transition-delay: 0s; }
+  .btt-intro__scatter-item:nth-child(2) { transition-delay: .1s; }
+  .btt-intro__scatter-item:nth-child(3) { transition-delay: .2s; }
+  .btt-intro__scatter-item:nth-child(4) { transition-delay: .3s; }
+  .btt-intro__scatter-item:nth-child(5) { transition-delay: .4s; }
+  .btt-intro__scatter-item:nth-child(6) { transition-delay: .5s; }
+  .btt-intro__scatter-item:nth-child(7) { transition-delay: .6s; }
+  .btt-intro__scatter-item:nth-child(8) { transition-delay: .7s; }
+
+  .btt-intro__scatter-item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .btt-intro__inner {
+    position: relative;
+    z-index: 4;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 36px;
+    box-sizing: border-box;
+  }
+
+  .btt-intro__line {
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 40px;
+    font-weight: 400;
+    color: #111820;
+    line-height: 1.35;
+    margin: 0;
+  }
+
+  .btt-intro__line--label { align-self: flex-start; text-align: left; }
+
+  .btt-intro__highlight {
+    align-self: flex-start;
+    margin-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  /* HORIZONTAL LINEAR GRADIENT TEXT: #95C11F (Left) -> #46BEC4 (Right) —
+     continuously animated, same technique as the Hero title. */
+  .btt-intro__line--grad {
+    font-size: 60px;
+    font-weight: 700;
+    background-image: linear-gradient(100deg, #95C11F 0%, #46BEC4 50%, #95C11F 100%);
+    background-size: 220% 100%;
+    background-position: 0% 50%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Animating `background-position` on a `background-clip: text` element
+     cannot be composited — every frame is a full main-thread repaint of the
+     glyphs. This previously ran `infinite` on three large headlines from page
+     load onward, including the whole time the section was off-screen. */
+  .btt-intro__inner.is-visible .btt-intro__line--grad {
+    animation: bttIntroGradientFlow 6s ease-in-out infinite;
+  }
+
+  @keyframes bttIntroGradientFlow {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .btt-intro__line--tail {
+    align-self: flex-start;
+    font-size: 34px;
+    font-style: italic;
+    font-weight: 400;
+    color: rgba(17, 24, 32, .78);
+    text-align: left;
+  }
+
+  /* Line-by-line reveal — one transition per line (not per character), each
+     with its own STATIC delay (baked into the stylesheet, same technique
+     Industries uses for its nth-child stagger) so they cascade top to
+     bottom. No JS computes this — just a class toggle triggers it. */
+  .btt-intro__line {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .7s cubic-bezier(.23, 1, .32, 1), transform .7s cubic-bezier(.23, 1, .32, 1);
+  }
+
+  .btt-intro__inner.is-visible .btt-intro__line {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .btt-intro__line[data-intro-line="0"] { transition-delay: 0s; }
+  .btt-intro__line[data-intro-line="1"] { transition-delay: .12s; }
+  .btt-intro__line[data-intro-line="2"] { transition-delay: .24s; }
+  .btt-intro__line[data-intro-line="3"] { transition-delay: .36s; }
+  .btt-intro__line[data-intro-line="4"] { transition-delay: .48s; }
+
+  /* Editor Mode Override */
+  .shopify-design-mode .btt-intro__line,
+  .shopify-section--selected .btt-intro__line {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .shopify-design-mode .btt-intro__scatter-item,
+  .shopify-section--selected .btt-intro__scatter-item {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Tablet Adjustments */
+  @media (max-width: 1024px) {
+    .btt-intro { padding: 80px 32px; }
+    .btt-intro__inner { padding: 0 32px; gap: 28px; }
+    .btt-intro__line--label { font-size: 32px; }
+    .btt-intro__line--grad { font-size: 44px; }
+    .btt-intro__line--tail { font-size: 26px; }
+  }
+
+  /* Mobile Adjustments (LARGER PUNCHY TYPOGRAPHY FIX) */
+  @media (max-width: 640px) {
+    .btt-intro { padding: 60px 20px; }
+    /* `svh` = smallest viewport height. Plain `vh` on iOS Safari changes value
+       as the URL bar collapses and expands mid-scroll, relayouting this
+       section and everything below it while the user is scrolling. */
+    .btt-intro__sticky { min-height: 140vh; min-height: 140svh; }
+    .btt-intro__inner { padding: 0 20px; gap: 24px; }
+    .btt-intro__line--label { font-size: clamp(26px, 7vw, 32px); }
+    .btt-intro__line--grad {
+      font-size: clamp(30px, 8vw, 38px);
+      line-height: 1.22;
+    }
+    /* Static gradient on phones — the colour stays, only the flow stops.
+       50% 50% matches the resting position the `prefers-reduced-motion` rule
+       below already uses, so this is a colour the design already ships. */
+    .btt-intro__inner.is-visible .btt-intro__line--grad {
+      animation: none;
+      background-position: 50% 50%;
+    }
+    .btt-intro__line--tail { font-size: clamp(22px, 5.8vw, 26px); }
+    .btt-intro__highlight { align-self: flex-start; width: 100%; gap: 6px; }
+
+    /* Scatter photos stay visible on mobile, but sit further back and much
+       fainter — a subtle texture behind the text rather than a competing
+       focal point. Positions/sizes reuse the same randomised slots as desktop. */
+    .btt-intro__scatter { opacity: .16; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btt-intro__line, .btt-intro__scatter-item { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .btt-intro__line--grad { animation: none !important; background-position: 50% 50% !important; }
+  }
+</style>
+
+<script>
+(function(){
+  'use strict';
+
+  function initBTTIntro() {
+    var section = document.getElementById('btt-intro-{{ section.id }}');
+    if (!section) return;
+
+    var scatterWrap = document.getElementById('btt-intro-scatter-{{ section.id }}');
+    var scatterItems = scatterWrap ? Array.from(scatterWrap.querySelectorAll('[data-scatter-item]')) : [];
+    var inner = section.querySelector('.btt-intro__inner');
+    var lines = Array.from(section.querySelectorAll('[data-intro-line]'));
+    if (!lines.length && !scatterItems.length) return;
+
+    // Randomise scatter photo positions (slot pool, shuffled) — position
+    // only. Reveal stagger is handled entirely by static CSS (nth-child),
+    // same technique Industries uses — no JS timing logic needed here.
+    if (scatterItems.length && !scatterWrap.dataset.positioned) {
+      scatterWrap.dataset.positioned = 'true';
+
+      var isMobile = window.matchMedia('(max-width: 640px)').matches;
+
+      var slots = isMobile ? [
+        { top: '4%',  left: '8%',  w: 95,  h: 95  },
+        { top: '16%', left: '64%', w: 55,  h: 55  },
+        { top: '27%', left: '12%', w: 70,  h: 70  },
+        { top: '39%', left: '66%', w: 100, h: 100 },
+        { top: '52%', left: '8%',  w: 50,  h: 50  },
+        { top: '63%', left: '62%', w: 80,  h: 80  },
+        { top: '75%', left: '16%', w: 45,  h: 45  },
+        { top: '87%', left: '66%', w: 90,  h: 90  }
+      ] : [
+        { top: '13%', left: '3%',  w: 120, h: 120 },
+        { top: '11%', left: '38%', w: 95,  h: 95  },
+        { top: '13%', left: '73%', w: 190, h: 140 },
+        { top: '40%', left: '82%', w: 150, h: 180 },
+        { top: '74%', left: '82%', w: 120, h: 100 },
+        { top: '34%', left: '66%', w: 100, h: 90  },
+        { top: '72%', left: '6%',  w: 100, h: 100 },
+        { top: '76%', left: '58%', w: 90,  h: 80  }
+      ];
+
+      // Fisher-Yates shuffle
+      for (var i = slots.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = slots[i]; slots[i] = slots[j]; slots[j] = tmp;
+      }
+
+      scatterItems.forEach(function(item, idx){
+        var slot = slots[idx % slots.length];
+        var jitterX = idx >= slots.length ? (Math.random() * 10 - 5) : 0;
+        var jitterY = idx >= slots.length ? (Math.random() * 10 - 5) : 0;
+        item.style.top = 'calc(' + slot.top + ' + ' + jitterY + 'px)';
+        item.style.left = 'calc(' + slot.left + ' + ' + jitterX + 'px)';
+        item.style.width = slot.w + 'px';
+        item.style.height = slot.h + 'px';
+      });
+    }
+
+    // Simple in/out reveal — one IntersectionObserver, one class toggle each
+    // on .btt-intro__inner and .btt-intro__scatter. Identical pattern to
+    // Assessment/Tools' left/right column reveal — no scroll-speed or
+    // direction logic, no rAF loop, no getBoundingClientRect().
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting) {
+            if (inner) inner.classList.add('is-visible');
+            if (scatterWrap) scatterWrap.classList.add('is-visible');
+          } else {
+            if (inner) inner.classList.remove('is-visible');
+            if (scatterWrap) scatterWrap.classList.remove('is-visible');
+          }
+        });
+      }, { threshold: 0.15 });
+      obs.observe(section);
+    } else {
+      if (inner) inner.classList.add('is-visible');
+      if (scatterWrap) scatterWrap.classList.add('is-visible');
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBTTIntro);
+  } else {
+    initBTTIntro();
+  }
+
+  document.addEventListener('shopify:section:load', function(event) {
+    if (event.target.querySelector('.btt-intro')) {
+      initBTTIntro();
+    }
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "BTT Intro Scroll",
+  "settings": [
+    {
+      "type": "text",
+      "id": "line_label",
+      "label": "Top Label Line",
+      "default": "Andatech is"
+    },
+    {
+      "type": "text",
+      "id": "line_grad_1",
+      "label": "Gradient Line 1",
+      "default": "Keeping you safe,"
+    },
+    {
+      "type": "text",
+      "id": "line_grad_2",
+      "label": "Gradient Line 2",
+      "default": "improving your life,"
+    },
+    {
+      "type": "text",
+      "id": "line_grad_3",
+      "label": "Gradient Line 3",
+      "default": "ensuring your peace of mind,"
+    },
+    {
+      "type": "text",
+      "id": "line_tail",
+      "label": "Bottom Tail Line",
+      "default": "wherever you are."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "scatter_image",
+      "name": "Scatter Photo",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "text", "id": "alt", "label": "Alt text" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BTT Intro Scroll",
+      "blocks": [
+        { "type": "scatter_image" },
+        { "type": "scatter_image" },
+        { "type": "scatter_image" },
+        { "type": "scatter_image" },
+        { "type": "scatter_image" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,260 @@
+{%- comment -%} Andatech — CTA banner. Generated from the Phase 1 prototype.
+  Classes are `at-` prefixed; styling lives in andatech-site.css. {%- endcomment -%}
+
+{{ 'andatech-homepage.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'andatech-homepage.js' | asset_url }}" defer="defer"></script>
+{%- if section.settings.fine_print != blank -%}{{ 'andatech-training.css' | asset_url | stylesheet_tag }}{%- endif -%}
+
+<section class="at-cta-banner{% if section.settings.mobile_image != blank %} at-cta-banner--has-mobile-image{% endif %}{% if section.settings.image == blank and section.settings.mobile_image == blank %} at-cta-banner--no-media{% endif %}"{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handleize }}"{% endif %}>
+  <div class="at-shell at-cta-banner__inner">
+    {%- if section.settings.image != blank or section.settings.mobile_image != blank -%}
+      {%- assign cta_fallback_image = section.settings.image | default: section.settings.mobile_image -%}
+      <div class="at-cta-banner__media" data-at-rise>
+        <img class="at-cta-banner__image at-cta-banner__image--desktop" src="{{ cta_fallback_image | image_url: width: 1040 }}" alt="{{ cta_fallback_image.alt | escape }}" loading="lazy">
+        {%- if section.settings.mobile_image != blank -%}<img class="at-cta-banner__image at-cta-banner__image--mobile" src="{{ section.settings.mobile_image | image_url: width: 800 }}" alt="{{ section.settings.mobile_image.alt | escape }}" loading="lazy">{%- endif -%}
+      </div>
+    {%- endif -%}
+    <div class="at-cta-banner__content">
+      <h2 class="at-cta-banner__title" data-at-rise>{{ section.settings.heading }}</h2>
+      {%- if section.settings.desc != blank -%}<div class="at-cta-banner__desc" data-at-rise>{{ section.settings.desc }}</div>{%- endif -%}
+      {%- if section.settings.show_form -%}
+        {%- assign use_hubspot = false -%}
+        {%- if section.settings.hubspot_portal_id != blank and section.settings.hubspot_form_guid != blank -%}
+          {%- assign use_hubspot = true -%}
+        {%- endif -%}
+        {%- assign use_hubspot_embed = false -%}
+        {%- if use_hubspot and section.settings.hubspot_embed -%}
+          {%- assign use_hubspot_embed = true -%}
+        {%- endif -%}
+
+        {%- if use_hubspot_embed -%}
+          {%- assign hs_embed_id = 'AtCtaHsEmbed-' | append: section.id -%}
+          <div class="at-cta-form" id="{{ hs_embed_id }}" data-at-rise></div>
+          <script charset="utf-8" src="//js-{{ section.settings.hubspot_region | default: 'ap1' }}.hsforms.net/forms/embed/v2.js"></script>
+          <script>
+            (function(){
+              var target = document.getElementById('{{ hs_embed_id }}');
+              if (!target || typeof hbspt === 'undefined') return;
+              hbspt.forms.create({
+                portalId: {{ section.settings.hubspot_portal_id | json }},
+                formId: {{ section.settings.hubspot_form_guid | json }},
+                region: {{ section.settings.hubspot_region | default: 'ap1' | json }},
+                target: '#{{ hs_embed_id }}'
+              });
+            })();
+          </script>
+
+        {%- elsif use_hubspot -%}
+          {%- assign hs_form_id = 'AtCtaHubSpot-' | append: section.id -%}
+          <form id="{{ hs_form_id }}" class="at-cta-form"
+                data-portal-id="{{ section.settings.hubspot_portal_id | escape }}"
+                data-form-guid="{{ section.settings.hubspot_form_guid | escape }}">
+            <p class="at-cta-form__status at-cta-form__status--success" id="{{ hs_form_id }}-success" hidden tabindex="-1">{{ section.settings.success_message | escape }}</p>
+            <div class="at-cta-form__status at-cta-form__status--error" id="{{ hs_form_id }}-error" hidden role="alert"></div>
+            <div class="at-cta-form__grid" id="{{ hs_form_id }}-fields">
+              <div class="at-cta-form__field">
+                <label for="{{ hs_form_id }}-firstname">First name</label>
+                <input id="{{ hs_form_id }}-firstname" type="text" name="firstname" autocomplete="given-name" required>
+              </div>
+              <div class="at-cta-form__field">
+                <label for="{{ hs_form_id }}-lastname">Last name</label>
+                <input id="{{ hs_form_id }}-lastname" type="text" name="lastname" autocomplete="family-name" required>
+              </div>
+              <div class="at-cta-form__field">
+                <label for="{{ hs_form_id }}-phone">Phone number</label>
+                <input id="{{ hs_form_id }}-phone" type="tel" name="phone" autocomplete="tel">
+              </div>
+              <div class="at-cta-form__field">
+                <label for="{{ hs_form_id }}-email">Work email</label>
+                <input id="{{ hs_form_id }}-email" type="email" name="email" autocomplete="email" autocapitalize="off" spellcheck="false" required>
+              </div>
+              <div class="at-cta-form__field">
+                <label for="{{ hs_form_id }}-company">Company</label>
+                <input id="{{ hs_form_id }}-company" type="text" name="company" autocomplete="organization">
+              </div>
+              <div class="at-cta-form__field">
+                <label for="{{ hs_form_id }}-sites">Number of sites</label>
+                <select id="{{ hs_form_id }}-sites" name="number_of_sites">
+                  <option value="">Select</option><option>1</option><option>2-5</option><option>6-10</option><option>11-20</option><option>21+</option>
+                </select>
+              </div>
+              <div class="at-cta-form__field">
+                <label for="{{ hs_form_id }}-workforce">Workforce size</label>
+                <select id="{{ hs_form_id }}-workforce" name="workforce_size">
+                  <option value="">Select</option><option>1-49</option><option>50-199</option><option>200-499</option><option>500-999</option><option>1,000+</option>
+                </select>
+              </div>
+              <div class="at-cta-form__field">
+                <label for="{{ hs_form_id }}-state">State or territory</label>
+                <select id="{{ hs_form_id }}-state" name="state_or_territory">
+                  <option value="">Select</option><option>ACT</option><option>NSW</option><option>NT</option><option>QLD</option><option>SA</option><option>TAS</option><option>VIC</option><option>WA</option><option>Other</option>
+                </select>
+              </div>
+              <div class="at-cta-form__field at-cta-form__field--wide">
+                <label for="{{ hs_form_id }}-message">What do you need help with?</label>
+                <textarea id="{{ hs_form_id }}-message" name="message" rows="5"></textarea>
+              </div>
+            </div>
+            <div class="at-cta-form__actions">
+              <button class="at-btn at-btn--green at-cta-form__submit" type="submit">
+                <span class="at-cta-form__submit-label">{{ section.settings.form_button_label | escape }}</span>
+                <i class="at-btn__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i>
+              </button>
+              {%- if section.settings.cta2_label != blank -%}
+                <a class="at-btn at-btn--outline-dark at-cta-form__secondary" href="{{ section.settings.cta2_url | default: '#' }}"{% if section.settings.cta2_label contains 'Find Your Device' %} data-at-device-open{% endif %}>{{ section.settings.cta2_label | escape }}</a>
+              {%- endif -%}
+            </div>
+          </form>
+          <script>
+            (function(){
+              var form = document.getElementById('{{ hs_form_id }}');
+              if (!form) return;
+              var portalId  = form.dataset.portalId;
+              var formGuid  = form.dataset.formGuid;
+              var fieldsEl  = document.getElementById('{{ hs_form_id }}-fields');
+              var successEl = document.getElementById('{{ hs_form_id }}-success');
+              var errorEl   = document.getElementById('{{ hs_form_id }}-error');
+              var submitBtn = form.querySelector('.at-cta-form__submit');
+              var labelEl   = form.querySelector('.at-cta-form__submit-label');
+              var labelDefault = labelEl ? labelEl.textContent : '';
+
+              form.addEventListener('submit', function(e){
+                e.preventDefault();
+                if (errorEl) errorEl.hidden = true;
+
+                var fields = [];
+                Array.prototype.forEach.call(form.elements, function(el){
+                  if (!el.name || el.type === 'submit' || el.type === 'button') return;
+                  fields.push({ name: el.name, value: el.value });
+                });
+
+                if (submitBtn) submitBtn.disabled = true;
+                if (labelEl) labelEl.textContent = 'Sending…';
+
+                fetch('https://api.hsforms.com/submissions/v3/integration/submit/' + portalId + '/' + formGuid, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    fields: fields,
+                    context: { pageUri: window.location.href, pageName: document.title }
+                  })
+                })
+                .then(function(res){
+                  if (!res.ok) throw new Error('HubSpot submission failed');
+                  return res.json();
+                })
+                .then(function(){
+                  if (fieldsEl) fieldsEl.hidden = true;
+                  if (form.querySelector('.at-cta-form__actions')) form.querySelector('.at-cta-form__actions').hidden = true;
+                  if (successEl) { successEl.hidden = false; successEl.focus(); }
+                })
+                .catch(function(){
+                  if (submitBtn) submitBtn.disabled = false;
+                  if (labelEl) labelEl.textContent = labelDefault;
+                  if (errorEl) { errorEl.textContent = 'Something went wrong — please try again or contact us directly.'; errorEl.hidden = false; }
+                });
+              });
+            })();
+          </script>
+
+        {%- else -%}
+          {%- assign consultation_form_id = 'AtConsultationForm-' | append: section.id -%}
+          {%- form 'contact', id: consultation_form_id, class: 'at-cta-form' -%}
+            {%- if form.posted_successfully? -%}
+              <p class="at-cta-form__status at-cta-form__status--success" tabindex="-1" autofocus>{{ section.settings.success_message | escape }}</p>
+            {%- elsif form.errors -%}
+              <div class="at-cta-form__status at-cta-form__status--error" role="alert">{{ form.errors | default_errors }}</div>
+            {%- endif -%}
+            <input type="hidden" name="contact[Landing page]" value="{{ page.title | default: 'Heavy Industry' | escape }}">
+            <div class="at-cta-form__grid">
+              <div class="at-cta-form__field">
+                <label for="AtContactName-{{ section.id }}">First name</label>
+                <input id="AtContactName-{{ section.id }}" type="text" name="contact[first_name]" autocomplete="given-name" required>
+              </div>
+              <div class="at-cta-form__field">
+                <label for="AtContactLastName-{{ section.id }}">Last name</label>
+                <input id="AtContactLastName-{{ section.id }}" type="text" name="contact[last_name]" autocomplete="family-name" required>
+              </div>
+              <div class="at-cta-form__field">
+                <label for="AtContactPhone-{{ section.id }}">Phone number</label>
+                <input id="AtContactPhone-{{ section.id }}" type="tel" name="contact[phone]" autocomplete="tel">
+              </div>
+              <div class="at-cta-form__field">
+                <label for="AtContactEmail-{{ section.id }}">Work email</label>
+                <input id="AtContactEmail-{{ section.id }}" type="email" name="contact[email]" autocomplete="email" autocapitalize="off" spellcheck="false" required>
+              </div>
+              <div class="at-cta-form__field">
+                <label for="AtContactCompany-{{ section.id }}">Company</label>
+                <input id="AtContactCompany-{{ section.id }}" type="text" name="contact[company]" autocomplete="organization">
+              </div>
+              <div class="at-cta-form__field">
+                <label for="AtContactSites-{{ section.id }}">Number of sites</label>
+                <select id="AtContactSites-{{ section.id }}" name="contact[number_of_sites]">
+                  <option value="">Select</option><option>1</option><option>2-5</option><option>6-10</option><option>11-20</option><option>21+</option>
+                </select>
+              </div>
+              <div class="at-cta-form__field">
+                <label for="AtContactWorkforce-{{ section.id }}">Workforce size</label>
+                <select id="AtContactWorkforce-{{ section.id }}" name="contact[workforce_size]">
+                  <option value="">Select</option><option>1-49</option><option>50-199</option><option>200-499</option><option>500-999</option><option>1,000+</option>
+                </select>
+              </div>
+              <div class="at-cta-form__field">
+                <label for="AtContactState-{{ section.id }}">State or territory</label>
+                <select id="AtContactState-{{ section.id }}" name="contact[state_or_territory]">
+                  <option value="">Select</option><option>ACT</option><option>NSW</option><option>NT</option><option>QLD</option><option>SA</option><option>TAS</option><option>VIC</option><option>WA</option><option>Other</option>
+                </select>
+              </div>
+              <div class="at-cta-form__field at-cta-form__field--wide">
+                <label for="AtContactMessage-{{ section.id }}">What do you need help with?</label>
+                <textarea id="AtContactMessage-{{ section.id }}" name="contact[body]" rows="5"></textarea>
+              </div>
+            </div>
+            <div class="at-cta-form__actions">
+              <button class="at-btn at-btn--green at-cta-form__submit" type="submit">
+                <span class="at-cta-form__submit-label">{{ section.settings.form_button_label | escape }}</span>
+                <i class="at-btn__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i>
+              </button>
+              {%- if section.settings.cta2_label != blank -%}
+                <a class="at-btn at-btn--outline-dark at-cta-form__secondary" href="{{ section.settings.cta2_url | default: '#' }}"{% if section.settings.cta2_label contains 'Find Your Device' %} data-at-device-open{% endif %}>{{ section.settings.cta2_label | escape }}</a>
+              {%- endif -%}
+            </div>
+          {%- endform -%}
+        {%- endif -%}
+
+      {%- else -%}
+        <div class="at-cta-banner__cta" data-at-rise>
+          {%- if section.settings.cta1_label != blank -%}<a class="at-btn at-btn--green" href="{{ section.settings.cta1_url | default: '#' }}">{{ section.settings.cta1_label | escape }} <i class="at-btn__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>{%- endif -%}
+          {%- if section.settings.cta2_label != blank -%}<a class="at-btn at-btn--outline-dark" href="{{ section.settings.cta2_url | default: '#' }}"{% if section.settings.cta2_label contains 'Find Your Device' %} data-at-device-open{% endif %}>{{ section.settings.cta2_label | escape }}</a>{%- endif -%}
+        </div>
+      {%- endif -%}
+      {%- if section.settings.fine_print != blank -%}<div class="at-cta-banner__fine-print">{{ section.settings.fine_print }}</div>{%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Andatech CTA", "tag": "section", "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "image_picker", "id": "mobile_image", "label": "Mobile image", "info": "Optional portrait or mobile-specific image. The desktop image is used when this is blank." },
+    { "type": "html", "id": "heading", "label": "H2 — Heading", "default": "Not sure which one fits?<br><strong>Neither are most people.</strong>" },
+    { "type": "richtext", "id": "desc", "label": "Description", "default": "<p>Tell us your sites, your rosters and what you're accountable for. We'll tell you what a program actually needs to look like before anyone quotes you anything.</p>" },
+    { "type": "header", "content": "Consultation form" },
+    { "type": "checkbox", "id": "show_form", "label": "Show consultation form", "default": false, "info": "Replaces the buttons with a contact form." },
+    { "type": "text", "id": "form_button_label", "label": "Form button label", "default": "Book A Consultation" },
+    { "type": "text", "id": "success_message", "label": "Success message", "default": "Thanks. Our workplace team will be in touch shortly." },
+    { "type": "header", "content": "HubSpot" },
+    { "type": "text", "id": "hubspot_portal_id", "label": "HubSpot Portal ID", "info": "When both Portal ID and Form GUID are filled, submissions go to HubSpot instead of Shopify." },
+    { "type": "text", "id": "hubspot_form_guid", "label": "HubSpot Form GUID", "info": "This form's own GUID — different from the Resource Library download form." },
+    { "type": "text", "id": "hubspot_region", "label": "HubSpot region", "default": "ap1", "info": "The region from the embed code (e.g. na1, eu1, ap1)." },
+    { "type": "checkbox", "id": "hubspot_embed", "label": "Use HubSpot embed", "default": false, "info": "Loads the full HubSpot form via their SDK. Fields stay in sync with HubSpot. Style the form from HubSpot's form editor." },
+    { "type": "header", "content": "Buttons" },
+    { "type": "text", "id": "cta1_label", "label": "Primary button (no-form mode)", "default": "Book A Consultation" },
+    { "type": "url", "id": "cta1_url", "label": "Primary link" },
+    { "type": "text", "id": "cta2_label", "label": "Secondary button", "default": "Find Your Device", "info": "Shows below the form when form is on, or beside the primary button when form is off." },
+    { "type": "url", "id": "cta2_url", "label": "Secondary link" },
+    { "type": "richtext", "id": "fine_print", "label": "Supporting links", "info": "Optional small copy shown beneath the actions." } ],
+  "presets": [ { "name": "Andatech CTA" } ] }
+{% endschema %}

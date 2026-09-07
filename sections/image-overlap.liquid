@@ -1,0 +1,216 @@
+{% schema %}
+{
+  "name": "Andatech App Preview",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_back",
+      "label": "Back Image (QR Code/Rectangle)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_front",
+      "label": "Front Image (App Interface)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_front_hover",
+      "label": "Front Image Hover (Second Screenshot)"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Download Andalink"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Scan the QR code to manage your safety data on the go."
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Andatech App Preview"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .andatech-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.bg_color }};
+    overflow: hidden;
+  }
+  
+  .andatech-app-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .image-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 550px;
+    margin-bottom: 50px;
+  }
+
+  .image-back {
+    width: 85%;
+    margin-left: auto;
+    z-index: 1;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    /* Glassmorphism Effect */
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .image-back img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .image-front {
+    position: absolute;
+    width: 42%; 
+    bottom: -15%;
+    left: 0;
+    z-index: 5;
+  }
+
+  .image-inner-touch {
+    position: relative;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    border: 6px solid #ffffff;
+    will-change: transform;
+    background: #fff;
+  }
+
+  .image-front img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .hover-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 2;
+  }
+
+  /* Hover States */
+  .image-wrapper:hover .image-inner-touch {
+    transform: translateY(-20px) rotate(-3deg) scale(1.05);
+  }
+
+  .image-wrapper:hover .hover-img {
+    opacity: 1;
+  }
+
+  .image-wrapper:hover .image-back {
+    transform: translateX(10px) scale(0.98);
+    filter: saturate(1.2);
+  }
+
+  .andatech-text-content {
+    text-align: center;
+    margin-top: 60px;
+  }
+
+  .andatech-text-content h2 {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 15px;
+  }
+
+  @media (max-width: 768px) {
+    .image-front { width: 50%; bottom: -10%; }
+    .andatech-text-content h2 { font-size: 1.5rem; }
+  }
+</style>
+
+<div class="andatech-section-{{ section.id }}">
+  <div class="andatech-app-container">
+    <div class="image-wrapper">
+      <div class="image-back">
+        {% if section.settings.image_back != blank %}
+          <img src="{{ section.settings.image_back | image_url: width: 1000 }}" alt="{{ section.settings.title }}" loading="lazy">
+        {% else %}
+          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+      </div>
+
+      <div class="image-front">
+        <div class="image-inner-touch">
+          {% if section.settings.image_front != blank %}
+            <img src="{{ section.settings.image_front | image_url: width: 600 }}" class="primary-img" alt="App UI" loading="lazy">
+            {% if section.settings.image_front_hover != blank %}
+               <img src="{{ section.settings.image_front_hover | image_url: width: 600 }}" class="hover-img" alt="App UI Hover" loading="lazy">
+            {% endif %}
+          {% else %}
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="andatech-text-content">
+       <h2 style="color: {{ section.settings.text_color }}">{{ section.settings.title }}</h2>
+       <p style="color: {{ section.settings.text_color }}">{{ section.settings.description }}</p>
+    </div>
+  </div>
+</div>

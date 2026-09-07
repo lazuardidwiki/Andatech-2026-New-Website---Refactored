@@ -1,0 +1,972 @@
+{% doc %}
+  @prompt
+    Display Interantional Partners logo. With a lavel that links to their homepage and a mini see more button that would list their address email and contact details, can we have it a coarousel  showing up to 4 partners sliding left and right. also add a mini label at the top so that they know which country the partner is from.
+    
+    , can we make remove the green background. is it possible to follow thr same style as the previous sections, remove the box borders and have the country be like a mini heading instead, change the country text to black and change the partername to green.
+    
+    allow for adding more partners. incase we need more, have the image all compressed and scaled down. they all must be the same size. have the text centered as well
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-partners-carousel-{{ ai_gen_id }} {
+    width: 100%;
+    padding: 40px 20px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-partners-carousel__container-{{ ai_gen_id }} {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .ai-partners-carousel__track-wrapper-{{ ai_gen_id }} {
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ai-partners-carousel__track-{{ ai_gen_id }} {
+    display: flex;
+    gap: 30px;
+    transition: transform 0.5s ease;
+  }
+
+  .ai-partners-carousel__item-{{ ai_gen_id }} {
+    flex: 0 0 calc(25% - 22.5px);
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .ai-partners-carousel__country-{{ ai_gen_id }} {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: {{ block.settings.country_text_color }};
+    margin: 0;
+  }
+
+  .ai-partners-carousel__logo-wrapper-{{ ai_gen_id }} {
+    width: 100%;
+    height: {{ block.settings.logo_height }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: {{ block.settings.logo_background_color }};
+    padding: 16px;
+    overflow: hidden;
+  }
+
+  .ai-partners-carousel__logo-{{ ai_gen_id }} {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .ai-partners-carousel__logo-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f4f4;
+  }
+
+  .ai-partners-carousel__logo-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-partners-carousel__info-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .ai-partners-carousel__name-{{ ai_gen_id }} {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    color: {{ block.settings.partner_name_color }};
+    text-decoration: none;
+    display: inline-block;
+    transition: opacity 0.3s ease;
+  }
+
+  .ai-partners-carousel__name-{{ ai_gen_id }}:hover {
+    opacity: 0.7;
+  }
+
+  .ai-partners-carousel__details-toggle-{{ ai_gen_id }} {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 14px;
+    color: {{ block.settings.see_more_color }};
+    cursor: pointer;
+    text-decoration: underline;
+    transition: opacity 0.3s ease;
+  }
+
+  .ai-partners-carousel__details-toggle-{{ ai_gen_id }}:hover {
+    opacity: 0.7;
+  }
+
+  .ai-partners-carousel__details-{{ ai_gen_id }} {
+    display: none;
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: {{ block.settings.details_text_color }};
+    text-align: center;
+  }
+
+  .ai-partners-carousel__details-{{ ai_gen_id }}.active {
+    display: block;
+  }
+
+  .ai-partners-carousel__details-{{ ai_gen_id }} p {
+    margin: 4px 0;
+  }
+
+  .ai-partners-carousel__nav-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 30px;
+  }
+
+  .ai-partners-carousel__nav-button-{{ ai_gen_id }} {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid {{ block.settings.nav_button_border_color }};
+    background-color: {{ block.settings.nav_button_bg_color }};
+    color: {{ block.settings.nav_button_color }};
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .ai-partners-carousel__nav-button-{{ ai_gen_id }}:hover:not(:disabled) {
+    background-color: {{ block.settings.nav_button_hover_bg_color }};
+    border-color: {{ block.settings.nav_button_hover_border_color }};
+  }
+
+  .ai-partners-carousel__nav-button-{{ ai_gen_id }}:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .ai-partners-carousel__nav-button-{{ ai_gen_id }} svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-partners-carousel__item-{{ ai_gen_id }} {
+      flex: 0 0 calc(50% - 15px);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-partners-carousel__item-{{ ai_gen_id }} {
+      flex: 0 0 100%;
+    }
+
+    .ai-partners-carousel__track-{{ ai_gen_id }} {
+      gap: 20px;
+    }
+  }
+{% endstyle %}
+
+<partners-carousel-{{ ai_gen_id }}
+  class="ai-partners-carousel-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-partners-carousel__container-{{ ai_gen_id }}">
+    <div class="ai-partners-carousel__track-wrapper-{{ ai_gen_id }}">
+      <div class="ai-partners-carousel__track-{{ ai_gen_id }}">
+        {% for i in (1..12) %}
+          {% liquid
+            assign country_key = 'partner_' | append: i | append: '_country'
+            assign logo_key = 'partner_' | append: i | append: '_logo'
+            assign name_key = 'partner_' | append: i | append: '_name'
+            assign url_key = 'partner_' | append: i | append: '_url'
+            assign address_key = 'partner_' | append: i | append: '_address'
+            assign email_key = 'partner_' | append: i | append: '_email'
+            assign phone_key = 'partner_' | append: i | append: '_phone'
+
+            assign country = block.settings[country_key]
+            assign logo = block.settings[logo_key]
+            assign name = block.settings[name_key]
+            assign url = block.settings[url_key]
+            assign address = block.settings[address_key]
+            assign email = block.settings[email_key]
+            assign phone = block.settings[phone_key]
+          %}
+
+          {% if name != blank %}
+            <div class="ai-partners-carousel__item-{{ ai_gen_id }}" data-partner-index="{{ i }}">
+              {% if country != blank %}
+                <p class="ai-partners-carousel__country-{{ ai_gen_id }}">{{ country }}</p>
+              {% endif %}
+
+              <div class="ai-partners-carousel__logo-wrapper-{{ ai_gen_id }}">
+                {% if logo %}
+                  <img
+                    src="{{ logo | image_url: width: 300 }}"
+                    alt="{{ name | escape }}"
+                    loading="lazy"
+                    class="ai-partners-carousel__logo-{{ ai_gen_id }}"
+                    width="300"
+                    height="{{ block.settings.logo_height }}"
+                  >
+                {% else %}
+                  <div class="ai-partners-carousel__logo-placeholder-{{ ai_gen_id }}">
+                    {{ 'image' | placeholder_svg_tag }}
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="ai-partners-carousel__info-{{ ai_gen_id }}">
+                {% if url != blank %}
+                  <a
+                    href="{{ url }}"
+                    class="ai-partners-carousel__name-{{ ai_gen_id }}"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {{ name }}
+                  </a>
+                {% else %}
+                  <p class="ai-partners-carousel__name-{{ ai_gen_id }}">{{ name }}</p>
+                {% endif %}
+
+                {% if address != blank or email != blank or phone != blank %}
+                  <button
+                    class="ai-partners-carousel__details-toggle-{{ ai_gen_id }}"
+                    data-toggle-details="{{ i }}"
+                    aria-expanded="false"
+                  >
+                    See more
+                  </button>
+
+                  <div
+                    class="ai-partners-carousel__details-{{ ai_gen_id }}"
+                    data-details="{{ i }}"
+                  >
+                    {% if address != blank %}
+                      <p><strong>Address:</strong><br>{{ address }}</p>
+                    {% endif %}
+                    {% if email != blank %}
+                      <p><strong>Email:</strong><br><a href="mailto:{{ email }}">{{ email }}</a></p>
+                    {% endif %}
+                    {% if phone != blank %}
+                      <p><strong>Phone:</strong><br><a href="tel:{{ phone }}">{{ phone }}</a></p>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="ai-partners-carousel__nav-{{ ai_gen_id }}">
+      <button
+        class="ai-partners-carousel__nav-button-{{ ai_gen_id }}"
+        data-nav="prev"
+        aria-label="Previous partners"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <button
+        class="ai-partners-carousel__nav-button-{{ ai_gen_id }}"
+        data-nav="next"
+        aria-label="Next partners"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+  </div>
+</partners-carousel-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class PartnersCarousel{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentIndex = 0;
+        this.itemsPerPage = 4;
+      }
+
+      connectedCallback() {
+        this.track = this.querySelector('.ai-partners-carousel__track-{{ ai_gen_id }}');
+        this.items = Array.from(this.querySelectorAll('.ai-partners-carousel__item-{{ ai_gen_id }}'));
+        this.prevButton = this.querySelector('[data-nav="prev"]');
+        this.nextButton = this.querySelector('[data-nav="next"]');
+        this.detailsToggles = this.querySelectorAll('.ai-partners-carousel__details-toggle-{{ ai_gen_id }}');
+
+        this.updateItemsPerPage();
+        this.setupEventListeners();
+        this.updateButtons();
+
+        window.addEventListener('resize', () => {
+          this.updateItemsPerPage();
+          this.updateCarousel();
+        });
+      }
+
+      updateItemsPerPage() {
+        const width = window.innerWidth;
+        if (width <= 749) {
+          this.itemsPerPage = 1;
+        } else if (width <= 989) {
+          this.itemsPerPage = 2;
+        } else {
+          this.itemsPerPage = 4;
+        }
+      }
+
+      setupEventListeners() {
+        this.prevButton.addEventListener('click', () => this.navigate('prev'));
+        this.nextButton.addEventListener('click', () => this.navigate('next'));
+
+        this.detailsToggles.forEach(toggle => {
+          toggle.addEventListener('click', (e) => {
+            const index = e.target.dataset.toggleDetails;
+            const details = this.querySelector(`[data-details="${index}"]`);
+            const isActive = details.classList.contains('active');
+
+            this.querySelectorAll('.ai-partners-carousel__details-{{ ai_gen_id }}').forEach(d => {
+              d.classList.remove('active');
+            });
+
+            this.detailsToggles.forEach(t => {
+              t.setAttribute('aria-expanded', 'false');
+              t.textContent = 'See more';
+            });
+
+            if (!isActive) {
+              details.classList.add('active');
+              toggle.setAttribute('aria-expanded', 'true');
+              toggle.textContent = 'See less';
+            }
+          });
+        });
+      }
+
+      navigate(direction) {
+        const maxIndex = Math.max(0, this.items.length - this.itemsPerPage);
+
+        if (direction === 'prev') {
+          this.currentIndex = Math.max(0, this.currentIndex - this.itemsPerPage);
+        } else {
+          this.currentIndex = Math.min(maxIndex, this.currentIndex + this.itemsPerPage);
+        }
+
+        this.updateCarousel();
+      }
+
+      updateCarousel() {
+        const itemWidth = this.items[0]?.offsetWidth || 0;
+        const gap = 30;
+        const offset = this.currentIndex * (itemWidth + gap);
+
+        this.track.style.transform = `translateX(-${offset}px)`;
+        this.updateButtons();
+      }
+
+      updateButtons() {
+        const maxIndex = Math.max(0, this.items.length - this.itemsPerPage);
+
+        this.prevButton.disabled = this.currentIndex === 0;
+        this.nextButton.disabled = this.currentIndex >= maxIndex;
+      }
+    }
+
+    customElements.define('partners-carousel-{{ ai_gen_id }}', PartnersCarousel{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Partners carousel",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "logo_background_color",
+      "label": "Logo background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "min": 60,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Logo height",
+      "default": 120
+    },
+    {
+      "type": "color",
+      "id": "country_text_color",
+      "label": "Country text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "partner_name_color",
+      "label": "Partner name",
+      "default": "#8dc63f"
+    },
+    {
+      "type": "color",
+      "id": "see_more_color",
+      "label": "See more button",
+      "default": "#2a2b2a"
+    },
+    {
+      "type": "color",
+      "id": "details_text_color",
+      "label": "Details text",
+      "default": "#2a2b2a"
+    },
+    {
+      "type": "header",
+      "content": "Navigation buttons"
+    },
+    {
+      "type": "color",
+      "id": "nav_button_bg_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "nav_button_color",
+      "label": "Icon",
+      "default": "#2a2b2a"
+    },
+    {
+      "type": "color",
+      "id": "nav_button_border_color",
+      "label": "Border",
+      "default": "#e1e1e1"
+    },
+    {
+      "type": "color",
+      "id": "nav_button_hover_bg_color",
+      "label": "Hover background",
+      "default": "#8dc63f"
+    },
+    {
+      "type": "color",
+      "id": "nav_button_hover_border_color",
+      "label": "Hover border",
+      "default": "#8dc63f"
+    },
+    {
+      "type": "header",
+      "content": "Partner 1"
+    },
+    {
+      "type": "text",
+      "id": "partner_1_country",
+      "label": "Country"
+    },
+    {
+      "type": "image_picker",
+      "id": "partner_1_logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "partner_1_name",
+      "label": "Partner name"
+    },
+    {
+      "type": "url",
+      "id": "partner_1_url",
+      "label": "Homepage URL"
+    },
+    {
+      "type": "textarea",
+      "id": "partner_1_address",
+      "label": "Address"
+    },
+    {
+      "type": "text",
+      "id": "partner_1_email",
+      "label": "Email"
+    },
+    {
+      "type": "text",
+      "id": "partner_1_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Partner 2"
+    },
+    {
+      "type": "text",
+      "id": "partner_2_country",
+      "label": "Country"
+    },
+    {
+      "type": "image_picker",
+      "id": "partner_2_logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "partner_2_name",
+      "label": "Partner name"
+    },
+    {
+      "type": "url",
+      "id": "partner_2_url",
+      "label": "Homepage URL"
+    },
+    {
+      "type": "textarea",
+      "id": "partner_2_address",
+      "label": "Address"
+    },
+    {
+      "type": "text",
+      "id": "partner_2_email",
+      "label": "Email"
+    },
+    {
+      "type": "text",
+      "id": "partner_2_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Partner 3"
+    },
+    {
+      "type": "text",
+      "id": "partner_3_country",
+      "label": "Country"
+    },
+    {
+      "type": "image_picker",
+      "id": "partner_3_logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "partner_3_name",
+      "label": "Partner name"
+    },
+    {
+      "type": "url",
+      "id": "partner_3_url",
+      "label": "Homepage URL"
+    },
+    {
+      "type": "textarea",
+      "id": "partner_3_address",
+      "label": "Address"
+    },
+    {
+      "type": "text",
+      "id": "partner_3_email",
+      "label": "Email"
+    },
+    {
+      "type": "text",
+      "id": "partner_3_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Partner 4"
+    },
+    {
+      "type": "text",
+      "id": "partner_4_country",
+      "label": "Country"
+    },
+    {
+      "type": "image_picker",
+      "id": "partner_4_logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "partner_4_name",
+      "label": "Partner name"
+    },
+    {
+      "type": "url",
+      "id": "partner_4_url",
+      "label": "Homepage URL"
+    },
+    {
+      "type": "textarea",
+      "id": "partner_4_address",
+      "label": "Address"
+    },
+    {
+      "type": "text",
+      "id": "partner_4_email",
+      "label": "Email"
+    },
+    {
+      "type": "text",
+      "id": "partner_4_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Partner 5"
+    },
+    {
+      "type": "text",
+      "id": "partner_5_country",
+      "label": "Country"
+    },
+    {
+      "type": "image_picker",
+      "id": "partner_5_logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "partner_5_name",
+      "label": "Partner name"
+    },
+    {
+      "type": "url",
+      "id": "partner_5_url",
+      "label": "Homepage URL"
+    },
+    {
+      "type": "textarea",
+      "id": "partner_5_address",
+      "label": "Address"
+    },
+    {
+      "type": "text",
+      "id": "partner_5_email",
+      "label": "Email"
+    },
+    {
+      "type": "text",
+      "id": "partner_5_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Partner 6"
+    },
+    {
+      "type": "text",
+      "id": "partner_6_country",
+      "label": "Country"
+    },
+    {
+      "type": "image_picker",
+      "id": "partner_6_logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "partner_6_name",
+      "label": "Partner name"
+    },
+    {
+      "type": "url",
+      "id": "partner_6_url",
+      "label": "Homepage URL"
+    },
+    {
+      "type": "textarea",
+      "id": "partner_6_address",
+      "label": "Address"
+    },
+    {
+      "type": "text",
+      "id": "partner_6_email",
+      "label": "Email"
+    },
+    {
+      "type": "text",
+      "id": "partner_6_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Partner 7"
+    },
+    {
+      "type": "text",
+      "id": "partner_7_country",
+      "label": "Country"
+    },
+    {
+      "type": "image_picker",
+      "id": "partner_7_logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "partner_7_name",
+      "label": "Partner name"
+    },
+    {
+      "type": "url",
+      "id": "partner_7_url",
+      "label": "Homepage URL"
+    },
+    {
+      "type": "textarea",
+      "id": "partner_7_address",
+      "label": "Address"
+    },
+    {
+      "type": "text",
+      "id": "partner_7_email",
+      "label": "Email"
+    },
+    {
+      "type": "text",
+      "id": "partner_7_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Partner 8"
+    },
+    {
+      "type": "text",
+      "id": "partner_8_country",
+      "label": "Country"
+    },
+    {
+      "type": "image_picker",
+      "id": "partner_8_logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "partner_8_name",
+      "label": "Partner name"
+    },
+    {
+      "type": "url",
+      "id": "partner_8_url",
+      "label": "Homepage URL"
+    },
+    {
+      "type": "textarea",
+      "id": "partner_8_address",
+      "label": "Address"
+    },
+    {
+      "type": "text",
+      "id": "partner_8_email",
+      "label": "Email"
+    },
+    {
+      "type": "text",
+      "id": "partner_8_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Partner 9"
+    },
+    {
+      "type": "text",
+      "id": "partner_9_country",
+      "label": "Country"
+    },
+    {
+      "type": "image_picker",
+      "id": "partner_9_logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "partner_9_name",
+      "label": "Partner name"
+    },
+    {
+      "type": "url",
+      "id": "partner_9_url",
+      "label": "Homepage URL"
+    },
+    {
+      "type": "textarea",
+      "id": "partner_9_address",
+      "label": "Address"
+    },
+    {
+      "type": "text",
+      "id": "partner_9_email",
+      "label": "Email"
+    },
+    {
+      "type": "text",
+      "id": "partner_9_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Partner 10"
+    },
+    {
+      "type": "text",
+      "id": "partner_10_country",
+      "label": "Country"
+    },
+    {
+      "type": "image_picker",
+      "id": "partner_10_logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "partner_10_name",
+      "label": "Partner name"
+    },
+    {
+      "type": "url",
+      "id": "partner_10_url",
+      "label": "Homepage URL"
+    },
+    {
+      "type": "textarea",
+      "id": "partner_10_address",
+      "label": "Address"
+    },
+    {
+      "type": "text",
+      "id": "partner_10_email",
+      "label": "Email"
+    },
+    {
+      "type": "text",
+      "id": "partner_10_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Partner 11"
+    },
+    {
+      "type": "text",
+      "id": "partner_11_country",
+      "label": "Country"
+    },
+    {
+      "type": "image_picker",
+      "id": "partner_11_logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "partner_11_name",
+      "label": "Partner name"
+    },
+    {
+      "type": "url",
+      "id": "partner_11_url",
+      "label": "Homepage URL"
+    },
+    {
+      "type": "textarea",
+      "id": "partner_11_address",
+      "label": "Address"
+    },
+    {
+      "type": "text",
+      "id": "partner_11_email",
+      "label": "Email"
+    },
+    {
+      "type": "text",
+      "id": "partner_11_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "header",
+      "content": "Partner 12"
+    },
+    {
+      "type": "text",
+      "id": "partner_12_country",
+      "label": "Country"
+    },
+    {
+      "type": "image_picker",
+      "id": "partner_12_logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "partner_12_name",
+      "label": "Partner name"
+    },
+    {
+      "type": "url",
+      "id": "partner_12_url",
+      "label": "Homepage URL"
+    },
+    {
+      "type": "textarea",
+      "id": "partner_12_address",
+      "label": "Address"
+    },
+    {
+      "type": "text",
+      "id": "partner_12_email",
+      "label": "Email"
+    },
+    {
+      "type": "text",
+      "id": "partner_12_phone",
+      "label": "Phone"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Partners carousel"
+    }
+  ]
+}
+{% endschema %}

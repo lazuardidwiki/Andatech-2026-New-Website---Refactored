@@ -1,0 +1,58 @@
+.kby-giveaway{
+  position:relative; overflow:hidden;
+  background:var(--kby-navy-raised);
+  border-top:1px solid var(--kby-border); border-bottom:1px solid var(--kby-border);
+  padding:72px 48px;
+}
+
+/* Optional background photo + dark navy scrim, same layering idea as the
+   hero: image sits behind everything, the overlay keeps text readable on
+   top of it. Both are absent entirely if no image is set in section
+   settings, leaving the plain navy panel exactly as before. */
+.kby-giveaway__bg{
+  position:absolute; inset:0; z-index:0;
+  background-size:cover; background-position:center;
+}
+.kby-giveaway__overlay{
+  position:absolute; inset:0; z-index:0;
+  background:rgba(11,17,22,.82);
+}
+
+/* Same alignment fix as every other section — full width, not centered in
+   a max-width box, so this lines up with the nav/hero at 48px from the
+   true edge instead of drifting on wide viewports. */
+.kby-giveaway__wrap{
+  position:relative; z-index:1;
+  max-width:1280px; display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center;
+}
+/* Desktop-only exception to the left-aligned convention every other
+   section uses — Dwiki specifically wants this one centered instead. */
+@media (min-width:821px){
+  .kby-giveaway__wrap{ margin:0 auto; }
+}
+.kby-giveaway__sub{ font-size:15px; color:var(--kby-ink-muted); max-width:420px; margin-top:14px; }
+
+.kby-giveaway__form{ display:flex; flex-direction:column; gap:10px; }
+.kby-field{ display:flex; flex-direction:column; gap:6px; }
+.kby-field label{ font-size:12px; color:var(--kby-ink-muted); }
+.kby-field__optional{ opacity:.7; }
+.kby-field input,
+.kby-field select{
+  background:var(--kby-navy); border:1px solid var(--kby-border-strong); border-radius:10px;
+  padding:13px 14px; color:var(--kby-ink); font-family:'Titillium Web',sans-serif; font-size:14px;
+}
+.kby-field input:focus, .kby-field select:focus{ border-color:var(--kby-teal); outline:none; }
+.kby-field select{ appearance:none; }
+
+/* Extra push before the button (on top of the form's own 10px gap) so
+   occupation-to-button reads as a deliberate, wider gap, while the button
+   itself keeps the tighter base gap down to the fine print below it. */
+#kby-giveaway-submit{ justify-content:center; margin-top:14px; }
+
+.kby-giveaway__status{ font-size:13px; margin:0; min-height:18px; }
+.kby-giveaway__status[data-state="success"]{ color:var(--kby-green); }
+.kby-giveaway__status[data-state="error"]{ color:#E2574A; }
+
+.kby-giveaway__fine{ font-size:11.5px; color:var(--kby-ink-muted); line-height:1.5; margin:4px 0 0; }
+
+@media (max-width:820px){ .kby-giveaway__wrap{ grid-template-columns:1fr; } }

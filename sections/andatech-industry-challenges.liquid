@@ -1,0 +1,207 @@
+{%- comment -%} Andatech — Industry-specific challenges with pill-filter tabs.
+  Classes are `at-` prefixed; styling lives in andatech-site.css + inline. {%- endcomment -%}
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-industry.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign first_industry = ''
+  for block in section.blocks
+    if block.type == 'industry'
+      if first_industry == ''
+        assign first_industry = block.id
+      endif
+    endif
+  endfor
+-%}
+
+<style>
+  .at-challenges { padding: clamp(64px, 7vw, 120px) 0; background: var(--at-surface-alt, #FBFBFB); }
+  .at-challenges__pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 32px; margin-bottom: 48px; }
+  .at-challenges__pill {
+    padding: 10px 24px; border-radius: var(--at-r-pill, 100px);
+    border: 1px solid #DDE0E3; background: transparent;
+    font-family: 'Titillium Web', sans-serif; font-size: 14px; font-weight: 600;
+    color: var(--at-body-color, #495563); cursor: pointer; transition: all .2s ease;
+  }
+  .at-challenges__pill.is-active,
+  .at-challenges__pill:hover {
+    background: var(--at-navy, #1F2937); color: #fff; border-color: var(--at-navy, #1F2937);
+  }
+  .at-challenges__panel { display: none; }
+  .at-challenges__panel.is-active { display: block; }
+  .at-challenges__card {
+    display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 4vw, 64px);
+    align-items: start;
+  }
+  .at-challenges__image { border-radius: var(--at-r-lg, 16px); overflow: hidden; }
+  .at-challenges__image img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+  .at-challenges__body { padding-top: 8px; }
+  .at-challenges__category {
+    font-family: 'Titillium Web', sans-serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 1.2px; text-transform: uppercase; color: var(--at-teal, #46BEC4);
+    margin-bottom: 8px;
+  }
+  .at-challenges__title {
+    font-family: 'Titillium Web', sans-serif; font-size: clamp(24px, 2.5vw, 36px);
+    font-weight: 700; line-height: 1.2; color: var(--at-navy, #1F2937); margin: 0 0 24px;
+  }
+  .at-challenges__label {
+    font-family: 'Titillium Web', sans-serif; font-size: 13px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.8px; color: var(--at-navy, #1F2937);
+    margin: 0 0 8px;
+  }
+  .at-challenges__text {
+    font-family: 'Titillium Web', sans-serif; font-size: 15px; line-height: 1.65;
+    color: var(--at-body-color, #495563); margin: 0 0 24px;
+  }
+  .at-challenges__support-list {
+    list-style: none; padding: 0; margin: 0 0 32px;
+  }
+  .at-challenges__support-list li {
+    position: relative; padding-left: 20px;
+    font-family: 'Titillium Web', sans-serif; font-size: 15px; line-height: 1.65;
+    color: var(--at-body-color, #495563);
+  }
+  .at-challenges__support-list li + li { margin-top: 6px; }
+  .at-challenges__support-list li::before {
+    content: ''; position: absolute; left: 0; top: 0.55em;
+    width: 8px; height: 8px; border: 2px solid var(--at-teal, #46BEC4); border-radius: 50%;
+  }
+  .at-challenges__step {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'Titillium Web', sans-serif; font-size: 14px; font-weight: 700;
+    color: var(--at-navy, #1F2937); margin-top: 8px;
+  }
+  .at-challenges__step-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--at-teal, #46BEC4); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+  }
+  @media (max-width: 767px) {
+    .at-challenges__card { grid-template-columns: 1fr; }
+    .at-challenges__pills { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+    .at-challenges__pill { white-space: nowrap; flex-shrink: 0; }
+  }
+</style>
+
+<section class="at-challenges" id="{{ section.settings.anchor_id | default: 'industry-challenges' | handleize }}">
+  <div class="at-shell">
+    {%- if section.settings.eyebrow != blank -%}<p class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+    <h2 class="at-industry__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>
+    {%- if section.settings.desc != blank -%}<div class="at-industry__desc" data-at-rise>{{ section.settings.desc }}</div>{%- endif -%}
+
+    <div class="at-challenges__pills" role="tablist" aria-label="Industry filters" data-at-rise>
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'industry' -%}
+          <button class="at-challenges__pill{% if block.id == first_industry %} is-active{% endif %}" type="button" role="tab" aria-selected="{% if block.id == first_industry %}true{% else %}false{% endif %}" aria-controls="AtChallenge-{{ block.id }}" data-at-challenge-tab="{{ block.id }}" {{ block.shopify_attributes }}>{{ block.settings.tab_label | escape }}</button>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'industry' -%}
+        <div class="at-challenges__panel{% if block.id == first_industry %} is-active{% endif %}" id="AtChallenge-{{ block.id }}" role="tabpanel" {% unless block.id == first_industry %}hidden{% endunless %} data-at-challenge-panel="{{ block.id }}">
+          <div class="at-challenges__card">
+            <div class="at-challenges__image">
+              {%- if block.settings.image != blank -%}
+                <img src="{{ block.settings.image | image_url: width: 1200 }}" alt="{{ block.settings.image.alt | default: block.settings.tab_label | escape }}" loading="lazy">
+              {%- endif -%}
+            </div>
+            <div class="at-challenges__body">
+              {%- if block.settings.category != blank -%}<p class="at-challenges__category">{{ block.settings.category | escape }}</p>{%- endif -%}
+              {%- if block.settings.title != blank -%}<h3 class="at-challenges__title">{{ block.settings.title | escape }}</h3>{%- endif -%}
+              {%- if block.settings.challenge != blank -%}
+                <p class="at-challenges__label">Challenge:</p>
+                <p class="at-challenges__text">{{ block.settings.challenge | escape }}</p>
+              {%- endif -%}
+              {%- if block.settings.support != blank -%}
+                <p class="at-challenges__label">A managed program can support:</p>
+                <ul class="at-challenges__support-list">
+                  {%- assign support_items = block.settings.support | newline_to_br | split: '<br />' -%}
+                  {%- for item in support_items -%}
+                    {%- assign trimmed = item | strip -%}
+                    {%- if trimmed != blank -%}<li>{{ trimmed | escape }}</li>{%- endif -%}
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+              <div class="at-challenges__step">
+                <span class="at-challenges__step-num">1</span>
+                <span>{{ block.settings.step_label | default: 'Understand' | escape }}</span>
+              </div>
+              {%- if block.settings.step_desc != blank -%}
+                <p class="at-challenges__text" style="margin-top:8px">{{ block.settings.step_desc | escape }}</p>
+              {%- endif -%}
+              {%- if block.settings.cta_label != blank -%}
+                <a class="at-btn at-btn--green" href="{{ block.settings.cta_url | default: '#' }}" style="margin-top:16px">{{ block.settings.cta_label | escape }} <i class="at-btn__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+<script>
+(function () {
+  var section = document.getElementById('{{ section.settings.anchor_id | default: 'industry-challenges' | handleize }}');
+  if (!section || section.dataset.challengesReady) return;
+  section.dataset.challengesReady = 'true';
+  var tabs = Array.prototype.slice.call(section.querySelectorAll('[data-at-challenge-tab]'));
+  var panels = Array.prototype.slice.call(section.querySelectorAll('[data-at-challenge-panel]'));
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      var id = tab.dataset.atChallengeTab;
+      tabs.forEach(function (t) { var a = t === tab; t.classList.toggle('is-active', a); t.setAttribute('aria-selected', String(a)); });
+      panels.forEach(function (p) { var a = p.dataset.atChallengePanel === id; p.classList.toggle('is-active', a); p.hidden = !a; });
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Industry Challenges",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "industry-challenges" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Industry Specific Challenges" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "Different industries. Different risks." },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "One need for capable people." },
+    { "type": "richtext", "id": "desc", "label": "Description" }
+  ],
+  "blocks": [
+    {
+      "type": "industry",
+      "name": "Industry",
+      "limit": 8,
+      "settings": [
+        { "type": "text", "id": "tab_label", "label": "Pill label", "default": "Heavy Industries" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "category", "label": "Category label", "default": "Challenges" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Heavy Industries" },
+        { "type": "textarea", "id": "challenge", "label": "Challenge text" },
+        { "type": "textarea", "id": "support", "label": "Support list", "info": "One item per line." },
+        { "type": "text", "id": "step_label", "label": "Step label", "default": "Understand", "info": "Label shown next to the numbered step indicator." },
+        { "type": "text", "id": "step_desc", "label": "Step description", "default": "Assess your current D&A program, policies, procedures and capability." },
+        { "type": "text", "id": "cta_label", "label": "Button label" },
+        { "type": "url", "id": "cta_url", "label": "Button link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Industry Challenges",
+      "blocks": [
+        { "type": "industry", "settings": { "tab_label": "Heavy Industries", "title": "Heavy Industries", "challenge": "Organisations can invest in quality testing technology and still have weaknesses in how programs are planned, administered and documented. It doesn't happen automatically: knowledge, procedures and capability.", "support": "Consistent testing procedures across all sites\nAccurate documentation and chain of custody\nCalibrated, audit-ready equipment\nSupervisor and collector competency" } },
+        { "type": "industry", "settings": { "tab_label": "Transport & Logistics", "title": "Transport & Logistics", "challenge": "Chain of responsibility obligations require operators to demonstrate fitness-for-work testing across drivers, subcontractors and depots — often with inconsistent processes between them.", "support": "Standardised processes across depots and drivers\nDocumented chain of responsibility evidence\nFitness-for-work program integration\nSubcontractor testing alignment" } },
+        { "type": "industry", "settings": { "tab_label": "Government", "title": "Government & Critical Services", "challenge": "Public-sector organisations face heightened scrutiny on procedural fairness, evidentiary standards and policy transparency — particularly where testing outcomes affect employment.", "support": "Evidentiary-grade testing procedures\nProcedural fairness documentation\nPolicy transparency and audit trails\nStaff training and competency records" } },
+        { "type": "industry", "settings": { "tab_label": "Healthcare", "title": "Healthcare & Community", "challenge": "Healthcare and community services operate under duty-of-care obligations where impairment risks affect vulnerable populations — but testing programs must balance safety with workforce wellbeing.", "support": "Duty-of-care aligned testing programs\nConfidential and sensitive testing processes\nWorkforce wellbeing integration\nRegulatory compliance documentation" } },
+        { "type": "industry", "settings": { "tab_label": "Workplace", "title": "Workplace & Corporate", "challenge": "Corporate environments often lack the internal expertise to implement and maintain a testing program that meets both legal requirements and practical operational needs.", "support": "End-to-end program implementation\nPolicy development and review\nSupervisor training and awareness\nOngoing compliance management" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

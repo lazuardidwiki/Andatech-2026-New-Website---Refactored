@@ -1,0 +1,129 @@
+{%- comment -%}
+  Andatech — All Industries directory.
+  A routing grid for the View All Industries / Service & Support landing page.
+{%- endcomment -%}
+
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-industry.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-all-industries.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'andatech-site.js' | asset_url }}" defer="defer"></script>
+
+{%- assign directory_menu = linklists[section.settings.menu] -%}
+
+<section class="at-industry-directory"{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handleize }}"{% endif %}>
+  <div class="at-shell">
+    <header class="at-industry-directory__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank or section.settings.heading_bold != blank -%}
+        <h2 class="at-industry__title" data-at-rise>
+          {{ section.settings.heading | escape }}
+          {%- if section.settings.heading_bold != blank -%}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{%- endif -%}
+        </h2>
+      {%- endif -%}
+      {%- if section.settings.description != blank -%}
+        <div class="at-industry__desc" data-at-rise>{{ section.settings.description }}</div>
+      {%- endif -%}
+    </header>
+
+    <div class="at-industry-directory__grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign card_url = block.settings.url
+          if card_url == blank and directory_menu.links.size > 0
+            for parent_link in directory_menu.links
+              if parent_link.title == section.settings.menu_parent
+                for child_link in parent_link.links
+                  if child_link.title == block.settings.title
+                    assign card_url = child_link.url
+                  endif
+                endfor
+              endif
+            endfor
+          endif
+          assign card_tag = 'article'
+          if card_url != blank
+            assign card_tag = 'a'
+          endif
+          assign card_alt = block.settings.image.alt | default: block.settings.title
+        -%}
+        <{{ card_tag }} class="at-industry-directory__card"{% if card_url != blank %} href="{{ card_url }}" aria-label="Explore {{ block.settings.title | escape }}"{% endif %} data-at-rise {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            {{ block.settings.image
+              | image_url: width: 1600
+              | image_tag:
+                class: 'at-industry-directory__image',
+                widths: '480, 720, 960, 1200, 1600',
+                sizes: '(min-width: 1101px) 31vw, (min-width: 768px) 48vw, 100vw',
+                loading: 'lazy',
+                alt: card_alt
+            }}
+          {%- endif -%}
+          <div class="at-industry-directory__content">
+            {%- if block.settings.eyebrow != blank -%}
+              <p class="at-industry-directory__eyebrow">{{ block.settings.eyebrow | escape }}</p>
+            {%- endif -%}
+            <div class="at-industry-directory__bottom">
+              <div>
+                <h3 class="at-industry-directory__title">{{ block.settings.title | escape }}</h3>
+                {%- if block.settings.description != blank -%}
+                  <div class="at-industry-directory__desc">{{ block.settings.description }}</div>
+                {%- endif -%}
+              </div>
+              {%- if card_url != blank -%}
+                <span class="at-industry-directory__arrow" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M17 7v7.5M17 7H9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              {%- endif -%}
+            </div>
+          </div>
+        </{{ card_tag }}>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Industry directory",
+  "tag": "section",
+  "class": "at-section",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "industry-directory" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Start with your operating reality" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "One standard of care." },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "Six different contexts." },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>A remote mine, a transport depot, a hospital and a family home should not be treated as the same testing environment. Choose your context to see the risks, methods and support that fit.</p>" },
+    { "type": "link_list", "id": "menu", "label": "Navigation menu", "info": "Used to inherit the live industry page links when a card link is blank." },
+    { "type": "text", "id": "menu_parent", "label": "Industry menu title", "default": "Industries", "info": "Must match the parent item in the selected navigation menu." }
+  ],
+  "blocks": [
+    {
+      "type": "industry",
+      "name": "Industry",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Background image", "info": "Optional. Use a 1600 × 1600 px square image; the card uses a centred cover crop." },
+        { "type": "text", "id": "eyebrow", "label": "Industries involved" },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "richtext", "id": "description", "label": "Description" },
+        { "type": "url", "id": "url", "label": "Industry page link", "info": "Optional override. Leave blank to use the matching item from the selected navigation menu." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Industry directory",
+      "blocks": [
+        { "type": "industry", "settings": { "eyebrow": "Mining / Construction / Oil & Gas / Utilities / Energy", "title": "Heavy Industries", "description": "<p>Fitness-for-work programs built for remote sites, rotating crews, contractors and high-risk operations.</p>" } },
+        { "type": "industry", "settings": { "eyebrow": "Road / Rail / Aviation / Maritime", "title": "Transport & Logistics", "description": "<p>Consistent testing across drivers, depots, terminals and mobile, contractor-heavy workforces.</p>" } },
+        { "type": "industry", "settings": { "eyebrow": "Police / Corrections / Emergency / Defence / Councils / Utilities", "title": "Government & Critical Services", "description": "<p>Documented procedures and reporting for accountable, safety-critical public-service environments.</p>" } },
+        { "type": "industry", "settings": { "eyebrow": "Hospitals / Aged Care / Disability / Community Health / Personal", "title": "Healthcare & Community", "description": "<p>Safer care environments supported by fair processes, confidentiality and clear duty-of-care controls.</p>" } },
+        { "type": "industry", "settings": { "eyebrow": "Offices / Professional Services / Retail / Hospitality / Multi-site Workplaces", "title": "Workplace & Corporate", "description": "<p>Practical, fair testing programs for offices, customer-facing teams, vehicles and varied job risks.</p>" } },
+        { "type": "industry", "settings": { "eyebrow": "Personal Breathalysers / Saliva Tests / Urine Tests / Practical Guidance", "title": "Home Testing Solutions", "description": "<p>Reliable personal alcohol and drug screening products with straightforward guidance for what comes next.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

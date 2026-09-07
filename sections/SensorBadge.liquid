@@ -1,0 +1,389 @@
+{% comment %}
+  Andatech FX Sensor Badge - Designed by Designer X Programmer
+  Exact Organic Wave Design: Restored displacement (top/right) from user snippet.
+  Features: Inward scaling, Horizontal Stretch, Metallic Reflections with Customizable Shine, Adobe Typekit.
+{% endcomment %}
+
+{%- if section.settings.adobe_font_url != blank -%}
+  <link rel="stylesheet" href="{{ section.settings.adobe_font_url }}">
+{%- endif -%}
+
+{%- style -%}
+  {%- if section.settings.use_custom_font and section.settings.custom_font_url != blank -%}
+    @font-face {
+      font-family: 'AndatechCustomFont';
+      src: url('{{ section.settings.custom_font_url }}') format('woff2');
+      font-weight: normal; font-style: normal; font-display: swap;
+    }
+  {%- else -%}
+    {{ section.settings.fx_font | font_face }}
+  {%- endif -%}
+  
+  #section-{{ section.id }} {
+    --primary-glow: {{ section.settings.glow_color }};
+    --bg-dark: {{ section.settings.bg_color }};
+    --text-size-main: {{ section.settings.text_size }}rem;
+    --fx-text-size: {{ section.settings.fx_text_size }}rem;
+    --brand-grad-1: {{ section.settings.brand_grad_1 }};
+    --brand-grad-2: {{ section.settings.brand_grad_2 }};
+    --tier-grad-1: {{ section.settings.tier_grad_1 }};
+    --tier-grad-2: {{ section.settings.tier_grad_2 }};
+    --base-speed: {{ section.settings.anim_speed }}s;
+    --wave-stretch: {{ section.settings.wave_stretch }};
+    --reflection-light: {{ section.settings.shine_color }};
+
+    {%- if section.settings.adobe_font_url != blank -%}
+      --fx-brand-font-family: {{ section.settings.adobe_font_family | default: 'bc-barell' }}, sans-serif;
+    {%- elsif section.settings.use_custom_font -%}
+      --fx-brand-font-family: 'AndatechCustomFont', sans-serif;
+    {%- else -%}
+      --fx-brand-font-family: {{ section.settings.fx_font.family }}, {{ section.settings.fx_font.fallback_families }};
+    {%- endif -%}
+    
+    --fx-font-weight: {% if section.settings.fx_bold %}700{% else %}{% if section.settings.use_custom_font or section.settings.adobe_font_url != blank %}400{% else %}{{ section.settings.fx_font.weight | default: 300 }}{% endif %}{% endif %};
+  }
+{%- endstyle -%}
+
+<div class="fx-badge-section" id="section-{{ section.id }}">
+  <div class="fx-card-wrapper">
+    <div class="fx-card">
+      <!-- Background Technical Grid -->
+      <div class="fx-core-grid"></div>
+      
+      <!-- Tier Layers (Strict Organic Wave Engine) -->
+      <div class="fx-waves-container" style="transform: scaleX(var(--wave-stretch));">
+        {%- for i in (1..section.settings.wave_count) -%}
+          <div class="wave-layer" style="--wave-index: {{ i }};"></div>
+        {%- endfor -%}
+      </div>
+
+      <!-- Card Header -->
+      <div class="fx-header">
+        <span class="fx-tech-label">SENSOR TECHNOLOGY</span>
+      </div>
+
+      <!-- Main Branding & Tier -->
+      <div class="fx-main-content">
+        <div class="fx-brand {% if section.settings.fx_metallic %}has-reflection{% endif %}" data-text="{{ section.settings.fx_text }}">
+          {{ section.settings.fx_text }}
+        </div>
+        <div class="fx-tier-number {% if section.settings.tier_metallic %}has-reflection{% endif %}" data-text="{% if section.settings.manual_count != blank %}{{ section.settings.manual_count }}{% else %}5{% endif %}">
+          {%- if section.settings.manual_count != blank -%}
+            {{ section.settings.manual_count }}
+          {%- else -%}
+            {{ section.settings.metaobject_reference.total_followers | default: '5' }}
+          {%- endif -%}
+        </div>
+      </div>
+
+      <!-- Card Footer -->
+      <div class="fx-footer">
+        <div class="fx-gen-code">{{ section.settings.gen_code }}</div>
+        <div class="fx-label">{{ section.settings.label_text }}</div>
+      </div>
+
+      <!-- Conic Border Tracer -->
+      <div class="fx-tracer"></div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Andatech FX Badge",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Wave Settings"
+    },
+    {
+      "type": "range",
+      "id": "wave_count",
+      "min": 1,
+      "max": 11,
+      "step": 1,
+      "label": "Number of Wave Layers",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "wave_stretch",
+      "min": 0.5,
+      "max": 3.0,
+      "step": 0.1,
+      "label": "Wave Horizontal Stretch",
+      "default": 1.0,
+      "info": "Values above 1.0 will stretch the waves horizontally."
+    },
+    {
+      "type": "range",
+      "id": "anim_speed",
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "unit": "s",
+      "label": "Base Animation Duration",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Branding (FX)"
+    },
+    {
+      "type": "text",
+      "id": "fx_text",
+      "label": "Brand Text",
+      "default": "FX"
+    },
+    {
+      "type": "checkbox",
+      "id": "fx_bold",
+      "label": "Enable Bold Weight",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "fx_metallic",
+      "label": "Enable Metallic Reflection",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "brand_grad_1",
+      "label": "Brand Gradient Start",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "brand_grad_2",
+      "label": "Brand Gradient End",
+      "default": "#19BD76"
+    },
+    {
+      "type": "range",
+      "id": "fx_text_size",
+      "min": 1,
+      "max": 8,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Brand Text Size",
+      "default": 2.5
+    },
+    {
+      "type": "header",
+      "content": "Tier Number Settings"
+    },
+    {
+      "type": "text",
+      "id": "manual_count",
+      "label": "Tier Number",
+      "default": "5"
+    },
+    {
+      "type": "checkbox",
+      "id": "tier_metallic",
+      "label": "Enable Metallic Reflection",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "tier_grad_1",
+      "label": "Tier Gradient Start",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "tier_grad_2",
+      "label": "Tier Gradient End",
+      "default": "#808080"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 2,
+      "max": 12,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Tier Number Size",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Shine Effect Settings"
+    },
+    {
+      "type": "color",
+      "id": "shine_color",
+      "label": "Shine Color",
+      "default": "#ffffff",
+      "info": "Customizes the sweeping light effect on text."
+    },
+    {
+      "type": "header",
+      "content": "Adobe Typekit Font"
+    },
+    {
+      "type": "text",
+      "id": "adobe_font_url",
+      "label": "Adobe Typekit CSS URL",
+      "default": "https://use.typekit.net/wes8iwv.css"
+    },
+    {
+      "type": "text",
+      "id": "adobe_font_family",
+      "label": "Adobe Font Family Name",
+      "default": "bc-barell"
+    },
+    {
+      "type": "header",
+      "content": "Visual Styles"
+    },
+    {
+      "type": "color",
+      "id": "glow_color",
+      "label": "Global Accent Color",
+      "default": "#19BD76"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Card Background",
+      "default": "#0c0d0d"
+    },
+    {
+      "type": "text",
+      "id": "gen_code",
+      "label": "Sensor Code",
+      "default": "2110"
+    },
+    {
+      "type": "text",
+      "id": "label_text",
+      "label": "Description Label",
+      "default": "PRECISION SENSOR"
+    }
+  ],
+  "presets": [ { "name": "Andatech FX Badge" } ]
+}
+{% endschema %}
+
+{% style %}
+#section-{{ section.id }} {
+  padding: 80px 20px;
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.fx-card-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  perspective: 1000px;
+}
+
+.fx-card {
+  position: relative;
+  background: var(--bg-dark);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 40px;
+  height: 320px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.fx-card:hover { transform: translateY(-10px) rotateX(5deg); }
+
+.fx-core-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
+  mask-image: radial-gradient(circle at center, black, transparent 80%);
+  pointer-events: none;
+}
+
+.fx-waves-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transform-origin: center center;
+}
+
+.wave-layer {
+  position: absolute;
+  border: 1.5px solid var(--primary-glow);
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  top: 50%;
+  right: -20%;
+  width: calc(100% + (var(--wave-index) * 10%) - (var(--wave-index) * 2%));
+  height: calc(100% + (var(--wave-index) * 10%) - (var(--wave-index) * 2%));
+  opacity: calc(0.8 / var(--wave-index));
+  animation: waveRotation calc(var(--base-speed) + (var(--wave-index) * 3s)) linear infinite;
+  transform-origin: center center;
+}
+
+@keyframes waveRotation {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.fx-tech-label {
+  font-size: 10px; letter-spacing: 4px; color: #888; font-weight: 600; text-transform: uppercase;
+}
+.fx-main-content { display: flex; align-items: baseline; gap: 15px; z-index: 2; }
+.fx-brand {
+  font-family: var(--fx-brand-font-family);
+  font-weight: var(--fx-font-weight);
+  font-size: var(--fx-text-size);
+  letter-spacing: 2px; line-height: 1; position: relative;
+  background: linear-gradient(180deg, var(--brand-grad-1) 0%, var(--brand-grad-2) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.fx-tier-number {
+  font-family: inherit; font-size: var(--text-size-main); font-weight: 800; line-height: 0.9; position: relative;
+  background: linear-gradient(180deg, var(--tier-grad-1) 0%, var(--tier-grad-2) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 20px rgba(255,255,255,0.1));
+}
+
+.has-reflection::before {
+  content: attr(data-text); position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 35%, var(--reflection-light) 45%, #fff 50%, var(--reflection-light) 55%, transparent 65%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: reflectionSweep 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  z-index: 10; pointer-events: none;
+}
+@keyframes reflectionSweep {
+  0% { background-position: 250% 0; }
+  25% { background-position: -50% 0; }
+  100% { background-position: -50% 0; }
+}
+
+.fx-footer {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;
+}
+.fx-gen-code { font-family: monospace; font-size: 12px; color: var(--primary-glow); opacity: 0.8; }
+.fx-label { font-size: 10px; letter-spacing: 2px; color: #fff; opacity: 0.6; text-transform: uppercase; }
+
+.fx-tracer {
+  position: absolute; inset: 0; border-radius: 12px; padding: 1px;
+  background: conic-gradient(from var(--angle), transparent 70%, var(--primary-glow), transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: rotateAngle 4s linear infinite;
+}
+@property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+@keyframes rotateAngle { to { --angle: 360deg; } }
+{% endstyle %}

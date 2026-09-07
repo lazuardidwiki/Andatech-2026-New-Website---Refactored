@@ -1,0 +1,423 @@
+{% schema %}
+{
+  "name": "Career List (Simple)",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Content"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Heading",
+      "default": "Current Opportunities"
+    },
+    {
+      "type": "header",
+      "content": "Simplified Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Page Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "brand_color",
+      "label": "Brand Color (Buttons & Accents)",
+      "default": "#111111",
+      "info": "Controls buttons, active icons, and hover states."
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#222222",
+      "info": "Controls all headings and body text."
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider / Line Color",
+      "default": "#E0E0E0"
+    },
+    {
+      "type": "header",
+      "content": "Text Sizing"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 20,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading Size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "job_title_size",
+      "min": 16,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Job Title Size",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "job_title_weight",
+      "label": "Job Title Weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Semi Bold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "range",
+      "id": "row_padding",
+      "min": 15,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "Row Spacing",
+      "default": 35
+    }
+  ],
+  "blocks": [
+    {
+      "type": "job_post",
+      "name": "Job Posting",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Job Title",
+          "default": "Brand Manager"
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Date / Status",
+          "default": "Expression of Interest"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Job Description",
+          "default": "<p>Write the job responsibilities here. Make it sound exciting!</p>"
+        },
+        {
+          "type": "text",
+          "id": "email_address",
+          "label": "Application Email",
+          "default": "careers@andatech.com.au"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Career List (Simple)",
+      "blocks": [
+        { "type": "job_post" },
+        { "type": "job_post" },
+        { "type": "job_post" }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<div class="career-list-section">
+  <div class="career-page-width">
+    {% if section.settings.section_title != blank %}
+      <div class="career-header-wrapper">
+        <h2 class="career-section-title">{{ section.settings.section_title }}</h2>
+      </div>
+    {% endif %}
+
+    <div class="career-list-container">
+      {% for block in section.blocks %}
+        <div class="career-item" {{ block.shopify_attributes }} style="animation-delay: {{ forloop.index | times: 100 }}ms;">
+          <button class="career-trigger" aria-expanded="false">
+            <span class="career-title">{{ block.settings.title }}</span>
+            <div class="career-trigger-right">
+              <span class="career-meta">{{ block.settings.date }}</span>
+              <span class="career-icon-wrapper">
+                <span class="career-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </span>
+              </span>
+            </div>
+          </button>
+          
+          <div class="career-content">
+            <div class="career-content-inner">
+              <div class="career-description">
+                {{ block.settings.description }}
+              </div>
+              <div class="career-actions">
+                <a href="mailto:{{ block.settings.email_address }}?subject=Application for {{ block.settings.title }}" class="career-btn">
+                  Apply via Email
+                  <span class="btn-arrow">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  /* --- COLORS --- */
+  :root {
+    --cl-bg: {{ section.settings.bg_color }};
+    --cl-text: {{ section.settings.text_color }};
+    --cl-line: {{ section.settings.divider_color }};
+    --cl-brand: {{ section.settings.brand_color }};
+  }
+
+  .career-list-section {
+    background-color: var(--cl-bg);
+    padding: 60px 0;
+    overflow: hidden;
+  }
+
+  .career-page-width {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* HEADINGS */
+  .career-header-wrapper {
+    overflow: hidden;
+    margin-bottom: 2rem;
+    border-bottom: 3px solid var(--cl-brand); /* Uses brand color for heavy underline */
+    padding-bottom: 15px;
+  }
+
+  .career-section-title {
+    font-size: {{ section.settings.heading_size }}px;
+    color: var(--cl-text);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin: 0;
+    animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .career-list-container {
+    border-top: 1px solid var(--cl-line);
+  }
+
+  /* ROW ITEM */
+  .career-item {
+    border-bottom: 1px solid var(--cl-line);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* TRIGGER BUTTON */
+  .career-trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: {{ section.settings.row_padding }}px 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.2s ease;
+  }
+
+  .career-trigger:hover {
+    background-color: rgba(0,0,0,0.02); /* Auto-tint */
+  }
+
+  /* JOB TITLE */
+  .career-title {
+    font-size: {{ section.settings.job_title_size }}px;
+    font-weight: {{ section.settings.job_title_weight }};
+    color: var(--cl-text);
+    padding-right: 20px;
+    transition: transform 0.3s ease;
+  }
+
+  .career-trigger:hover .career-title {
+    transform: translateX(10px);
+  }
+
+  .career-trigger-right {
+    display: flex;
+    align-items: center;
+  }
+
+  /* DATE / STATUS (Uses Text Color but lighter opacity) */
+  .career-meta {
+    font-size: 1rem;
+    color: var(--cl-text);
+    opacity: 0.6; 
+    margin-right: 30px;
+    font-weight: 500;
+    display: none;
+  }
+
+  @media(min-width: 768px) {
+    .career-meta { display: block; }
+  }
+
+  /* ICON CIRCLE */
+  .career-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: {{ section.settings.job_title_size | plus: 16 }}px;
+    height: {{ section.settings.job_title_size | plus: 16 }}px;
+    background: #f0f0f0;
+    border-radius: 50%;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .career-icon {
+    display: flex;
+    color: var(--cl-text); /* Icon is text color by default */
+    opacity: 0.5;
+    transition: color 0.3s;
+  }
+
+  /* ACTIVE STATES */
+  .career-trigger:hover .career-icon-wrapper {
+    transform: scale(1.1);
+    background: #e5e5e5;
+  }
+
+  .career-trigger[aria-expanded="true"] .career-icon-wrapper {
+    background: var(--cl-brand); /* Circle becomes Brand Color */
+    transform: scale(1.0);
+  }
+
+  .career-trigger[aria-expanded="true"] .career-icon {
+    transform: rotate(45deg);
+    color: #fff; /* Icon becomes white inside brand color */
+    opacity: 1;
+  }
+
+  /* ACCORDION CONTENT */
+  .career-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    background-color: rgba(0,0,0,0.01);
+  }
+
+  .career-content[data-visible="true"] {
+    grid-template-rows: 1fr;
+  }
+
+  /* Accent line on the left using Brand Color */
+  .career-content[data-visible="true"] .career-item {
+     /* Logic handled via border on inner content if needed, kept clean for now */
+  }
+
+  .career-content-inner {
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    border-left: 4px solid var(--cl-brand); /* The Accent Line */
+  }
+
+  .career-content[data-visible="true"] .career-content-inner {
+    opacity: 1;
+    transform: translateY(0);
+    padding: 40px;
+    transition-delay: 0.1s;
+  }
+  
+  .career-content:not([data-visible="true"]) .career-content-inner {
+    padding: 0 40px;
+  }
+
+  /* DESCRIPTION TEXT */
+  .career-description {
+    color: var(--cl-text);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 30px;
+    max-width: 900px;
+  }
+
+  .career-description h1, .career-description h2, .career-description h3 {
+    color: var(--cl-text);
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+  }
+
+  /* BUTTON STYLING */
+  .career-btn {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--cl-brand); /* BUTTON IS BRAND COLOR */
+    color: #ffffff; /* Text always white for contrast */
+    padding: 16px 32px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .btn-arrow {
+    display: inline-block;
+    margin-left: 10px;
+    transition: transform 0.3s ease;
+  }
+
+  .career-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+
+  .career-btn:hover .btn-arrow {
+    transform: translateX(5px);
+  }
+
+  /* Keyframes */
+  @keyframes slideUpFade {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.career-trigger').forEach(button => {
+    button.addEventListener('click', () => {
+      const content = button.nextElementSibling;
+      const isExpanded = button.getAttribute('aria-expanded') === 'true';
+      button.setAttribute('aria-expanded', !isExpanded);
+      if (!isExpanded) {
+        content.setAttribute('data-visible', 'true');
+      } else {
+        content.removeAttribute('data-visible');
+      }
+    });
+  });
+</script>

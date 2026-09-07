@@ -1,0 +1,126 @@
+{%- comment -%} Andatech — Industry Specific Challenges (Managed Compliance Programs).
+  Pill filter tabs → two-column panel: image left, content right. {%- endcomment -%}
+
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-industry.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-mcp.css' | asset_url | stylesheet_tag }}
+{%- if section.settings.layout == 'solutions_router' -%}{{ 'andatech-solutions-pages.css' | asset_url | stylesheet_tag }}{%- endif -%}
+
+<section class="at-mcp-challenges{% if section.settings.layout == 'solutions_router' %} at-mcp-challenges--solutions-router{% endif %}" id="{% if section.settings.anchor_id != blank %}{{ section.settings.anchor_id | handle }}{% else %}AtMcpChallenges-{{ section.id }}{% endif %}">
+  <div class="at-shell">
+    <div class="at-mcp-challenges__intro">
+      {%- if section.settings.eyebrow != blank -%}<p class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      <h2 class="at-industry__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>
+      {%- if section.settings.desc != blank -%}<div class="at-mcp-challenges__desc" data-at-rise>{{ section.settings.desc }}</div>{%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="at-mcp-challenges__tabs" role="tablist" aria-label="Industry challenges" data-at-rise>
+        {%- for block in section.blocks -%}
+          <button class="at-mcp-challenges__tab{% if forloop.first %} is-active{% endif %}" id="McpIndustryTab-{{ section.id }}-{{ forloop.index0 }}" type="button" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="McpIndustryPanel-{{ section.id }}-{{ forloop.index0 }}" tabindex="{% if forloop.first %}0{% else %}-1{% endif %}" data-mcp-tab="{{ forloop.index0 }}" {{ block.shopify_attributes }}>{{ block.settings.tab_label | escape }}</button>
+        {%- endfor -%}
+      </div>
+
+      <div class="at-mcp-challenges__panels">
+        {%- for block in section.blocks -%}
+          <div class="at-mcp-challenges__panel{% if forloop.first %} is-active{% endif %}" id="McpIndustryPanel-{{ section.id }}-{{ forloop.index0 }}" role="tabpanel" aria-labelledby="McpIndustryTab-{{ section.id }}-{{ forloop.index0 }}" data-mcp-panel="{{ forloop.index0 }}"{% unless forloop.first %} hidden{% endunless %}>
+            <div class="at-mcp-challenges__image">
+              {%- if block.settings.image != blank -%}
+                <img src="{{ block.settings.image | image_url: width: 1200 }}" alt="{{ block.settings.image.alt | default: block.settings.tab_label | escape }}" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}" loading="lazy">
+              {%- elsif block.settings.asset_name != blank -%}
+                <img src="{{ block.settings.asset_name | asset_img_url: '1200x' }}" srcset="{{ block.settings.asset_name | asset_img_url: '640x' }} 640w, {{ block.settings.asset_name | asset_img_url: '900x' }} 900w, {{ block.settings.asset_name | asset_img_url: '1200x' }} 1200w" sizes="(max-width: 749px) 100vw, 50vw" alt="{{ block.settings.tab_label | escape }}" width="1200" height="800" loading="lazy">
+              {%- endif -%}
+            </div>
+            <div class="at-mcp-challenges__content">
+              {%- if block.settings.category != blank -%}<p class="at-mcp-challenges__category">{{ block.settings.category | escape }}</p>{%- endif -%}
+              <h3 class="at-mcp-challenges__title">{{ block.settings.title | escape }}</h3>
+              {%- if section.settings.layout == 'solutions_router' -%}
+                {%- if block.settings.simple_desc != blank -%}<div class="at-mcp-challenges__simple-desc">{{ block.settings.simple_desc }}</div>{%- endif -%}
+              {%- elsif block.settings.challenge != blank -%}
+                <div class="at-mcp-challenges__block">
+                  <h4>Challenge:</h4>
+                  <div>{{ block.settings.challenge }}</div>
+                </div>
+              {%- endif -%}
+              {%- if section.settings.layout != 'solutions_router' and block.settings.support != blank -%}
+                <div class="at-mcp-challenges__block">
+                  <h4>A managed program can support:</h4>
+                  <div>{{ block.settings.support }}</div>
+                </div>
+              {%- endif -%}
+              {%- if block.settings.cta_label != blank -%}
+                {%- if section.settings.layout == 'solutions_router' or block.settings.cta_url != blank -%}
+                  <a class="at-btn at-btn--green" href="{{ block.settings.cta_url | default: '#' }}">{{ block.settings.cta_label | escape }} <i class="at-btn__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>
+                {%- endif -%}
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+(function () {
+  var root = document.getElementById('{% if section.settings.anchor_id != blank %}{{ section.settings.anchor_id | handle }}{% else %}AtMcpChallenges-{{ section.id }}{% endif %}');
+  if (!root) return;
+  var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-mcp-tab]'));
+  var panels = Array.prototype.slice.call(root.querySelectorAll('[data-mcp-panel]'));
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      var idx = tab.getAttribute('data-mcp-tab');
+      tabs.forEach(function (t) { t.classList.remove('is-active'); t.setAttribute('aria-selected', 'false'); t.setAttribute('tabindex', '-1'); });
+      panels.forEach(function (p) { p.classList.remove('is-active'); p.hidden = true; });
+      tab.classList.add('is-active');
+      tab.setAttribute('aria-selected', 'true');
+      tab.setAttribute('tabindex', '0');
+      var target = root.querySelector('[data-mcp-panel="' + idx + '"]');
+      if (target) { target.hidden = false; target.classList.add('is-active'); }
+    });
+    tab.addEventListener('keydown', function (event) {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight' && event.key !== 'Home' && event.key !== 'End') return;
+      event.preventDefault();
+      var current = tabs.indexOf(tab);
+      var next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : event.key === 'ArrowRight' ? (current + 1) % tabs.length : (current - 1 + tabs.length) % tabs.length;
+      tabs[next].focus();
+      tabs[next].click();
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "MCP Industry Challenges",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    { "type": "select", "id": "layout", "label": "Content layout", "options": [{ "value": "managed", "label": "Managed program detail" }, { "value": "solutions_router", "label": "Simple solutions router" }], "default": "managed" },
+    { "type": "text", "id": "anchor_id", "label": "Optional section anchor", "info": "Leave blank to preserve the existing generated ID." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Industry Specific Challenges" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "Different industries. Different risks." },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "One need for capable people." },
+    { "type": "richtext", "id": "desc", "label": "Description" }
+  ],
+  "blocks": [{ "type": "industry", "name": "Industry", "limit": 8, "settings": [
+    { "type": "text", "id": "tab_label", "label": "Tab label", "default": "Heavy Industries" },
+    { "type": "image_picker", "id": "image", "label": "Panel image" },
+    { "type": "text", "id": "asset_name", "label": "Bundled fallback asset", "info": "Used only when no Shopify image is selected." },
+    { "type": "text", "id": "category", "label": "Category label", "info": "e.g. Mining / Construction / Oil & Gas / Utilities / Energy" },
+    { "type": "text", "id": "title", "label": "Industry title", "default": "Heavy Industries" },
+    { "type": "richtext", "id": "challenge", "label": "Challenge copy" },
+    { "type": "richtext", "id": "support", "label": "Managed program support copy" },
+    { "type": "richtext", "id": "simple_desc", "label": "Simple router description", "info": "Used by the Simple solutions router layout." },
+    { "type": "text", "id": "cta_label", "label": "CTA label", "default": "Explore Heavy Industry Solutions" },
+    { "type": "url", "id": "cta_url", "label": "CTA link" }
+  ] }],
+  "presets": [{ "name": "MCP Industry Challenges", "blocks": [
+    { "type": "industry", "settings": { "tab_label": "Heavy Industries", "category": "Mining · Resources · Construction · Utilities · Energy", "title": "Heavy Industries", "challenge": "<p>Safety-sensitive work, contractor movements, remote sites and roster variation can magnify gaps when procedures differ between locations.</p>", "support": "<p>Documented procedures, trained collectors, specimen-integrity and chain-of-custody controls, maintained equipment, consistent records and scheduled program reviews.</p>", "cta_label": "Explore Heavy Industry Solutions" } },
+    { "type": "industry", "settings": { "tab_label": "Transport & Logistics", "category": "Road · Rail · Aviation · Maritime · Warehousing", "title": "Transport & Logistics", "challenge": "<p>Dispersed and shift-based operations must account for different sector rules, fitness-for-work expectations and practical site conditions.</p>", "support": "<p>A role- and site-aligned process, trained collectors and supervisors, equipment controls, chain-of-custody documentation and central records.</p>", "cta_label": "Explore Workplace Testing Solutions" } },
+    { "type": "industry", "settings": { "tab_label": "Government & Critical Services", "category": "Police · Corrections · Defence · Councils · Emergency Services", "title": "Government & Critical Services", "challenge": "<p>Public accountability, workforce diversity and high-consequence roles require a consistent process that also respects privacy and dignity.</p>", "support": "<p>Defined responsibilities, consistent collection and escalation procedures, competency records, secure reporting and a clear audit trail.</p>", "cta_label": "Explore Workplace Testing Solutions" } },
+    { "type": "industry", "settings": { "tab_label": "Healthcare & Community", "category": "Hospitals · Aged Care · Disability · Community Services", "title": "Healthcare & Community", "challenge": "<p>Duty of care must be balanced with informed consent, confidentiality, privacy and dignity across varied care settings.</p>", "support": "<p>A setting-appropriate method, trained staff, clear consent and privacy steps, specimen-integrity controls and secure, restricted records.</p>", "cta_label": "Explore Workplace Testing Solutions" } },
+    { "type": "industry", "settings": { "tab_label": "Workplace & Corporate", "category": "Offices · Manufacturing · Education · Retail", "title": "Workplace & Corporate", "challenge": "<p>Different job risks and limited in-house specialist knowledge can lead to inconsistent policy decisions, testing steps and records.</p>", "support": "<p>A risk-based policy, supervisor guidance, fit-for-purpose equipment, a documented process and periodic review as the workplace changes.</p>", "cta_label": "Explore Workplace Testing Solutions" } }
+  ] }]
+}
+{% endschema %}

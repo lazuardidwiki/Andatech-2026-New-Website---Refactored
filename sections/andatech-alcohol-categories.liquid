@@ -1,0 +1,57 @@
+{%- comment -%} Alcohol testing category strip. Icons are merchant-managed in Theme Editor. {%- endcomment -%}
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-alcohol-testing.css' | asset_url | stylesheet_tag }}
+
+<section class="at-alcohol-categories"{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handleize }}"{% endif %}>
+  <div class="at-shell">
+    <div class="at-alcohol-categories__grid">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.link != blank -%}<a class="at-alcohol-category" href="{{ block.settings.link }}" {{ block.shopify_attributes }}>{%- else -%}<div class="at-alcohol-category" {{ block.shopify_attributes }}>{%- endif -%}
+          {%- if block.settings.icon != blank -%}
+            <span class="at-alcohol-category__icon">
+              {{ block.settings.icon | image_url: width: 200 | image_tag: loading: 'lazy', widths: '100, 150, 200', sizes: '(max-width: 749px) 52px, 88px', alt: block.settings.icon.alt }}
+            </span>
+          {%- endif -%}
+          {%- if block.settings.title != blank -%}<h2 class="at-alcohol-category__title">{{ block.settings.title | escape }}</h2>{%- endif -%}
+          {%- if block.settings.description != blank -%}<p class="at-alcohol-category__desc">{{ block.settings.description | escape }}</p>{%- endif -%}
+        {%- if block.settings.link != blank -%}</a>{%- else -%}</div>{%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Alcohol Categories",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "testing-categories" },
+    { "type": "paragraph", "content": "Use transparent SVG or PNG icons. A 200 x 200 px source is recommended; icons display at up to 88 x 88 px on desktop and 52 x 52 px on mobile." }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "limit": 4,
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon" },
+        { "type": "text", "id": "title", "label": "H2 — Title", "default": "Personal" },
+        { "type": "textarea", "id": "description", "label": "Description", "default": "For informed decisions before driving" },
+        { "type": "url", "id": "link", "label": "Optional link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Alcohol Categories",
+      "blocks": [
+        { "type": "category", "settings": { "title": "Personal", "description": "For informed decisions before driving" } },
+        { "type": "category", "settings": { "title": "Workplace", "description": "For flexible workplace screening" } },
+        { "type": "category", "settings": { "title": "Wall-Mounted", "description": "For repeat screening at an entry point" } },
+        { "type": "category", "settings": { "title": "Vehicle Interlock", "description": "For a breath test before vehicle start" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

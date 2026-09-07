@@ -1,0 +1,1484 @@
+{% schema %}
+{
+  "name": "BAC Calculator Pro",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "BAC Estimator"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#8dc63f"
+    },
+    {
+      "type": "header",
+      "content": "Typography & Effects"
+    },
+    {
+      "type": "range",
+      "id": "base_font_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Base Text Size",
+      "default": 16,
+      "info": "Scales labels, inputs, and descriptions."
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 24,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size",
+      "default": 48
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_bold",
+      "label": "Bold Heading",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "result_size",
+      "min": 40,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Result (BAC%) Size",
+      "default": 72
+    },
+    {
+      "type": "checkbox",
+      "id": "result_bold",
+      "label": "Bold Result",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "result_pulsate",
+      "label": "Pulsate Result",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "sober_size",
+      "min": 30,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Sober Time Size",
+      "default": 64
+    },
+    {
+      "type": "checkbox",
+      "id": "sober_bold",
+      "label": "Bold Sober Time",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "sober_pulsate",
+      "label": "Pulsate Sober Time",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Graph Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_graph",
+      "label": "Show BAC History Graph",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Status & Results"
+    },
+    {
+      "type": "text",
+      "id": "safe_text",
+      "label": "Safe Status Text",
+      "default": "Likely Legal"
+    },
+    {
+      "type": "color",
+      "id": "safe_color",
+      "label": "Safe Color",
+      "default": "#8dc63f"
+    },
+    {
+      "type": "text",
+      "id": "danger_text",
+      "label": "Danger Status Text",
+      "default": "Unsafe / Illegal"
+    },
+    {
+      "type": "color",
+      "id": "danger_color",
+      "label": "Danger Color",
+      "default": "#ff4757"
+    },
+    {
+      "type": "header",
+      "content": "Effects Descriptions"
+    },
+    {
+      "type": "textarea",
+      "id": "effect_default",
+      "label": "0.00% - 0.01% Effect",
+      "default": "No significant effects detected."
+    },
+    {
+      "type": "textarea",
+      "id": "effect_02",
+      "label": "0.02% Effect",
+      "default": "Mild change, may seem slightly elated."
+    },
+    {
+      "type": "textarea",
+      "id": "effect_05",
+      "label": "0.05% Effect",
+      "default": "Drivers hesitant: alternate from 'who cares?' to impulsive aggression."
+    },
+    {
+      "type": "textarea",
+      "id": "effect_08",
+      "label": "0.08% Effect",
+      "default": "Ability to accurately steer, brake, and judge distance impaired. Legally considered drunk."
+    },
+    {
+      "type": "textarea",
+      "id": "effect_10",
+      "label": "0.10% Effect",
+      "default": "Judgment seriously affected, coordination impaired. Legally under influence."
+    },
+    {
+      "type": "textarea",
+      "id": "effect_15",
+      "label": "0.15% Effect",
+      "default": "Unmistakably drunk. All faculties affected."
+    },
+    {
+      "type": "textarea",
+      "id": "effect_30",
+      "label": "0.30% Effect",
+      "default": "Stuporous. Severe central nervous system depression."
+    },
+    {
+      "type": "textarea",
+      "id": "effect_40",
+      "label": "0.40% Effect",
+      "default": "Unconscious. Possibly in coma and verge of death."
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "text",
+      "id": "cta_heading",
+      "label": "CTA Text",
+      "default": "TOO COMPLICATED? SIMPLIFY."
+    },
+    {
+      "type": "text",
+      "id": "cta_btn_text",
+      "label": "Button Label",
+      "default": "GET AN ALCOSENSE BREATHALYZER"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Form Labels"
+    },
+    {
+      "type": "text",
+      "id": "label_gender",
+      "label": "Gender Label",
+      "default": "Gender"
+    },
+    {
+      "type": "text",
+      "id": "label_weight",
+      "label": "Weight Label (kg)",
+      "default": "Weight (kg)"
+    },
+    {
+      "type": "text",
+      "id": "disclaimer_text",
+      "label": "Disclaimer Text",
+      "default": "ESTIMATE ONLY. Do not use to assess ability to drive."
+    }
+  ],
+  "presets": [
+    {
+      "name": "BAC  Pro"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="andatech-bac-section" id="bac-calculator-{{ section.id }}">
+  <!-- Backdrop for expanded graph -->
+  <div class="graph-backdrop" id="graph-backdrop-{{ section.id }}"></div>
+
+  <div class="bac-container">
+    <h2 class="container-title" style="color: {{ section.settings.text_color }};">
+      {{ section.settings.heading }}
+    </h2>
+
+    <!-- Calculator Grid (No Card Wrapper) -->
+    <div class="calc-grid">
+      <!-- Inputs Column -->
+      <div class="inputs-column">
+        
+        <!-- Gender & Weight Row -->
+        <div class="input-row-split">
+          <!-- Gender -->
+          <div class="input-group">
+            <label>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 8px;">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+              {{ section.settings.label_gender }}
+            </label>
+            <div class="select-wrapper">
+              <select id="bac-gender-{{ section.id }}">
+                <option value="0.68">Male</option>
+                <option value="0.55">Female</option>
+              </select>
+              <svg class="chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+
+          <!-- Weight -->
+          <div class="input-group">
+            <label>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 8px;">
+                <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+                <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+                <path d="M7 21h10"></path>
+                <path d="M12 3v18"></path>
+                <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path>
+              </svg>
+              {{ section.settings.label_weight }}
+            </label>
+            <input type="number" id="bac-weight-{{ section.id }}" value="75" min="40" max="150" placeholder="75">
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Dynamic Drink Sessions -->
+        <div id="drink-sessions-container-{{ section.id }}">
+          <!-- Sessions injected via JS -->
+        </div>
+
+        <button id="add-session-btn-{{ section.id }}" class="add-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Add Another Round
+        </button>
+        
+      </div>
+
+      <!-- Results Column -->
+      <div class="results-column">
+        <div class="result-box">
+          <h4>Estimated BAC %</h4>
+          <!-- Pulsating Result based on settings -->
+          <div class="bac-score {% if section.settings.result_pulsate %}pulsate{% endif %}" id="bac-result-{{ section.id }}">0.000</div>
+          <div id="bac-status-{{ section.id }}" class="status-badge">{{ section.settings.safe_text }}</div>
+          
+          <div class="sober-time">
+            <span>Minimum time before sober:</span>
+            <!-- Pulsating Sober Time based on settings -->
+            <strong id="bac-sober-{{ section.id }}" {% if section.settings.sober_pulsate %}class="pulsate"{% endif %}>0 hrs</strong>
+          </div>
+        </div>
+
+        <!-- Flip Card Effects -->
+        <div class="card-container">
+          <div class="flip-card">
+            <div class="front-content">
+              <div class="front-inner">
+                <small>ESTIMATED EFFECT</small>
+                <p id="bac-effects-text-{{ section.id }}">{{ section.settings.effect_default }}</p>
+                <span class="hover-hint">(Hover for full guide)</span>
+              </div>
+            </div>
+            <div class="content">
+              <p class="heading">BAC Effects Guide</p>
+              <ul class="effects-list">
+                <li><strong>0.02%</strong> {{ section.settings.effect_02 | truncate: 100 }}</li>
+                <li><strong>0.05%</strong> {{ section.settings.effect_05 | truncate: 100  }}</li>
+                <li><strong>0.08%</strong> {{ section.settings.effect_08 | truncate: 100 }}</li>
+                <li><strong>0.10%</strong> {{ section.settings.effect_10 | truncate: 100 }}</li>
+                <li><strong>0.15%</strong> {{ section.settings.effect_15 | truncate: 100 }}</li>
+                <li><strong>>0.30%</strong> {{ section.settings.effect_30 | truncate: 100 }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        {% if section.settings.show_graph %}
+        <!-- Graph Placeholder in Flow -->
+        <div class="graph-placeholder" id="graph-anchor-{{ section.id }}">
+           <div class="graph-wrapper" id="bac-graph-wrapper-{{ section.id }}">
+              <button type="button" class="expand-btn" id="expand-graph-btn-{{ section.id }}" title="Enlarge Graph">
+                  ⛶ Enlarge
+              </button>
+              <div class="canvas-scroll-container">
+                <canvas id="bac-chart-{{ section.id }}" height="250"></canvas>
+              </div>
+           </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-container">
+      <h3>{{ section.settings.cta_heading | newline_to_br }}</h3>
+      <a href="{{ section.settings.cta_link }}" class="cta-btn">{{ section.settings.cta_btn_text }}</a>
+    </div>
+
+    <!-- Prominent Disclaimer Box -->
+    <div class="disclaimer-box">
+      <div class="disclaimer-icon">⚠️</div>
+      <div class="disclaimer-content">
+        <strong>{{ section.settings.disclaimer_text }}</strong>
+        <p>Actual Blood Alcohol Concentration depends on metabolism, food consumption, medication, and other factors.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  /* Base Styles & Dynamic Variables */
+  #shopify-section-{{ section.id }} .andatech-bac-section {
+    --bac-accent: {{ section.settings.accent_color }};
+    --bac-safe: {{ section.settings.safe_color }};
+    --bac-danger: {{ section.settings.danger_color }};
+    --bac-text: {{ section.settings.text_color }};
+    --bac-input-bg: #f3f4f6; 
+    --bac-border: #e5e7eb;
+    
+    /* Typography Settings */
+    --base-size: {{ section.settings.base_font_size }}px;
+    --heading-size: {{ section.settings.heading_size }}px;
+    --heading-weight: {% if section.settings.heading_bold %}800{% else %}400{% endif %};
+    --result-size: {{ section.settings.result_size }}px;
+    --result-weight: {% if section.settings.result_bold %}800{% else %}400{% endif %};
+    --sober-size: {{ section.settings.sober_size }}px;
+    --sober-weight: {% if section.settings.sober_bold %}800{% else %}400{% endif %};
+    
+    /* Default Dynamic Color Logic */
+    --current-color: var(--bac-safe);
+    
+    padding: 3rem 1.5rem;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    color: var(--bac-text);
+    position: relative;
+    transition: --current-color 0.4s ease;
+    font-size: var(--base-size);
+  }
+
+  /* Danger Mode */
+  .andatech-bac-section.is-danger {
+    --current-color: var(--bac-danger);
+  }
+
+  /* Pulsate Animation */
+  @keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.9; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .pulsate {
+    animation: pulse 2s infinite ease-in-out;
+    display: inline-block;
+  }
+
+  .bac-container {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .container-title {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: var(--heading-size);
+    font-weight: var(--heading-weight);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .calc-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  @media (max-width: 1024px) {
+    .calc-grid { grid-template-columns: 1fr; gap: 3rem; }
+  }
+
+  /* Input Styling */
+  .input-row-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  .input-group { margin-bottom: 2rem; }
+  
+  .andatech-bac-section label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+    color: var(--bac-text);
+    opacity: 0.9;
+    font-size: 1.2em; /* relative to base size */
+  }
+
+  .andatech-bac-section input[type="number"], 
+  .andatech-bac-section select {
+    width: 100%;
+    padding: 1.2em;
+    background: var(--bac-input-bg);
+    border: 1px solid var(--bac-border);
+    border-radius: 12px;
+    color: var(--bac-text);
+    outline: none;
+    font-size: 1.3em;
+    font-weight: 500;
+    transition: border-color 0.3s;
+  }
+  
+  .andatech-bac-section input[type="number"]:focus, 
+  .andatech-bac-section select:focus {
+    border-color: var(--current-color);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(0,0,0,0.05);
+  }
+
+  .select-wrapper { position: relative; }
+  .select-wrapper .chevron {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    opacity: 0.7;
+    color: var(--bac-text);
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--bac-border);
+    margin: 2rem 0 2.5rem;
+  }
+
+  /* Drink Session Styling */
+  .drink-session {
+    background: #f9fafb;
+    border: 1px solid var(--bac-border);
+    border-radius: 14px;
+    padding: 1.8em;
+    margin-bottom: 1.5rem;
+    position: relative;
+    transition: border-color 0.3s;
+  }
+
+  .drink-session.is-active {
+    border-color: var(--current-color);
+    background: #fff;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.04);
+  }
+
+  .session-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .session-title {
+    font-weight: 800;
+    font-size: 1.1em;
+    color: var(--bac-text);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .remove-session {
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 0.9em;
+    padding: 6px 12px;
+    border-radius: 6px;
+    opacity: 0.8;
+    font-weight: 600;
+  }
+  
+  .remove-session:hover {
+    background: #fee2e2;
+    opacity: 1;
+  }
+
+  .session-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .slider-group label {
+    font-size: 1.1em;
+    justify-content: space-between;
+  }
+
+  .slider-val {
+    color: var(--current-color);
+    font-weight: 700;
+    font-size: 1.3em;
+  }
+
+  .andatech-bac-section input[type="range"] {
+    width: 100%;
+    background: transparent;
+    -webkit-appearance: none;
+    margin: 15px 0;
+    cursor: pointer;
+  }
+
+  .andatech-bac-section input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    background: var(--current-color);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    margin-top: -12px;
+    border: 3px solid white;
+    transition: background 0.3s;
+  }
+
+  .andatech-bac-section input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8px;
+    background: #d1d5db;
+    border-radius: 4px;
+  }
+
+  .add-btn {
+    width: 100%;
+    padding: 1.2em;
+    background: transparent;
+    border: 2px dashed var(--bac-border);
+    border-radius: 12px;
+    color: var(--bac-text);
+    font-weight: 700;
+    font-size: 1.1em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    transition: all 0.3s;
+  }
+
+  .add-btn:hover {
+    border-color: var(--current-color);
+    color: var(--current-color);
+    background: rgba(0,0,0,0.02);
+  }
+  
+  .add-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-style: solid;
+  }
+
+  /* Result Box */
+  .result-box {
+    text-align: center;
+    padding: 2.5rem;
+    background: #ffffff;
+    border-radius: 20px;
+    border: 3px solid var(--bac-border);
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+    transition: border-color 0.3s;
+  }
+  
+  .andatech-bac-section.is-danger .result-box {
+    border-color: var(--bac-danger);
+    background: #fff8f8;
+  }
+
+  .result-box h4 {
+    margin: 0;
+    opacity: 0.6;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+  }
+
+  .bac-score {
+    font-size: var(--result-size);
+    font-weight: var(--result-weight);
+    color: var(--current-color);
+    margin: 0.5rem 0 1.5rem;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.3s;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 0.8rem 2.5rem;
+    border-radius: 50px;
+    font-size: 1.1em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: white;
+    background: var(--current-color);
+    transition: background 0.3s;
+  }
+
+  .sober-time {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--bac-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: var(--bac-text);
+  }
+  
+  .sober-time span {
+    font-size: 1.1em; 
+    opacity: 0.8; 
+    text-transform: uppercase; 
+    letter-spacing: 0.5px;
+    font-weight: 700;
+  }
+  
+  .sober-time strong {
+    font-size: var(--sober-size);
+    font-weight: var(--sober-weight);
+    color: var(--current-color); 
+    line-height: 1;
+  }
+
+  /* --- FLIP CARD STYLES --- */
+  .card-container {
+    width: 100%;
+    height: 400px;
+    position: relative;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    margin-bottom: 2rem;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+  }
+
+  .flip-card {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+  }
+
+  /* Front State */
+  .flip-card .front-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+  }
+
+  .front-inner {
+    text-align: center;
+  }
+
+  .front-inner small {
+    display: block;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+    color: #999;
+    font-size: 1em;
+    text-transform: uppercase;
+  }
+
+  .flip-card .front-content p {
+    font-size: 2em;
+    font-weight: 700;
+    opacity: 1;
+    line-height: 1.4;
+    color: var(--bac-text);
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+    margin: 0;
+  }
+  
+  .hover-hint {
+    display: block;
+    margin-top: 1.5rem;
+    font-size: 1em;
+    opacity: 0.5;
+    font-style: italic;
+  }
+
+  /* Hover State */
+  .flip-card .content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 15px;
+    background: linear-gradient(135deg, var(--current-color) 0%, #1a1a1a 150%);
+    color: #fff;
+    padding: 2.5rem;
+    border-radius: 5px;
+    pointer-events: none;
+    transform: translateY(-98%);
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+  }
+
+  .flip-card .content .heading {
+    font-size: 1.8em;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .effects-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 1.6em;
+    text-align: left;
+    width: 100%;
+  }
+  
+  .effects-list li {
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    padding-bottom: 4px;
+    line-height: 1.4;
+  }
+  
+  .effects-list strong {
+    color: rgba(255,255,255,1);
+    margin-right: 12px;
+    font-size: 1.7rem;
+  }
+
+  /* Hover Animations */
+  .flip-card:hover .content {
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .flip-card:hover .front-content {
+    transform: translateY(30%);
+    opacity: 0;
+  }
+
+  /* GRAPH STYLES */
+  .graph-placeholder {
+    width: 100%;
+    height: 250px;
+    position: relative;
+    margin-bottom: 2rem;
+  }
+
+  .graph-wrapper {
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 1.5rem;
+    border: 1px solid var(--bac-border);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .canvas-scroll-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Default hidden */
+  }
+
+  /* EXPANDED GRAPH STYLE */
+  .graph-wrapper.expanded {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    height: 80vh;
+    max-width: 1400px;
+    z-index: 2147483647; 
+    padding: 4rem;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 4px solid var(--current-color);
+  }
+  
+  /* Scrollable only when expanded */
+  .graph-wrapper.expanded .canvas-scroll-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Backdrop styling */
+  .graph-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(5px);
+    z-index: 2147483646; 
+  }
+  
+  .graph-backdrop.active {
+    display: block;
+  }
+  
+  .expand-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--bac-text);
+    z-index: 20;
+    transition: all 0.2s;
+  }
+  
+  .expand-btn:hover {
+    background: #e5e7eb;
+    transform: scale(1.05);
+  }
+  
+  canvas { width: 100% !important; height: 100% !important; display: block; }
+
+  /* CTA Section */
+  .cta-container {
+    margin-top: 4rem;
+    background: var(--current-color);
+    color: white;
+    padding: 4rem 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    text-align: center;
+    transition: background 0.3s;
+  }
+
+  .cta-container h3 {
+    margin: 0 0 1.5rem 0;
+    font-size: 2.5em;
+    line-height: 1.2;
+    font-weight: 800;
+    color: white;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    background: white;
+    color: var(--current-color);
+    padding: 1.5rem 4rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: transform 0.2s, color 0.3s;
+    font-size: 1.2em;
+  }
+
+  .cta-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  }
+
+  /* Disclaimer Box */
+  .disclaimer-box {
+    margin-top: 3rem;
+    background: #fff8f8;
+    border: 3px solid #fee2e2; 
+    border-radius: 16px;
+    padding: 2.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .disclaimer-icon {
+    font-size: 3em;
+  }
+
+  .disclaimer-content {
+    text-align: left;
+    color: #b91c1c;
+  }
+
+  .disclaimer-content strong {
+    display: block;
+    font-size: 1.5em;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 800;
+  }
+
+  .disclaimer-content p {
+    margin: 0;
+    font-size: 1.2em;
+    opacity: 0.9;
+    line-height: 1.5;
+  }
+
+  /* Responsive Adjustments for Mobile */
+  @media (max-width: 768px) {
+    .card-container {
+      height: 550px; /* Taller on mobile to fit content */
+    }
+    
+    .effects-list {
+      font-size: 1.1em; /* Smaller font on mobile */
+    }
+    
+    .effects-list strong {
+      font-size: 1.2em;
+    }
+    
+    .flip-card .content {
+      padding: 1.5rem;
+    }
+    
+    .flip-card .front-content p {
+      font-size: 1.5em;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    const sectionId = "{{ section.id }}";
+    const showGraph = {{ section.settings.show_graph | default: false }};
+    
+    // Using simple debounce to prevent loop error
+    function debounce(func, wait) {
+      let timeout;
+      return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+      };
+    }
+
+    const config = {
+      safeText: {{ section.settings.safe_text | json }},
+      dangerText: {{ section.settings.danger_text | json }},
+      safeColor: "{{ section.settings.safe_color }}",
+      dangerColor: "{{ section.settings.danger_color }}",
+      accentColor: "{{ section.settings.accent_color }}",
+      textColor: "{{ section.settings.text_color }}",
+      
+      // Effects text
+      effectDefault: {{ section.settings.effect_default | json }},
+      effect02: {{ section.settings.effect_02 | json }},
+      effect05: {{ section.settings.effect_05 | json }},
+      effect08: {{ section.settings.effect_08 | json }},
+      effect10: {{ section.settings.effect_10 | json }},
+      effect15: {{ section.settings.effect_15 | json }},
+      effect30: {{ section.settings.effect_30 | json }},
+      effect40: {{ section.settings.effect_40 | json }}
+    };
+
+    const getEl = (id) => document.getElementById(id);
+    const sectionEl = document.getElementById('bac-calculator-' + sectionId);
+    
+    // State
+    let sessions = [
+      { id: 1, drinks: 2, hoursAgo: 1 } 
+    ];
+    let nextId = 2;
+    const MAX_SESSIONS = 3;
+
+    let chartCanvas = null;
+    let chartCtx = null;
+    let isGraphExpanded = false;
+
+    function initBAC() {
+       renderSessions();
+       setupEventListeners();
+       
+       if(showGraph) {
+         chartCanvas = getEl('bac-chart-' + sectionId);
+         if(chartCanvas) {
+            chartCtx = chartCanvas.getContext('2d');
+            
+            // Debounced resize handler
+            const handleResize = debounce(() => {
+                resizeGraph();
+                updateCalc(); // Redraw chart
+            }, 100);
+
+            const resizeObserver = new ResizeObserver(handleResize);
+            resizeObserver.observe(getEl('bac-graph-wrapper-' + sectionId));
+         }
+         
+         const expandBtn = getEl('expand-graph-btn-' + sectionId);
+         if(expandBtn) {
+             expandBtn.addEventListener('click', () => {
+                 const wrapper = getEl('bac-graph-wrapper-' + sectionId);
+                 const backdrop = getEl('graph-backdrop-' + sectionId);
+                 const placeholder = getEl('graph-anchor-' + sectionId);
+                 
+                 isGraphExpanded = !isGraphExpanded;
+                 
+                 if(isGraphExpanded) {
+                     document.body.appendChild(wrapper); // Move to body for fullscreen
+                     wrapper.classList.add('expanded');
+                     backdrop.classList.add('active');
+                     expandBtn.innerText = '✕ Close';
+                     document.body.style.overflow = 'hidden'; // Lock scroll
+                 } else {
+                     placeholder.appendChild(wrapper); // Move back
+                     wrapper.classList.remove('expanded');
+                     backdrop.classList.remove('active');
+                     expandBtn.innerText = '⛶ Enlarge';
+                     document.body.style.overflow = ''; // Unlock scroll
+                 }
+                 
+                 // Trigger redraw after transition
+                 setTimeout(() => {
+                     resizeGraph();
+                     updateCalc();
+                 }, 450); 
+             });
+             
+             getEl('graph-backdrop-' + sectionId).addEventListener('click', () => {
+                 expandBtn.click();
+             });
+         }
+       }
+       
+       updateCalc();
+    }
+    
+    function resizeGraph() {
+        if(!chartCanvas) return;
+        const dpr = window.devicePixelRatio || 1;
+        const wrapper = getEl('bac-graph-wrapper-' + sectionId);
+        const container = wrapper.querySelector('.canvas-scroll-container');
+        
+        let width = container.clientWidth;
+        let height = container.clientHeight;
+        
+        if (wrapper.classList.contains('expanded')) {
+             width = Math.max(width, 1000); // Minimum width for scroll
+             chartCanvas.style.width = width + 'px'; 
+        } else {
+             chartCanvas.style.width = '100%'; 
+             // Re-measure after style reset if needed, but container width is usually accurate
+        }
+
+        chartCanvas.width = width * dpr;
+        chartCanvas.height = height * dpr;
+        chartCtx.scale(dpr, dpr);
+    }
+    
+    // Named handler to allow removal
+    function handleAddSession(e) {
+       e.preventDefault();
+       if(sessions.length < MAX_SESSIONS) {
+         sessions.push({ id: nextId++, drinks: 1, hoursAgo: 0 });
+         renderSessions();
+         updateCalc();
+       }
+    }
+
+    function setupEventListeners() {
+       const genderEl = getEl('bac-gender-' + sectionId);
+       const weightEl = getEl('bac-weight-' + sectionId);
+       const addBtn = getEl('add-session-btn-' + sectionId);
+
+       if(genderEl) genderEl.addEventListener('input', updateCalc);
+       if(weightEl) weightEl.addEventListener('input', updateCalc);
+       
+       if(addBtn) {
+         addBtn.removeEventListener('click', handleAddSession);
+         addBtn.addEventListener('click', handleAddSession);
+       }
+       
+       window.addEventListener('resize', debounce(() => {
+           if(showGraph) {
+               resizeGraph();
+               updateCalc();
+           }
+       }, 200));
+    }
+
+    function renderSessions() {
+      const container = getEl('drink-sessions-container-' + sectionId);
+      if(!container) return;
+
+      container.innerHTML = '';
+      
+      sessions.forEach((sess, index) => {
+        const el = document.createElement('div');
+        el.className = 'drink-session';
+        if(index === sessions.length - 1) el.classList.add('is-active');
+
+        el.innerHTML = `
+          <div class="session-header">
+            <span class="session-title">Round ${index + 1}</span>
+            ${sessions.length > 1 ? `<button type="button" class="remove-session" data-id="${sess.id}">Remove</button>` : ''}
+          </div>
+          <div class="session-controls">
+            <div class="slider-group">
+              <label>Standard Drinks: <span class="slider-val" id="val-drinks-${sectionId}-${sess.id}">${sess.drinks}</span></label>
+              <input type="range" min="0" max="20" step="1" value="${sess.drinks}" data-id="${sess.id}" data-type="drinks">
+            </div>
+            <div class="slider-group">
+              <label>Time Since: <span class="slider-val" id="val-hours-${sectionId}-${sess.id}">${sess.hoursAgo} hrs</span></label>
+              <input type="range" min="0" max="12" step="0.5" value="${sess.hoursAgo}" data-id="${sess.id}" data-type="hoursAgo">
+            </div>
+          </div>
+        `;
+        container.appendChild(el);
+      });
+
+      const addBtn = getEl('add-session-btn-' + sectionId);
+      if(addBtn) {
+        addBtn.disabled = sessions.length >= MAX_SESSIONS;
+        addBtn.innerHTML = sessions.length >= MAX_SESSIONS ? 'Max Rounds Reached' : `
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Add Another Round
+        `;
+      }
+
+      container.querySelectorAll('input[type="range"]').forEach(input => {
+        input.addEventListener('input', (e) => {
+          const id = parseInt(e.target.dataset.id);
+          const type = e.target.dataset.type;
+          const val = parseFloat(e.target.value);
+          const sess = sessions.find(s => s.id === id);
+          if(sess) sess[type] = val;
+          const labelSpan = document.getElementById(type === 'drinks' ? `val-drinks-${sectionId}-${id}` : `val-hours-${sectionId}-${id}`);
+          if(labelSpan) labelSpan.innerText = type === 'drinks' ? val : val + ' hrs';
+          updateCalc();
+        });
+      });
+
+      container.querySelectorAll('.remove-session').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = parseInt(e.target.dataset.id);
+          sessions = sessions.filter(s => s.id !== id);
+          renderSessions();
+          updateCalc();
+        });
+      });
+    }
+
+    function updateCalc() {
+       const genderEl = getEl('bac-gender-' + sectionId);
+       const weightEl = getEl('bac-weight-' + sectionId);
+       if (!genderEl || !weightEl) return;
+
+       const genderConstant = parseFloat(genderEl.value);
+       const weight = parseFloat(weightEl.value);
+
+       const resultEl = getEl('bac-result-' + sectionId);
+       const statusEl = getEl('bac-status-' + sectionId);
+       const soberEl = getEl('bac-sober-' + sectionId);
+       const effectsEl = getEl('bac-effects-text-' + sectionId);
+
+       if(!weight || weight <= 0) {
+         if(resultEl) resultEl.innerText = "---";
+         return;
+       }
+
+       // --- SIMULATION LOGIC ---
+       let maxHoursAgo = 0;
+       sessions.forEach(s => { if(s.hoursAgo > maxHoursAgo) maxHoursAgo = s.hoursAgo; });
+       
+       let drinkEvents = sessions.map(s => ({
+         drinks: s.drinks,
+         ingestTime: maxHoursAgo - s.hoursAgo 
+       })).sort((a,b) => a.ingestTime - b.ingestTime);
+
+       let currentSimBAC = 0;
+       let graphData = [];
+       const step = 0.1;
+       
+       let soberTimeRelative = 0;
+       let isSober = false;
+       let finalBAC = 0;
+
+       for(let t = 0; t <= 48; t += step) {
+         drinkEvents.forEach(evt => {
+           if(t >= evt.ingestTime && t < evt.ingestTime + step) {
+             const alcoholGrams = evt.drinks * 10;
+             const bacIncrease = (alcoholGrams / (weight * 1000 * genderConstant)) * 100;
+             currentSimBAC += bacIncrease;
+           }
+         });
+
+         if(currentSimBAC > 0) {
+           currentSimBAC -= (0.015 * step);
+           if(currentSimBAC < 0) currentSimBAC = 0;
+         }
+
+         graphData.push({ t: t, bac: currentSimBAC });
+
+         if(Math.abs(t - maxHoursAgo) < step/2) {
+            finalBAC = currentSimBAC;
+         }
+         
+         if(t > maxHoursAgo && currentSimBAC <= 0 && !isSober) {
+            soberTimeRelative = t - maxHoursAgo;
+            isSober = true;
+         }
+       }
+       
+       if (finalBAC <= 0) {
+         finalBAC = 0;
+         soberTimeRelative = 0;
+       } else if (!isSober) {
+          soberTimeRelative = finalBAC / 0.015;
+       }
+
+       // --- UPDATE UI ---
+       if(resultEl) resultEl.innerText = finalBAC.toFixed(3) + '%';
+       
+       // CSS Variable Update Logic
+       if (finalBAC >= 0.05) {
+          if(statusEl) statusEl.innerText = config.dangerText;
+          // Set dynamic style property for color
+          sectionEl.style.setProperty('--current-color', config.dangerColor);
+          sectionEl.classList.add('is-danger');
+       } else {
+          if(statusEl) statusEl.innerText = config.safeText;
+          sectionEl.style.setProperty('--current-color', config.accentColor);
+          sectionEl.classList.remove('is-danger');
+       }
+       
+       if(soberEl) {
+           soberEl.innerText = soberTimeRelative.toFixed(1) + ' hrs';
+       }
+
+       // EFFECTS LOGIC
+       let effectText = config.effectDefault;
+       if (finalBAC >= 0.40) effectText = config.effect40;
+       else if (finalBAC >= 0.30) effectText = config.effect30;
+       else if (finalBAC >= 0.15) effectText = config.effect15;
+       else if (finalBAC >= 0.10) effectText = config.effect10;
+       else if (finalBAC >= 0.08) effectText = config.effect08;
+       else if (finalBAC >= 0.05) effectText = config.effect05;
+       else if (finalBAC >= 0.02) effectText = config.effect02;
+       
+       if(effectsEl) effectsEl.innerText = effectText;
+
+       // Pass current color directly to graph
+       const graphColor = finalBAC >= 0.05 ? config.dangerColor : config.accentColor;
+       if(showGraph) {
+         drawGraph(graphData, maxHoursAgo, graphColor);
+       }
+    }
+
+    function drawGraph(data, nowTime, lineColor) {
+        if(!chartCtx || !chartCanvas) return;
+        
+        // Logical width/height setup by resizeGraph
+        const width = chartCanvas.width / (window.devicePixelRatio || 1);
+        const height = chartCanvas.height / (window.devicePixelRatio || 1);
+        
+        const padding = { top: 30, right: 40, bottom: 30, left: 50 };
+        const drawWidth = width - padding.left - padding.right;
+        const drawHeight = height - padding.top - padding.bottom;
+        
+        chartCtx.clearRect(0, 0, width, height);
+        
+        let maxBAC = 0;
+        let endIndex = data.length - 1;
+        for(let i=0; i<data.length; i++) {
+            if(data[i].bac > maxBAC) maxBAC = data[i].bac;
+            if(data[i].t > nowTime && data[i].bac === 0) {
+                let bufferIdx = i + (2 / 0.1); 
+                endIndex = Math.min(data.length - 1, bufferIdx);
+                break;
+            }
+        }
+        
+        const displayData = data.slice(0, endIndex);
+        const maxY = Math.max(0.1, Math.ceil(maxBAC * 20) / 20);
+        const maxX = Math.max(4, displayData[displayData.length-1].t);
+
+        const getX = (t) => padding.left + (t / maxX) * drawWidth;
+        const getY = (b) => padding.top + drawHeight - (b / maxY) * drawHeight;
+
+        // Draw Axes
+        chartCtx.beginPath();
+        const baseColor = config.textColor === '#ffffff' ? '255,255,255' : '0,0,0';
+        chartCtx.strokeStyle = `rgba(${baseColor}, 0.1)`;
+        chartCtx.lineWidth = 1;
+        chartCtx.moveTo(padding.left, padding.top);
+        chartCtx.lineTo(padding.left, height - padding.bottom);
+        chartCtx.lineTo(width - padding.right, height - padding.bottom);
+        chartCtx.stroke();
+        
+        chartCtx.fillStyle = config.textColor;
+        chartCtx.globalAlpha = 0.6;
+        const fontSize = isGraphExpanded ? 16 : 12;
+        chartCtx.font = `${fontSize}px sans-serif`;
+        
+        chartCtx.textAlign = "right";
+        for(let i=0; i<=4; i++) {
+           const val = (maxY * i) / 4;
+           chartCtx.fillText(val.toFixed(2) + "%", padding.left - 10, getY(val) + 5);
+        }
+        
+        // FIXED X-AXIS LABELS LOGIC
+        chartCtx.textAlign = "center";
+        
+        const tickInterval = maxX > 12 ? 2 : 1;
+        const startRel = Math.ceil(-nowTime / tickInterval) * tickInterval;
+        const endRel = Math.floor((maxX - nowTime) / tickInterval) * tickInterval;
+
+        for(let r = startRel; r <= endRel; r += tickInterval) {
+           const t = nowTime + r;
+           const x = getX(t);
+           
+           if (x < padding.left - 20 || x > width - padding.right + 20) continue;
+
+           let label = "";
+           if (Math.abs(r) < 0.1) label = "Now";
+           else if (r < 0) label = Math.abs(r) + "h ago";
+           else label = "+" + r + "h";
+           
+           chartCtx.fillText(label, x, height - 10);
+        }
+        
+        chartCtx.globalAlpha = 1.0;
+
+        // Draw Line
+        chartCtx.beginPath();
+        chartCtx.strokeStyle = lineColor; // Explicit color pass
+        chartCtx.lineWidth = isGraphExpanded ? 5 : 3;
+        
+        displayData.forEach((pt, i) => {
+            if(i===0) chartCtx.moveTo(getX(pt.t), getY(pt.bac));
+            else chartCtx.lineTo(getX(pt.t), getY(pt.bac));
+        });
+        chartCtx.stroke();
+        
+        // Fill
+        chartCtx.lineTo(getX(displayData[displayData.length-1].t), getY(0));
+        chartCtx.lineTo(getX(0), getY(0));
+        
+        // Manual hex to rgba
+        let fillStyle = lineColor;
+        if(lineColor.startsWith('#') && lineColor.length === 7) {
+             const r = parseInt(lineColor.slice(1,3), 16);
+             const g = parseInt(lineColor.slice(3,5), 16);
+             const b = parseInt(lineColor.slice(5,7), 16);
+             fillStyle = `rgba(${r},${g},${b},0.2)`;
+        }
+        chartCtx.fillStyle = fillStyle;
+        chartCtx.fill();
+
+        // Current Line
+        const nowX = getX(nowTime);
+        chartCtx.beginPath();
+        chartCtx.setLineDash([5, 5]);
+        chartCtx.strokeStyle = config.textColor;
+        chartCtx.moveTo(nowX, padding.top);
+        chartCtx.lineTo(nowX, height - padding.bottom);
+        chartCtx.stroke();
+        chartCtx.setLineDash([]);
+        
+        const currentBAC = displayData.find(d => Math.abs(d.t - nowTime) < 0.05)?.bac || 0;
+        chartCtx.beginPath();
+        chartCtx.fillStyle = config.textColor;
+        chartCtx.arc(nowX, getY(currentBAC), isGraphExpanded ? 8 : 5, 0, Math.PI * 2);
+        chartCtx.fill();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initBAC);
+    } else {
+        initBAC();
+    }
+    
+    document.addEventListener('shopify:section:load', function(event) {
+        if (event.detail.sectionId === sectionId) initBAC();
+    });
+
+  })();
+</script>

@@ -1,0 +1,238 @@
+{% comment %}
+  Text Cards Section (Management Plan Style)
+  - Style matches your Calibration Management Plan (Solid card, top border accent, shadow).
+  - Glass effect removed.
+  - Fully editable via sidebar.
+{% endcomment %}
+
+<style>
+  /* --- Section Container --- */
+  #shopify-section-{{ section.id }} .cards-section-wrapper {
+    background-color: {{ section.settings.section_bg_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* --- Card Styling (Matches Management Plan) --- */
+  .custom-text-card {
+    border-radius: 12px;
+    padding: 30px 20px;
+    
+    /* The Management Plan Shadow & Border */
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    border: 1px solid #e1e1e1;
+    
+    /* Animation */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
+    /* Layout */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Hover Effect */
+  .custom-text-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  }
+  
+  /* --- Rich Text Content Styling --- */
+  .card-rich-text h1, .card-rich-text h2, .card-rich-text h3, .card-rich-text h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+  .card-rich-text p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+  }
+  
+  /* Bullet Point Fixes */
+  .card-rich-text ul {
+    list-style-type: disc !important; 
+    margin-left: 0 !important;
+    padding-left: 20px !important; 
+    margin-bottom: 15px;
+  }
+  .card-rich-text ol {
+    list-style-type: decimal !important;
+    margin-left: 0 !important;
+    padding-left: 20px !important;
+    margin-bottom: 15px;
+  }
+  .card-rich-text li {
+    display: list-item !important;
+    margin-bottom: 5px;
+  }
+  .card-rich-text a {
+    text-decoration: underline;
+    font-weight: bold;
+  }
+
+  /* Mobile Adjustments */
+  @media (max-width: 767px) {
+    .cards-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+</style>
+
+<div class="cards-section-wrapper">
+  
+  {% if section.settings.section_title != blank %}
+    <h2 style="text-align: center; margin-bottom: 50px; color: {{ section.settings.section_heading_color }};">
+      {{ section.settings.section_title }}
+    </h2>
+  {% endif %}
+
+  <div class="cards-grid">
+    {% for block in section.blocks %}
+      <div class="custom-text-card" 
+           style="
+             background-color: {{ block.settings.card_bg_color }};
+             color: {{ block.settings.card_text_color }};
+             border-top: 5px solid {{ block.settings.card_accent_color }};
+           "
+           {{ block.shopify_attributes }}>
+        
+        <div class="card-rich-text">
+          {{ block.settings.card_content }}
+        </div>
+
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Text Cards (Plan Style)",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "color",
+      "id": "section_bg_color",
+      "label": "Section Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Heading",
+      "default": "Our Services"
+    },
+    {
+      "type": "color",
+      "id": "section_heading_color",
+      "label": "Heading Color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "card_content",
+          "label": "Card Content",
+          "default": "<h3>Card Title</h3><p>Description text here.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Card Styling"
+        },
+        {
+          "type": "color",
+          "id": "card_accent_color",
+          "label": "Top Border Accent",
+          "default": "#bdc3c7",
+          "info": "This creates the colored strip at the top (like the Green/Gold plans)."
+        },
+        {
+          "type": "color",
+          "id": "card_bg_color",
+          "label": "Card Background",
+          "default": "#f8f9fa"
+        },
+        {
+          "type": "color",
+          "id": "card_text_color",
+          "label": "Text Color",
+          "default": "#333333"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Text Cards (Plan Style)",
+      "blocks": [
+        { 
+          "type": "card",
+          "settings": {
+            "card_accent_color": "#bdc3c7",
+            "card_bg_color": "#f8f9fa",
+            "card_content": "<h3>Basic Card</h3><p>This mimics the Grey plan style.</p>"
+          }
+        },
+        { 
+          "type": "card",
+          "settings": {
+            "card_accent_color": "#7cb342",
+            "card_bg_color": "#f1f8e9",
+             "card_content": "<h3>Standard Card</h3><p>This mimics the Green plan style.</p>"
+          }
+        },
+        { 
+          "type": "card",
+          "settings": {
+            "card_accent_color": "#fbc02d",
+            "card_bg_color": "#fff8e1",
+             "card_content": "<h3>Premium Card</h3><p>This mimics the Gold plan style.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,68 @@
+<section class="kby-giveaway" id="giveaway">
+  {%- if section.settings.bg_image -%}
+    <div class="kby-giveaway__bg" style="background-image:url('{{ section.settings.bg_image | image_url: width: 1600 }}');"></div>
+    <div class="kby-giveaway__overlay"></div>
+  {%- endif -%}
+
+  <div class="kby-giveaway__wrap">
+    <div class="kby-giveaway__copy">
+      <h2 class="kby-solve__title">
+        <span class="kby-solve__title-line kby-solve__title-line--regular">{{ section.settings.heading_line_1 | default: "Win one of three" }}</span>
+        <span class="kby-solve__title-line kby-solve__title-line--bold">{{ section.settings.heading_line_2 | default: "$500 live music experiences" }}</span>
+      </h2>
+      <p class="kby-giveaway__sub">{{ section.settings.subtext | default: "Celebrate safe driving. Sign the Zero-BAC pledge below for automatic entry into this month's draw." }}</p>
+    </div>
+
+    <form class="kby-giveaway__form" id="kby-giveaway-form" novalidate
+      data-portal-id="7005767"
+      data-form-guid="{{ section.settings.hubspot_form_guid | default: 'TBD-create-in-hubspot' }}">
+      <div class="kby-field">
+        <label for="kby-name">Your name</label>
+        <input id="kby-name" name="name" type="text" placeholder="Jordan Smith" required>
+      </div>
+      <div class="kby-field">
+        <label for="kby-email">Your email address</label>
+        <input id="kby-email" name="email" type="email" placeholder="jordan@example.com" required>
+      </div>
+      <div class="kby-field">
+        <label for="kby-occupation">Occupation <span class="kby-field__optional">(optional)</span></label>
+        <select id="kby-occupation" name="occupation">
+          <option value="">Prefer not to say</option>
+          <option value="parent_guardian">Parent or guardian of a P-plater</option>
+          <option value="p_plate_driver">P1 / P2 licence holder</option>
+          <option value="event_organiser">Event organiser</option>
+          <option value="whs_professional">Workplace health &amp; safety professional</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <button type="submit" class="kby-btn kby-btn--primary" id="kby-giveaway-submit">Enter Giveaway</button>
+      <p class="kby-giveaway__status" id="kby-giveaway-status" role="status" aria-live="polite"></p>
+
+      <p class="kby-giveaway__fine">This campaign is open to Australian residents 18+ only. One entry per person per draw. No purchase necessary to enter the pledge path. T&amp;C apply.</p>
+    </form>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KBYG Giveaway",
+  "settings": [
+    { "type": "text", "id": "heading_line_1", "label": "Heading — line 1 (regular weight)" },
+    { "type": "text", "id": "heading_line_2", "label": "Heading — line 2 (bold weight)" },
+    { "type": "textarea", "id": "subtext", "label": "Subtext" },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background photo",
+      "info": "Optional. Falls back to the solid navy panel if left blank."
+    },
+    {
+      "type": "text",
+      "id": "hubspot_form_guid",
+      "label": "HubSpot form GUID",
+      "info": "TBD — needs a new form created in HubSpot (Portal 7005767) for the giveaway list before this goes live."
+    }
+  ]
+}
+{% endschema %}

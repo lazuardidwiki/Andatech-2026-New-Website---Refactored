@@ -1,0 +1,93 @@
+<section class="kby-solve" id="why-test">
+  <div class="kby-solve__head">
+    <span class="kby-solve__kicker">{{ section.settings.kicker | default: "How we solve it" }}</span>
+    <h2 class="kby-solve__title">
+      <span class="kby-solve__title-line kby-solve__title-line--regular">{{ section.settings.heading_line_1 | default: "Four moments guesswork" }}</span>
+      <span class="kby-solve__title-line kby-solve__title-line--bold">{{ section.settings.heading_line_2 | default: "gets expensive" }}</span>
+    </h2>
+  </div>
+
+  <div class="kby-solve__list">
+    {% for block in section.blocks %}
+      <div class="kby-solve__item" data-kby-solve-item {{ block.shopify_attributes }}>
+
+        <button type="button" class="kby-solve__row" aria-expanded="false">
+          <div class="kby-solve__row-inner">
+            <span class="kby-solve__row-title">{{ block.settings.title | default: "Reason" }}</span>
+            <span class="kby-solve__chevron" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </div>
+
+          {%- comment -%} Hover marquee — ported from React Bits' FlowingMenu. Hidden entirely off-screen (not just opacity) until JS slides it in from whichever edge the pointer entered. {%- endcomment -%}
+          <div class="kby-solve__marquee" data-kby-marquee aria-hidden="true">
+            <div class="kby-solve__marquee-inner-wrap">
+              <div class="kby-solve__marquee-inner" data-kby-marquee-inner>
+                {% for i in (1..10) %}
+                  <div class="kby-solve__marquee-part">
+                    <span>{{ block.settings.title | default: "Reason" }}</span>
+                    {%- if block.settings.image -%}
+                      <div class="kby-solve__marquee-img" style="background-image:url('{{ block.settings.image | image_url: width: 300 }}')"></div>
+                    {%- endif -%}
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </button>
+
+        <div class="kby-solve__panel" data-kby-panel>
+          <div class="kby-solve__panel-inner">
+            <div class="kby-solve__panel-text">
+              <p>{{ block.settings.body }}</p>
+              {%- if block.settings.cta_text != blank and block.settings.cta_url != blank -%}
+                <a href="{{ block.settings.cta_url }}" class="kby-solve__cta">
+                  {{ block.settings.cta_text }}
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+              {%- endif -%}
+            </div>
+            {%- if block.settings.image -%}
+              <div class="kby-solve__panel-media">
+                <img src="{{ block.settings.image | image_url: width: 640 }}" alt="{{ block.settings.image.alt | escape }}" loading="lazy">
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KBYG Why Test",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker" },
+    { "type": "text", "id": "heading_line_1", "label": "Heading — line 1 (regular weight)" },
+    { "type": "text", "id": "heading_line_2", "label": "Heading — line 2 (bold weight)" }
+  ],
+  "blocks": [
+    {
+      "type": "reason",
+      "name": "Reason",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "body", "label": "Body copy" },
+        { "type": "image_picker", "id": "image", "label": "Supporting image (also used in the hover marquee)" },
+        { "type": "text", "id": "cta_text", "label": "Resource link text (optional)" },
+        { "type": "url", "id": "cta_url", "label": "Resource link URL (optional)" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "default": {
+    "blocks": [
+      { "type": "reason", "settings": { "title": "Morning after" } },
+      { "type": "reason", "settings": { "title": "Social & work events" } },
+      { "type": "reason", "settings": { "title": "P-plate rules" } },
+      { "type": "reason", "settings": { "title": "Road Trips" } }
+    ]
+  }
+}
+{% endschema %}

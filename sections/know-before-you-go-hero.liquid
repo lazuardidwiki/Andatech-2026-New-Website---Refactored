@@ -1,0 +1,56 @@
+{%- liquid
+  assign kby_hero_bg_desktop = section.settings.bg_image | image_url: width: 2400
+  if section.settings.bg_image_mobile != blank
+    assign kby_hero_bg_mobile = section.settings.bg_image_mobile | image_url: width: 1200
+  else
+    assign kby_hero_bg_mobile = section.settings.bg_image | image_url: width: 1200
+  endif
+-%}
+<section class="kby-hero" id="hero">
+  <div class="kby-hero__bg" style="--kby-bg-desktop:url('{{ kby_hero_bg_desktop }}'); --kby-bg-mobile:url('{{ kby_hero_bg_mobile }}');"></div>
+  <div class="kby-hero__overlay"></div>
+
+  <div class="kby-hero__inner">
+    <p class="kby-hero__eyebrow">{{ section.settings.eyebrow | default: "Stay safe, check before you drive" }}</p>
+
+    <h1 class="kby-hero__title">
+      {{ section.settings.heading_line_1 | default: "The Morning After." }}<br>
+      <span class="kby-hero__grad-text">{{ section.settings.heading_line_2 | default: "Check First." }}</span>
+    </h1>
+
+    <p class="kby-hero__sub">
+      {{ section.settings.subtext | default: "Australia's strict 0.00% BAC limit for P-platers means guesswork can cost a licence. Confirm you're clear before turning the key." }}
+    </p>
+
+    <div class="kby-hero__ctas">
+      <a href="{{ section.settings.cta_primary_url | default: '/discount/KNOWBEFOREYOUGO?redirect=/collections/personal-breathalysers' }}" class="kby-btn kby-btn--primary kby-btn--specular">
+        {{ section.settings.cta_primary_text | default: "Claim 10% OFF Personal Breathalyser" }}
+      </a>
+      <a href="#giveaway" class="kby-btn kby-btn--secondary kby-btn--specular">
+        {{ section.settings.cta_secondary_text | default: "Enter $500 Music Voucher Draw" }}
+      </a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KBYG Hero",
+  "settings": [
+    { "type": "image_picker", "id": "bg_image", "label": "Background photo — desktop" },
+    {
+      "type": "image_picker",
+      "id": "bg_image_mobile",
+      "label": "Background photo — mobile",
+      "info": "Optional. Falls back to the desktop image if left blank."
+    },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading_line_1", "label": "Heading — line 1" },
+    { "type": "text", "id": "heading_line_2", "label": "Heading — line 2 (accent colour)" },
+    { "type": "textarea", "id": "subtext", "label": "Subtext" },
+    { "type": "text", "id": "cta_primary_text", "label": "Primary CTA text" },
+    { "type": "url", "id": "cta_primary_url", "label": "Primary CTA link" },
+    { "type": "text", "id": "cta_secondary_text", "label": "Secondary CTA text" }
+  ]
+}
+{% endschema %}

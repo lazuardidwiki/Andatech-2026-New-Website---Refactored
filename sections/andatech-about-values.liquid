@@ -1,0 +1,62 @@
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-about.css' | asset_url | stylesheet_tag }}
+
+<section class="at-about-values at-about-section"{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handleize }}"{% endif %}>
+  <div class="at-shell">
+    <header class="at-about-section__header">
+      {%- if section.settings.eyebrow != blank -%}<p class="at-about-section__eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 class="at-about-section__title">{{ section.settings.heading }}</h2>{%- endif -%}
+      {%- if section.settings.description != blank -%}<div class="at-about-section__body">{{ section.settings.description }}</div>{%- endif -%}
+    </header>
+
+    <div class="at-about-values__grid">
+      {%- for block in section.blocks -%}
+        <article class="at-about-value" {{ block.shopify_attributes }}>
+          <div class="at-about-value__icon" aria-hidden="true">{% render 'icon', icon: block.settings.icon, width: 26, height: 26 %}</div>
+          <h3 class="at-about-value__title">{{ block.settings.heading | escape }}</h3>
+          {%- if block.settings.body != blank -%}<div class="at-about-value__body">{{ block.settings.body }}</div>{%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About — Values",
+  "tag": "section",
+  "class": "at-section",
+  "max_blocks": 3,
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "about-values" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "What we stand for" },
+    { "type": "html", "id": "heading", "label": "H2 — Heading", "default": "Our <strong>values</strong>" },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Whether you're evaluating a partner, checking our credentials, or looking for a role — start here.</p>" }
+  ],
+  "blocks": [
+    {
+      "type": "value",
+      "name": "Value",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "default": "leaf", "options": [
+          { "value": "leaf", "label": "Leaf" },
+          { "value": "heart", "label": "Heart" },
+          { "value": "award", "label": "Award" },
+          { "value": "star", "label": "Star" },
+          { "value": "check_mark_in_circle", "label": "Check in circle" },
+          { "value": "briefcase", "label": "Briefcase" }
+        ] },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Value" },
+        { "type": "richtext", "id": "body", "label": "Body copy", "default": "<p>Describe what this value means in practice.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "About — Values", "blocks": [
+      { "type": "value", "settings": { "icon": "leaf", "heading": "Innovate", "body": "<p>To add value to our products and services, take on only products backed by scientific rigour, and proactively challenge and improve our systems and products.</p>" } },
+      { "type": "value", "settings": { "icon": "heart", "heading": "Nurture", "body": "<p>To contribute to a happier environment by understanding and supporting others, respecting and valuing ideas, and developing and growing the leader within.</p>" } },
+      { "type": "value", "settings": { "icon": "award", "heading": "Excellence", "body": "<p>To bring trusted and proven products to market, work to the highest standards and keep finding more efficient ways to do what we do.</p>" } }
+    ] }
+  ]
+}
+{% endschema %}

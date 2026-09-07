@@ -1,0 +1,241 @@
+{%- comment -%}
+  Andatech — Device Finder overlay.
+
+  One shared instance is added to the homepage. Any link carrying
+  `data-at-device-open` opens it, so the hero, plan card and final CTA all use
+  the same four-question journey without navigating away.
+{%- endcomment -%}
+
+{%- comment -%}
+  Split from the andatech-home monolith on 2026-09-05.
+  This section now loads ONLY its own CSS and JS — not the 336 KB andatech-site.css
+  or the 76 KB andatech-site.js. The old files still exist and are still loaded by
+  other homepage sections, but this section no longer contributes to that.
+{%- endcomment -%}
+{{ 'andatech-device-finder.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'andatech-device-finder.js' | asset_url }}" defer="defer"></script>
+
+<div class="at-device-modal"
+     id="at-device-finder-{{ section.id }}"
+     role="dialog"
+     aria-modal="true"
+     aria-label="Device Finder"
+     hidden
+     data-at-device-modal>
+  <div class="at-device-modal__panel">
+    <header class="at-device-modal__head">
+      {%- if section.settings.logo != blank -%}
+        {%- assign logo_src = section.settings.logo | image_url: width: 320 -%}
+      {%- else -%}
+        {%- assign logo_src = section.settings.logo_url -%}
+      {%- endif -%}
+      <a class="at-device-modal__brand" href="{{ routes.root_url }}" aria-label="Andatech home">
+        <img class="at-device-modal__brand-img" src="{{ logo_src }}" alt="Andatech" width="140" height="32" loading="lazy">
+      </a>
+      <button class="at-device-modal__close" type="button" data-at-device-close aria-label="{{ section.settings.close_label | escape }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+
+    <div class="at-device-modal__progress" data-at-device-progress-wrap hidden>
+      <span class="at-device-modal__progress-bar" data-at-device-progress></span>
+    </div>
+
+    <main class="at-device-modal__body">
+      <section class="at-device-intro" data-at-device-intro>
+        <div class="at-device-intro__signal" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <p class="at-device__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        <h2 class="at-device__title" id="at-device-title-{{ section.id }}">{{ section.settings.heading }}</h2>
+        <div class="at-device__lede">{{ section.settings.intro }}</div>
+        <ul class="at-device-intro__facts" aria-label="Device finder details">
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Less than 60 seconds</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>No sign-up required</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 4 7v5c0 4.5 3.2 7.5 8 9 4.8-1.5 8-4.5 8-9V7l-8-4Z" stroke="currentColor" stroke-width="1.8"/><path d="m8.5 12 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Instant recommendation</li>
+        </ul>
+        <button class="at-btn at-btn--green at-device-intro__start" type="button" data-at-device-start>
+          {{ section.settings.start_label | escape }}
+          <i class="at-btn__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i>
+        </button>
+        <p class="at-device-intro__note">{{ section.settings.intro_note | escape }}</p>
+      </section>
+
+      <section class="at-device-question" data-at-device-question hidden aria-live="polite">
+        <p class="at-device-question__step" data-at-device-step>Question 1 of 4</p>
+        <h3 class="at-device-question__title" data-at-device-question-title></h3>
+        <p class="at-device-question__hint" data-at-device-question-hint></p>
+        <div class="at-device-question__options" data-at-device-options></div>
+        <p class="at-device-question__limit" data-at-device-limit hidden>Choose up to two priorities.</p>
+        <div class="at-device-question__actions">
+          <button class="at-device__back" type="button" data-at-device-back>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m14.5 5-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Back
+          </button>
+          <button class="at-btn at-btn--green at-device-question__continue" type="button" data-at-device-continue hidden disabled>
+            See my matches
+            <i class="at-btn__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i>
+          </button>
+        </div>
+      </section>
+
+      <section class="at-device-result" data-at-device-result hidden aria-live="polite">
+        <div class="at-device-result__heading">
+          <div>
+            <p class="at-device__eyebrow">Your recommendation</p>
+            <h3 class="at-device-result__title">A practical place to start</h3>
+          </div>
+          <span class="at-device-result__fit"><i></i>Matched to your answers</span>
+        </div>
+
+        <div class="at-device-result__cards">
+          <article class="at-device-match at-device-match--primary">
+            <div class="at-device-match__rank">Best match</div>
+            <div class="at-device-match__visual" data-at-device-primary-visual aria-hidden="true">
+              <svg viewBox="0 0 160 160" fill="none"><rect x="47" y="18" width="66" height="124" rx="18" stroke="currentColor" stroke-width="3"/><rect x="58" y="34" width="44" height="34" rx="7" fill="currentColor" opacity=".12"/><path d="M67 91h26M67 104h18" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><circle cx="80" cy="124" r="6" fill="currentColor"/></svg>
+            </div>
+            <div class="at-device-match__content">
+              <p class="at-device-match__type" data-at-device-primary-type></p>
+              <h3 data-at-device-primary-title></h3>
+              <p data-at-device-primary-desc></p>
+              <ul data-at-device-primary-reasons></ul>
+              <a class="at-btn at-btn--green" data-at-device-primary-link href="#">
+                View recommended devices
+                <i class="at-btn__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i>
+              </a>
+            </div>
+          </article>
+
+          <article class="at-device-match at-device-match--alternative">
+            <div class="at-device-match__rank">Also consider</div>
+            <div class="at-device-match__visual at-device-match__visual--alt" data-at-device-alt-visual aria-hidden="true"></div>
+            <p class="at-device-match__type" data-at-device-alt-type></p>
+            <h3 data-at-device-alt-title></h3>
+            <p data-at-device-alt-desc></p>
+            <a class="at-device-match__link" data-at-device-alt-link href="#">Explore this option <span aria-hidden="true">&rarr;</span></a>
+          </article>
+        </div>
+
+        <div class="at-device-result__summary">
+          <div>
+            <p class="at-device-result__summary-label">Your requirements</p>
+            <p data-at-device-summary></p>
+          </div>
+          <p class="at-device-result__disclaimer">{{ section.settings.result_note | escape }}</p>
+        </div>
+
+        <div class="at-device-result__actions">
+          <a class="at-btn at-btn--outline-dark" href="{{ section.settings.specialist_url | default: '/pages/talk-to-sales' }}">{{ section.settings.specialist_label | escape }}</a>
+          <button class="at-device__restart" type="button" data-at-device-restart>Start again</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  {%- comment -%} Image resolution: image_picker → text URL setting → schema default {%- endcomment -%}
+  {%- if section.settings.portable_image != blank -%}
+    {%- assign portable_img = section.settings.portable_image | image_url: width: 600 -%}
+  {%- else -%}
+    {%- assign portable_img = section.settings.portable_image_url -%}
+  {%- endif -%}
+  {%- if section.settings.fixed_image != blank -%}
+    {%- assign fixed_img = section.settings.fixed_image | image_url: width: 600 -%}
+  {%- else -%}
+    {%- assign fixed_img = section.settings.fixed_image_url -%}
+  {%- endif -%}
+  {%- if section.settings.drug_image != blank -%}
+    {%- assign drug_img = section.settings.drug_image | image_url: width: 600 -%}
+  {%- else -%}
+    {%- assign drug_img = section.settings.drug_image_url -%}
+  {%- endif -%}
+  {%- if section.settings.combined_image != blank -%}
+    {%- assign combined_img = section.settings.combined_image | image_url: width: 600 -%}
+  {%- else -%}
+    {%- assign combined_img = section.settings.combined_image_url -%}
+  {%- endif -%}
+  {%- if section.settings.personal_image != blank -%}
+    {%- assign personal_img = section.settings.personal_image | image_url: width: 600 -%}
+  {%- else -%}
+    {%- assign personal_img = section.settings.personal_image_url -%}
+  {%- endif -%}
+
+  <script type="application/json" data-at-device-config>
+    {
+      "portable": {
+        "type": "Staff-operated alcohol testing",
+        "title": "Portable workplace breathalysers",
+        "description": "Flexible, certified alcohol testing for supervisors, testing officers and mobile teams.",
+        "image": {{ portable_img | json }},
+        "url": {{ section.settings.portable_url | default: '/collections/portable-breathalysers' | json }}
+      },
+      "fixed": {
+        "type": "Unattended alcohol screening",
+        "title": "Wall-mounted breathalysers",
+        "description": "High-frequency, self-service screening with options for identity, access control and central reporting.",
+        "image": {{ fixed_img | json }},
+        "url": {{ section.settings.fixed_url | default: '/collections/wallmounted-breathalysers' | json }}
+      },
+      "drug": {
+        "type": "On-site drug screening",
+        "title": "Workplace drug-test kits",
+        "description": "Practical oral-fluid and urine screening options for workplace and field testing.",
+        "image": {{ drug_img | json }},
+        "url": {{ section.settings.drug_url | default: '/collections/drug-test-kits' | json }}
+      },
+      "combined": {
+        "type": "Integrated workplace testing",
+        "title": "Drug and alcohol testing program",
+        "description": "A coordinated device, consumables and reporting setup when one testing method cannot cover the whole requirement.",
+        "image": {{ combined_img | json }},
+        "url": {{ section.settings.combined_url | default: '/pages/talk-to-sales' | json }}
+      },
+      "personal": {
+        "type": "Personal alcohol testing",
+        "title": "Personal breathalysers",
+        "description": "Simple, portable breathalysers for informed personal testing at home or before driving.",
+        "image": {{ personal_img | json }},
+        "url": {{ section.settings.personal_url | default: '/collections/personal-breathalysers' | json }}
+      }
+    }
+  </script>
+</div>
+
+{% schema %}
+{
+  "name": "Andatech Device Finder",
+  "tag": "section",
+  "class": "at-section at-section--overlay-only",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Find Your Device" },
+    { "type": "html", "id": "heading", "label": "H2 — Heading", "default": "Let’s find the right testing device for <strong>your needs.</strong>" },
+    { "type": "richtext", "id": "intro", "label": "Introduction", "default": "<p>Answer four quick questions and we’ll recommend the most suitable place to start.</p>" },
+    { "type": "text", "id": "start_label", "label": "Start button", "default": "Start Device Finder" },
+    { "type": "text", "id": "intro_note", "label": "Intro note", "default": "No contact details are required to see your result." },
+    { "type": "text", "id": "close_label", "label": "Close button label", "default": "Close device finder" },
+    { "type": "text", "id": "result_note", "label": "Result note", "default": "This is general product guidance, not a compliance assessment. Final suitability depends on your policy, testing procedures and applicable obligations." },
+    { "type": "text", "id": "specialist_label", "label": "Specialist button", "default": "Talk to a product specialist" },
+    { "type": "url", "id": "specialist_url", "label": "Specialist link" },
+    { "type": "header", "content": "Branding", "info": "Image picker takes priority. If empty, the URL below is used." },
+    { "type": "image_picker", "id": "logo", "label": "Modal logo (upload from Files)" },
+    { "type": "text", "id": "logo_url", "label": "Modal logo URL fallback", "default": "https://cdn.shopify.com/s/files/1/0241/5850/2976/files/Andatech_Logo_Main.png?v=1780796910" },
+    { "type": "header", "content": "Recommendation destinations" },
+    { "type": "url", "id": "portable_url", "label": "Portable workplace breathalysers" },
+    { "type": "url", "id": "fixed_url", "label": "Wall-mounted breathalysers" },
+    { "type": "url", "id": "drug_url", "label": "Drug-test kits" },
+    { "type": "url", "id": "combined_url", "label": "Integrated testing enquiry" },
+    { "type": "url", "id": "personal_url", "label": "Personal breathalysers" },
+    { "type": "header", "content": "Recommendation images", "info": "Each card uses the image picker first. If empty, it falls back to the URL below (pre-filled with the current default)." },
+    { "type": "image_picker", "id": "portable_image", "label": "Portable — upload" },
+    { "type": "text", "id": "portable_image_url", "label": "Portable — URL fallback", "default": "https://cdn.shopify.com/s/files/1/0241/5850/2976/files/Tyrone_FRX_Workplace_4-5.png" },
+    { "type": "image_picker", "id": "fixed_image", "label": "Wall-mounted — upload" },
+    { "type": "text", "id": "fixed_image_url", "label": "Wall-mounted — URL fallback", "default": "https://cdn.shopify.com/s/files/1/0241/5850/2976/files/Andatech_Accesspoint_FRX_Step_3_Results_Sync_Online_Andalink.webp" },
+    { "type": "image_picker", "id": "drug_image", "label": "Drug-test — upload" },
+    { "type": "text", "id": "drug_image_url", "label": "Drug-test — URL fallback", "default": "https://cdn.shopify.com/s/files/1/0241/5850/2976/files/drug_test_kits_7f4f6c88-ab99-41b2-bb2b-0b3e99beb539.jpg" },
+    { "type": "image_picker", "id": "combined_image", "label": "Integrated — upload" },
+    { "type": "text", "id": "combined_image_url", "label": "Integrated — URL fallback", "default": "https://cdn.shopify.com/s/files/1/0241/5850/2976/files/Why_mentally_safe_workplaces_are_drug-safe_workplaces.jpg" },
+    { "type": "image_picker", "id": "personal_image", "label": "Personal — upload" },
+    { "type": "text", "id": "personal_image_url", "label": "Personal — URL fallback", "default": "https://cdn.shopify.com/s/files/1/0241/5850/2976/files/Tyrone_FRX_Transparent.webp" }
+  ],
+  "presets": [ { "name": "Andatech Device Finder" } ]
+}
+{% endschema %}

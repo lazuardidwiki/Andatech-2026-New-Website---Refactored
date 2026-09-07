@@ -1,0 +1,664 @@
+{% schema %}
+{
+  "name": "Breathalyzer Quiz Builder",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find Your Perfect Breathalyzer"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Answer a few quick questions to get a personalized recommendation."
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#8dc63f"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Card Background",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "step_id",
+          "label": "Step ID (Unique)",
+          "info": "e.g. 'start', 'q2'. The first question MUST be 'start'.",
+          "default": "start"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Question Text",
+          "default": "What is your primary use?"
+        },
+        {
+          "type": "header",
+          "content": "Option 1"
+        },
+        {
+          "type": "text",
+          "id": "opt_1_label",
+          "label": "Label",
+          "default": "Personal Use"
+        },
+        {
+          "type": "text",
+          "id": "opt_1_sub",
+          "label": "Subtitle (Optional)",
+          "default": "For myself or family"
+        },
+        {
+          "type": "text",
+          "id": "opt_1_next",
+          "label": "Next Step ID or Result ID",
+          "info": "Enter the ID of the next Question or Result block."
+        },
+        {
+          "type": "header",
+          "content": "Option 2"
+        },
+        {
+          "type": "text",
+          "id": "opt_2_label",
+          "label": "Label",
+          "default": "Workplace"
+        },
+        {
+          "type": "text",
+          "id": "opt_2_sub",
+          "label": "Subtitle (Optional)",
+          "default": "For employees & safety"
+        },
+        {
+          "type": "text",
+          "id": "opt_2_next",
+          "label": "Next Step ID or Result ID"
+        },
+        {
+          "type": "header",
+          "content": "Option 3 (Optional)"
+        },
+        {
+          "type": "text",
+          "id": "opt_3_label",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "opt_3_sub",
+          "label": "Subtitle (Optional)"
+        },
+        {
+          "type": "text",
+          "id": "opt_3_next",
+          "label": "Next Step ID or Result ID"
+        }
+      ]
+    },
+    {
+      "type": "result",
+      "name": "Result Outcome",
+      "settings": [
+        {
+          "type": "text",
+          "id": "step_id",
+          "label": "Result ID (Unique)",
+          "info": "Match this with the 'Next Step ID' from a question.",
+          "default": "res_casual"
+        },
+        {
+          "type": "product",
+          "id": "product_ref",
+          "label": "Product to Recommend"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Custom Image (Optional)",
+          "info": "Overrides the product image."
+        },
+        {
+          "type": "text",
+          "id": "title_override",
+          "label": "Title Override",
+          "info": "Leave blank to use Product Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "This is the best match for your needs."
+        },
+        {
+          "type": "text",
+          "id": "btn_text",
+          "label": "Button Text",
+          "default": "View Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Breathalyzer Quiz Builder",
+      "blocks": [
+        {
+          "type": "question",
+          "settings": {
+            "step_id": "start",
+            "title": "Who are you buying for?",
+            "opt_1_label": "Myself / Family",
+            "opt_1_next": "q_personal",
+            "opt_2_label": "Business / Workplace",
+            "opt_2_next": "q_workplace"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "step_id": "q_personal",
+            "title": "How often will you use it?",
+            "opt_1_label": "Occasionally",
+            "opt_1_sub": "Parties, weekends",
+            "opt_1_next": "res_casual",
+            "opt_2_label": "Frequently",
+            "opt_2_sub": "Daily tracking, high accuracy",
+            "opt_2_next": "res_pro"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "step_id": "q_workplace",
+            "title": "What is the testing volume?",
+            "opt_1_label": "Low Volume",
+            "opt_1_sub": "Small teams, entry checks",
+            "opt_1_next": "res_lite",
+            "opt_2_label": "High Volume",
+            "opt_2_sub": "Industrial, mining, rapid checks",
+            "opt_2_next": "res_heavy"
+          }
+        },
+        {
+          "type": "result",
+          "settings": {
+            "step_id": "res_casual",
+            "description": "Perfect for personal peace of mind."
+          }
+        },
+        {
+          "type": "result",
+          "settings": {
+            "step_id": "res_pro",
+            "description": "Professional grade accuracy for personal use."
+          }
+        },
+        {
+          "type": "result",
+          "settings": {
+            "step_id": "res_lite",
+            "description": "AS3547 Certified for compliant workplace testing."
+          }
+        },
+        {
+          "type": "result",
+          "settings": {
+            "step_id": "res_heavy",
+            "description": "Heavy duty sensors for high-throughput environments."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<div class="breathalyzer-quiz-section">
+  <div class="quiz-container">
+    <div class="quiz-header">
+      <h2 class="section-title" style="color: {{ section.settings.text_color }}">{{ section.settings.heading }}</h2>
+      <p class="section-subtitle" style="color: {{ section.settings.text_color }}">{{ section.settings.subheading }}</p>
+    </div>
+
+    <div class="quiz-card glass-panel" id="quiz-wrapper-{{ section.id }}">
+      
+      <!-- PROGRESS BAR -->
+      <div class="progress-container">
+        <div class="progress-bar" id="quiz-progress-{{ section.id }}"></div>
+      </div>
+
+      <!-- DYNAMIC CONTENT CONTAINER -->
+      <div id="quiz-content-{{ section.id }}" class="quiz-content-area">
+        <!-- JS will inject active block here -->
+        <div class="loading-spinner">Loading Quiz...</div>
+      </div>
+
+      <!-- HIDDEN DATA STORE (Source of truth for JS) -->
+      <div id="quiz-data-{{ section.id }}" style="display:none;">
+        {% for block in section.blocks %}
+          {% if block.type == 'question' %}
+            <div 
+              class="data-block-question" 
+              data-id="{{ block.settings.step_id }}"
+              data-title="{{ block.settings.title | escape }}"
+            >
+              {% if block.settings.opt_1_label != blank %}
+                <div class="data-option" 
+                     data-label="{{ block.settings.opt_1_label | escape }}" 
+                     data-sub="{{ block.settings.opt_1_sub | escape }}" 
+                     data-next="{{ block.settings.opt_1_next }}"></div>
+              {% endif %}
+              {% if block.settings.opt_2_label != blank %}
+                <div class="data-option" 
+                     data-label="{{ block.settings.opt_2_label | escape }}" 
+                     data-sub="{{ block.settings.opt_2_sub | escape }}" 
+                     data-next="{{ block.settings.opt_2_next }}"></div>
+              {% endif %}
+              {% if block.settings.opt_3_label != blank %}
+                <div class="data-option" 
+                     data-label="{{ block.settings.opt_3_label | escape }}" 
+                     data-sub="{{ block.settings.opt_3_sub | escape }}" 
+                     data-next="{{ block.settings.opt_3_next }}"></div>
+              {% endif %}
+            </div>
+          {% elsif block.type == 'result' %}
+            {% assign p = all_products[block.settings.product_ref] %}
+            
+            {% comment %} Logic for Image Source {% endcomment %}
+            {% assign img_src = '' %}
+            {% if block.settings.custom_image != blank %}
+              {% assign img_src = block.settings.custom_image | img_url: '600x' %}
+            {% elsif p.featured_image != blank %}
+              {% assign img_src = p.featured_image | img_url: '600x' %}
+            {% endif %}
+
+            <div 
+              class="data-block-result" 
+              data-id="{{ block.settings.step_id }}"
+              data-title="{{ block.settings.title_override | default: p.title | default: 'Recommended Product' | escape }}"
+              data-desc="{{ block.settings.description | escape }}"
+              data-price="{{ p.price | money }}"
+              data-url="{{ p.url }}"
+              data-image="{{ img_src }}"
+              data-btn="{{ block.settings.btn_text | escape }}"
+            ></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  .breathalyzer-quiz-section {
+    padding: 4rem 1rem;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: {{ section.settings.text_color }};
+    --quiz-accent: {{ section.settings.accent_color }};
+    --quiz-bg: {{ section.settings.card_bg }};
+  }
+
+  .quiz-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .section-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  .section-subtitle {
+    font-size: 1rem;
+    opacity: 0.7;
+  }
+
+  /* Card Styles */
+  .glass-panel {
+    background: var(--quiz-bg);
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); 
+    border: 1px solid rgba(0,0,0,0.05);
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Progress Bar */
+  .progress-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: #f3f4f6;
+  }
+  
+  .progress-bar {
+    height: 100%;
+    background: var(--quiz-accent);
+    width: 10%;
+    transition: width 0.4s ease;
+  }
+
+  /* Content Area */
+  .quiz-content-area {
+    width: 100%;
+    animation: fadeIn 0.4s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-text {
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    color: {{ section.settings.text_color }};
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* Option Buttons */
+  .quiz-option {
+    background: #f9fafb;
+    border: 2px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+  }
+
+  .quiz-option:hover {
+    border-color: var(--quiz-accent);
+    background: #ffffff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    transform: translateY(-2px);
+  }
+
+  .option-title {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: {{ section.settings.text_color }};
+  }
+
+  .option-desc {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    line-height: 1.4;
+    color: {{ section.settings.text_color }};
+  }
+
+  /* Result Card Styling */
+  .result-view {
+    text-align: center;
+  }
+
+  .checkmark-circle {
+    width: 64px;
+    height: 64px;
+    background: var(--quiz-accent);
+    color: white;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .prod-image {
+    margin: 1.5rem auto;
+    max-width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .prod-image img {
+    max-height: 250px;
+    width: auto;
+    object-fit: contain;
+  }
+  
+  .placeholder-box {
+    padding: 3rem;
+    background: #f3f4f6;
+    color: #666;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+  }
+
+  .price {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--quiz-accent);
+    margin: 0.5rem 0;
+  }
+
+  .desc {
+    max-width: 500px;
+    margin: 0 auto 2rem;
+    opacity: 0.8;
+    line-height: 1.6;
+  }
+
+  .shop-btn {
+    display: inline-block;
+    background: var(--quiz-accent);
+    color: white;
+    padding: 1rem 3rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-size: 1.1rem;
+  }
+
+  .shop-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px {{ section.settings.accent_color | color_modify: 'alpha', 0.4 }};
+  }
+
+  .back-btn {
+    display: block;
+    margin: 2rem auto 0;
+    background: none;
+    border: none;
+    text-decoration: underline;
+    color: {{ section.settings.text_color }};
+    opacity: 0.5;
+    cursor: pointer;
+  }
+  
+  .back-btn:hover { opacity: 1; }
+</style>
+
+<script>
+  (function() {
+    const sectionId = "{{ section.id }}";
+    const contentArea = document.getElementById('quiz-content-' + sectionId);
+    const progressEl = document.getElementById('quiz-progress-' + sectionId);
+    const dataStore = document.getElementById('quiz-data-' + sectionId);
+    
+    // Store blocks in memory
+    const blocks = {};
+    
+    function init() {
+      // Parse hidden DOM data into JS object
+      const questionEls = dataStore.querySelectorAll('.data-block-question');
+      questionEls.forEach(el => {
+        const id = el.dataset.id;
+        const options = [];
+        el.querySelectorAll('.data-option').forEach(opt => {
+          options.push({
+            label: opt.dataset.label,
+            sub: opt.dataset.sub,
+            next: opt.dataset.next
+          });
+        });
+        blocks[id] = { type: 'question', title: el.dataset.title, options: options };
+      });
+
+      const resultEls = dataStore.querySelectorAll('.data-block-result');
+      resultEls.forEach(el => {
+        const id = el.dataset.id;
+        blocks[id] = { 
+          type: 'result', 
+          title: el.dataset.title, 
+          desc: el.dataset.desc,
+          price: el.dataset.price,
+          url: el.dataset.url,
+          image: el.dataset.image,
+          btnText: el.dataset.btn
+        };
+      });
+
+      // Start Quiz
+      goToStep('start');
+    }
+
+    window.goToStep = function(stepId) {
+      const block = blocks[stepId];
+      
+      if (!block) {
+        contentArea.innerHTML = `<div class="text-center"><h3>Error: Step "${stepId}" not found.</h3><button class="back-btn" onclick="goToStep('start')">Restart</button></div>`;
+        return;
+      }
+
+      // Update Progress (Simple logic: if result 100%, else variable)
+      if(block.type === 'result') {
+        progressEl.style.width = '100%';
+      } else {
+        // Just a visual approximation
+        progressEl.style.width = stepId === 'start' ? '10%' : '50%';
+      }
+
+      // Render
+      if (block.type === 'question') {
+        renderQuestion(block);
+      } else if (block.type === 'result') {
+        renderResult(block);
+      }
+    };
+
+    function renderQuestion(block) {
+      let optionsHtml = '';
+      block.options.forEach(opt => {
+        optionsHtml += `
+          <button class="quiz-option" onclick="goToStep('${opt.next}')">
+            <span class="option-title">${opt.label}</span>
+            ${opt.sub ? `<span class="option-desc">${opt.sub}</span>` : ''}
+          </button>
+        `;
+      });
+
+      contentArea.innerHTML = `
+        <div class="question-view">
+          <h3 class="question-text">${block.title}</h3>
+          <div class="options-grid">
+            ${optionsHtml}
+          </div>
+          ${block.stepId !== 'start' ? `<button class="back-btn" onclick="goToStep('start')">Restart</button>` : ''}
+        </div>
+      `;
+    }
+
+    function renderResult(block) {
+      // Image Handling
+      let imageHtml = '';
+      if (block.image) {
+        imageHtml = `<div class="prod-image"><img src="${block.image}" alt="${block.title}"></div>`;
+      } else {
+        imageHtml = `<div class="placeholder-box">No image available</div>`;
+      }
+
+      // Link Handling
+      // If product url exists, wrap image, otherwise just div
+      if (block.url && block.image) {
+         imageHtml = `<a href="${block.url}" class="prod-image"><img src="${block.image}" alt="${block.title}"></a>`; 
+      }
+
+      contentArea.innerHTML = `
+        <div class="result-view">
+          <div class="checkmark-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <h3>We Recommend</h3>
+          ${imageHtml}
+          <h4>${block.title}</h4>
+          ${block.price ? `<p class="price">${block.price}</p>` : ''}
+          <p class="desc">${block.desc}</p>
+          ${block.url ? `<a href="${block.url}" class="shop-btn">${block.btnText}</a>` : ''}
+          <button class="back-btn" onclick="goToStep('start')">Retake Quiz</button>
+        </div>
+      `;
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+    
+    // Support Shopify Theme Editor reloads
+    document.addEventListener('shopify:section:load', (e) => {
+        if(e.detail.sectionId === sectionId) init();
+    });
+
+  })();
+</script>

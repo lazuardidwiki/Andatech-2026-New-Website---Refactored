@@ -1,0 +1,399 @@
+{% comment %}
+  ANDATECH FLEXIBLE RICH TEXT & MEDIA
+  - Supports: Standard Text, Image Left/Right, Banner Overlay
+  - Andatech Green Branding included
+  - Fully block-based for ordering flexibility
+{% endcomment %}
+
+<style>
+  #shopify-section-{{ section.id }} {
+    --adt-primary: #76bc21;
+    --adt-text: {{ section.settings.text_color }};
+    --adt-bg: {{ section.settings.bg_color }};
+    --adt-padding: {{ section.settings.padding_y }}px;
+  }
+
+  /* --- WRAPPER & LAYOUTS --- */
+  .adt-flex-section {
+    background-color: var(--adt-bg);
+    padding: var(--adt-padding) 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .adt-flex-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    gap: 40px;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* LAYOUT: STANDARD (One Column) */
+  .layout--standard .adt-flex-container {
+    grid-template-columns: 1fr;
+    max-width: 900px;
+    text-align: {{ section.settings.text_align }};
+  }
+
+  /* LAYOUT: SPLIT (Image Left or Right) */
+  .layout--split_left .adt-flex-container,
+  .layout--split_right .adt-flex-container {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  /* FLIP LOGIC for Split Right */
+  .layout--split_right .adt-media-col { order: 2; }
+  .layout--split_right .adt-content-col { order: 1; }
+  
+  /* LAYOUT: BANNER (Overlay) */
+  .layout--banner {
+    padding: 0; /* Remove section padding, let height control it */
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .layout--banner .adt-flex-container {
+    text-align: center;
+    color: #ffffff; /* Force white text on banner */
+    max-width: 800px;
+  }
+  .layout--banner .adt-bg-image {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+  .layout--banner .adt-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); /* Dark overlay */
+    z-index: 1;
+  }
+  /* Force white text overrides for banner mode */
+  .layout--banner .adt-rich-title, 
+  .layout--banner .adt-rich-text { color: #ffffff !important; }
+
+  /* --- COLUMNS --- */
+  .adt-media-col img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  }
+
+  .adt-content-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* Alignment based on settings */
+    align-items: {% if section.settings.text_align == 'center' %}center{% elsif section.settings.text_align == 'right' %}flex-end{% else %}flex-start{% endif %};
+    text-align: {{ section.settings.text_align }};
+  }
+
+  /* --- TYPOGRAPHY --- */
+  .adt-rich-title {
+    margin: 0;
+    line-height: 1.2;
+    color: var(--adt-text);
+  }
+  .adt-rich-title strong { color: var(--adt-primary); }
+
+  .adt-rich-text {
+    color: var(--adt-text);
+    line-height: 1.6;
+    opacity: 0.9;
+  }
+  .adt-rich-text p { margin: 0 0 15px 0; font-size: inherit; }
+  .adt-rich-text strong { color: var(--adt-primary); font-weight: 700; }
+  .adt-rich-text a { color: var(--adt-primary); text-decoration: underline; }
+
+  /* --- BUTTONS --- */
+  .adt-btn-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .adt-btn {
+    padding: 12px 28px;
+    border-radius: 4px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s;
+    line-height: 1;
+  }
+  /* Solid Green Button */
+  .btn--primary {
+    background-color: var(--adt-primary);
+    color: #fff;
+    border: 2px solid var(--adt-primary);
+  }
+  .btn--primary:hover {
+    background-color: #5ea015;
+    border-color: #5ea015;
+  }
+  /* Outline Button */
+  .btn--outline {
+    background-color: transparent;
+    color: var(--adt-text);
+    border: 2px solid currentColor;
+  }
+  .btn--outline:hover {
+    color: var(--adt-primary);
+  }
+
+  /* --- RESPONSIVE --- */
+  @media (max-width: 768px) {
+    .adt-flex-container { grid-template-columns: 1fr !important; gap: 30px; }
+    .adt-media-col { order: -1 !important; } /* Image always top on mobile */
+    .layout--banner { min-height: 350px; }
+    .adt-content-col { align-items: flex-start; text-align: left; }
+    .layout--banner .adt-content-col { align-items: center; text-align: center; }
+  }
+</style>
+
+<div class="adt-flex-section layout--{{ section.settings.layout_mode }}">
+  
+  {% if section.settings.layout_mode == 'banner' and section.settings.bg_image != blank %}
+    <img src="{{ section.settings.bg_image | img_url: '1600x' }}" class="adt-bg-image" alt="Background">
+    <div class="adt-overlay"></div>
+  {% endif %}
+
+  <div class="adt-flex-container">
+    
+    {% if section.settings.layout_mode contains 'split' %}
+      <div class="adt-media-col">
+        {% if section.settings.bg_image != blank %}
+          <img src="{{ section.settings.bg_image | img_url: '800x' }}" loading="lazy" alt="Section Image">
+        {% else %}
+          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="adt-content-col">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          
+          {% when 'heading' %}
+            <div class="adt-rich-title" style="font-size: {{ block.settings.font_size }}px;" {{ block.shopify_attributes }}>
+              {{ block.settings.title_rich }}
+            </div>
+
+          {% when 'text' %}
+            <div class="adt-rich-text" style="font-size: {{ block.settings.font_size }}px;" {{ block.shopify_attributes }}>
+              {{ block.settings.text_rich }}
+            </div>
+
+          {% when 'image' %}
+            <div {{ block.shopify_attributes }} style="max-width: {{ block.settings.width }}px;">
+               <img src="{{ block.settings.image | img_url: '600x' }}" style="width:100%; border-radius:4px;" alt="Inline Image">
+            </div>
+
+          {% when 'buttons' %}
+            <div class="adt-btn-group" {{ block.shopify_attributes }}>
+              {% if block.settings.btn1_text != blank %}
+                <a href="{{ block.settings.btn1_link }}" class="adt-btn btn--primary">{{ block.settings.btn1_text }}</a>
+              {% endif %}
+              {% if block.settings.btn2_text != blank %}
+                <a href="{{ block.settings.btn2_link }}" class="adt-btn btn--outline">{{ block.settings.btn2_text }}</a>
+              {% endif %}
+            </div>
+
+          {% when 'spacer' %}
+            <div style="height: {{ block.settings.height }}px;" {{ block.shopify_attributes }}></div>
+
+        {% endcase %}
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Andatech Flexible Content",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout Mode"
+    },
+    {
+      "type": "select",
+      "id": "layout_mode",
+      "label": "Section Layout",
+      "options": [
+        { "value": "standard", "label": "Standard (Text Only)" },
+        { "value": "split_left", "label": "Split: Image Left" },
+        { "value": "split_right", "label": "Split: Image Right" },
+        { "value": "banner", "label": "Hero Banner (Text Over Image)" }
+      ],
+      "default": "standard"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Main Image / Background",
+      "info": "Used as the side image in Split mode, or background in Banner mode."
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text Alignment (Standard Mode)",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "padding_y",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Vertical Padding",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#222222"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading (Rich Text)",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "title_rich",
+          "label": "Heading Text",
+          "default": "<h2>Your <strong>Heading</strong></h2>"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 16,
+          "max": 60,
+          "step": 1,
+          "label": "Font Size",
+          "default": 36
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Body Text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text_rich",
+          "label": "Content",
+          "default": "<p>Add your rich text here. You can make text <strong>bold (green)</strong> or italic.</p>"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "label": "Font Size",
+          "default": 16
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Button Group",
+      "settings": [
+        {
+          "type": "text",
+          "id": "btn1_text",
+          "label": "Primary Button Text",
+          "default": "Get Started"
+        },
+        {
+          "type": "url",
+          "id": "btn1_link",
+          "label": "Primary Link"
+        },
+        {
+          "type": "text",
+          "id": "btn2_text",
+          "label": "Secondary Button Text"
+        },
+        {
+          "type": "url",
+          "id": "btn2_link",
+          "label": "Secondary Link"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Inline Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "min": 50,
+          "max": 600,
+          "step": 10,
+          "label": "Max Width",
+          "default": 200
+        }
+      ]
+    },
+    {
+      "type": "spacer",
+      "name": "Vertical Spacer",
+      "settings": [
+        {
+          "type": "range",
+          "id": "height",
+          "min": 10,
+          "max": 100,
+          "step": 5,
+          "unit": "px",
+          "label": "Height",
+          "default": 30
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Andatech Flexible Content",
+      "blocks": [
+        { "type": "heading" },
+        { "type": "text" },
+        { "type": "buttons" }
+      ]
+    }
+  ]
+}
+{% endschema %}

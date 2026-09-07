@@ -1,0 +1,110 @@
+{%- comment -%}
+  Andatech — Connected Platform.
+  Section header + full-width promo card(s) with background image.
+  Card design mirrors the Alcohol Pathways card.
+{%- endcomment -%}
+
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-industry.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-connected-platform.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'andatech-site.js' | asset_url }}" defer="defer"></script>
+
+<section class="at-connected-platform"{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handleize }}"{% endif %}>
+  <div class="at-shell">
+    {%- if section.settings.eyebrow != blank or section.settings.heading != blank -%}
+      <header class="at-connected-platform__header" data-at-rise>
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="at-industry__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank or section.settings.heading_bold != blank -%}
+          <h2 class="at-industry__title">
+            {{ section.settings.heading | escape }}
+            {%- if section.settings.heading_bold != blank -%}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{%- endif -%}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.description != blank -%}
+          <div class="at-industry__desc">{{ section.settings.description }}</div>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    <div class="at-connected-platform__grid">
+      {%- for block in section.blocks -%}
+        {%- assign cp_tag = 'div' -%}
+        {%- if block.settings.cta_url != blank -%}{%- assign cp_tag = 'a' -%}{%- endif -%}
+
+        <{{ cp_tag }} class="at-cp__card{% if block.settings.cta_url != blank %} at-cp__card--link{% endif %}" data-at-rise {{ block.shopify_attributes }}
+          {%- if block.settings.cta_url != blank %} href="{{ block.settings.cta_url }}"{% if block.settings.cta_url contains '://' %} target="_blank" rel="noopener"{% endif %}{% endif -%}>
+          {%- if block.settings.image != blank -%}
+            <span class="at-cp__media" aria-hidden="true">
+              {{ block.settings.image | image_url: width: 2200 | image_tag: loading: 'lazy', widths: '750, 1100, 1600, 2200', sizes: '(max-width: 749px) 100vw, 90vw', alt: '' }}
+            </span>
+          {%- endif -%}
+          <div class="at-cp__content">
+            {%- if block.settings.logo != blank -%}
+              <img class="at-cp__logo" src="{{ block.settings.logo | image_url: width: 300 }}" alt="{{ block.settings.logo.alt | escape }}" loading="lazy">
+            {%- endif -%}
+            {%- if block.settings.eyebrow != blank -%}
+              <span class="at-cp__eyebrow">{{ block.settings.eyebrow | escape }}</span>
+            {%- endif -%}
+            {%- if block.settings.title != blank -%}
+              <span class="at-cp__title">{{ block.settings.title | escape }}{% if block.settings.title_bold != blank %}<strong>{{ block.settings.title_bold | escape }}</strong>{% endif %}</span>
+            {%- endif -%}
+            {%- if block.settings.description != blank -%}
+              <div class="at-cp__copy">{{ block.settings.description }}</div>
+            {%- endif -%}
+          </div>
+          {%- if block.settings.cta_url != blank -%}
+            <span class="at-cp__arrow" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 9v8H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          {%- endif -%}
+        </{{ cp_tag }}>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Connected Platform",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor" },
+    { "type": "header", "content": "Section header" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)" },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)" },
+    { "type": "richtext", "id": "description", "label": "Description" }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Platform card",
+      "limit": 4,
+      "settings": [
+        { "type": "image_picker", "id": "logo", "label": "Logo / wordmark", "info": "Optional brand mark shown above the heading." },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow", "info": "Optional category label above the heading." },
+        { "type": "text", "id": "title", "label": "H2 — Heading (light)" },
+        { "type": "text", "id": "title_bold", "label": "H2 — Heading (bold)" },
+        { "type": "richtext", "id": "description", "label": "Body copy" },
+        { "type": "url", "id": "cta_url", "label": "Link", "info": "Makes the entire card clickable. The arrow appears in the bottom-right corner." },
+        { "type": "image_picker", "id": "image", "label": "Background image", "info": "Full-bleed image behind the card content. Use a landscape image, at least 2200 px wide." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Connected Platform",
+      "blocks": [
+        {
+          "type": "card",
+          "settings": {
+            "title": "Caltrace",
+            "description": "<p>Register your device, book calibration, order consumables and manage your subscription, all in one place.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,74 @@
+{%- comment -%} Andatech — What-we-test and confirmation pathway. {%- endcomment -%}
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-industry.css' | asset_url | stylesheet_tag }}
+
+{%- assign pathway_overlay = section.settings.background_overlay | default: 65 | times: 0.01 -%}
+<section class="at-industry at-testing-pathway{% if section.settings.background_image != blank %} at-testing-pathway--has-image{% endif %}" id="{{ section.settings.anchor_id | default: 'testing-pathway' | handleize }}" style="--at-pathway-overlay: {{ pathway_overlay }};">
+  {%- if section.settings.background_image != blank -%}
+    <div class="at-testing-pathway__background" aria-hidden="true">
+      <img src="{{ section.settings.background_image | image_url: width: 2400 }}" alt="" loading="lazy">
+    </div>
+  {%- endif -%}
+  <div class="at-shell">
+    {%- if section.settings.eyebrow != blank -%}<p class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+    <h2 class="at-industry__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>
+    {%- if section.settings.desc != blank -%}<div class="at-industry__desc" data-at-rise>{{ section.settings.desc }}</div>{%- endif -%}
+
+    <div class="at-testing-pathway__layout">
+      <div class="at-testing-pathway__substances" data-at-rise>
+        <h3>{{ section.settings.substances_heading | escape }}</h3>
+        <div class="at-testing-pathway__chips">
+          {%- for block in section.blocks -%}<span {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</span>{%- endfor -%}
+        </div>
+        {%- if section.settings.substances_note != blank -%}<div class="at-testing-pathway__note">{{ section.settings.substances_note }}</div>{%- endif -%}
+      </div>
+
+      <div class="at-testing-pathway__flow" data-at-rise>
+        <article>
+          <span>01</span>
+          <div><h3>{{ section.settings.screen_heading | escape }}</h3>{{ section.settings.screen_desc }}</div>
+        </article>
+        <i aria-hidden="true">↓</i>
+        <article>
+          <span>02</span>
+          <div><h3>{{ section.settings.confirm_heading | escape }}</h3>{{ section.settings.confirm_desc }}</div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Testing & Confirmation",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "testing-pathway" },
+    { "type": "image_picker", "id": "background_image", "label": "Background image", "info": "Optional. Replaces the navy background while retaining a readable navy overlay." },
+    { "type": "range", "id": "background_overlay", "label": "Image overlay", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 65 },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Screening & Confirmation" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "What we test and" },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "what happens next." },
+    { "type": "richtext", "id": "desc", "label": "Description", "default": "<p>Build a documented pathway from the first screen through to laboratory confirmation, record keeping and the response required by your workplace policy.</p>" },
+    { "type": "text", "id": "substances_heading", "label": "Substances heading", "default": "Common screening groups" },
+    { "type": "richtext", "id": "substances_note", "label": "Substances note", "default": "<p>The substances and detection windows available depend on the selected device, sample type and testing panel.</p>" },
+    { "type": "text", "id": "screen_heading", "label": "Screening heading", "default": "Initial workplace screen" },
+    { "type": "richtext", "id": "screen_desc", "label": "Screening description", "default": "<p>Conduct the approved on-site test, record the result and follow the response process defined in the workplace policy.</p>" },
+    { "type": "text", "id": "confirm_heading", "label": "Confirmation heading", "default": "Laboratory confirmation when required" },
+    { "type": "richtext", "id": "confirm_desc", "label": "Confirmation description", "default": "<p>A non-negative screening result is not treated as a confirmed positive. The sample follows the applicable chain-of-custody and accredited confirmation pathway.</p>" }
+  ],
+  "blocks": [{ "type": "substance", "name": "Screening group", "limit": 16, "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "Alcohol" }
+  ] }],
+  "presets": [{ "name": "Testing & Confirmation", "blocks": [
+    { "type": "substance", "settings": { "label": "Alcohol" } },
+    { "type": "substance", "settings": { "label": "Amphetamines" } },
+    { "type": "substance", "settings": { "label": "Methamphetamine" } },
+    { "type": "substance", "settings": { "label": "Cannabis (THC)" } },
+    { "type": "substance", "settings": { "label": "Cocaine" } },
+    { "type": "substance", "settings": { "label": "Opiates" } },
+    { "type": "substance", "settings": { "label": "Benzodiazepines" } }
+  ] }]
+}
+{% endschema %}

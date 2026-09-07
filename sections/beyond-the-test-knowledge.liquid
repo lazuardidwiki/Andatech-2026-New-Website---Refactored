@@ -1,0 +1,91 @@
+<section class="btt-know" id="knowledge">
+  <div class="btt-know__header">
+    <div class="btt-know__header-left">
+      <h2 class="btt-know__heading">{{ section.settings.heading | default: "Knowledge Hub" }}</h2>
+      <p class="btt-know__sub">{{ section.settings.subheading | default: "Myth, updates, case studies and insights to keep you informed" }}</p>
+    </div>
+    <div class="btt-know__tabs" id="btt-know-tabs">
+      <button class="btt-know__tab is-active" data-tab="all">All Articles</button>
+      <button class="btt-know__tab" data-tab="update">Latest Updates</button>
+      <button class="btt-know__tab" data-tab="case-study">Case Studies</button>
+    </div>
+  </div>
+
+  <!-- Bento grid -->
+  <div class="btt-know__grid" id="btt-know-grid">
+    {% assign filtered = section.blocks | where: "type", "article" %}
+    {% for block in section.blocks %}
+      {% if block.type == 'article' %}
+      <a
+        href="{{ block.settings.link | default: '#' }}"
+        class="btt-know__card btt-know__card--{{ forloop.index }}"
+        data-category="{{ block.settings.category_key | default: 'all' }}"
+        data-tilt
+        {% if block.settings.image != blank %}style="--card-bg:url('{{ block.settings.image | image_url: width: 900 }}')"{% endif %}
+      >
+        <div class="btt-know__card-inner"></div>
+        <div class="btt-know__card-spotlight"></div> 
+        <div class="btt-know__card-overlay"></div>
+        <div class="btt-know__card-top">
+          <span class="btt-know__badge btt-know__badge--{{ block.settings.category_key | default: 'myth' }}">
+            {{ block.settings.category_label | default: "Myth" }}
+          </span>
+        </div>
+        <div class="btt-know__card-bottom">
+          <div class="btt-know__card-text">
+            <h3 class="btt-know__card-title">{{ block.settings.title }}</h3>
+            {% if block.settings.excerpt != blank %}
+              <p class="btt-know__card-excerpt">{{ block.settings.excerpt }}</p>
+            {% endif %}
+          </div>
+          <div class="btt-know__card-footer">
+            {% if block.settings.read_time != blank %}
+              <span class="btt-know__read-time">{{ block.settings.read_time }}</span>
+            {% endif %}
+            <span class="btt-know__arrow" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+            </span>
+          </div>
+        </div>
+      </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "BTT Knowledge Hub",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Knowledge Hub" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Myth, updates, case studies and insights to keep you informed" }
+  ],
+  "blocks": [
+    {
+      "type": "article",
+      "name": "Article",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Background photo" },
+        {
+          "type": "select",
+          "id": "category_key",
+          "label": "Category",
+          "options": [
+            { "value": "myth", "label": "Myth" },
+            { "value": "update", "label": "Latest Update" },
+            { "value": "case-study", "label": "Case Study" }
+          ],
+          "default": "myth"
+        },
+        { "type": "text", "id": "category_label", "label": "Badge label", "default": "Myth" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Drug Testing Proves Impairment At Work" },
+        { "type": "textarea", "id": "excerpt", "label": "Excerpt (optional, shows on large card only)" },
+        { "type": "text", "id": "read_time", "label": "Read time", "default": "5 min read" },
+        { "type": "url", "id": "link", "label": "Article URL" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [{ "name": "BTT Knowledge Hub" }]
+}
+{% endschema %}

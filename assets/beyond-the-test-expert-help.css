@@ -1,0 +1,349 @@
+/* =====================================================
+   Beyond The Test™ — Get Expert Help
+   ===================================================== */
+
+.btt-expert{
+  background:transparent;
+  padding:100px 48px;
+  position:relative;
+  z-index:1;
+}
+.btt-expert__inner{
+  width:100%;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+/* ===== Header ===== */
+.btt-expert__header{
+  max-width:640px;
+  margin:0 0 48px;
+}
+.btt-expert__eyebrow{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:12.5px;
+  font-style:italic;
+  color:rgba(17,24,32,.55);
+  margin:0 0 12px;
+}
+.btt-expert__eyebrow svg{ flex-shrink:0; color:#46BEC4; }
+.btt-expert__heading{
+  font-family:'Titillium Web',sans-serif;
+  font-size:38px;
+  font-weight:700;
+  color:#111820;
+  margin:0 0 12px;
+  line-height:1.15;
+}
+.btt-expert__sub{
+  font-size:15.5px;
+  color:rgba(17,24,32,.65);
+  line-height:1.6;
+  margin:0;
+}
+
+/* ===== Grid ===== */
+.btt-expert__grid{
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:32px;
+  align-items:start;
+}
+
+/* =====================================================
+   Shared card treatment (form + panel) — soft light gradient rather than
+   a flat fill, so the pair of cards has some depth instead of reading flat.
+   ===================================================== */
+.btt-expert__form-wrap,
+.btt-expert__panel{
+  position:relative;
+  background:linear-gradient(160deg, #ffffff 0%, #edf2f4 100%);
+  border:1px solid rgba(17,24,32,.08);
+  border-radius:24px;
+  padding:32px;
+  box-shadow:0 12px 32px rgba(17,24,32,.10), inset 0 1px 0 rgba(255,255,255,.6);
+}
+.btt-expert__field--message textarea{
+  min-height:80px;
+}
+.btt-expert__panel{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  box-sizing:border-box;
+}
+
+
+/* The rotating conic-gradient border glow that used to sit on these two cards
+   has been removed outright, not just paused. It was a ::before overlay
+   painting a teal-to-green arc across the top-left corner, driven by an
+   infinite animation on --btt-angle. Conic gradients cannot be GPU-composited,
+   so every frame re-rasterised the whole border image, on- and off-screen
+   alike, for the entire session.
+
+   Nothing replaces it — the cards now carry only their plain 1px light-grey
+   border: no pseudo-element, no gradient, no mask compositing, nothing to
+   animate.
+
+   The @property --btt-angle registration and the btt-glow-rotate keyframes
+   that lived here are gone too, as nothing in this file references them any
+   more. Both are still declared in the stylesheets for the sections that do
+   still use the effect, so those are unaffected. */
+
+/* ===== Form fields ===== */
+.btt-expert__field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-bottom:16px;
+}
+.btt-expert__field-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-bottom:16px;
+}
+.btt-expert__field-row .btt-expert__field{ margin-bottom:0; }
+.btt-expert__field label{
+  font-family:'Titillium Web',sans-serif;
+  font-size:12px;
+  font-weight:600;
+  color:#111820;
+}
+.btt-expert__field textarea,
+.btt-expert__field select,
+.btt-expert__field input{
+  width:100%;
+  padding:12px 14px;
+  font-family:'Titillium Web',sans-serif;
+  font-size:14px;
+  color:#111820;
+  background:rgba(17,24,32,.04);
+  border:1.5px solid rgba(17,24,32,.15);
+  border-radius:12px;
+  box-sizing:border-box;
+  transition:border-color .15s ease, background .15s ease;
+}
+.btt-expert__field textarea{ resize:vertical; font-family:'Titillium Web',sans-serif; }
+.btt-expert__field select{
+  appearance:none;
+  -webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23111820' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 14px center;
+  padding-right:36px;
+}
+.btt-expert__field select option{ background:#ffffff; color:#111820; }
+.btt-expert__field textarea::placeholder,
+.btt-expert__field input::placeholder{ color:rgba(17,24,32,.35); }
+.btt-expert__field textarea:focus,
+.btt-expert__field select:focus,
+.btt-expert__field input:focus{
+  outline:none;
+  border-color:#95C11F;
+  background:rgba(17,24,32,.06);
+}
+
+/* Chrome/Safari autofill forces its own light background and near-black text
+   via a UA style that ordinary `color` and `background` declarations cannot
+   override. `-webkit-text-fill-color` wins over `color` for the glyphs, and a
+   large inset box-shadow paints over the imposed background. The 5000s
+   background-color transition is the standard trick to outrun the UA's own
+   background repaint.
+
+   The Resource Library gate form already carried this fix
+   (beyond-the-test-resources.css); the Get Expert Help form was missing it,
+   which is why only this form went black on autofill. Values are matched to
+   that existing rule so both forms behave identically.
+
+   `select` is included as well — it autofills the same way when the browser
+   has a stored value for the industry dropdown. */
+.btt-expert__field input:-webkit-autofill,
+.btt-expert__field input:-webkit-autofill:hover,
+.btt-expert__field input:-webkit-autofill:focus,
+.btt-expert__field input:-webkit-autofill:active,
+.btt-expert__field textarea:-webkit-autofill,
+.btt-expert__field textarea:-webkit-autofill:hover,
+.btt-expert__field textarea:-webkit-autofill:focus,
+.btt-expert__field select:-webkit-autofill,
+.btt-expert__field select:-webkit-autofill:hover,
+.btt-expert__field select:-webkit-autofill:focus{
+  -webkit-text-fill-color:#111820;
+  -webkit-box-shadow:0 0 0 1000px rgba(255,255,255,.95) inset;
+  box-shadow:0 0 0 1000px rgba(255,255,255,.95) inset;
+  border-color:rgba(17,24,32,.15);
+  caret-color:#111820;
+  transition:background-color 5000s ease-in-out 0s;
+}
+/* Keep the green focus ring visible on an autofilled field. */
+.btt-expert__field input:-webkit-autofill:focus,
+.btt-expert__field textarea:-webkit-autofill:focus,
+.btt-expert__field select:-webkit-autofill:focus{
+  border-color:#95C11F;
+}
+
+.btt-expert__submit{ margin-top:4px; }
+
+/* ===== Success / error states ===== */
+.btt-expert__success{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+}
+.btt-expert__success-icon{
+  width:40px; height:40px; border-radius:50%;
+  background:rgba(149,193,31,.2);
+  color:#95C11F;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.btt-expert__success-title{
+  font-family:'Titillium Web',sans-serif;
+  font-size:16px;
+  font-weight:700;
+  color:#111820;
+  margin:0 0 6px;
+}
+.btt-expert__success-body{
+  font-size:13.5px;
+  color:rgba(17,24,32,.65);
+  line-height:1.6;
+  margin:0;
+}
+.btt-expert__error{
+  background:rgba(239,68,68,.12);
+  border:1px solid rgba(239,68,68,.35);
+  border-radius:12px;
+  padding:14px 16px;
+  margin-bottom:16px;
+}
+.btt-expert__error p{
+  margin:0;
+  font-size:13px;
+  color:#111820;
+}
+.btt-expert__success[hidden],
+.btt-expert__error[hidden],
+#btt-expert-fields[hidden]{
+  display:none;
+}
+
+/* ===== Expert panel ===== */
+.btt-expert__panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:20px;
+  position:relative;
+  z-index:1;
+}
+.btt-expert__panel-head span:first-child{
+  font-family:'Titillium Web',sans-serif;
+  font-size:17px;
+  font-weight:700;
+  color:#111820;
+}
+.btt-expert__badge{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  background:rgba(149,193,31,.12);
+  border:1px solid rgba(149,193,31,.35);
+  color:#95C11F;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.04em;
+  padding:5px 12px 5px 10px;
+  border-radius:9999px;
+  white-space:nowrap;
+}
+.btt-expert__badge::before{
+  content:'';
+  width:6px; height:6px;
+  border-radius:50%;
+  background:#95C11F;
+  flex-shrink:0;
+  /* The rotating conic border on this section was removed further up; this
+     pulsing ring on the availability dot was the other animation in Get
+     Expert Help and is what remained visible. `box-shadow` spread cannot be
+     composited, so each pulse repaints the badge, forever, on every viewport.
+     The dot itself is unchanged — it just no longer pulses. */
+}
+/* btt-expert-badge-pulse keyframes removed along with the animation that used
+   them — the availability dot is now a plain static dot. */
+.btt-expert__list{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  position:relative;
+  z-index:1;
+  flex:1;
+}
+.btt-expert__item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px 16px;
+  background:rgba(17,24,32,.04);
+  border:1px solid rgba(17,24,32,.08);
+  border-radius:14px;
+  transition:background .15s ease, transform .15s ease;
+  flex:1;
+}
+.btt-expert__avatar{
+  width:44px; height:44px; border-radius:50%;
+  background:rgba(149,193,31,.18);
+  color:#95C11F;
+  font-family:'Titillium Web',sans-serif;
+  font-size:16px;
+  font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+  overflow:hidden;
+}
+.btt-expert__avatar img{
+  width:100%; height:100%;
+  object-fit:cover;
+  display:block;
+}
+.btt-expert__name{
+  font-family:'Titillium Web',sans-serif;
+  font-size:14.5px;
+  font-weight:600;
+  color:#111820;
+}
+.btt-expert__focus{
+  font-size:12.5px;
+  color:rgba(17,24,32,.55);
+  margin-top:2px;
+}
+
+@media (hover:hover) and (pointer:fine){
+  .btt-expert__item:hover{
+    background:rgba(149,193,31,.1);
+    transform:translateX(3px);
+  }
+}
+
+/* ===== Tablet ===== */
+@media (max-width:1024px){
+  .btt-expert{ padding:80px 24px; }
+  .btt-expert__grid{ grid-template-columns:1fr; }
+  .btt-expert__heading{ font-size:32px; }
+}
+
+/* ===== Mobile ===== */
+@media (max-width:640px){
+  .btt-expert{ padding:64px 20px; }
+  .btt-expert__heading{ font-size:26px; }
+  .btt-expert__form-wrap,
+  .btt-expert__panel{ padding:24px 20px; border-radius:20px; }
+  .btt-expert__field-row{ grid-template-columns:1fr; gap:16px; }
+  .btt-expert__submit{ width:100%; justify-content:center; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .btt-expert__item{ transition:none; }
+}

@@ -1,0 +1,237 @@
+{% comment %}
+  Parallax Banner Section (Strict Compliance Fix)
+  - Fixed 'image_url' usage.
+  - Added required width/height attributes to <img> tags.
+  - Smart Spacing: Logo acts as title if title is blank.
+{% endcomment %}
+
+<style>
+  /* --- Section Container --- */
+  .parallax-section-{{ section.id }} {
+    position: relative;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    
+    /* Flexbox for centering */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    
+    padding: 20px;
+    background-color: #444444; /* Fallback */
+  }
+
+  /* --- Dark Overlay --- */
+  .parallax-overlay-{{ section.id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* --- Content Wrapper --- */
+  .parallax-content-{{ section.id }} {
+    position: relative;
+    z-index: 2; 
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* --- Logo Styling --- */
+  .parallax-logo-{{ section.id }} {
+    height: auto;
+    display: block;
+    max-width: 100%;
+    margin-bottom: 20px;
+    object-fit: contain;
+  }
+
+  /* Smart Spacing: If Title is hidden, reduce logo bottom margin */
+  .parallax-content-{{ section.id }}.no-title .parallax-logo-{{ section.id }} {
+    margin-bottom: 10px; 
+  }
+
+  /* --- Text Styling --- */
+  .parallax-title-{{ section.id }} {
+    margin: 0 0 10px 0;
+    line-height: 1.2;
+  }
+  
+  .parallax-subheading-{{ section.id }} {
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* --- Mobile Fix --- */
+  @media only screen and (max-width: 767px) {
+    .parallax-section-{{ section.id }} {
+      background-attachment: scroll;
+    }
+  }
+</style>
+
+{%- style -%}
+  /* Dynamic Background Image handled via CSS variable or inline style for best compatibility */
+  .parallax-section-{{ section.id }} {
+    {% if section.settings.bg_image != blank %}
+      background-image: url('{{ section.settings.bg_image | image_url: width: 2000 }}');
+    {% endif %}
+  }
+{%- endstyle -%}
+
+<div class="parallax-section-{{ section.id }}" style="height: {{ section.settings.section_height }}px;">
+  
+  <div class="parallax-overlay-{{ section.id }}" 
+       style="background-color: rgba(0, 0, 0, {{ section.settings.overlay_opacity | divided_by: 100.0 }});">
+  </div>
+
+  <div class="parallax-content-{{ section.id }} {% if section.settings.title == blank %}no-title{% endif %}">
+    
+    {% if section.settings.logo_image != blank %}
+      {% assign logo_width = section.settings.logo_width %}
+      {% assign logo_height = logo_width | divided_by: section.settings.logo_image.aspect_ratio | round %}
+      
+      <img src="{{ section.settings.logo_image | image_url: width: 800 }}" 
+           alt="{{ section.settings.logo_image.alt | escape }}"
+           width="{{ logo_width }}"
+           height="{{ logo_height }}"
+           loading="lazy"
+           class="parallax-logo-{{ section.id }}"
+           style="width: {{ logo_width }}px;">
+    {% endif %}
+
+    {% if section.settings.title != blank %}
+      <h2 class="parallax-title-{{ section.id }}"
+          style="
+            color: {{ section.settings.text_color }}; 
+            font-size: {{ section.settings.title_size }}px; 
+            font-weight: 700;">
+        {{ section.settings.title | escape }}
+      </h2>
+    {% endif %}
+
+    {% if section.settings.subheading != blank %}
+      <h3 class="parallax-subheading-{{ section.id }}"
+          style="
+            color: {{ section.settings.text_color }}; 
+            font-size: {{ section.settings.subheading_size }}px; 
+            font-weight: 500;">
+        {{ section.settings.subheading | escape }}
+      </h3>
+    {% endif %}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Parallax Banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "min": 200,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Banner Height",
+      "default": 450
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay Opacity",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Logo Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo Image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "label": "Logo Width",
+      "default": 200
+    },
+    {
+      "type": "header",
+      "content": "Text Settings"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Main Title",
+      "default": "Welcome"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 16,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "label": "Title Size",
+      "default": 42
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Add a subheading here"
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "min": 12,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Subheading Size",
+      "default": 18
+    }
+  ],
+  "presets": [
+    {
+      "name": "Parallax Banner"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,407 @@
+/* =====================================================
+   Beyond The Test™ — Industries Section
+   ===================================================== */
+
+.btt-industries{
+  background:transparent;
+  padding:100px 48px 80px;
+  position:relative;
+  z-index:1;
+  overflow-x:hidden;
+}
+
+.btt-industries__inner{
+  width:100%;
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:64px;
+  align-items:center;
+}
+
+/* ===== Left column ===== */
+.btt-industries__left{
+  display:flex; flex-direction:column; gap:32px;
+  position:sticky; top:120px;
+  align-items:flex-start;
+}
+.btt-industries__eyebrow{
+  font-size:13px; font-weight:700;
+  letter-spacing:.16em; text-transform:uppercase;
+  color:#95C11F; margin:0 0 14px;
+}
+.btt-industries__heading{
+  font-family:'Titillium Web',sans-serif;
+  font-size:42px; font-weight:700;
+  color:#111820; line-height:1.15; margin:0 0 14px;
+}
+.btt-industries__sub{
+  font-size:16px; color:rgba(17,24,32,.65); line-height:1.6; margin:0;
+}
+
+
+
+/* Mobile header + cta — hidden on desktop */
+.btt-industries__mobile-header{ display:none; }
+.btt-industries__mobile-cta{ display:none; }
+
+/* ===== Deck wrapper — desktop ===== */
+.btt-industries__deck-wrap{
+  position:relative;
+  height:500px;
+}
+.btt-industries__deck{
+  position:relative; width:100%;
+  top:80px;
+  height:360px;
+}
+
+/* ===== Deck cards ===== */
+.btt-industries__deck-card{
+  position:absolute;
+  top:0; left:0;
+  width:calc(100% - 88px);
+  height:360px;
+  border-radius:20px;
+  overflow:hidden;
+  border:none;
+  box-shadow:0 16px 48px rgba(17,24,32,.22);
+  background:#1F2937;
+  will-change:transform, opacity;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  cursor:pointer;
+  user-select:none;
+}
+.btt-industries__deck-photo{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover; display:block;
+  transition:transform .5s cubic-bezier(.23,1,.32,1);
+}
+.btt-industries__deck-card:hover .btt-industries__deck-photo{
+  transform:scale(1.06);
+}
+.btt-industries__deck-overlay{
+  position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(17,24,32,0) 0%, rgba(17,24,32,.3) 40%, rgba(17,24,32,.85) 100%);
+}
+.btt-industries__deck-content{
+  position:absolute; bottom:0; left:0; right:0;
+  padding:28px 80px 28px 32px; color:#fff;
+}
+.btt-industries__deck-counter{
+  display:block; font-size:12px; font-weight:700;
+  color:rgba(255,255,255,.65); margin:0 0 8px; letter-spacing:.04em;
+}
+.btt-industries__deck-name{
+  font-family:'Titillium Web',sans-serif;
+  font-size:26px; font-weight:700; margin:0 0 8px; color:#fff;
+}
+.btt-industries__deck-body{
+  font-size:14px; color:rgba(255,255,255,.82); line-height:1.55; margin:0;
+}
+
+/* Link button — bottom-right corner of each deck card, arrow flipped to point down-right */
+.btt-industries__deck-link{
+  position:absolute; bottom:20px; right:20px; z-index:2;
+  width:48px; height:48px; border-radius:50%;
+  background:#95C11F; color:#1F2937;
+  display:flex; align-items:center; justify-content:center;
+  text-decoration:none;
+  box-shadow:0 4px 14px rgba(0,0,0,.25);
+  transition:background .15s ease, transform .2s ease;
+}
+.btt-industries__deck-link svg{ transform:scaleY(-1); }
+.btt-industries__deck-link:hover{ background:#7ba318; transform:scale(1.08); }
+
+/* ===== Dots — desktop bottom right ===== */
+.btt-industries__dots{
+  position:absolute;
+  bottom:-36px; right:0;
+  display:flex; gap:8px;
+}
+.btt-industries__dot{
+  width:8px; height:8px; border-radius:50%;
+  background:rgba(17,24,32,.22);
+  border:none; cursor:pointer;
+  transition:background .2s ease, transform .2s ease; padding:0;
+}
+.btt-industries__dot.is-active{ background:#95C11F; transform:scale(1.35); }
+
+/* =====================================================
+   MODAL OVERLAY
+   Blur/backdrop now animates on its own opacity+filter
+   transition, decoupled from the parent's visibility gate,
+   so the blur ramps in smoothly instead of "popping" once
+   the parent's opacity threshold is crossed.
+   ===================================================== */
+.btt-industries__modal{
+  position:fixed; inset:0; z-index:500;
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
+}
+.btt-industries__modal.is-open{ pointer-events:auto; }
+
+.btt-industries__modal-backdrop{
+  position:absolute; inset:0;
+  background:rgba(17,24,32,0);
+  backdrop-filter:blur(0px);
+  -webkit-backdrop-filter:blur(0px);
+  transition:background .45s ease, backdrop-filter .45s ease, -webkit-backdrop-filter .45s ease;
+}
+.btt-industries__modal.is-open .btt-industries__modal-backdrop{
+  background:rgba(17,24,32,.72);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+
+.btt-industries__modal-panel{
+  position:relative; z-index:1;
+  background:#ffffff; border:1px solid rgba(17,24,32,.08); border-radius:24px; padding:44px;
+  width:min(1100px, 92vw); max-height:90vh; overflow-y:auto;
+  box-shadow:0 32px 80px rgba(17,24,32,.20);
+  opacity:0;
+  transform:translateY(20px) scale(.97);
+  transition:transform .4s cubic-bezier(.23,1,.32,1), opacity .35s ease;
+}
+.btt-industries__modal.is-open .btt-industries__modal-panel{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+.btt-industries__modal-header{
+  display:flex; align-items:center; justify-content:space-between; margin-bottom:36px;
+}
+.btt-industries__modal-title{
+  font-family:'Titillium Web',sans-serif; font-size:26px; font-weight:700; color:#111820; margin:0;
+}
+.btt-industries__modal-close{
+  width:40px; height:40px; border-radius:50%;
+  background:rgba(17,24,32,.06); border:none;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:#111820; transition:background .15s ease; flex-shrink:0;
+}
+.btt-industries__modal-close:hover{ background:rgba(17,24,32,.12); }
+.btt-industries__modal-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+
+/* ===== Grid cards ===== */
+.btt-industries__card{
+  position:relative; background:#F4F6F8;
+  border:1px solid rgba(17,24,32,.08); border-radius:18px; padding:22px;
+  box-shadow:0 4px 16px rgba(17,24,32,.06);
+  display:flex; flex-direction:column; gap:10px;
+  cursor:pointer; transform-style:preserve-3d;
+  transition:transform .15s ease-out, box-shadow .25s ease; overflow:hidden;
+}
+.btt-industries__card:hover{ box-shadow:0 12px 30px rgba(17,24,32,.14); }
+.btt-industries__card.is-tilting{ transition:none; }
+.btt-industries__card-spotlight{
+  position:absolute; inset:0; border-radius:inherit;
+  background:radial-gradient(circle at var(--sx,50%) var(--sy,50%), rgba(149,193,31,.16) 0%, transparent 55%);
+  opacity:0; transition:opacity .3s ease; pointer-events:none; z-index:0;
+}
+.btt-industries__card:hover .btt-industries__card-spotlight{ opacity:1; }
+.btt-industries__card-icon{ width:56px; height:56px; object-fit:contain; position:relative; z-index:1; }
+.btt-industries__card-name{
+  font-family:'Titillium Web',sans-serif; font-size:15px; font-weight:700;
+  color:#111820; margin:0; position:relative; z-index:1;
+}
+.btt-industries__card-body{
+  font-size:12px; color:rgba(17,24,32,.62); line-height:1.55; margin:0; flex:1; position:relative; z-index:1;
+}
+.btt-industries__card-btn{
+  align-self:flex-end; width:30px; height:30px;
+  border-radius:50%; background:#95C11F;
+  display:flex; align-items:center; justify-content:center;
+  color:#1F2937; text-decoration:none;
+  position:relative; z-index:1; transition:background .15s ease; overflow:hidden; flex-shrink:0;
+}
+.btt-industries__card-btn::after{
+  content:''; position:absolute; inset:0; border-radius:50%;
+  background:linear-gradient(115deg, transparent 0%, rgba(255,255,255,.55) 50%, transparent 100%);
+  transform:translateX(-100%) skewX(-20deg); transition:transform .55s ease;
+}
+.btt-industries__card:hover .btt-industries__card-btn::after{ transform:translateX(200%) skewX(-20deg); }
+.btt-industries__card-btn:hover{ background:#7ba318; }
+
+/* ===== MOBILE MODAL ===== */
+.btt-industries__mobile-modal{
+  position:fixed; inset:0; z-index:500;
+  background:#ffffff; display:flex; flex-direction:column;
+  transform:translateY(100%); transition:transform .4s cubic-bezier(.23,1,.32,1);
+}
+.btt-industries__mobile-modal.is-open{ transform:translateY(0); }
+.btt-industries__mobile-modal-inner{ display:flex; flex-direction:column; height:100%; }
+.btt-industries__mobile-modal-header{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:20px 20px 16px;
+  font-family:'Titillium Web',sans-serif; font-size:18px; font-weight:700; color:#111820;
+  border-bottom:1px solid rgba(17,24,32,.08); flex-shrink:0;
+}
+.btt-industries__carousel{
+  display:flex; gap:16px; padding:24px 20px;
+  overflow-x:auto; scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch; flex:1; scrollbar-width:none;
+}
+.btt-industries__carousel::-webkit-scrollbar{ display:none; }
+.btt-industries__carousel-card{
+  flex:0 0 260px; scroll-snap-align:start;
+  background:#F4F6F8; border:1px solid rgba(17,24,32,.08);
+  border-radius:18px; padding:20px; display:flex; flex-direction:column; gap:10px;
+}
+.btt-industries__carousel-photo{ width:100%; height:130px; object-fit:cover; border-radius:12px; display:block; }
+.btt-industries__carousel-icon{ width:52px; height:52px; object-fit:contain; }
+.btt-industries__carousel-name{
+  font-family:'Titillium Web',sans-serif; font-size:15px; font-weight:700; color:#111820; margin:0;
+}
+.btt-industries__carousel-body{ font-size:12px; color:rgba(17,24,32,.62); line-height:1.5; margin:0; flex:1; }
+
+body.btt-modal-open{ overflow:hidden; }
+
+/* ===== Mobile — horizontal scroll carousel ===== */
+@media (max-width:1024px){
+  .btt-industries{ 
+    padding:64px 0 48px; 
+    overflow:visible; /* Allows ambient glows to look seamless out toward viewport limits */
+  }
+
+  /* Inner: flex column so CSS order works */
+  .btt-industries__inner{
+    display:flex;
+    flex-direction:column;
+    width:100%;
+    gap:0;
+    padding:0;
+    margin:0;
+  }
+  .btt-industries__left{ display:none; }
+
+  /* Order: header(1) → deck(2) → cta(3) */
+  .btt-industries__mobile-header{ order:1; }
+  .btt-industries__deck-wrap{
+    order:2;
+    width:100%;
+    display:block;
+    height:auto;
+    padding:0;
+    position:static;
+  }
+  .btt-industries__mobile-cta{ order:3; }
+
+  /* Reset desktop deck positioning */
+  .btt-industries__deck{
+    position:static;
+    top:0;
+    height:auto;
+    width:100%;
+    /* Horizontal scroll carousel */
+    display:flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    overflow-y:visible; /* Crucial: ensures shadows don't slice flat against hidden boundaries */
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    gap:16px;
+    padding:16px 24px 36px 24px; /* Increased bottom padding to 36px to comfortably fit unclipped shadow drop */
+    scroll-padding-left:24px;
+    box-sizing:border-box;
+    scrollbar-width:none;
+  }
+  .btt-industries__deck::-webkit-scrollbar{ display:none; }
+
+  .btt-industries__deck-card{
+    position:relative;
+    flex:0 0 75vw;
+    width:75vw;
+    max-width:300px;
+    height:240px;
+    display:block;
+    transform:none;
+    opacity:1;
+    pointer-events:auto;
+    scroll-snap-align:start;
+    border-radius:16px;
+    overflow:hidden;
+    border:none;
+    background:#1a2433;
+    box-shadow:0 12px 32px rgba(17,24,32,.18); /* Solid ambient blur radius */
+    box-sizing:border-box;
+  }
+  /* Button hidden on mobile — the whole card is tappable instead (see JS) */
+  .btt-industries__deck-link{ display:none; }
+  .btt-industries__deck-photo{
+    position:absolute; inset:0;
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .btt-industries__deck-overlay{
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(17,24,32,0) 30%, rgba(17,24,32,.88) 100%);
+  }
+  .btt-industries__deck-content{ position:absolute; bottom:0; left:0; right:0; padding:14px 18px; }
+  .btt-industries__deck-name{ font-size:18px; }
+  .btt-industries__deck-body{ font-size:12px; }
+  .btt-industries__deck-counter{ margin-bottom:4px; }
+
+  /* Dots centered horizontally under the carousel */
+  .btt-industries__dots{
+    position:static;
+    display:flex; 
+    justify-content:center; /* Horizontally balances dots across layouts */
+    gap:8px;
+    margin:0 0 0 0; /* Tightened layout spacing above indicators */
+    padding:0 24px;
+  }
+
+  /* Mobile header text configurations */
+  .btt-industries__mobile-header{
+    display:flex !important;
+    flex-direction:column;
+    align-items:flex-start;
+    text-align:left;
+    gap:6px;
+    padding:12px 24px 32px; /* Reduced padding down to 32px to elegantly pull text closer to cards */
+    width:100%;
+    box-sizing:border-box;
+  }
+  .btt-industries__mobile-header .btt-industries__eyebrow{ margin:0; }
+  .btt-industries__mobile-header .btt-industries__heading{ margin:0; font-size:28px; }
+  .btt-industries__mobile-header .btt-industries__sub{ margin:0; }
+
+  /* Mobile CTA spacing configuration */
+  .btt-industries__mobile-cta{
+    display:block;
+    padding:44px 24px 0;
+  }
+  .btt-industries__mobile-cta .btt-btn{
+    width:100%; justify-content:center;
+  }
+
+  .btt-industries__modal{ display:none !important; }
+
+  /* Mobile modal vertical list */
+  .btt-industries__carousel{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:20px;
+    padding:24px 20px 40px !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+  }
+  .btt-industries__carousel-card{
+    width:100% !important;
+    height:max-content !important;
+    flex:none !important;
+  }
+}
+
+@media (max-width:640px){
+  .btt-industries__deck-card{ flex:0 0 80vw; width:80vw; height:220px; }
+  .btt-industries__mobile-header .btt-industries__heading{ font-size:28px; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .btt-industries__card{ transition:none; }
+  .btt-industries__modal-backdrop{ transition:none; }
+  .btt-industries__modal-panel{ transition:none; }
+  .btt-industries__mobile-modal{ transition:none; }
+}

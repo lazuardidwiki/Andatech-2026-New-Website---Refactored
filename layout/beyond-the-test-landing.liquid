@@ -1,0 +1,330 @@
+{%- liquid
+  assign body_font_bold = settings.body_font | font_modify: 'weight', 'bolder'
+  assign body_font_italic = settings.body_font | font_modify: 'style', 'italic'
+  assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
+-%}
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#F4F6F8">
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  {%- comment -%}
+    A fallback is used rather than a bare `if`, because with only the `if` the
+    entire meta description tag disappears whenever no SEO description is set
+    on the page in Shopify admin — and an absent description is what SEO
+    scanners report as "missing meta description". Google then invents a
+    snippet from page text instead of using ours.
+
+    Setting a proper description in admin (Online Store > Pages > Beyond The
+    Test > Edit website SEO) still takes precedence and is the better fix;
+    this only guarantees the tag can never be absent.
+  {%- endcomment -%}
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- else -%}
+    <meta name="description" content="Practical guidance, compliance tools and expert advice for Australian workplace drug and alcohol testing programs.">
+  {%- endif -%}
+
+  <title>{{ page_title }}</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-P4WPHJP');</script>
+  <!-- End Google Tag Manager -->
+
+  <!-- HubSpot — deferred until the visitor actually interacts.
+
+       The tag loads HubSpot's tracking script and chat widget, which then
+       pull in a large amount of further JavaScript. Even with async+defer the
+       browser still fetches, parses, compiles and executes all of it during
+       the page's busiest period, competing with first render.
+
+       Safe to delay here because NEITHER form on this page depends on it:
+       the Resource Library gate and the Get Expert Help form both POST
+       directly to api.hsforms.com/submissions/v3 via fetch(), which needs no
+       HubSpot script present.
+
+       Deliberate interactions only — pointerdown / touchstart / keydown.
+       `scroll` and `mousemove` are intentionally NOT triggers: firing a heavy
+       script load the instant someone starts scrolling is what we are trying
+       to avoid. Visitors who never interact still get it via the idle
+       fallback, so tracking is delayed but never lost. -->
+  <script>
+    (function(){
+      var EVENTS = ['pointerdown', 'touchstart', 'keydown'];
+      var loaded = false;
+
+      function loadHubSpot(){
+        if (loaded) return;
+        loaded = true;
+        for (var i = 0; i < EVENTS.length; i++){
+          window.removeEventListener(EVENTS[i], loadHubSpot);
+        }
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.id = 'hs-script-loader';
+        s.async = true;
+        s.defer = true;
+        s.src = 'https://js-ap1.hs-scripts.com/7005767.js';
+        document.head.appendChild(s);
+      }
+
+      for (var i = 0; i < EVENTS.length; i++){
+        window.addEventListener(EVENTS[i], loadHubSpot, { passive: true });
+      }
+
+      // Fallback for a visitor who only ever scrolls. requestIdleCallback
+      // lands the load in a gap between frames instead of mid-scroll.
+      window.addEventListener('load', function(){
+        setTimeout(function(){
+          if (window.requestIdleCallback) requestIdleCallback(loadHubSpot, { timeout: 4000 });
+          else loadHubSpot();
+        }, 5000);
+      });
+    })();
+  </script>
+
+  {% render 'meta-tags' %}
+  {%- render 'doc-head-core' -%}
+  {%- render 'doc-head-social' -%}
+
+  <link rel="preload" href="{{ 'main.css' | asset_url }}" as="style">
+  <link rel="stylesheet" href="{{ 'main.css' | asset_url }}">
+  <script src="{{ 'main.js' | asset_url }}" defer="defer"></script>
+
+  {%- style %}
+    {{- settings.body_font | font_face: font_display: 'swap' -}}
+    {{- body_font_bold | font_face: font_display: 'swap' -}}
+    {{- body_font_italic | font_face: font_display: 'swap' -}}
+    {{- body_font_bold_italic | font_face: font_display: 'swap' -}}
+    {{- settings.heading_font | font_face: font_display: 'swap' -}}
+  {%- endstyle %}
+
+  {%- unless settings.body_font.system? -%}
+    <link rel="preload" href="{{ settings.body_font | font_url }}" as="font" type="font/woff2" crossorigin fetchpriority="high">
+  {%- endunless -%}
+  {%- unless settings.heading_font.system? -%}
+    <link rel="preload" href="{{ settings.heading_font | font_url }}" as="font" type="font/woff2" crossorigin fetchpriority="high">
+  {%- endunless -%}
+
+  {{ content_for_header }}
+
+  {%- if request.design_mode -%}
+    <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer" data-contact="{{ shop.email | escape }}"></script>
+  {%- endif -%}
+
+  <script>
+    document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+  </script>
+
+  {%- if settings.custom_html_head -%}
+    {{- settings.custom_html_head -}}
+  {%- endif -%}
+
+  {{ 'beyond-the-test-preloader.css' | asset_url | stylesheet_tag }}
+  {{ 'beyond-the-test-industries.css' | asset_url | stylesheet_tag }}
+  {{ 'beyond-the-test-assessment.css' | asset_url | stylesheet_tag }}
+  {{ 'beyond-the-test-guide03-assessment.css' | asset_url | stylesheet_tag }}
+  {{ 'beyond-the-test-resources.css' | asset_url | stylesheet_tag }}
+  {{ 'beyond-the-test-knowledge.css' | asset_url | stylesheet_tag }}
+  {{ 'beyond-the-test-tools.css' | asset_url | stylesheet_tag }}
+  {{ 'beyond-the-test-expert-help.css' | asset_url | stylesheet_tag }}
+  {{ 'beyond-the-test-landing.css' | asset_url | stylesheet_tag }}
+</head>
+<body style="background:#F4F6F8;">
+<div id="btt-preloader" aria-hidden="true">
+  <div class="btt-preloader__logo">
+    <img src="https://cdn.shopify.com/s/files/1/0241/5850/2976/files/Logomark_SVG.svg?v=1784364652" alt="" class="btt-preloader__logomark">
+    <span class="btt-preloader__divider"></span>
+    <span class="btt-preloader__wordmark">Beyond The Test<sup>™</sup></span>
+  </div>
+  <span class="btt-preloader__pct" id="btt-preloader-pct">0%</span>
+</div>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P4WPHJP"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+  <a class="skip-link btn btn--primary visually-hidden" href="#main-content">
+    {{- 'accessibility.skip_to_content' | t -}}
+  </a>
+
+  <header class="btt-nav">
+    <div class="btt-nav__bg"></div>
+    <div class="btt-nav__inner">
+
+      <a href="{{ shop.url }}" class="btt-nav__logo-compact" aria-label="Andatech home">
+        <img src="https://cdn.shopify.com/s/files/1/0241/5850/2976/files/Logomark_SVG.svg?v=1784364652" alt="Andatech" class="btt-nav__logomark-img">
+        <span class="btt-nav__logo-divider"></span>
+        <span class="btt-nav__logo-text">Beyond The Test<span class="btt-nav__tm">™</span></span>
+      </a>
+
+      <a href="{{ shop.url }}" class="btt-nav__logo">
+        <img src="https://cdn.shopify.com/s/files/1/0241/5850/2976/files/Andatech_Logo_Collection_Main_Logo_Colors_-_Silver_Cloud_Type.png?v=1781103995" alt="Andatech" class="btt-nav__logo-img">
+        <span class="btt-nav__logo-divider"></span>
+        <span class="btt-nav__logo-text">Beyond The Test<span class="btt-nav__tm">™</span></span>
+      </a>
+
+      <nav class="btt-nav__menu-pill">
+        <a href="#resources">Resources</a>
+        <a href="#industries">Industries</a>
+        <a href="#assessment">Assessment</a>
+        <a href="#tools">Tools</a>
+        <a href="#knowledge">Knowledge</a>
+        <a href="#expert-help">Experts</a>
+      </nav>
+
+      <div class="btt-nav__actions">
+        <a href="{{ shop.url }}" class="btt-nav__icon-btn" aria-label="Back to Andatech" title="Back to Andatech">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M3 11L12 3L21 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5 10V20H19V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="https://andatech.com.au/pages/talk-to-sales" class="btt-btn btt-btn--nav">Book a Review</a>
+      </div>
+
+      <button class="btt-nav__hamburger" id="btt-menu-toggle" aria-label="Open menu" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="btt-drawer-overlay" id="btt-drawer-overlay"></div>
+  <div class="btt-drawer" id="btt-drawer">
+    <nav class="btt-drawer__menu">
+      <a href="#resources">Resources</a>
+      <a href="#industries">Industries</a>
+      <a href="#assessment">Assessment</a>
+      <a href="#tools">Tools</a>
+      <a href="#knowledge">Knowledge</a>
+      <a href="#expert-help">Experts</a>
+    </nav>
+    <div class="btt-drawer__cta">
+      <a href="https://andatech.com.au/pages/talk-to-sales" class="btt-btn btt-btn--nav btt-btn--full">Book a Review</a>
+    </div>
+    <div class="btt-drawer__footer">
+      <a href="{{ shop.url }}" class="btt-drawer__home">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M3 11L12 3L21 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M5 10V20H19V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back to Andatech
+      </a>
+    </div>
+  </div>
+
+  <main id="main-content">
+    {{ content_for_layout }}
+  </main>
+
+  <footer class="btt-footer">
+    <div class="btt-footer__inner">
+
+      <div class="btt-footer__top">
+        <div class="btt-footer__col btt-footer__col--brand">
+          <div class="btt-footer__brand">
+            <img src="https://cdn.shopify.com/s/files/1/0241/5850/2976/files/Logomark_SVG.svg?v=1784364652" alt="" class="btt-footer__logomark">
+            <span class="btt-footer__divider"></span>
+            <span class="btt-footer__wordmark">Beyond The Test<sup>™</sup></span>
+          </div>
+
+          <div class="btt-footer__contact">
+            <p class="btt-footer__col-heading">Contact Us</p>
+            <p class="btt-footer__contact-line">Address: 9 Trade Pl, Vermont VIC 3133</p>
+            <p class="btt-footer__contact-line">Business Hours: Monday to Friday, 9am to 5.30pm (AEST)</p>
+            <a href="https://andatech.com.au/pages/talk-to-sales" class="btt-footer__contact-link">Request Information</a>
+            <a href="https://andatech.com.au/pages/support" class="btt-footer__contact-link">Service Information</a>
+          </div>
+        </div>
+
+        <div class="btt-footer__col btt-footer__col--links">
+          <p class="btt-footer__col-heading">Solutions</p>
+          <ul class="btt-footer__link-list">
+            <li><a href="https://andatech.com.au/pages/workplace-alcohol-drug-testing">Workplace Alcohol &amp; Drug Testing</a></li>
+            <li><a href="https://andatech.com.au/pages/personal-alcohol-drug-testing">Personal Alcohol &amp; Drug Testing</a></li>
+            <li><a href="https://andatech.com.au/pages/drug-testing">Drug Testing</a></li>
+            <li><a href="https://andatech.com.au/pages/customer-success">Customer Success</a></li>
+            <li><a href="https://andatech.com.au/pages/calibration-and-servicing">Calibration and Servicing</a></li>
+            <li><a href="https://andatech.com.au/pages/data-management-system">Data Management System (Andalink)</a></li>
+            <li><a href="https://andatech.com.au/pages/news-updates">News and Updates</a></li>
+          </ul>
+        </div>
+
+        <div class="btt-footer__col btt-footer__col--meta">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0241/5850/2976/files/Certification_Logo_Collection_White_a938641b-83ba-4d6a-966e-66434f3c57c0.webp?v=1781655073"
+            alt="Andatech certifications: Australian Standard AS3547, ISO 9001, ilac-MRA and NATA accredited"
+            class="btt-footer__certs" loading="lazy">
+
+          <nav class="btt-footer__social" aria-label="Social media">
+            <a href="https://www.facebook.com/andatech.australia" aria-label="Facebook" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://www.youtube.com/@andatechmedia" aria-label="YouTube" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="https://www.instagram.com/andatech.au/" aria-label="Instagram" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@andatech.au" aria-label="TikTok" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/andatech/" aria-label="LinkedIn" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="btt-footer__bottom">
+        <p class="btt-footer__copy">&copy; {{ 'now' | date: '%Y' }} Andatech. All rights reserved.</p>
+        <nav class="btt-footer__links">
+          <a href="https://andatech.com.au/pages/support">Contact Support</a>
+          <a href="https://andatech.com.au/policies/refund-policy">Refund Policy</a>
+          {% if shop.privacy_policy %}
+            <a href="{{ shop.privacy_policy.url }}">Privacy Policy</a>
+          {% endif %}
+          {% if shop.terms_of_service %}
+            <a href="{{ shop.terms_of_service.url }}">Terms of Service</a>
+          {% endif %}
+          <a href="#" data-cookie-preferences>Cookie Settings</a>
+        </nav>
+      </div>
+
+    </div>
+  </footer>
+
+  {%- comment -%}
+    These were `| script_tag`, which emits a plain blocking script element
+    with no defer attribute. Nine of them executed serially and blocked
+    DOMContentLoaded, delaying every observer and listener on the page.
+    `defer` preserves execution order exactly but lets parsing finish first.
+  {%- endcomment -%}
+  <script src="{{ 'beyond-the-test-preloader.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'beyond-the-test-industries.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'beyond-the-test-assessment.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'beyond-the-test-resources.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'beyond-the-test-guide03-assessment.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'beyond-the-test-knowledge.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'beyond-the-test-tools.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'beyond-the-test-expert-help.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'beyond-the-test-landing.js' | asset_url }}" defer="defer"></script>
+
+  {%- if request.design_mode == false and settings.preload_links -%}
+    <script src="{{ 'instant-page.js' | asset_url }}" type="module" defer="defer"></script>
+  {%- endif -%}
+</body>
+</html>

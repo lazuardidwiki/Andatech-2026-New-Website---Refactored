@@ -1,0 +1,49 @@
+{%- comment -%}
+  Parameters:
+  - share_title {String} - Title of the shared page.
+  - share_url {String} - Permalink of the shared page.
+  - share_image {Object} - Image for the shared page (optional).
+  - share_twitter {Boolean} - Show Twitter icon/link (optional, default is true).
+  - share_facebook {Boolean} - Show Facebook icon/link (optional, default is true).
+  - share_pinterest {Boolean} - Show Pinterest icon/link (optional, default is true).
+  - share_linkedin {Boolean} - Show Linkedin icon/link (optional, default is true).
+  - share_instagram {Boolean} - Show Instagram icon/link (optional, default is true).
+
+
+  Usage:
+  {% render 'social-share',
+    share_title: article.title,
+    share_url: article.url,
+    share_image: article.image,
+    share_facebook: false
+  %}
+{%- endcomment -%}
+
+<ul class="social inline-flex flex-wrap">
+
+  {%- unless share_facebook == false -%}
+    <li>
+      <a class="social__link flex items-center justify-center" href="https://www.facebook.com/sharer.php?u={{ shop.url | append: share_url }}" target="_blank" rel="noopener" title="{{ 'general.social.share_on_facebook' | t }}">
+        {% render 'icon-facebook' %}
+      </a>
+    </li>
+  {%- endunless -%}
+
+  {%- if share_instagram != false -%}
+    <li>
+      <a class="social__link flex items-center justify-center" href="https://www.instagram.com/andatech.au/" target="_blank" rel="noopener" title="View on Instagram">
+        {% render 'icon-instagram' %}
+      </a>
+    </li>
+  {%- endif -%}
+
+  {%- if share_linkedin != false -%}
+    <li>
+      <a class="social__link flex items-center justify-center" href="https://www.linkedin.com/sharing/share-offsite/?url={{ shop.url | append: share_url }}" target="_blank" rel="noopener" title="Share on LinkedIn">
+        {% render 'icon-linkedin' %}
+      </a>
+    </li>
+  {%- endif -%}
+  
+</ul>
+

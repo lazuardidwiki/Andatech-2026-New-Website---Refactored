@@ -1,0 +1,85 @@
+<section class="kby-edu" id="edu-hub">
+  <div class="kby-edu__head">
+    <span class="kby-solve__kicker">{{ section.settings.kicker | default: "Edu hub" }}</span>
+    <h2 class="kby-solve__title">
+      <span class="kby-solve__title-line kby-solve__title-line--regular">{{ section.settings.heading_line_1 | default: "Know the facts" }}</span>
+      <span class="kby-solve__title-line kby-solve__title-line--bold">{{ section.settings.heading_line_2 | default: "before you decide" }}</span>
+    </h2>
+  </div>
+
+  <div class="kby-edu__grid">
+    {% for block in section.blocks %}
+      <a href="{{ block.settings.link_url | default: '#' }}" class="kby-edu-card" data-kby-edu-card {{ block.shopify_attributes }}>
+        <div class="kby-edu-card__spotlight" aria-hidden="true"></div>
+        <div class="kby-edu-card__img-wrap">
+          {%- if block.settings.image -%}
+            <img src="{{ block.settings.image | image_url: width: 640 }}" alt="{{ block.settings.image.alt | escape }}" loading="lazy">
+          {%- endif -%}
+        </div>
+        <div class="kby-edu-card__body">
+          {%- if block.settings.tag != blank -%}
+            <span class="kby-edu-card__tag">{{ block.settings.tag }}</span>
+          {%- endif -%}
+          <h3 class="kby-edu-card__title">{{ block.settings.title | default: "Resource title" }}</h3>
+          <p class="kby-edu-card__desc">{{ block.settings.description }}</p>
+          <span class="kby-edu-card__arrow" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KBYG Edu Hub",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker" },
+    { "type": "text", "id": "heading_line_1", "label": "Heading — line 1 (regular weight)" },
+    { "type": "text", "id": "heading_line_2", "label": "Heading — line 2 (bold weight)" }
+  ],
+  "blocks": [
+    {
+      "type": "resource",
+      "name": "Resource card",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "tag", "label": "Tag label" },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "description", "label": "Description" },
+        { "type": "url", "id": "link_url", "label": "Link URL" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "default": {
+    "blocks": [
+      {
+        "type": "resource",
+        "settings": {
+          "tag": "BAC Basics",
+          "title": "How Alcohol Clears",
+          "description": "Metabolism rates (roughly 0.015%/hr) and the sleep myths that catch people out."
+        }
+      },
+      {
+        "type": "resource",
+        "settings": {
+          "tag": "Interactive",
+          "title": "BAC Calculator",
+          "description": "Estimate the time required before reaching 0.00% after your last drink."
+        }
+      },
+      {
+        "type": "resource",
+        "settings": {
+          "tag": "State Rules",
+          "title": "P-Plate Penalties Breakdown",
+          "description": "State-by-state laws, fines, interlocks and licence suspensions."
+        }
+      }
+    ]
+  }
+}
+{% endschema %}

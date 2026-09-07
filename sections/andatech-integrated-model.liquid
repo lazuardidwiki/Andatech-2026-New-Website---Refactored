@@ -1,0 +1,68 @@
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-solutions-pages.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'andatech-solutions-pages.js' | asset_url }}" defer="defer"></script>
+
+<section class="at-integrated-model" data-at-integrated-model{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handleize }}"{% endif %}>
+  <div class="at-shell">
+    <div class="at-integrated-model__intro">
+      {%- if section.settings.eyebrow != blank -%}<p class="at-solutions-page__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      <h2 class="at-solutions-page__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>
+      {%- if section.settings.desc != blank -%}<div class="at-solutions-page__desc" data-at-rise>{{ section.settings.desc }}</div>{%- endif -%}
+    </div>
+
+    <div class="at-integrated-model__card" data-at-rise>
+      <div class="at-integrated-model__tabs" role="tablist" aria-label="Integrated compliance layers">
+        {%- for block in section.blocks -%}
+          <button class="at-integrated-model__tab{% if forloop.first %} is-active{% endif %}" id="AtIntegratedTab-{{ section.id }}-{{ forloop.index0 }}" type="button" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="AtIntegratedPanel-{{ section.id }}-{{ forloop.index0 }}" tabindex="{% if forloop.first %}0{% else %}-1{% endif %}" data-at-integrated-tab="{{ block.id }}" {{ block.shopify_attributes }}><span>{{ forloop.index | prepend: '0' }}</span>{{ block.settings.label | escape }}</button>
+        {%- endfor -%}
+      </div>
+      <div class="at-integrated-model__panels">
+        {%- for block in section.blocks -%}
+          {%- capture model_image -%}{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 2200 }}{% elsif section.settings.asset_name != blank %}{{ section.settings.asset_name | asset_img_url: '2200x' }}{% endif %}{%- endcapture -%}
+          <article class="at-integrated-model__panel{% if forloop.first %} is-active{% endif %}" id="AtIntegratedPanel-{{ section.id }}-{{ forloop.index0 }}" role="tabpanel" aria-labelledby="AtIntegratedTab-{{ section.id }}-{{ forloop.index0 }}" data-at-integrated-panel="{{ block.id }}" style="--at-model-image:url('{{ model_image | strip }}')"{% unless forloop.first %} hidden{% endunless %}>
+            <p class="at-integrated-model__panel-label">{% if block.settings.eyebrow != blank %}{{ block.settings.eyebrow | escape }}{% else %}LAYER {{ forloop.index }}{% endif %}</p>
+            <h3>{{ block.settings.heading | escape }}{% if block.settings.heading_bold != blank %}<br><strong>{{ block.settings.heading_bold | escape }}</strong>{% endif %}</h3>
+            {%- if block.settings.desc != blank -%}<div class="at-integrated-model__panel-copy">{{ block.settings.desc }}</div>{%- endif -%}
+            {%- if block.settings.items != blank -%}
+              <ul class="at-integrated-model__list">
+                {%- assign model_items = block.settings.items | newline_to_br | split: '<br />' -%}
+                {%- for item in model_items -%}{%- assign model_item = item | strip -%}{%- if model_item != blank -%}<li>{{ model_item | escape }}</li>{%- endif -%}{%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </article>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Integrated Model",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "integrated-model" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "THE INTEGRATED MODEL" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "Five layers." },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "One controlled system." },
+    { "type": "richtext", "id": "desc", "label": "Description", "default": "<p>The page explains the relationship between controls before discussing equipment or commercial options.</p>" },
+    { "type": "text", "id": "asset_name", "label": "Bundled fallback asset", "default": "andatech-integrated-model.jpg", "info": "Used when a layer does not have its own Shopify image." }
+  ],
+  "blocks": [{
+    "type": "layer",
+    "name": "Model layer",
+    "limit": 5,
+    "settings": [
+      { "type": "text", "id": "label", "label": "Tab label", "default": "Policy" },
+      { "type": "text", "id": "eyebrow", "label": "Layer eyebrow", "info": "Leave blank to use the automatic Layer 1, Layer 2, and so on." },
+      { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "One policy that defines" },
+      { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "how controls work together." },
+      { "type": "richtext", "id": "desc", "label": "Description", "default": "<p>Align scope, responsibilities, testing triggers, consent, privacy, escalation and review points before selecting a delivery model.</p>" },
+      { "type": "textarea", "id": "items", "label": "Checklist", "info": "One item per line." },
+      { "type": "image_picker", "id": "image", "label": "Optional layer background" }
+    ]
+  }],
+  "presets": [{ "name": "Integrated Model", "blocks": [{ "type": "layer" }, { "type": "layer" }, { "type": "layer" }, { "type": "layer" }, { "type": "layer" }] }]
+}
+{% endschema %}

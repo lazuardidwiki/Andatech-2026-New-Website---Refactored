@@ -1,0 +1,60 @@
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-solutions-pages.css' | asset_url | stylesheet_tag }}
+
+<section class="at-fragmentation"{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handleize }}"{% endif %}>
+  <div class="at-shell">
+    <div class="at-solutions-page__header">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}<p class="at-solutions-page__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+        <h2 class="at-solutions-page__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>
+        {%- if section.settings.desc != blank -%}<div class="at-solutions-page__desc" data-at-rise>{{ section.settings.desc }}</div>{%- endif -%}
+      </div>
+      <div class="at-solutions-page__media" data-at-rise>
+        {%- if section.settings.image != blank -%}
+          <img src="{{ section.settings.image | image_url: width: 1400 }}" alt="{{ section.settings.image.alt | default: section.settings.image_alt | escape }}" loading="lazy">
+        {%- elsif section.settings.asset_name != blank -%}
+          <img src="{{ section.settings.asset_name | asset_img_url: '1400x' }}" srcset="{{ section.settings.asset_name | asset_img_url: '700x' }} 700w, {{ section.settings.asset_name | asset_img_url: '1000x' }} 1000w, {{ section.settings.asset_name | asset_img_url: '1400x' }} 1400w" sizes="(max-width: 749px) 100vw, 1200px" alt="{{ section.settings.image_alt | escape }}" width="1400" height="933" loading="lazy">
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="at-fragmentation__grid">
+      {%- for block in section.blocks -%}
+        <article class="at-fragmentation__card" data-at-rise {{ block.shopify_attributes }}>
+          {%- if block.settings.label != blank -%}<p class="at-fragmentation__label">{{ block.settings.label | escape }}</p>{%- endif -%}
+          <h3>{{ block.settings.heading | escape }}</h3>
+          {%- if block.settings.text != blank -%}<div class="at-fragmentation__copy">{{ block.settings.text }}</div>{%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Compliance Fragmentation",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "fragmentation" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "WHERE FRAGMENTATION STARTS" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "The risk is rarely one missing device." },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "It is the gaps between systems." },
+    { "type": "richtext", "id": "desc", "label": "Description", "default": "<p>Separate documents, training records and testing workflows can each look reasonable while the overall program remains inconsistent.</p>" },
+    { "type": "image_picker", "id": "image", "label": "Section image" },
+    { "type": "text", "id": "asset_name", "label": "Bundled fallback asset", "default": "andatech-integrated-fragmentation.jpg", "info": "Used only while no Shopify image is selected." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Worker experiencing pressure caused by fragmented workplace systems" }
+  ],
+  "blocks": [{
+    "type": "gap",
+    "name": "Fragmentation card",
+    "limit": 4,
+    "settings": [
+      { "type": "text", "id": "label", "label": "Label", "default": "POLICY" },
+      { "type": "text", "id": "heading", "label": "Heading", "default": "Different rules by site" },
+      { "type": "richtext", "id": "text", "label": "Description", "default": "<p>Responsibilities, triggers and escalation steps drift as locations solve the same problem differently.</p>" }
+    ]
+  }],
+  "presets": [{ "name": "Compliance Fragmentation", "blocks": [{ "type": "gap" }, { "type": "gap" }, { "type": "gap" }, { "type": "gap" }] }]
+}
+{% endschema %}

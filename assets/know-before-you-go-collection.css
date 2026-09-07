@@ -1,0 +1,48 @@
+/* Same alignment fix as every other section — full width, 48px from the
+   true edge, not centered in a max-width box. */
+.kby-collection{ padding:80px 48px 96px; }
+.kby-collection__head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:32px; flex-wrap:wrap; gap:12px; }
+.kby-collection__empty{ color:var(--kby-ink-muted); font-size:14px; }
+
+.kby-collection__grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; align-items:stretch; }
+
+.kby-product-card{
+  display:flex; flex-direction:column;
+  text-decoration:none; color:var(--kby-ink);
+  background:var(--kby-navy-raised); border:1px solid var(--kby-border); border-radius:14px;
+  padding:16px;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
+  transition:border-color .18s ease, transform .2s ease, box-shadow .2s ease;
+}
+@media (hover:hover) and (pointer:fine){
+  .kby-product-card:hover{
+    border-color:var(--kby-border-strong);
+    transform:translateY(-6px);
+    box-shadow:0 20px 40px rgba(0,0,0,.4);
+  }
+}
+.kby-product-card__img-wrap{
+  aspect-ratio:1/1; border-radius:10px; overflow:hidden; margin-bottom:14px; flex-shrink:0;
+  background:#0B1116; display:flex; align-items:center; justify-content:center;
+}
+.kby-product-card__img-wrap img{ width:100%; height:100%; object-fit:contain; display:block; }
+
+/* Same bottom-anchoring approach as the Edu Hub cards: column flex body,
+   the bottom row (price + arrow) gets margin-top:auto so it pins to the
+   bottom regardless of title/description length above it. */
+.kby-product-card__body{ display:flex; flex-direction:column; flex:1; }
+.kby-product-card__title{ font-size:14.5px; font-weight:600; margin:0 0 4px; }
+.kby-product-card__desc{ font-size:12.5px; color:var(--kby-ink-muted); margin:0 0 10px; line-height:1.5; }
+.kby-product-card__bottom{ margin-top:auto; display:flex; align-items:flex-end; justify-content:space-between; gap:8px; }
+.kby-product-card__price{ font-size:14px; font-weight:700; color:var(--kby-green); margin:0; }
+.kby-product-card__compare{ font-size:12px; font-weight:400; color:var(--kby-ink-muted); text-decoration:line-through; margin-left:8px; }
+.kby-product-card__arrow{
+  flex-shrink:0;
+  width:30px; height:30px; border-radius:50%;
+  background:var(--kby-green); color:#16210A;
+  display:flex; align-items:center; justify-content:center;
+}
+
+@media (max-width:900px){ .kby-collection__grid{ grid-template-columns:repeat(2, 1fr); } }
+@media (max-width:760px){ .kby-collection{ padding:56px 24px 72px; } }
+@media (max-width:560px){ .kby-collection__grid{ grid-template-columns:1fr 1fr; gap:12px; } }

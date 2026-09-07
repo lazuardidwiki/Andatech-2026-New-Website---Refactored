@@ -1,0 +1,335 @@
+<section class="btt-assess" id="assessment">
+  <div class="btt-assess__inner">
+
+    <!-- LEFT: heading + benefits + CTA -->
+    <div class="btt-assess__left">
+      <p class="btt-assess__eyebrow">Fast | Easy | Tailored</p>
+      <h2 class="btt-assess__heading">{{ section.settings.heading | default: "Receive Your Workplace Compliance Score" }}</h2>
+      <p class="btt-assess__sub">{{ section.settings.subtext | default: "Our 5-minute assessment gives you a maturity score and a personalised roadmap to improve your program." }}</p>
+
+      <ul class="btt-assess__benefits">
+        <li>
+          <span class="btt-assess__check">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+          </span>
+          No sign-up required
+        </li>
+        <li>
+          <span class="btt-assess__check">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+          </span>
+          Instant score &amp; recommendations
+        </li>
+        <li>
+          <span class="btt-assess__check">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+          </span>
+          Actionable next steps
+        </li>
+      </ul>
+
+      <p class="btt-assess__time-note">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Test takes about 5 minutes
+      </p>
+
+      <button class="btt-btn btt-btn--primary btt-btn--specular btt-assess__cta" id="btt-assess-open">
+        {{ section.settings.cta_label | default: "Start Free Workplace Assessment" }}
+        <span class="btt-btn__icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4l7 8-7 8"/></svg>
+        </span>
+      </button>
+    </div>
+
+    <!-- RIGHT: 3-step preview card (tilt + glare) -->
+    <div class="btt-assess__card-wrap">
+      <div class="btt-assess__card" id="btt-assess-card">
+        <div class="btt-assess__card-glare"></div>
+
+        <!-- Panels stacked vertically on desktop, horizontally swipeable on mobile -->
+        <div class="btt-assess__panels">
+
+          <!-- Panel 1: Question preview -->
+          <div class="btt-assess__panel">
+            <div class="btt-assess__panel-step">
+              <span class="btt-assess__step-num">1</span>
+              <p class="btt-assess__step-label">Answer 4 quick questions.</p>
+            </div>
+            <p class="btt-assess__panel-q">What industry best describes your organisation?</p>
+            <div class="btt-assess__panel-opts">
+              <div class="btt-assess__panel-opt btt-assess__panel-opt--selected">
+                <span class="btt-assess__panel-opt-text" id="btt-assess-cycle-industry">Mining</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+              </div>
+              <div class="btt-assess__panel-opt btt-assess__panel-opt--ghost"></div>
+              <div class="btt-assess__panel-opt btt-assess__panel-opt--ghost"></div>
+              <div class="btt-assess__panel-opt btt-assess__panel-opt--ghost"></div>
+            </div>
+          </div>
+
+          <!-- Panel 2: Score preview -->
+          <div class="btt-assess__panel btt-assess__panel--score">
+            <div class="btt-assess__panel-step">
+              <span class="btt-assess__step-num">2</span>
+              <p class="btt-assess__step-label">Get your workplace maturity score</p>
+            </div>
+            <div class="btt-assess__panel-score-inner">
+              <p class="btt-assess__panel-score-label">Your<br>Workplace Score</p>
+              <div class="btt-assess__gauge-wrap">
+                <svg class="btt-assess__gauge-svg" viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="50" class="btt-assess__gauge-track"/>
+                  <circle cx="60" cy="60" r="50" class="btt-assess__gauge-fill" id="btt-preview-gauge"/>
+                </svg>
+                <div class="btt-assess__gauge-inner">
+                  <span class="btt-assess__gauge-pct" id="btt-preview-pct">62%</span>
+                </div>
+              </div>
+              <p class="btt-assess__panel-risk">Moderate Risk</p>
+            </div>
+          </div>
+
+          <!-- Panel 3: Recommendations preview -->
+          <div class="btt-assess__panel">
+            <div class="btt-assess__panel-step">
+              <span class="btt-assess__step-num btt-assess__step-num--green">3</span>
+              <p class="btt-assess__step-label">See your recommended next steps!</p>
+            </div>
+            <div class="btt-assess__recs">
+              <div class="btt-assess__rec"><span class="btt-assess__rec-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>Review policy maturity</div>
+              <div class="btt-assess__rec"><span class="btt-assess__rec-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>Improve supervisor training</div>
+              <div class="btt-assess__rec"><span class="btt-assess__rec-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>Implement random testing</div>
+              <div class="btt-assess__rec"><span class="btt-assess__rec-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>Download policy builder</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<!-- ASSESSMENT MODAL -->
+<div class="btt-assess__modal" id="btt-assess-modal" aria-hidden="true" role="dialog" aria-label="Workplace Assessment">
+  <div class="btt-assess__modal-backdrop" id="btt-assess-backdrop"></div>
+  <div class="btt-assess__modal-panel-frame">
+  <div class="btt-assess__modal-panel">
+    <button class="btt-assess__modal-close" id="btt-assess-close" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+
+    <!-- Progress bar -->
+    <div class="btt-assess__progress-wrap">
+      <div class="btt-assess__progress-bar" id="btt-assess-progress"></div>
+    </div>
+
+    <!-- Step label -->
+    <p class="btt-assess__modal-step-label" id="btt-assess-step-label">Question 1 of 3</p>
+
+    <!-- Question screen -->
+    <div id="btt-assess-question-screen">
+      <h3 class="btt-assess__modal-q" id="btt-assess-q-text"></h3>
+      <div class="btt-assess__modal-opts" id="btt-assess-opts"></div>
+      <button class="btt-assess__back" id="btt-assess-back" type="button" hidden>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+        Back
+      </button>
+    </div>
+
+    <!-- Result screen (hidden until done) -->
+    <div id="btt-assess-result-screen" style="display:none;">
+      <p class="btt-assess__modal-result-eyebrow">Your Result</p>
+      <div class="btt-assess__result-top">
+        <!-- Result gauge -->
+        <div class="btt-assess__result-gauge-wrap">
+          <svg class="btt-assess__result-gauge-svg" viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="58" class="btt-assess__gauge-track"/>
+            <circle cx="70" cy="70" r="58" class="btt-assess__result-gauge-fill" id="btt-result-gauge"/>
+          </svg>
+          <div class="btt-assess__result-gauge-inner">
+            <span class="btt-assess__result-pct" id="btt-result-pct">0%</span>
+            <span class="btt-assess__result-maturity">Maturity</span>
+          </div>
+        </div>
+        <div class="btt-assess__result-band">
+          <h3 class="btt-assess__result-band-title" id="btt-result-band-title"></h3>
+          <p class="btt-assess__result-band-body" id="btt-result-band-body"></p>
+        </div>
+      </div>
+      <div class="btt-assess__result-recs" id="btt-result-recs"></div>
+      <div class="btt-assess__result-actions">
+        <a href="https://andatech.com.au/pages/talk-to-sales" class="btt-btn btt-btn--primary btt-btn--specular">Book a Workplace Review</a>
+        <button class="btt-btn btt-btn--ghost" id="btt-assess-restart">Restart</button>
+      </div>
+    </div>
+
+  </div>
+  <div class="btt-assess__scroll-hint" id="btt-assess-scroll-hint" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+  </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // FUNGSI 1: Animasi angka & progress linear (Jalan 1 kali)
+  function initAssessmentCounter() {
+    var cardWraps = document.querySelectorAll('.btt-assess__card-wrap');
+    
+    cardWraps.forEach(function(cardWrap) {
+      var pctText = document.querySelector('.btt-assess__gauge-pct');
+      var riskText = document.querySelector('.btt-assess__panel-risk');
+
+      if (!pctText || !riskText) return;
+
+      pctText.textContent = '0%';
+      riskText.textContent = 'Early stage';
+
+      var hasAnimated = false;
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function bandFor(n) {
+        if (n < 25) return 'Early stage';
+        if (n < 50) return 'Developing';
+        if (n < 75) return 'Progressing well';
+        return 'Strong maturity';
+      }
+
+      // The bar is eased, not linear. The counter used to advance linearly,
+      // so even with identical durations the bar would surge ahead early and
+      // the number would trail it for most of the run, only agreeing at the
+      // two endpoints. This evaluates the same curve so the number tracks the
+      // bar the whole way.
+      //
+      // Newton-Raphson on the x-polynomial to invert the parametric curve,
+      // which is the same approach browsers use internally.
+      function cubicBezier(p1x, p1y, p2x, p2y) {
+        function coA(a1, a2) { return 1 - 3 * a2 + 3 * a1; }
+        function coB(a1, a2) { return 3 * a2 - 6 * a1; }
+        function coC(a1)     { return 3 * a1; }
+        function calc(t, a1, a2)  { return ((coA(a1, a2) * t + coB(a1, a2)) * t + coC(a1)) * t; }
+        function slope(t, a1, a2) { return 3 * coA(a1, a2) * t * t + 2 * coB(a1, a2) * t + coC(a1); }
+
+        return function (x) {
+          if (x <= 0) return 0;
+          if (x >= 1) return 1;
+          var t = x;
+          for (var i = 0; i < 8; i++) {
+            var s = slope(t, p1x, p2x);
+            if (s === 0) break;
+            t -= (calc(t, p1x, p2x) - x) / s;
+          }
+          return calc(t, p1y, p2y);
+        };
+      }
+      // MUST match the cubic-bezier on `.btt-assess__card-wrap.is-counted
+      // .btt-assess__gauge-wrap::after` in beyond-the-test-assessment.css.
+      var easeBar = cubicBezier(0.33, 0.55, 0.45, 1);
+
+      var observer = new IntersectionObserver(function(entries) {
+        if (!entries[0].isIntersecting || hasAnimated) return;
+        hasAnimated = true;
+        observer.disconnect();
+        cardWrap.classList.add('is-counted');
+
+        if (reduceMotion) {
+          pctText.textContent = '100%';
+          riskText.textContent = 'Strong maturity';
+          return;
+        }
+
+        setTimeout(function() {
+          var startTime = null;
+          // KEEP IN SYNC with `.btt-assess__card-wrap.is-counted
+          // .btt-assess__gauge-wrap::after` in beyond-the-test-assessment.css.
+          // The bar is a CSS animation and this number is a rAF loop — two
+          // separate animations of the same value — so duration, delay and
+          // easing all have to match. The CSS delay is 0.4s, matching the
+          // setTimeout wrapping this block, and the CSS duration is 4s.
+          var duration = 4000;
+          // Only touch the DOM when the rendered value actually changes.
+          // Previously both elements were rewritten on EVERY frame — roughly
+          // 480 writes for 100 value changes, with the risk label reassigned
+          // the identical string over a hundred times in a row. Each write
+          // invalidates style inside a composited card.
+          var lastNum = -1;
+          var lastBand = '';
+
+          function updateCounter(currentTime) {
+            if (!startTime) startTime = currentTime;
+
+            var progress = (currentTime - startTime) / duration;
+            if (progress > 1) progress = 1;
+
+            // Eased, not linear — see the cubicBezier note above.
+            var currentNum = Math.round(easeBar(progress) * 100);
+
+            if (currentNum !== lastNum) {
+              lastNum = currentNum;
+              pctText.textContent = currentNum + '%';
+
+              var band = bandFor(currentNum);
+              if (band !== lastBand) {
+                lastBand = band;
+                riskText.textContent = band;
+              }
+            }
+
+            if (progress < 1) {
+              requestAnimationFrame(updateCounter);
+            } else {
+              pctText.textContent = '100%';
+              riskText.textContent = 'Strong maturity';
+            }
+          }
+          requestAnimationFrame(updateCounter);
+        }, 400);
+      }, { threshold: 0.1 });
+
+      observer.observe(cardWrap);
+    });
+  }
+
+  // FUNGSI 2: Two-way Scroll Animation (Masuk-Keluar)
+  function initScrollAnimations() {
+    var section = document.querySelector('.btt-assess');
+    var leftEl = document.querySelector('.btt-assess__left');
+    var rightEl = document.querySelector('.btt-assess__card-wrap');
+
+    if (!section || !leftEl || !rightEl) return;
+
+    var scrollObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          leftEl.classList.add('is-visible');
+          rightEl.classList.add('is-visible');
+        } else {
+          leftEl.classList.remove('is-visible');
+          rightEl.classList.remove('is-visible');
+        }
+      });
+    }, { threshold: 0.15 }); 
+
+    scrollObserver.observe(section);
+  }
+
+  initAssessmentCounter();
+  initScrollAnimations();
+  
+  document.addEventListener('shopify:section:load', function() {
+    initAssessmentCounter();
+    initScrollAnimations();
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "BTT Assessment",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Receive Your Workplace Compliance Score" },
+    { "type": "textarea", "id": "subtext", "label": "Subtext", "default": "Our 5-minute assessment gives you a maturity score and a personalised roadmap to improve your program." },
+    { "type": "text", "id": "cta_label", "label": "CTA button label", "default": "Start Free Workplace Assessment" }
+  ],
+  "presets": [{ "name": "BTT Assessment" }]
+}
+{% endschema %}

@@ -1,0 +1,442 @@
+<section class="btt-res" id="resources">
+  <div class="btt-res__header">
+    <div class="btt-res__header-left">
+      <h2 class="btt-res__heading">{{ section.settings.heading | default: "Resource Library" }}</h2>
+      <p class="btt-res__sub">{{ section.settings.subheading | default: "Practical guides, templates and tools created by experts." }}</p>
+    </div>
+    <button class="btt-res__view-all" id="btt-res-view-all">
+      View all resources
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+    </button>
+  </div>
+
+  <!-- Circular gallery track -->
+  <div class="btt-res__gallery-wrap">
+    <div class="btt-res__gallery" id="btt-res-gallery">
+      {% for block in section.blocks %}
+        {% if block.type == 'resource' %}
+        <div class="btt-res__gallery-item" data-index="{{ forloop.index0 }}">
+          <div class="btt-res__card" data-tilt>
+            <div class="btt-res__card-spotlight"></div>
+            {% if block.settings.is_popular %}
+              <span class="btt-res__badge">Most Popular</span>
+            {% endif %}
+            <div class="btt-res__card-img-wrap">
+              {% if block.settings.image != blank %}
+                <img src="{{ block.settings.image | image_url: width: 600 }}" alt="Cover of {{ block.settings.title | default: 'Andatech compliance resource' }}" class="btt-res__card-img" loading="lazy">
+              {% else %}
+                <div class="btt-res__card-img-placeholder">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
+              {% endif %}
+            </div>
+            <div class="btt-res__card-body">
+              <p class="btt-res__card-category">{{ block.settings.category | default: "Guide" }}</p>
+              <h3 class="btt-res__card-title">{{ block.settings.title }}</h3>
+              <div class="btt-res__card-footer">
+                <span class="btt-res__card-read">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                  {{ block.settings.read_time | default: "12 mins read" }}
+                </span>
+                {% if block.settings.opens_assessment %}
+                  <button type="button" class="btt-res__card-download" aria-label="Take the {{ block.settings.title }} assessment" data-open-assessment="guide03">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                  </button>
+                {% elsif block.settings.download_url != blank %}
+                  <button type="button" class="btt-res__card-download" aria-label="Download {{ block.settings.title }}" data-gate-trigger data-download-url="{{ block.settings.download_url }}" data-download-title="{{ block.settings.title | escape }}">
+                    <!-- UPDATED DOWNLOAD ICON: Arrow down with bottom line -->
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M8 11l4 4 4-4"/><line x1="6" y1="20" x2="18" y2="20"/></svg>
+                  </button>
+                {% else %}
+                  <span class="btt-res__card-coming">Coming soon</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- Dots + nav arrows -->
+    <div class="btt-res__controls">
+      <div class="btt-res__dots" id="btt-res-dots">
+        {% for block in section.blocks %}
+          {% if block.type == 'resource' %}
+            <button class="btt-res__dot{% if forloop.first %} is-active{% endif %}" data-dot="{{ forloop.index0 }}"></button>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="btt-res__nav">
+        <button class="btt-res__nav-btn" id="btt-res-prev" aria-label="Previous">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="btt-res__nav-btn" id="btt-res-next" aria-label="Next">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL: expanded view all -->
+<div class="btt-res__modal" id="btt-res-modal" aria-hidden="true" role="dialog" aria-label="All Resources">
+  <div class="btt-res__modal-backdrop" id="btt-res-modal-backdrop"></div>
+  <div class="btt-res__modal-panel">
+    <div class="btt-res__modal-header">
+      <h3 class="btt-res__modal-title">All Resources</h3>
+      <button class="btt-res__modal-close" id="btt-res-modal-close" aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="btt-res__modal-grid">
+      {% for block in section.blocks %}
+        {% if block.type == 'resource' %}
+        <div class="btt-res__modal-card" data-tilt-modal>
+          <div class="btt-res__card-spotlight"></div>
+          {% if block.settings.is_popular %}
+            <span class="btt-res__badge">Most Popular</span>
+          {% endif %}
+          <div class="btt-res__card-img-wrap">
+            {% if block.settings.image != blank %}
+              <img src="{{ block.settings.image | image_url: width: 600 }}" alt="Cover of {{ block.settings.title | default: 'Andatech compliance resource' }}" class="btt-res__card-img" loading="lazy">
+            {% else %}
+              <div class="btt-res__card-img-placeholder">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              </div>
+            {% endif %}
+          </div>
+          <div class="btt-res__card-body">
+            <p class="btt-res__card-category">{{ block.settings.category | default: "Guide" }}</p>
+            <h3 class="btt-res__card-title">{{ block.settings.title }}</h3>
+            <div class="btt-res__card-footer">
+              <span class="btt-res__card-read">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                {{ block.settings.read_time | default: "12 mins read" }}
+              </span>
+              {% if block.settings.opens_assessment %}
+                <button type="button" class="btt-res__card-download" aria-label="Take the {{ block.settings.title }} assessment" data-open-assessment="guide03">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                </button>
+              {% elsif block.settings.download_url != blank %}
+                <button type="button" class="btt-res__card-download" aria-label="Download {{ block.settings.title }}" data-gate-trigger data-download-url="{{ block.settings.download_url }}" data-download-title="{{ block.settings.title | escape }}">
+                  <!-- UPDATED DOWNLOAD ICON: Arrow down with bottom line -->
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M8 11l4 4 4-4"/><line x1="6" y1="20" x2="18" y2="20"/></svg>
+                </button>
+              {% else %}
+                <span class="btt-res__card-coming">Coming soon</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- GATE MODAL: fill in details before downloading -->
+<div class="btt-res__gate-modal" id="btt-res-gate-modal" aria-hidden="true" role="dialog" aria-label="Download resource">
+  <div class="btt-res__gate-backdrop" id="btt-res-gate-backdrop"></div>
+  <div class="btt-res__gate-panel-frame">
+  <button class="btt-res__modal-close" id="btt-res-gate-close" type="button" aria-label="Close">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <div class="btt-res__gate-panel">
+    <p class="btt-res__gate-eyebrow">Free Download</p>
+    <h3 class="btt-res__gate-title" id="btt-res-gate-resource-title">Resource</h3>
+    <p class="btt-res__gate-sub">Enter your details to get instant access.</p>
+
+    <form id="btt-res-gate-form" novalidate>
+      <div class="btt-res__gate-row">
+        <div class="btt-res__gate-field">
+          <label for="btt-res-gate-firstname">First name</label>
+          <input type="text" id="btt-res-gate-firstname" name="firstname" autocomplete="given-name" required>
+        </div>
+        <div class="btt-res__gate-field">
+          <label for="btt-res-gate-lastname">Last name</label>
+          <input type="text" id="btt-res-gate-lastname" name="lastname" autocomplete="family-name" required>
+        </div>
+      </div>
+      <div class="btt-res__gate-field">
+        <label for="btt-res-gate-email">Work email</label>
+        <input type="email" id="btt-res-gate-email" name="email" autocomplete="email" required>
+      </div>
+      <div class="btt-res__gate-row">
+        <div class="btt-res__gate-field">
+          <label for="btt-res-gate-jobtitle">Job title</label>
+          <input type="text" id="btt-res-gate-jobtitle" name="jobtitle" autocomplete="organization-title" required>
+        </div>
+        <div class="btt-res__gate-field">
+          <label for="btt-res-gate-company">Company</label>
+          <input type="text" id="btt-res-gate-company" name="company" autocomplete="organization" required>
+        </div>
+      </div>
+      <div class="btt-res__gate-field">
+        <label for="btt-res-gate-industry">Industry</label>
+        <select id="btt-res-gate-industry" name="industry" required>
+          <option value="" disabled selected>Select your industry</option>
+          <option>Aviation</option>
+          <option>Mining</option>
+          <option>Transport</option>
+          <option>Construction</option>
+          <option>Healthcare</option>
+          <option>Manufacture</option>
+          <option>Maritime</option>
+          <option>Education</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <label class="btt-res__gate-consent">
+        <input type="checkbox" id="btt-res-gate-consent" name="consent" required>
+        <span>I agree to receive occasional emails from Andatech about workplace compliance resources. You can unsubscribe anytime.</span>
+      </label>
+
+      <p class="btt-res__gate-error" id="btt-res-gate-error" hidden></p>
+
+      <button type="submit" class="btt-btn btt-btn--primary btt-btn--full btt-res__gate-submit" id="btt-res-gate-submit" disabled>
+        <span class="btt-res__gate-submit-label">Get Download</span>
+      </button>
+    </form>
+  </div>
+  <div class="btt-res__gate-scroll-hint" id="btt-res-gate-scroll-hint" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+  </div>
+  </div>
+</div>
+
+{%- comment -%}
+  GUIDE 03 MODAL — Workplace Compliance Readiness Assessment.
+
+  Lives here (not as its own section) so the whole thing works the moment
+  this section is on the page — no separate section to remember to add.
+  Opened by the "Take the assessment" button on the Guide 03 card above
+  (data-open-assessment="guide03"), which only renders when that card's
+  "Opens as interactive assessment" setting is checked.
+
+  The 8 questions/options are fixed guide content and live in
+  beyond-the-test-guide03-assessment.js rather than here — making all of
+  that theme-editable would mean ~40 separate schema fields for content
+  that shouldn't change without updating the guide itself.
+
+  The results reveal is gated behind the SAME HubSpot form as the download
+  gate above (window.BTT_RES_HUBSPOT, set below) — one lead form, one place
+  Jenny maintains it, rather than a second HubSpot form to configure.
+{%- endcomment -%}
+<div class="btt-g3-modal" id="btt-g3-modal" aria-hidden="true" role="dialog" aria-label="Workplace Compliance Readiness Assessment">
+  <div class="btt-g3-backdrop" id="btt-g3-backdrop"></div>
+  <div class="btt-g3-panel-frame">
+    <button class="btt-g3-close" id="btt-g3-close" type="button" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+
+    <div class="btt-g3-panel" id="btt-g3-panel">
+      <div class="btt-g3__app">
+
+        <div class="btt-g3__topbar">
+          <div class="btt-g3__brand"><b>Beyond the Test&trade;</b> &middot; Guide 03</div>
+          <div class="btt-g3__brand" id="btt-g3-step-indicator"></div>
+        </div>
+
+        <div class="btt-g3__progress-wrap" id="btt-g3-progress-wrap">
+          <div class="btt-g3__progress-label">
+            <span id="btt-g3-progress-text">Section 1 of 8</span>
+            <span id="btt-g3-progress-pct">0%</span>
+          </div>
+          <div class="btt-g3__progress-track"><div class="btt-g3__progress-fill" id="btt-g3-progress-fill"></div></div>
+        </div>
+
+        <!-- INTRO -->
+        <div class="btt-g3__screen is-active" id="btt-g3-intro">
+          <div class="btt-g3__eyebrow">Workplace Compliance Readiness Assessment</div>
+          <h1 class="btt-g3__intro-title">How prepared is your organisation?</h1>
+          <p class="btt-g3__sub">This isn&rsquo;t really about testing devices. It&rsquo;s about the maturity of your entire workplace compliance program. Answer eight short questions and receive your Workplace Compliance Score, your maturity level, and recommended next steps.</p>
+
+          <div class="btt-g3__dim-list">
+            <div>Governance</div>
+            <div>Risk assessment</div>
+            <div>Policy</div>
+            <div>Consultation</div>
+            <div>Supervisor capability</div>
+            <div>Testing</div>
+            <div>Documentation</div>
+            <div>Continuous improvement</div>
+          </div>
+
+          <button class="btt-g3__start-btn" id="btt-g3-start-btn" type="button">Start the assessment &rarr;</button>
+          <div class="btt-g3__time-note">Estimated time: 10 minutes &middot; 8 questions &middot; your score unlocks at the end</div>
+        </div>
+
+        <!-- QUESTION SCREEN -->
+        <div class="btt-g3__screen" id="btt-g3-question">
+          <div class="btt-g3__q-kicker">
+            <div class="btt-g3__num" id="btt-g3-q-num">1</div>
+            <div class="btt-g3__eyebrow" id="btt-g3-q-eyebrow">Governance</div>
+          </div>
+          <h2 class="btt-g3__q-title" id="btt-g3-q-title"></h2>
+          <div class="btt-g3__q-sub" id="btt-g3-q-sub">Score yourself</div>
+          <div id="btt-g3-options"></div>
+          <div class="btt-g3__nav-row">
+            <button class="btt-g3__nav-btn" id="btt-g3-back-btn" type="button">&larr; Back</button>
+            <button class="btt-g3__nav-btn is-primary" id="btt-g3-next-btn" type="button" disabled>Next &rarr;</button>
+          </div>
+        </div>
+
+        <!-- GATE SCREEN — lead capture before the score reveals -->
+        <div class="btt-g3__screen" id="btt-g3-gate">
+          <div class="btt-g3__eyebrow">One last step</div>
+          <h2 class="btt-g3__gate-title">Enter your details to reveal your score</h2>
+          <p class="btt-g3__gate-sub">Your Workplace Compliance Score, maturity level and recommended next steps are ready — just tell us who to send them to.</p>
+
+          <form id="btt-g3-gate-form" novalidate>
+            <div class="btt-g3__gate-row">
+              <div class="btt-g3__gate-field">
+                <label for="btt-g3-gate-firstname">First name</label>
+                <input type="text" id="btt-g3-gate-firstname" name="firstname" autocomplete="given-name" required>
+              </div>
+              <div class="btt-g3__gate-field">
+                <label for="btt-g3-gate-lastname">Last name</label>
+                <input type="text" id="btt-g3-gate-lastname" name="lastname" autocomplete="family-name" required>
+              </div>
+            </div>
+            <div class="btt-g3__gate-field">
+              <label for="btt-g3-gate-email">Work email</label>
+              <input type="email" id="btt-g3-gate-email" name="email" autocomplete="email" required>
+            </div>
+            <div class="btt-g3__gate-row">
+              <div class="btt-g3__gate-field">
+                <label for="btt-g3-gate-jobtitle">Job title</label>
+                <input type="text" id="btt-g3-gate-jobtitle" name="jobtitle" autocomplete="organization-title" required>
+              </div>
+              <div class="btt-g3__gate-field">
+                <label for="btt-g3-gate-company">Company</label>
+                <input type="text" id="btt-g3-gate-company" name="company" autocomplete="organization" required>
+              </div>
+            </div>
+            <div class="btt-g3__gate-field">
+              <label for="btt-g3-gate-industry">Industry</label>
+              <select id="btt-g3-gate-industry" name="industry" required>
+                <option value="" disabled selected>Select your industry</option>
+                <option>Aviation</option>
+                <option>Mining</option>
+                <option>Transport</option>
+                <option>Construction</option>
+                <option>Healthcare</option>
+                <option>Manufacture</option>
+                <option>Maritime</option>
+                <option>Education</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <label class="btt-g3__gate-consent">
+              <input type="checkbox" id="btt-g3-gate-consent" name="consent" required>
+              <span>I agree to receive occasional emails from Andatech about workplace compliance resources. You can unsubscribe anytime.</span>
+            </label>
+
+            <p class="btt-g3__gate-error" id="btt-g3-gate-error" hidden></p>
+
+            <button type="submit" class="btt-g3__nav-btn is-primary" id="btt-g3-gate-submit" disabled>
+              <span class="btt-g3__gate-submit-label">Reveal my results</span>
+            </button>
+          </form>
+          <div class="btt-g3__gate-note">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Your answers are never shared without your details above.
+          </div>
+        </div>
+
+        <!-- RESULTS -->
+        <div class="btt-g3__screen" id="btt-g3-results">
+          <div class="btt-g3__eyebrow">Your results</div>
+          <h2 class="btt-g3__results-heading">Your Workplace Compliance Score</h2>
+          <div class="btt-g3__score-hero">
+            <div class="btt-g3__score-big" id="btt-g3-score-big">0</div>
+            <div class="btt-g3__score-of">/ 100</div>
+          </div>
+          <div class="btt-g3__level-chip" id="btt-g3-level-chip">Level</div>
+
+          <div class="btt-g3__ladder" id="btt-g3-ladder"></div>
+
+          <div class="btt-g3__result-grid">
+            <div class="btt-g3__result-col btt-g3__result-col--strength">
+              <div class="btt-g3__eyebrow">Your strengths</div>
+              <div id="btt-g3-strengths"></div>
+            </div>
+            <div class="btt-g3__result-col btt-g3__result-col--gap">
+              <div class="btt-g3__eyebrow">Opportunities</div>
+              <div id="btt-g3-gaps"></div>
+            </div>
+          </div>
+
+          <div class="btt-g3__resources-block">
+            <div class="btt-g3__eyebrow">Recommended resources</div>
+            <div class="btt-g3__resource-list" id="btt-g3-resource-list"></div>
+          </div>
+
+          <div class="btt-g3__benchmark">
+            <div class="btt-g3__eyebrow">For context</div>
+            <p style="margin:0;">Typical organisations score in a similar range to this before implementing a structured workplace compliance program — most gains come from formalising governance, documentation and review, not from the testing method itself.</p>
+          </div>
+
+          <div class="btt-g3__cta-block">
+            <div class="btt-g3__eyebrow">Suggested next step</div>
+            <h3>{{ section.settings.guide03_cta_heading | default: "Book a Workplace Readiness Review" }}</h3>
+            <p>{{ section.settings.guide03_cta_body | default: "A structured conversation about your results, focused on the specific gaps identified above — not a sales pitch about testing devices." }}</p>
+            <a href="{{ section.settings.guide03_cta_url | default: 'https://andatech.com.au/pages/talk-to-sales' }}" class="btt-g3__cta-btn">{{ section.settings.guide03_cta_label | default: "Book a Readiness Review →" }}</a>
+            <button class="btt-g3__retake-btn" id="btt-g3-retake-btn" type="button">Retake assessment</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="btt-g3-scroll-hint" id="btt-g3-scroll-hint" aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Filled in via section settings once the HubSpot form is created (Portal ID + Form GUID).
+  // The gate modal will show a configuration error until both are set.
+  window.BTT_RES_HUBSPOT = {
+    portalId: {{ section.settings.hubspot_portal_id | default: '7005767' | json }},
+    formGuid: {{ section.settings.hubspot_form_guid | default: '309fda14-bdc1-4685-bc91-1420c8ab29a0' | json }}
+  };
+</script>
+{% schema %}
+{
+  "name": "BTT Resources",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Section heading", "default": "Resource Library" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Practical guides, templates and tools created by experts." },
+    { "type": "header", "content": "Gated Download (HubSpot)" },
+    { "type": "paragraph", "content": "Create a form in HubSpot with fields: firstname, email, jobtitle, company, industry, and a custom checkbox property for marketing consent. Paste the Portal ID and Form GUID below." },
+    { "type": "text", "id": "hubspot_portal_id", "label": "HubSpot Portal ID", "default": "7005767" },
+    { "type": "text", "id": "hubspot_form_guid", "label": "HubSpot Form GUID", "default": "309fda14-bdc1-4685-bc91-1420c8ab29a0", "info": "This form's own GUID — different from the Get Expert Help form." },
+    { "type": "header", "content": "Guide 03 Assessment — result screen CTA" },
+    { "type": "text", "id": "guide03_cta_heading", "label": "CTA heading", "default": "Book a Workplace Readiness Review" },
+    { "type": "textarea", "id": "guide03_cta_body", "label": "CTA body", "default": "A structured conversation about your results, focused on the specific gaps identified above — not a sales pitch about testing devices." },
+    { "type": "text", "id": "guide03_cta_label", "label": "CTA button label", "default": "Book a Readiness Review →" },
+    { "type": "url", "id": "guide03_cta_url", "label": "CTA button link" }
+  ],
+  "blocks": [
+    {
+      "type": "resource",
+      "name": "Resource",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Cover image" },
+        { "type": "text", "id": "category", "label": "Category label", "default": "Guide 01" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Building a Defensible Workplace Impairment Management Program" },
+        { "type": "text", "id": "read_time", "label": "Read time", "default": "12 mins read" },
+        { "type": "url", "id": "download_url", "label": "Download URL (leave blank for Coming Soon)" },
+        { "type": "checkbox", "id": "is_popular", "label": "Show Most Popular badge", "default": false },
+        { "type": "header", "content": "Interactive Assessment (Guide 03 only)" },
+        { "type": "checkbox", "id": "opens_assessment", "label": "Opens as interactive assessment instead of a download", "default": false, "info": "When checked, this overrides the Download URL above — the card opens the gated Workplace Compliance Readiness Assessment quiz instead." }
+      ]
+    }
+  ],
+  "presets": [{ "name": "BTT Resources" }]
+}
+{% endschema %}

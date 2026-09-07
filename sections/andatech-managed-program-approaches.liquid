@@ -1,0 +1,75 @@
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-industry.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-managed-programs.css' | asset_url | stylesheet_tag }}
+
+<section class="at-mp-approaches"{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handleize }}"{% endif %}>
+  <div class="at-shell">
+    <div class="at-mp-section-head">
+      {%- if section.settings.eyebrow != blank -%}<p class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      <h2 class="at-industry__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>
+      {%- if section.settings.description != blank -%}<div class="at-industry__desc" data-at-rise>{{ section.settings.description }}</div>{%- endif -%}
+    </div>
+
+    <div class="at-mp-approaches__grid">
+      {%- for block in section.blocks -%}
+        <article class="at-mp-approach{% if block.settings.featured %} at-mp-approach--featured{% endif %}" data-at-rise {{ block.shopify_attributes }}>
+          <div class="at-mp-approach__topline">
+            {%- if block.settings.eyebrow != blank -%}<p class="at-mp-approach__eyebrow">{{ block.settings.eyebrow | escape }}</p>{%- endif -%}
+            {%- if block.settings.badge != blank -%}<span class="at-mp-approach__badge">{{ block.settings.badge | escape }}</span>{%- endif -%}
+          </div>
+          <h3 class="at-mp-approach__title">{{ block.settings.title | escape }}</h3>
+          {%- if block.settings.description != blank -%}<div class="at-mp-approach__body">{{ block.settings.description }}</div>{%- endif -%}
+          {%- assign items = block.settings.items | newline_to_br | split: '<br />' -%}
+          {%- if block.settings.items != blank -%}<ul class="at-mp-approach__list">{%- for item in items -%}{%- assign line = item | strip -%}{%- if line != blank -%}<li><span class="at-mp-approach__check" aria-hidden="true">✓</span><span>{{ line | escape }}</span></li>{%- endif -%}{%- endfor -%}</ul>{%- endif -%}
+          {%- if block.settings.footnote != blank -%}<p class="at-mp-approach__footnote">{{ block.settings.footnote | escape }}</p>{%- endif -%}
+          {%- if block.settings.cta_label != blank and block.settings.cta_url != blank -%}
+            <a class="at-mp-approach__cta" href="{{ block.settings.cta_url }}">{{ block.settings.cta_label | escape }} ↗</a>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Program approaches",
+  "tag": "section",
+  "class": "at-section",
+  "max_blocks": 3,
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "program-approaches" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Three program approaches" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "Choose how much support" },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "your team needs." },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Choose the level of coordination that complements the capability already inside your organisation.</p>" }
+  ],
+  "blocks": [
+    {
+      "type": "approach",
+      "name": "Approach",
+      "settings": [
+        { "type": "checkbox", "id": "featured", "label": "Featured card", "default": false },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Your team leads" },
+        { "type": "text", "id": "badge", "label": "Badge" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Organisation-led" },
+        { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Your organisation manages day-to-day testing with selected Andatech support.</p>" },
+        { "type": "textarea", "id": "items", "label": "Checklist", "info": "One item per line." },
+        { "type": "text", "id": "footnote", "label": "Best-for note" },
+        { "type": "text", "id": "cta_label", "label": "CTA label" },
+        { "type": "url", "id": "cta_url", "label": "CTA link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Program approaches",
+      "blocks": [
+        { "type": "approach" },
+        { "type": "approach" },
+        { "type": "approach" }
+      ]
+    }
+  ]
+}
+{% endschema %}

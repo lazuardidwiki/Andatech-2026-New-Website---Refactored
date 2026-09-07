@@ -1,0 +1,396 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "show_page_title": true,
+        "heading_align": "text-center"
+      }
+    },
+    "image_banner_KzGeVg": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_3hbtPr": {
+          "type": "heading",
+          "settings": {
+            "heading": "Our Partners",
+            "heading_size": "h1",
+            "heading_h1": true
+          }
+        },
+        "text_UccMzR": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Discover the trusted organisations and businesses we partner with to deliver exceptional services. Our partnerships, from industry leaders to community organisations, are integral to our commitment to excellence and innovation. </p>",
+            "enlarge_text": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_3hbtPr",
+        "text_UccMzR"
+      ],
+      "settings": {
+        "image_desktop": "shopify://shop_images/andatech-partners.webp",
+        "url": "",
+        "height_mode": "fixed",
+        "fixed_height_desktop": 450,
+        "fixed_height_mobile": 350,
+        "overlay_position": "justify-center items-center",
+        "overlay_text_align": "text-center",
+        "mob_center_text": false,
+        "mobile_stacked": false,
+        "color_scheme": "white",
+        "full_width": true,
+        "transparent_content_color": "#ffffff",
+        "tint_color": "#000000",
+        "tint_opacity": 60,
+        "prevent_animation": false
+      }
+    },
+    "icons_with_text_LEeBMw": {
+      "type": "icons-with-text",
+      "blocks": {
+        "item_mH7Wr8": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "custom_icon": "shopify://shop_images/Autobarn.png",
+            "heading": "",
+            "text": "<p><a href=\"https://autobarn.com.au/ab/store-finder\" target=\"_blank\" title=\"https://autobarn.com.au/ab/store-finder\">Autobarn</a></p>",
+            "link": "https://autobarn.com.au/ab/store-finder"
+          }
+        },
+        "item_xajgJH": {
+          "type": "item",
+          "settings": {
+            "icon": "price_tag",
+            "heading": "Special offers",
+            "text": "<p>Regular sales and discounts</p>",
+            "link": ""
+          }
+        },
+        "item_THG6Ji": {
+          "type": "item",
+          "settings": {
+            "icon": "return",
+            "heading": "Easy returns",
+            "text": "<p>Hassle free returns policy</p>",
+            "link": ""
+          }
+        },
+        "item_A73CL7": {
+          "type": "item",
+          "settings": {
+            "icon": "chat_bubble",
+            "heading": "Chat facility",
+            "text": "<p>Talk to a real person</p>",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_mH7Wr8",
+        "item_xajgJH",
+        "item_THG6Ji",
+        "item_A73CL7"
+      ],
+      "disabled": true,
+      "settings": {
+        "heading": "",
+        "heading_align": "text-start",
+        "icon_size": 104,
+        "title_type_scale": "medium",
+        "text_type_scale": "medium",
+        "icon_position": "above",
+        "mobile_stack": false,
+        "section_height": "default",
+        "color_scheme": "none",
+        "full_width": true,
+        "dividers": "none",
+        "prevent_animation": false
+      }
+    },
+    "rich_text_LXz6fV": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_HN6LYN": {
+          "type": "heading",
+          "settings": {
+            "heading": "Collaborative partners",
+            "heading_size": "h4",
+            "heading_h1": false
+          }
+        },
+        "text_aPetN4": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Through collaborative partnerships with leading organisations, we actively exchange knowledge and educate stakeholders about workplace, personal, and road safety related to alcohol and drugs. United by a shared vision, we strive to create a safer future by empowering others with the latest insights and best practices in the field.</p>",
+            "enlarge_text": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_HN6LYN",
+        "text_aPetN4"
+      ],
+      "settings": {
+        "text_position": "justify-center",
+        "text_align": "text-center",
+        "mob_center_text": true,
+        "wide": false,
+        "color_scheme": "none",
+        "full_width": true,
+        "prevent_animation": false
+      }
+    },
+    "multi_column_g6gcCR": {
+      "type": "multi-column",
+      "blocks": {
+        "column_pAKLaY": {
+          "type": "column",
+          "settings": {
+            "enable_media": true,
+            "image": "shopify://shop_images/Dalgarno_Institute.png",
+            "media_scale": 80,
+            "heading": "",
+            "text": "",
+            "button_label": "Dalgarno Institute",
+            "button_link": "https://www.dalgarnoinstitute.org.au/"
+          }
+        },
+        "column_dcqBN4": {
+          "type": "column",
+          "settings": {
+            "enable_media": true,
+            "image": "shopify://shop_images/No_Brainer.png",
+            "media_scale": 80,
+            "heading": "",
+            "text": "",
+            "button_label": "No Brainer",
+            "button_link": "https://www.nobrainer.org.au/"
+          }
+        },
+        "column_9wGH4E": {
+          "type": "column",
+          "settings": {
+            "enable_media": true,
+            "image": "shopify://shop_images/People_Against_Drink_Drug_Driving.png",
+            "media_scale": 80,
+            "heading": "",
+            "text": "",
+            "button_label": "People Against Drink/Drug Driving",
+            "button_link": "https://www.dalgarnoinstitute.org.au/wp_site/blog-padd/"
+          }
+        },
+        "column_hybd6M": {
+          "type": "column",
+          "settings": {
+            "enable_media": true,
+            "image": "shopify://shop_images/Pedestrian_Council_of_Australia.png",
+            "media_scale": 80,
+            "heading": "",
+            "text": "",
+            "button_label": "Pedestrian Council of Australia",
+            "button_link": "https://www.walk.com.au/pedestriancouncil/page.asp"
+          }
+        },
+        "column_dKnbx6": {
+          "type": "column",
+          "settings": {
+            "enable_media": true,
+            "image": "shopify://shop_images/Drink_Drive_Victoria.png",
+            "media_scale": 80,
+            "heading": "",
+            "text": "",
+            "button_label": "Drink Drive Victoria",
+            "button_link": "https://www.drinkdrivevictoria.com.au/"
+          }
+        }
+      },
+      "block_order": [
+        "column_pAKLaY",
+        "column_dcqBN4",
+        "column_9wGH4E",
+        "column_hybd6M",
+        "column_dKnbx6"
+      ],
+      "settings": {
+        "title": "",
+        "heading_align": "text-start",
+        "button_label": "",
+        "button_link": "",
+        "layout": "carousel",
+        "column_size": "small",
+        "column_align": "center",
+        "media_align": "text-center",
+        "image_ratio": "natural",
+        "color_scheme": "none",
+        "button_style": "link"
+      }
+    },
+    "rich_text_rLWBrR": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_cjRJUP": {
+          "type": "heading",
+          "settings": {
+            "heading": "International partners",
+            "heading_size": "h4",
+            "heading_h1": false
+          }
+        },
+        "text_9FhWNj": {
+          "type": "text",
+          "settings": {
+            "text": "",
+            "enlarge_text": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_cjRJUP",
+        "text_9FhWNj"
+      ],
+      "settings": {
+        "text_position": "justify-center",
+        "text_align": "text-center",
+        "mob_center_text": true,
+        "wide": false,
+        "color_scheme": "none",
+        "full_width": true,
+        "prevent_animation": false
+      }
+    },
+    "176456276046391093": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_9a5d506_FkMUXy": {
+          "type": "ai_gen_block_9a5d506",
+          "settings": {
+            "background_color": "#ffffff",
+            "logo_background_color": "#ffffff",
+            "logo_height": 120,
+            "country_text_color": "#000000",
+            "partner_name_color": "#8dc63f",
+            "see_more_color": "#2a2b2a",
+            "details_text_color": "#2a2b2a",
+            "nav_button_bg_color": "#ffffff",
+            "nav_button_color": "#2a2b2a",
+            "nav_button_border_color": "#e1e1e1",
+            "nav_button_hover_bg_color": "#8dc63f",
+            "nav_button_hover_border_color": "#8dc63f",
+            "partner_1_country": "New Zealand",
+            "partner_1_logo": "shopify://shop_images/ADT_logo.jpg",
+            "partner_1_name": "ADT",
+            "partner_1_url": "https://www.adt.net.nz/",
+            "partner_1_address": "",
+            "partner_1_email": "",
+            "partner_1_phone": " 0800 ADT (238) 800",
+            "partner_2_country": "Singapore",
+            "partner_2_logo": "shopify://shop_images/Durasafe-Logo.png",
+            "partner_2_name": "Durasafe",
+            "partner_2_url": "https://www.durasafe.com.sg/",
+            "partner_2_address": "Durasafe@T-Space Tampines\n1 Tampines North Drive 1,\n#01-39 T-Space,\nSingapore 528559",
+            "partner_2_email": "quotes@durasafe.com.sg",
+            "partner_2_phone": "(65) 6841 2224",
+            "partner_3_country": "Malaysia",
+            "partner_3_logo": "shopify://shop_images/andatech-malaysia-logo.jpg",
+            "partner_3_name": "Andatech Malaysia",
+            "partner_3_url": "https://www.andatech.com.my/?srsltid=AfmBOoroOApK6zpptyauYu-atM9hNicPN8dJeAHZk0v4WS3CtB53kUnj",
+            "partner_3_address": "Jalan Wan Kadir 2,\nTaman Tun Dr Ismail,\n60000 Kuala Lumpur",
+            "partner_3_email": "",
+            "partner_3_phone": "+6010 8373 790",
+            "partner_4_country": "Phillipines",
+            "partner_4_logo": "shopify://shop_images/King_safety_logo.jpg",
+            "partner_4_name": "Kings Safety",
+            "partner_4_url": "https://www.facebook.com/kingsafetynetinc/",
+            "partner_4_address": "Unit D, Permarc Building, 8219 Dr Arcadio Santos Ave, San Isidro, Parañaque City, Parañaque, Philippines",
+            "partner_4_email": "info@kingsafety.com.ph",
+            "partner_4_phone": "+63 917 621 2324",
+            "partner_5_country": "Sri Lanka",
+            "partner_5_logo": "shopify://shop_images/Carlton_lanka.jpg",
+            "partner_5_name": "Carlton Lanka",
+            "partner_5_url": "https://www.carltonlanka.lk/",
+            "partner_5_address": "Carlton Lanka Pvt Ltd\nNo. 435/1/22,\nMaradana Road,\nColombo 10,\nSri Lanka.",
+            "partner_5_email": "carltonlankalab@mail.com",
+            "partner_5_phone": "011 7632290",
+            "partner_6_country": "Mongolia",
+            "partner_6_logo": "shopify://shop_images/CWE_logo.png",
+            "partner_6_name": "CW MGL",
+            "partner_6_url": "https://cwmongolia.com/",
+            "partner_6_address": "The ONE residence-26D, UNESCO Str, 1-st Khoroo, Sukhbaatar District, Ulaanbaatar-14230, Mongolia",
+            "partner_6_email": "info@cwmongolia.com",
+            "partner_6_phone": "(976)-89003150",
+            "partner_7_country": "Hong Kong",
+            "partner_7_logo": "shopify://shop_images/YSS_logo.png",
+            "partner_7_name": "Young Scientist Scheme",
+            "partner_7_url": "https://www.scifac.hku.hk/prospective/ug/young-scientist-scheme-yss",
+            "partner_7_address": "G/F, Chong Yuet Ming Physics Building, The University of Hong Kong,\nPokfulam Road, Hong Kong;",
+            "partner_7_email": "science@hku.hk",
+            "partner_7_phone": "3917 2683",
+            "partner_8_country": "",
+            "partner_8_name": "",
+            "partner_8_url": "",
+            "partner_8_address": "",
+            "partner_8_email": "",
+            "partner_8_phone": "",
+            "partner_9_country": "",
+            "partner_9_name": "",
+            "partner_9_url": "",
+            "partner_9_address": "",
+            "partner_9_email": "",
+            "partner_9_phone": "",
+            "partner_10_country": "",
+            "partner_10_name": "",
+            "partner_10_url": "",
+            "partner_10_address": "",
+            "partner_10_email": "",
+            "partner_10_phone": "",
+            "partner_11_country": "",
+            "partner_11_name": "",
+            "partner_11_url": "",
+            "partner_11_address": "",
+            "partner_11_email": "",
+            "partner_11_phone": "",
+            "partner_12_country": "",
+            "partner_12_name": "",
+            "partner_12_url": "",
+            "partner_12_address": "",
+            "partner_12_email": "",
+            "partner_12_phone": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_9a5d506_FkMUXy"
+      ],
+      "settings": {}
+    },
+    "1764559767da27d182": {
+      "type": "_blocks",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "image_banner_KzGeVg",
+    "icons_with_text_LEeBMw",
+    "rich_text_LXz6fV",
+    "multi_column_g6gcCR",
+    "rich_text_rLWBrR",
+    "176456276046391093",
+    "1764559767da27d182"
+  ]
+}

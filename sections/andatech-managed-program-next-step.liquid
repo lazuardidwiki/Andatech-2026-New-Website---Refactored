@@ -1,0 +1,104 @@
+{%- comment -%}
+  Managed Programs — next-step navigation card.
+  This is intentionally separate from the general Andatech CTA section because
+  it moves visitors to the next Managed Programs page rather than starting a
+  consultation journey.
+{%- endcomment -%}
+
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-managed-programs.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign card_image = section.settings.image
+  assign mobile_image = section.settings.mobile_image
+-%}
+
+<section
+  class="at-mp-next-step"
+  {% if section.settings.anchor_id != blank %}id="{{ section.settings.anchor_id | handleize }}"{% endif %}
+>
+  <div class="at-shell">
+    <div class="at-mp-next-step__card{% if card_image == blank and mobile_image == blank %} at-mp-next-step__card--no-media{% endif %}">
+      {%- if card_image != blank or mobile_image != blank -%}
+        <picture class="at-mp-next-step__media" aria-hidden="true">
+          {%- if mobile_image != blank -%}
+            <source
+              media="(max-width: 767px)"
+              srcset="{{ mobile_image | image_url: width: 480 }} 480w, {{ mobile_image | image_url: width: 800 }} 800w"
+              sizes="calc(100vw - 48px)"
+            >
+          {%- endif -%}
+          {%- assign fallback_image = card_image | default: mobile_image -%}
+          <img
+            src="{{ fallback_image | image_url: width: 1800 }}"
+            srcset="{{ fallback_image | image_url: width: 900 }} 900w, {{ fallback_image | image_url: width: 1400 }} 1400w, {{ fallback_image | image_url: width: 1800 }} 1800w"
+            sizes="(max-width: 767px) calc(100vw - 48px), calc(100vw - 96px)"
+            alt=""
+            loading="lazy"
+            width="{{ fallback_image.width }}"
+            height="{{ fallback_image.height }}"
+            style="object-position: {{ fallback_image.presentation.focal_point }};"
+          >
+        </picture>
+      {%- endif -%}
+
+      <div class="at-mp-next-step__overlay" aria-hidden="true"></div>
+
+      <div class="at-mp-next-step__route">
+        {%- if section.settings.step_label != blank -%}
+          <span>{{ section.settings.step_label | escape }}</span>
+        {%- endif -%}
+        {%- if section.settings.step_label != blank and section.settings.next_step_label != blank -%}
+          <span class="at-mp-next-step__route-arrow" aria-hidden="true">→</span>
+        {%- endif -%}
+        {%- if section.settings.next_step_label != blank -%}
+          <span>{{ section.settings.next_step_label | escape }}</span>
+        {%- endif -%}
+      </div>
+
+      <div class="at-mp-next-step__bottom">
+        <div class="at-mp-next-step__copy">
+          <h2 class="at-mp-next-step__title">{{ section.settings.heading | escape }}</h2>
+          {%- if section.settings.description != blank -%}
+            <div class="at-mp-next-step__description">{{ section.settings.description }}</div>
+          {%- endif -%}
+        </div>
+
+        {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+          <a class="at-btn at-btn--green at-mp-next-step__button" href="{{ section.settings.button_link }}">
+            {{ section.settings.button_label | escape }}
+            <i class="at-btn__arrow" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </i>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Managed program next step",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor" },
+    { "type": "image_picker", "id": "image", "label": "Background image" },
+    { "type": "image_picker", "id": "mobile_image", "label": "Mobile background image", "info": "Optional. The desktop image is used when this is blank." },
+    { "type": "header", "content": "Route label" },
+    { "type": "text", "id": "step_label", "label": "Current step label", "default": "Next step" },
+    { "type": "text", "id": "next_step_label", "label": "Destination label", "default": "Configure" },
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading", "default": "Now choose the level of support." },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Compare what a program can include and the three operational approaches.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "View Scope & Support" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "presets": [
+    { "name": "Managed program next step" }
+  ]
+}
+{% endschema %}

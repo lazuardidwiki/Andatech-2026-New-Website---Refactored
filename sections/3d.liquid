@@ -1,0 +1,74 @@
+<div class="breathalyzer-3d-wrapper" style="background: {{ section.settings.bg_color }};">
+  <div class="breathalyzer-3d-container" 
+       id="canvas-{{ section.id }}"
+       data-model-url="{{ section.settings.model_url }}"
+       data-x="{{ section.settings.feat_x }}"
+       data-y="{{ section.settings.feat_y }}"
+       data-z="{{ section.settings.feat_z }}"
+       style="height: {{ section.settings.height }}px; width: 100%;">
+       
+       {% if section.settings.model_url == blank %}
+         <div style="color: #666; text-align: center; padding-top: 100px;">
+           <p>3D Canvas Ready</p>
+           <p><small>Please paste your .glb URL in the sidebar settings</small></p>
+         </div>
+       {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "3D Breathalyzer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "model_url",
+      "label": "Model URL",
+      "info": "Upload .glb to Content > Files and paste the link here."
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "label": "Canvas Height",
+      "min": 200,
+      "max": 800,
+      "step": 10,
+      "default": 500,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#111111"
+    },
+    {
+      "type": "header",
+      "content": "Feature Marker Position"
+    },
+    {
+      "type": "number",
+      "id": "feat_x",
+      "label": "X Position",
+      "default": 0
+    },
+    {
+      "type": "number",
+      "id": "feat_y",
+      "label": "Y Position",
+      "default": 0
+    },
+    {
+      "type": "number",
+      "id": "feat_z",
+      "label": "Z Position",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "3D Breathalyzer"
+    }
+  ]
+}
+{% endschema %}

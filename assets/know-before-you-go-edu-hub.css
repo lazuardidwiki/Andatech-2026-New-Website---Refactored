@@ -1,0 +1,74 @@
+.kby-edu{ padding:80px 48px; }
+.kby-edu__head{ max-width:520px; margin-bottom:36px; }
+.kby-edu__grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; align-items:stretch; }
+
+.kby-edu-card{
+  position:relative; overflow:hidden;
+  display:flex; flex-direction:column;
+  text-decoration:none; color:var(--kby-ink);
+  background:var(--kby-navy-raised); border:1px solid var(--kby-border);
+  border-radius:16px;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
+  transition:border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+/* Lift + deeper shadow on hover — desktop/hover-capable only, so this
+   doesn't produce a stuck "lifted" state on tap for touch devices. */
+@media (hover:hover) and (pointer:fine){
+  .kby-edu-card:hover{
+    border-color:var(--kby-border-strong);
+    transform:translateY(-6px);
+    box-shadow:0 20px 40px rgba(0,0,0,.4);
+  }
+}
+
+.kby-edu-card__img-wrap{ aspect-ratio:16/9; overflow:hidden; flex-shrink:0; }
+.kby-edu-card__img-wrap img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+/* Column flex + margin-top:auto on the arrow button below is what pins it
+   to the bottom-right regardless of how long the title/description run —
+   the button always sits at the same spot, the text just takes however
+   much room it needs above it. */
+.kby-edu-card__body{
+  position:relative; z-index:1;
+  display:flex; flex-direction:column; flex:1;
+  padding:22px 22px 26px;
+}
+
+/* Cursor-tracking spotlight — ported from Beyond The Test's resource
+   cards. JS sets --sx/--sy from the pointer position on mousemove, measured
+   against .kby-edu-card's own bounding box — which is also this element's
+   positioning context now. Previously the spotlight was nested inside
+   .kby-edu-card__body instead of the card itself, so its inset:0 resolved
+   against the smaller body box (image excluded) while the JS was measuring
+   the full card (image included). The two disagreed, so the glow's
+   position was calculated against one box and rendered against a
+   different, offset one — it moved, just not to where the cursor actually
+   was. Moving it to a direct child of the card puts both in the same
+   coordinate space. */
+.kby-edu-card__spotlight{
+  position:absolute; inset:0; z-index:0; border-radius:inherit;
+  background:radial-gradient(circle at var(--sx,50%) var(--sy,50%), rgba(149,193,31,.12) 0%, transparent 55%);
+  opacity:0; transition:opacity .3s ease;
+  pointer-events:none;
+}
+.kby-edu-card:hover .kby-edu-card__spotlight{ opacity:1; }
+
+.kby-edu-card__tag{
+  align-self:flex-start;
+  display:inline-block;
+  font-family:'Titillium Web',sans-serif; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
+  color:var(--kby-teal); background:rgba(70,190,196,.14);
+  padding:5px 12px; border-radius:999px; margin-bottom:14px;
+}
+.kby-edu-card__title{ font-family:'Titillium Web',sans-serif; font-size:19px; font-weight:700; margin:0 0 10px; }
+.kby-edu-card__desc{ font-family:'Titillium Web',sans-serif; font-size:14px; line-height:1.6; color:var(--kby-ink-muted); margin:0; }
+
+.kby-edu-card__arrow{
+  margin-top:auto; align-self:flex-end;
+  width:34px; height:34px; border-radius:50%;
+  background:var(--kby-green); color:#16210A;
+  display:flex; align-items:center; justify-content:center;
+}
+
+@media (max-width:900px){ .kby-edu__grid{ grid-template-columns:1fr; } }
+@media (max-width:760px){ .kby-edu{ padding:56px 24px; } }

@@ -1,0 +1,209 @@
+{
+  "sections": {
+    "main": { "type": "main-page", "disabled": true, "settings": { "show_page_title": false, "heading_align": "text-start" } },
+    "hero": {
+      "type": "andatech-hero",
+      "settings": {
+        "anchor_id": "scope-support-overview",
+        "eyebrow": "Scope & Support",
+        "subheading": "",
+        "heading_line_1": "Built around your workplace.",
+        "heading_line_2": "",
+        "heading_accent": "Not a price list.",
+        "body": "<p>Configure the practical equipment, support and services your program needs, then choose the level of coordination that fits your internal capability.</p>",
+        "trust_line": "Andatech is Australia's leading drug and alcohol testing specialist since 2003.",
+        "cta1_label": "Compare Support Approaches",
+        "cta1_link": "#program-approaches",
+        "cta2_label": "Start A Partner Review",
+        "cta2_link": "/pages/partner-model#consultation",
+        "visual_desktop": "shopify://shop_images/Training_Education_9c98a850-edcf-4e29-b9fd-ba07cb9725b9.webp",
+        "visual_mobile": "shopify://shop_images/Training_Education_Square_c71d8bc7-52ef-49db-8ae2-b5dc1d892a06.webp",
+        "visual_asset": "",
+        "visual_alt": "Workplace testing equipment and support",
+        "certs_alt": "Andatech accreditations and certifications"
+      }
+    },
+    "why_managed": {
+      "type": "andatech-mcp-why-managed",
+      "blocks": {
+        "why_1": {
+          "type": "question",
+          "settings": {
+            "heading": "Do we have the right people?",
+            "text": "<p>Are appropriate people trained to undertake specimen collection and understand their responsibilities?</p>"
+          }
+        },
+        "why_2": {
+          "type": "question",
+          "settings": {
+            "heading": "Are we following the right process?",
+            "text": "<p>Are collection, documentation and chain-of-custody procedures consistently applied?</p>"
+          }
+        },
+        "why_3": {
+          "type": "question",
+          "settings": {
+            "heading": "Are employees treated appropriately?",
+            "text": "<p>Are privacy, dignity, informed consent and confidentiality understood throughout collection?</p>"
+          }
+        },
+        "why_4": {
+          "type": "question",
+          "settings": {
+            "heading": "Can we demonstrate what happened?",
+            "text": "<p>Are appropriate records maintained to support the integrity of the testing process?</p>"
+          }
+        },
+        "why_5": {
+          "type": "question",
+          "settings": {
+            "heading": "Is our program consistent?",
+            "text": "<p>Can the same procedures be applied across people, shifts, sites and locations?</p>"
+          }
+        }
+      },
+      "block_order": ["why_1", "why_2", "why_3", "why_4", "why_5"],
+      "settings": {
+        "anchor_id": "why-managed",
+        "eyebrow": "WHY A MANAGED PROGRAM MATTERS",
+        "heading": "Workplace testing isn't just",
+        "heading_bold": "about performing a test.",
+        "desc": "<p>Organisations can invest in quality testing technology and still have weaknesses in their program if the people administering the process don't have appropriate skills, knowledge, procedures and support.</p>",
+        "image": "shopify://shop_images/Ty_Vanguard_2_Shadow_422f0be6-ff96-4703-bd64-0f1b131c2274.png",
+        "image_alt": "A trained workplace collector preparing testing equipment"
+      }
+    },
+    "inclusions": {
+      "type": "andatech-industry-directory",
+      "blocks": {
+        "devices": { "type": "industry", "settings": { "eyebrow": "01", "title": "Testing devices", "description": "<p>Explore workplace alcohol and drug-testing options for different methods, environments and teams.</p>", "image": "shopify://shop_images/All_Solutions_Square_f60aea8b-926d-4709-84fc-92dd5a52dc2f.webp", "url": "/pages/onsite-alcohol-drug-testing" } },
+        "software": { "type": "industry", "settings": { "eyebrow": "02", "title": "Software and data", "description": "<p>Centralise compatible device results, sites and reporting through the Andalink platform.</p>", "image": "shopify://shop_images/Andalink_Tablet_2_3e4d0eae-5e96-458f-9187-5f6e87f92a81.webp", "url": "/pages/andalink" } },
+        "calibration": { "type": "industry", "settings": { "eyebrow": "03", "title": "Calibration", "description": "<p>Keep supported breathalysers accurate with scheduled calibration and servicing pathways.</p>", "image": "shopify://shop_images/Calibration_Square.webp", "url": "/pages/calibration-and-servicing" } },
+        "training": { "type": "industry", "settings": { "eyebrow": "04", "title": "Training", "description": "<p>Build practical collector capability through nationally recognised HLTPAT010 training (delivered by METEX Solutions Pty Ltd, RTO 46448), device-specific operator training and formal testing pathways registered on the National Training Register.</p>", "image": "shopify://shop_images/All_Industries_Square.webp", "url": "/pages/alcohol-and-drug-testing-course" } },
+        "implementation": { "type": "industry", "settings": { "eyebrow": "05", "title": "Implementation", "description": "<p>Plan responsibilities, rollout and site-level adoption around your operating requirements.</p>", "image": "shopify://shop_images/Managed_Compliance_Programs_Square.webp", "url": "/pages/partner-model#consultation" } },
+        "support": { "type": "industry", "settings": { "eyebrow": "06", "title": "Service and support", "description": "<p>Access product help, servicing guidance and ongoing technical support after rollout.</p>", "image": "shopify://shop_images/Customer_Support_Square.webp", "url": "/pages/support" } }
+      },
+      "block_order": ["devices", "software", "calibration", "training", "implementation", "support"],
+      "settings": { "anchor_id": "program-inclusions", "eyebrow": "What a program can include", "heading": "One capability stack.", "heading_bold": "Configured to fit.", "description": "<p>Bring the equipment, systems and support your workplace needs into one coordinated scope.</p>", "menu": "", "menu_parent": "" }
+    },
+    "approaches": {
+      "type": "andatech-managed-program-approaches",
+      "blocks": {
+        "connected": { "type": "approach", "settings": { "featured": true, "eyebrow": "Shared responsibility", "badge": "Common starting point", "title": "Connected program", "description": "<p>Your team runs testing while Andatech helps connect devices, records, servicing and program visibility.</p>", "items": "Connected device options\nAndalink visibility where appropriate\nCoordinated service and calibration\nReview and reporting support", "footnote": "Best when your team needs connected visibility and shared support", "cta_label": "Discuss Connected Support", "cta_url": "/pages/partner-model#consultation" } },
+        "organisation": { "type": "approach", "settings": { "featured": false, "eyebrow": "Your team leads", "badge": "", "title": "Organisation-led", "description": "<p>Your organisation manages day-to-day testing with selected Andatech equipment, training and service support.</p>", "items": "Selected devices and consumables\nCalibration and service options\nTraining pathways where required\nImplementation guidance", "footnote": "Best when internal roles and processes are established", "cta_label": "Discuss Organisation-led Support", "cta_url": "/pages/partner-model#consultation" } },
+        "coordinated": { "type": "approach", "settings": { "featured": false, "eyebrow": "Broader coordination", "badge": "", "title": "Coordinated program", "description": "<p>Andatech supports more of the rollout, service planning, review and ongoing coordination across your program.</p>", "items": "Broader program coordination\nTraining and rollout support\nMulti-site service planning\nOngoing review rhythm", "footnote": "Best when multiple sites or limited internal resources need more coordination", "cta_label": "Discuss Coordinated Support", "cta_url": "/pages/partner-model#consultation" } }
+      },
+      "block_order": ["connected", "organisation", "coordinated"],
+      "settings": { "anchor_id": "program-approaches", "eyebrow": "Three program approaches", "heading": "Choose how much support", "heading_bold": "your team needs.", "description": "<p>Choose the level of coordination that complements the capability already inside your organisation.</p>" }
+    },
+    "ownership": {
+      "type": "andatech-ways-to-work",
+      "blocks": {
+        "andatech": {
+          "type": "plan",
+          "settings": {
+            "title": "Program enablement",
+            "sub": "",
+            "badge": "ANDATECH COORDINATES",
+            "items": "Policy and process consultation within agreed scope\nTesting technology, servicing and calibration options\nTraining pathways and competency support\nReporting structure and ongoing program reviews",
+            "cta_label": "",
+            "cta_url": ""
+          }
+        },
+        "organisation": {
+          "type": "plan",
+          "settings": {
+            "title": "Workplace decisions",
+            "sub": "",
+            "badge": "YOUR ORGANISATION OWNS",
+            "items": "Legal advice, consultation and policy approval\nEmployment decisions and disciplinary processes\nRole, site and operational risk decisions\nInternal governance, privacy and authorised access",
+            "cta_label": "",
+            "cta_url": ""
+          }
+        }
+      },
+      "block_order": ["andatech", "organisation"],
+      "settings": {
+        "layout": "ownership",
+        "eyebrow": "OWNERSHIP MADE VISIBLE",
+        "heading": "A managed program does not mean",
+        "heading_bold": "outsourcing accountability.",
+        "desc": "<p>A useful program separates what Andatech can coordinate from what remains an employer and workplace responsibility.</p>",
+        "mobile_cta": "",
+        "mobile_cta_url": ""
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "faq_1": {
+          "type": "question",
+          "settings": {
+            "icon": "none",
+            "heading": "What's included in a Managed Compliance Program?",
+            "text": "<p>The scope is tailored to your organisation. It can include a review of your policy and procedures, nationally recognised collector training through HLTPAT010, appropriate testing technology and consumables, implementation support, documentation and ongoing program reviews.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "question",
+          "settings": {
+            "icon": "none",
+            "heading": "Do you provide the testing devices?",
+            "text": "<p>Yes. Andatech can recommend and supply fit-for-purpose alcohol and drug testing devices, consumables, servicing and calibration options, with connected reporting where appropriate. The final mix depends on your policy, testing method, sites and operating conditions.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "question",
+          "settings": {
+            "icon": "none",
+            "heading": "Can this cover multiple sites?",
+            "text": "<p>Yes. Multi-site consistency is a core use case. The program can define common roles, procedures, equipment controls and records while accounting for the practical needs of individual sites, shifts and jurisdictions.</p>"
+          }
+        },
+        "faq_4": {
+          "type": "question",
+          "settings": {
+            "icon": "none",
+            "heading": "Can I combine this with HLTPAT010 training?",
+            "text": "<p>Yes. HLTPAT010 training can form part of the capability plan for team members who need to collect specimens. Training requirements, delivery and eligibility should be confirmed for your organisation and participants before enrolment.</p>"
+          }
+        },
+        "faq_5": {
+          "type": "question",
+          "settings": {
+            "icon": "none",
+            "heading": "How is this different from just doing HLTPAT010 training?",
+            "text": "<p>HLTPAT010 builds an individual's specimen-collection skills. A managed program connects that capability with your policy, testing methods, equipment, documentation, escalation steps, records and program governance.</p>"
+          }
+        }
+      },
+      "block_order": ["faq_1", "faq_2", "faq_3", "faq_4", "faq_5"],
+      "settings": {
+        "anchor_id": "scope-faq",
+        "eyebrow": "COMMON QUESTIONS",
+        "heading": "",
+        "heading_bold": "Scope & Support FAQs",
+        "heading_align": "text-start",
+        "description": "<p>Still unsure? Talk to our team and we'll help you understand what a managed program could include.</p>",
+        "image_position": "left",
+        "color_scheme": "none",
+        "full_width": true
+      }
+    },
+    "cta": {
+      "type": "andatech-managed-program-next-step",
+      "settings": {
+        "anchor_id": "next-step",
+        "image": "shopify://shop_images/Setting_up_an_alcohol_and_drug_testing_policy_for_your_company.webp",
+        "mobile_image": "shopify://shop_images/Setting_up_an_alcohol_and_drug_testing_policy_for_your_company.webp",
+        "step_label": "Next step",
+        "next_step_label": "Justify",
+        "heading": "Estimate indicative value using your own inputs.",
+        "description": "<p>Assess readiness and move into a transparent ROI estimate based on your organisation's figures.</p>",
+        "button_label": "Open ROI Calculator",
+        "button_link": "/pages/roi-calculator"
+      }
+    }
+  },
+  "order": ["main", "hero", "why_managed", "inclusions", "approaches", "ownership", "faq", "cta"]
+}

@@ -1,0 +1,136 @@
+{%- comment -%}
+  Andatech — HLTPAT010 "Course at a Glance" table + "Before Enrolling" accordion.
+  Two logical sub-sections in one Shopify section so they always travel together
+  and the accordion sits directly beneath the table. Styled by andatech-site.css.
+{%- endcomment -%}
+
+{%- comment -%}
+  Split from andatech-site.css on 2026-09-05. This section now loads only
+  the scoped HLTPAT010 stylesheet (11 KB) instead of the 336 KB monolith.
+  Same shared-eyebrow caveat as the RTO section.
+{%- endcomment -%}
+{{ 'andatech-hltpat010.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-industry.css' | asset_url | stylesheet_tag }}
+
+<section class="at-h010-glance" id="{{ section.settings.anchor_id | default: 'glance' | handleize }}">
+  <div class="at-shell">
+
+    {%- comment -%} ── Header ── {%- endcomment -%}
+    <div class="at-h010-glance__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="at-industry__title" data-at-rise>
+        {{ section.settings.heading | escape }}
+        {%- if section.settings.heading_bold != blank -%}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{%- endif -%}
+      </h2>
+      {%- if section.settings.desc != blank -%}
+        <div class="at-industry__desc" data-at-rise>{{ section.settings.desc }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Table ── {%- endcomment -%}
+    <div class="at-h010-glance__table" data-at-rise>
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'row' -%}
+          <div class="at-h010-glance__row" {{ block.shopify_attributes }}>
+            <dt class="at-h010-glance__label">{{ block.settings.label | escape }}</dt>
+            <dd class="at-h010-glance__value">
+              {%- if block.settings.pending -%}
+                <span class="at-h010-glance__pending">Pending METEX approval</span>
+              {%- else -%}
+                {{ block.settings.value }}
+              {%- endif -%}
+            </dd>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} ── Before Enrolling accordion ── {%- endcomment -%}
+    {%- assign has_accordion = false -%}
+    {%- for block in section.blocks -%}{%- if block.type == 'accordion' -%}{%- assign has_accordion = true -%}{%- break -%}{%- endif -%}{%- endfor -%}
+
+    {%- if has_accordion -%}
+      <div class="at-h010-enroll" data-at-rise>
+        {%- if section.settings.enroll_heading != blank -%}
+          <h3 class="at-h010-enroll__title">{{ section.settings.enroll_heading | escape }}</h3>
+        {%- endif -%}
+        {%- if section.settings.enroll_desc != blank -%}
+          <p class="at-h010-enroll__desc">{{ section.settings.enroll_desc | escape }}</p>
+        {%- endif -%}
+
+        <div class="at-h010-enroll__list">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'accordion' -%}
+              <details class="at-h010-enroll__item" {{ block.shopify_attributes }}>
+                <summary class="at-h010-enroll__summary">
+                  <span>{{ block.settings.heading | escape }}</span>
+                  <svg class="at-h010-enroll__chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </summary>
+                <div class="at-h010-enroll__panel">
+                  {%- if block.settings.pending -%}
+                    <p class="at-h010-glance__pending">Pending METEX approval — content to be confirmed.</p>
+                  {%- else -%}
+                    {{ block.settings.content }}
+                  {%- endif -%}
+                </div>
+              </details>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "HLTPAT010 Glance",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "glance" },
+    { "type": "header", "content": "Course at a Glance" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "COURSE AT A GLANCE" },
+    { "type": "text", "id": "heading", "label": "H2 — Heading (light)", "default": "The course," },
+    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)", "default": "summarised" },
+    { "type": "richtext", "id": "desc", "label": "Description", "default": "<p>Connect testing activity, device readiness and compliance records in a clear reporting workflow.</p>" },
+    { "type": "header", "content": "Before Enrolling" },
+    { "type": "text", "id": "enroll_heading", "label": "Accordion heading", "default": "Before enrolling" },
+    { "type": "text", "id": "enroll_desc", "label": "Accordion description", "default": "The table above covers delivery, duration, requirements, assessment and fees. This is the policy detail that sits alongside it." }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Table row",
+      "limit": 16,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "-" },
+        { "type": "richtext", "id": "value", "label": "Value", "default": "<p>-</p>" },
+        { "type": "checkbox", "id": "pending", "label": "Show as pending", "default": false }
+      ]
+    },
+    {
+      "type": "accordion",
+      "name": "Before Enrolling item",
+      "limit": 8,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "-" },
+        { "type": "richtext", "id": "content", "label": "Content", "default": "<p>-</p>" },
+        { "type": "checkbox", "id": "pending", "label": "Show as pending", "default": false }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "HLTPAT010 Glance",
+    "blocks": [
+      { "type": "row", "settings": { "label": "Training product", "value": "<p>HLTPAT010 Collect specimens for drugs of abuse testing</p>" } },
+      { "type": "row", "settings": { "label": "Responsible RTO", "value": "<p>METEX Solutions Pty Ltd RTO 46448</p>" } },
+      { "type": "row", "settings": { "label": "Delivery", "value": "<p>1-day face-to-face workshop, delivered on-site at your workplace.</p>" } },
+      { "type": "row", "settings": { "label": "Duration", "value": "<p>1 day</p>" } }
+    ]
+  }]
+}
+{% endschema %}

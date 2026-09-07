@@ -1,0 +1,213 @@
+{%- if section.index > 2 -%}
+  <link rel="stylesheet" href="{{ 'hotspots-image.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- else -%}
+  {{ 'hotspots-image.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+<script src="{{ 'hotspots-image.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign hotspot_color = section.settings.hotspot_color
+  assign hotspot_color_brightness = hotspot_color | color_brightness
+-%}
+
+{% style %}
+  #{{ section.id }} {
+    --hotspot-color: {{ hotspot_color.red }}, {{ hotspot_color.green }}, {{ hotspot_color.blue }};
+    {% if hotspot_color_brightness > 128 %}
+      --hotspot-cross-color: #000000;
+    {% else %}
+      --hotspot-cross-color: #ffffff;
+    {% endif %}
+  }
+
+  /* Basic Tab Styling */
+  .tab-navigation { 
+    display: flex; 
+    gap: 30px; 
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e8e8e8;
+  }
+  .tab-trigger { 
+    background: none; 
+    border: none; 
+    padding: 10px 0; 
+    cursor: pointer; 
+    position: relative;
+    transition: opacity 0.2s;
+  }
+  .tab-trigger:not(.active) { opacity: 0.5; }
+  .tab-trigger.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+  }
+  .hotspot-tab-content:not(.active) { display: none; }
+{% endstyle %}
+
+<div class="container" id="{{ section.id }}">
+  <div class="section">
+    
+    <div class="product-features__text {{ section.settings.text_align }}">
+      {%- if section.settings.main_title != blank -%}
+        <h2 class="section__block {{ section.settings.heading_size }}">{{ section.settings.main_title | escape }}</h2>
+      {%- endif -%}
+      
+      {% comment %} Tab Navigation {% endcomment %}
+      <div class="tab-navigation {% if section.settings.text_align == 'text-center' %}justify-center{% elsif section.settings.text_align == 'text-end' %}justify-end{% endif %}">
+        <button type="button" class="tab-trigger h4 active" data-tab-target="tab-1">
+          {{ section.settings.tab_1_label | default: section.settings.product_1.title | default: 'Product 1' }}
+        </button>
+        <button type="button" class="tab-trigger h4" data-tab-target="tab-2">
+          {{ section.settings.tab_2_label | default: section.settings.product_2.title | default: 'Product 2' }}
+        </button>
+      </div>
+    </div>
+
+    {%- for i in (1..2) -%}
+      {%- liquid
+        assign tab_key = 'tab-' | append: i
+        assign prod_setting = 'product_' | append: i
+        assign img_setting = 'image_' | append: i
+        
+        assign current_product = section.settings[prod_setting]
+        assign current_image = section.settings[img_setting] | default: current_product.featured_image
+      -%}
+
+      <div class="hotspot-tab-content {% if i == 1 %}active{% endif %}" data-tab-content="{{ tab_key }}">
+        <div class="product-features relative">
+          <hotspots-image class="product-features__image block relative overflow-hidden">
+            {%- if current_image != blank -%}
+              {% render 'image',
+                image: current_image,
+                widths: '480, 980, 1200, 1400, 1600',
+                src_width: 1200,
+                class: 'block mx-auto w-full'
+              %}
+            {%- else -%}
+              <div class="media relative" style="padding-top: 56.25%;">
+                {{ 'product-' | append: i | placeholder_svg_tag: 'media__placeholder img-fit' }}
+              </div>
+            {%- endif -%}
+
+            {%- for block in section.blocks -%}
+              {%- if block.settings.tab_assignment == tab_key -%}
+                <div class="hotspot absolute" style="top: {{ block.settings.hotspot_y }}%; left: {{ block.settings.hotspot_x }}%">
+                  <button type="button" class="hotspot__btn relative tap-target" aria-expanded="false">
+                    <span class="visually-hidden">{{ 'accessibility.view_details' | t }}</span>
+                    {% render 'icon-plus' %}
+                  </button>
+                  <div class="hotspot__card hotspot__card--wide absolute {{ block.settings.content_align }}" aria-hidden="true">
+                    {%- if block.settings.image != blank -%}
+                      {% render 'image', image: block.settings.image, src_width: 320, class: 'mb-4' %}
+                    {%- endif -%}
+                    {%- if block.settings.heading != blank -%}
+                      <h6>{{ block.settings.heading | escape }}</h6>
+                    {%- endif -%}
+                    {%- if block.settings.text != blank -%}
+                      <div class="rte">{{ block.settings.text }}</div>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </hotspots-image>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const section = document.getElementById('{{ section.id }}');
+    const triggers = section.querySelectorAll('.tab-trigger');
+    const contents = section.querySelectorAll('.hotspot-tab-content');
+
+    triggers.forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const target = trigger.dataset.tabTarget;
+
+        // Reset
+        triggers.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+
+        // Activate
+        trigger.classList.add('active');
+        section.querySelector(`[data-tab-content="${target}"]`).classList.add('active');
+        
+        // Trigger a resize to ensure hotspots are positioned correctly if the JS needs it
+        window.dispatchEvent(new Event('resize'));
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Tabbed Product Features",
+  "class": "cc-product-features",
+  "settings": [
+    { "type": "text", "id": "main_title", "label": "Main Heading", "default": "Comparison" },
+    { "type": "header", "content": "Product 1" },
+    { "type": "product", "id": "product_1", "label": "Product 1" },
+    { "type": "text", "id": "tab_1_label", "label": "Tab 1 Name" },
+    { "type": "image_picker", "id": "image_1", "label": "Custom Image 1" },
+    { "type": "header", "content": "Product 2" },
+    { "type": "product", "id": "product_2", "label": "Product 2" },
+    { "type": "text", "id": "tab_2_label", "label": "Tab 2 Name" },
+    { "type": "image_picker", "id": "image_2", "label": "Custom Image 2" },
+    { "type": "header", "content": "Style" },
+    { "type": "color", "id": "hotspot_color", "label": "Hotspot color", "default": "#070707" },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text alignment",
+      "options": [
+        {"value": "text-start", "label": "Left"},
+        {"value": "text-center", "label": "Center"},
+        {"value": "text-end", "label": "Right"}
+      ],
+      "default": "text-center"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [{"value": "h2", "label": "Large"}, {"value": "h1", "label": "Extra Large"}],
+      "default": "h2"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "select",
+          "id": "tab_assignment",
+          "label": "Assign to Tab",
+          "options": [
+            { "value": "tab-1", "label": "Tab 1" },
+            { "value": "tab-2", "label": "Tab 2" }
+          ],
+          "default": "tab-1"
+        },
+        { "type": "image_picker", "id": "image", "label": "Feature Image" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Feature" },
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Description</p>" },
+        { "type": "select", "id": "content_align", "label": "Card Text Align", "options": [{"value": "text-start", "label": "Left"}, {"value": "text-center", "label": "Center"}], "default": "text-start" },
+        { "type": "range", "id": "hotspot_x", "label": "Horizontal %", "min": 10, "max": 90, "unit": "%", "step": 1, "default": 50 },
+        { "type": "range", "id": "hotspot_y", "label": "Vertical %", "min": 10, "max": 90, "unit": "%", "step": 1, "default": 50 }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Tabbed Product Features" }
+  ]
+}
+{% endschema %}

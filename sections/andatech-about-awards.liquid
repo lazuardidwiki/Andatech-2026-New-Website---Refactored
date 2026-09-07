@@ -1,0 +1,62 @@
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-about.css' | asset_url | stylesheet_tag }}
+
+<section class="at-about-awards at-about-section" style="--about-marquee-speed: {{ section.settings.speed }}s"{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handleize }}"{% endif %}>
+  <div class="at-shell">
+    <header class="at-about-section__header">
+      {%- if section.settings.eyebrow != blank -%}<p class="at-about-section__eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 class="at-about-section__title">{{ section.settings.heading }}</h2>{%- endif -%}
+      {%- if section.settings.description != blank -%}<div class="at-about-section__body">{{ section.settings.description }}</div>{%- endif -%}
+    </header>
+  </div>
+
+  <div class="at-about-awards__viewport" role="region" aria-label="{{ section.settings.marquee_label | escape }}">
+    <div class="at-about-awards__track">
+      {%- for copy_index in (1..2) -%}
+        <div class="at-about-awards__set"{% if copy_index == 2 %} aria-hidden="true"{% endif %}>
+          {%- for block in section.blocks -%}
+            <div class="at-about-award-logo"{% if copy_index == 1 %} {{ block.shopify_attributes }}{% endif %}>
+              {%- if block.settings.image != blank -%}
+                {%- assign award_alt = block.settings.alt | default: block.settings.image.alt -%}
+                {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}"{% if copy_index == 2 %} tabindex="-1"{% endif %}>{%- endif -%}
+                  {{ block.settings.image | image_url: width: 500 | image_tag: widths: '180, 260, 360, 500', sizes: '220px', loading: 'lazy', alt: award_alt }}
+                {%- if block.settings.link != blank -%}</a>{%- endif -%}
+              {%- elsif request.design_mode -%}
+                {{ 'logo' | placeholder_svg_tag }}
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About — Awards marquee",
+  "tag": "section",
+  "class": "at-section",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "about-awards" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Recognition" },
+    { "type": "html", "id": "heading", "label": "H2 — Heading", "default": "Awards & <strong>Recognition</strong>" },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>We're committed to excellent products and outstanding customer service. This has earned us recognition from multiple award agencies.</p>" },
+    { "type": "text", "id": "marquee_label", "label": "Accessible marquee label", "default": "Andatech awards and recognition" },
+    { "type": "range", "id": "speed", "label": "Scroll duration", "min": 16, "max": 60, "step": 2, "unit": "s", "default": 30 }
+  ],
+  "blocks": [
+    { "type": "logo", "name": "Award logo", "settings": [
+      { "type": "image_picker", "id": "image", "label": "Logo" },
+      { "type": "text", "id": "alt", "label": "Logo alt text" },
+      { "type": "url", "id": "link", "label": "Optional link" }
+    ] }
+  ],
+  "presets": [
+    { "name": "About — Awards marquee", "blocks": [
+      { "type": "logo" }, { "type": "logo" }, { "type": "logo" }, { "type": "logo" }, { "type": "logo" }, { "type": "logo" }
+    ] }
+  ]
+}
+{% endschema %}

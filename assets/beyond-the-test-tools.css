@@ -1,0 +1,685 @@
+/* =====================================================
+   Beyond The Test™ — Interactive Tools (Testing Approach)
+   ===================================================== */
+
+.btt-tools{
+  background:transparent;
+  padding:100px 48px;
+  position:relative;
+  z-index:1;
+  overflow:hidden;
+}
+
+.btt-tools__inner{
+  width:100%;
+  max-width:1200px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 480px;
+  gap:80px;
+  align-items:center;
+}
+
+.btt-tools__card-wrap{
+  perspective:1200px;
+  position:relative;
+}
+
+/* ===== Layout variant: card left, text right ===== */
+@media (min-width:1025px){
+  .btt-tools__inner--reversed{
+    grid-template-columns:480px 1fr;
+  }
+  .btt-tools__inner--reversed .btt-tools__left{ order:2; }
+  .btt-tools__inner--reversed .btt-tools__card-wrap{ order:1; }
+}
+
+/* ===== Left column ===== */
+.btt-tools__eyebrow{
+  display:block;
+  font-size:13px; font-weight:700;
+  letter-spacing:.16em; text-transform:uppercase;
+  color:#46BEC4; margin:0 0 16px;
+}
+.btt-tools__heading{
+  font-family:'Titillium Web',sans-serif;
+  font-size:42px; font-weight:700;
+  color:#111820; line-height:1.15;
+  margin:0 0 20px;
+}
+.btt-tools__sub{
+  font-size:16px; color:rgba(17,24,32,.65);
+  line-height:1.6; margin:0 0 32px;
+}
+
+.btt-tools__benefits{
+  list-style:none; padding:0; margin:0 0 24px;
+  display:flex; flex-direction:column; gap:14px;
+}
+.btt-tools__benefits li{
+  display:flex; align-items:center; gap:12px;
+  font-size:15px; font-weight:500; color:#111820;
+}
+.btt-tools__check{
+  width:22px; height:22px; border-radius:50%;
+  border:1.5px solid #95C11F;
+  display:flex; align-items:center; justify-content:center;
+  color:#95C11F; flex-shrink:0;
+}
+
+.btt-tools__time-note{
+  display:flex; align-items:center; gap:8px;
+  font-size:13px; font-style:italic; color:rgba(17,24,32,.55);
+  margin:0 0 32px;
+}
+
+.btt-tools__cta{ align-self:flex-start; }
+
+/* =====================================================
+   Right: light gradient preview card with rotating border glow
+   ===================================================== */
+.btt-tools__card{
+  position:relative;
+  background:linear-gradient(160deg, #ffffff 0%, #edf2f4 100%);
+  border:1px solid rgba(17,24,32,.08);
+  border-radius:24px;
+  padding:32px;
+  box-shadow:0 12px 32px rgba(17,24,32,.10), inset 0 1px 0 rgba(255,255,255,.6);
+  transition:transform .15s ease-out, box-shadow .3s ease;
+  will-change:transform;
+  overflow:hidden;
+  z-index:1;
+  transform:rotateX(4deg) rotateY(-4deg);
+}
+.btt-tools__card.is-tilting{ transition:none; }
+
+@media (min-width:1025px){
+  .btt-tools__inner--reversed .btt-tools__card{
+    transform:rotateX(4deg) rotateY(4deg);
+  }
+}
+
+@property --btt-angle{
+  syntax:'<angle>';
+  initial-value:0deg;
+  inherits:false;
+}
+.btt-tools__card::before{
+  content:'';
+  position:absolute; inset:0;
+  border-radius:inherit;
+  padding:1.5px;
+  background:conic-gradient(from var(--btt-angle,0deg),
+    transparent 0deg, transparent 250deg,
+    #46BEC4 290deg, #95C11F 320deg, transparent 350deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  animation:btt-glow-rotate 7s linear infinite;
+  pointer-events:none;
+  z-index:2;
+  display:none; /* Border glow turned off per request — no longer visible/needed */
+}
+@keyframes btt-glow-rotate{
+  to{ --btt-angle:360deg; }
+}
+
+.btt-tools__card-glare{
+  position:absolute; inset:0; border-radius:inherit;
+  background:radial-gradient(circle at var(--gx,50%) var(--gy,50%), rgba(255,255,255,.15), transparent 60%);
+  opacity:0; transition:opacity .3s ease;
+  pointer-events:none; z-index:2;
+}
+
+/* Step indicators (preview panels) */
+.btt-tools__panel-step{
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:12px;
+}
+.btt-tools__step-num{
+  width:28px; height:28px; border-radius:50%;
+  background:#46BEC4; color:#fff;
+  font-family:'Titillium Web',sans-serif;
+  font-size:12px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.btt-tools__step-num--green{ background:#95C11F; }
+.btt-tools__step-label{
+  font-size:12px; font-weight:700; color:#111820;
+  line-height:1.3; margin:0;
+}
+
+/* Preview panels — lighter nested glass */
+.btt-tools__panels{
+  display:flex; flex-direction:column; gap:10px;
+  position:relative; z-index:1;
+}
+.btt-tools__panel{
+  background:rgba(17,24,32,.035);
+  border:1px solid rgba(17,24,32,.07);
+  border-radius:16px;
+  padding:16px;
+  display:flex; flex-direction:column; gap:10px;
+  position:relative; z-index:1;
+}
+
+.btt-tools__panel-q{
+  font-size:12px; font-weight:600; color:#111820;
+  line-height:1.4; margin:0;
+}
+.btt-tools__panel-opts{
+  display:flex; flex-direction:column; gap:6px;
+}
+.btt-tools__panel-opt{
+  border-radius:8px; padding:8px 10px;
+  font-size:11px; font-weight:500;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.btt-tools__panel-opt--selected{
+  background:rgba(149,193,31,.18); border:1.5px solid #95C11F; color:#111820;
+}
+.btt-tools__panel-opt-text{
+  display:inline-block;
+  transition:opacity .3s ease, transform .3s ease;
+}
+.btt-tools__panel-opt-text.is-swapping{
+  opacity:0;
+  transform:translateY(-6px);
+}
+.btt-tools__panel-opt--ghost{
+  background:rgba(17,24,32,.05); height:28px; border:1.5px solid transparent;
+}
+
+/* Panel 2: matching chips */
+.btt-tools__match-row{
+  display:flex; flex-wrap:wrap; gap:6px;
+}
+.btt-tools__match-chip{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:6px 10px; border-radius:999px;
+  font-size:10.5px; font-weight:600;
+}
+.btt-tools__match-chip.is-done{
+  background:rgba(149,193,31,.18); color:#111820;
+}
+.btt-tools__match-chip.is-done svg{ color:#95C11F; }
+.btt-tools__match-chip.is-active{
+  background:rgba(70,190,196,.18); color:#111820;
+  animation:btt-tools-pulse 1.6s ease-in-out infinite;
+}
+.btt-tools__match-chip.is-active svg{ color:#46BEC4; }
+@keyframes btt-tools-pulse{
+  0%, 100%{ box-shadow:0 0 0 0 rgba(70,190,196,.35); }
+  50%{ box-shadow:0 0 0 5px rgba(70,190,196,0); }
+}
+.btt-tools__match-caption{
+  font-size:11px; color:rgba(17,24,32,.55); margin:0;
+}
+
+/* Panel 3: recommendation preview */
+.btt-tools__recs{
+  display:flex; flex-direction:column; gap:6px;
+}
+.btt-tools__rec{
+  display:flex; align-items:center; gap:7px;
+  font-size:10.5px; font-weight:500; color:#111820;
+  background:rgba(17,24,32,.05); border-radius:8px; padding:6px 8px;
+}
+.btt-tools__rec-check{
+  width:18px; height:18px; border-radius:4px;
+  background:#95C11F; color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+
+/* =====================================================
+   MODAL — light frosted glass, glow border ring on the panel
+   ===================================================== */
+.btt-tools__modal{
+  position:fixed; inset:0; z-index:600;
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
+}
+.btt-tools__modal.is-open{
+  pointer-events:auto;
+}
+.btt-tools__modal-backdrop{
+  position:absolute; inset:0;
+  background:rgba(10,15,20,0);
+  backdrop-filter:blur(0px);
+  -webkit-backdrop-filter:blur(0px);
+  transition:background .45s ease, backdrop-filter .45s ease, -webkit-backdrop-filter .45s ease;
+}
+.btt-tools__modal.is-open .btt-tools__modal-backdrop{
+  background:rgba(10,15,20,.55);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.btt-tools__modal-panel-frame{
+  position:relative; z-index:1;
+  background:#fff;
+  border:1px solid rgba(17,24,32,.10);
+  border-radius:24px;
+  width:min(560px, 92vw);
+  max-height:92vh;
+  overflow:hidden;
+  box-shadow:0 24px 64px rgba(17,24,32,.20);
+  opacity:0;
+  transform:translateY(20px) scale(.97);
+  transition:transform .4s cubic-bezier(.23,1,.32,1), opacity .35s ease;
+}
+.btt-tools__modal.is-open .btt-tools__modal-panel-frame{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+/* Promote the frosted layers only WHILE the modal is open — smooths the open
+   animation and step transitions on mobile, without paying any compositing
+   cost during normal page scroll (the modal is closed then, so this won't apply). */
+.btt-tools__modal.is-open .btt-tools__modal-backdrop{
+  will-change:transform, opacity;
+}
+.btt-tools__modal-panel-frame::before{
+  content:'';
+  position:absolute; inset:0;
+  border-radius:inherit;
+  padding:1.5px;
+  background:conic-gradient(from var(--btt-angle,0deg),
+    transparent 0deg, transparent 250deg,
+    #46BEC4 290deg, #95C11F 320deg, transparent 350deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  animation:btt-glow-rotate 7s linear infinite;
+  pointer-events:none;
+  z-index:2;
+}
+.btt-tools__modal-panel{
+  position:relative;
+  height:100%;
+  max-height:92vh;
+  overflow-y:auto;
+  padding:48px;
+  box-sizing:border-box;
+}
+.btt-tools__modal-close{
+  position:absolute; top:20px; right:20px;
+  width:36px; height:36px; border-radius:50%;
+  background:rgba(17,24,32,.06); border:none;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:#111820;
+  transition:background .15s ease;
+}
+
+.btt-tools__progress-wrap{
+  height:4px; background:rgba(17,24,32,.08);
+  border-radius:9999px; margin-bottom:28px; overflow:hidden;
+  max-width:calc(100% - 48px);
+}
+.btt-tools__progress-bar{
+  height:100%; background:#95C11F;
+  border-radius:9999px;
+  transition:width .4s cubic-bezier(.23,1,.32,1);
+  width:0%;
+}
+
+.btt-tools__modal-step-label{
+  display:block;
+  font-size:12px; font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:#2C8B90; margin:0 0 16px;
+}
+.btt-tools__modal-q{
+  font-family:'Titillium Web',sans-serif;
+  font-size:22px; font-weight:700; color:#111820;
+  margin:0 0 28px; line-height:1.35;
+}
+
+.btt-tools__modal-opts{
+  display:flex; flex-direction:column; gap:12px;
+  margin-bottom:20px;
+}
+.btt-tools__modal-opt{
+  width:100%; padding:16px 20px;
+  border:1.5px solid rgba(17,24,32,.12);
+  border-radius:12px;
+  font-family:'Titillium Web',sans-serif;
+  font-size:15px; font-weight:600; color:#111820;
+  background:rgba(17,24,32,.035); cursor:pointer; text-align:left;
+  transition:border-color .15s ease, background .15s ease, transform .1s ease;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.btt-tools__modal-opt-arrow{
+  width:28px; height:28px; border-radius:50%;
+  background:#95C11F; color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+  opacity:0; transform:scale(.7);
+  transition:opacity .15s ease, transform .15s ease;
+}
+
+.btt-tools__back{
+  display:inline-flex; align-items:center; gap:6px;
+  border:none; background:none; cursor:pointer; padding:0;
+  font-family:'Titillium Web',sans-serif;
+  font-size:13px; font-weight:600; color:rgba(17,24,32,.55);
+  transition:color .15s ease;
+}
+
+/* Scroll hint — bottom-fixed indicator, lives on the non-scrolling frame so
+   it never moves with the inner content. Only relevant when the modal is
+   short enough to require scrolling (mainly mobile). */
+.btt-tools__scroll-hint{
+  display:none;
+  position:absolute; left:0; right:0; bottom:0; z-index:3;
+  height:52px;
+  align-items:flex-end; justify-content:center;
+  padding-bottom:8px;
+  background:linear-gradient(180deg, transparent, rgba(255,255,255,.92) 65%);
+  pointer-events:none;
+  opacity:1;
+  transition:opacity .3s ease;
+}
+.btt-tools__scroll-hint.is-hidden{ opacity:0; }
+.btt-tools__scroll-hint svg{
+  color:rgba(17,24,32,.5);
+  animation:btt-scroll-hint-bounce 1.6s ease-in-out infinite;
+}
+@keyframes btt-scroll-hint-bounce{
+  0%,100%{ transform:translateY(0); opacity:.55; }
+  50%{ transform:translateY(5px); opacity:1; }
+}
+
+/* Step fade/slide transition inside modal */
+#btt-tools-question-screen[data-transitioning="true"]{
+  opacity:0; transform:translateX(-16px);
+  transition:opacity .22s ease, transform .22s ease;
+}
+
+/* ===== Result screen ===== */
+.btt-tools__result-top{
+  display:flex; align-items:center; gap:14px;
+  margin-bottom:18px;
+}
+.btt-tools__result-icon{
+  width:44px; height:44px; border-radius:50%;
+  background:rgba(149,193,31,.22); color:#111820;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.btt-tools__result-eyebrow{
+  display:block;
+  font-size:11px; font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase;
+  color:#95C11F; margin:0 0 3px;
+}
+.btt-tools__result-title{
+  font-family:'Titillium Web',sans-serif;
+  font-size:22px; font-weight:700; color:#111820;
+  margin:0; line-height:1.25;
+}
+
+.btt-tools__result-body{
+  font-size:14px; color:rgba(17,24,32,.65); line-height:1.6;
+  margin:0 0 20px;
+}
+
+.btt-tools__meta{
+  display:flex; gap:20px; flex-wrap:wrap;
+  padding:14px 0; margin-bottom:22px;
+  border-top:1px solid rgba(17,24,32,.10);
+  border-bottom:1px solid rgba(17,24,32,.10);
+}
+.btt-tools__meta-item{
+  display:flex; align-items:center; gap:8px;
+  font-size:12.5px; font-weight:600; color:#111820;
+}
+.btt-tools__meta-item svg{ color:#95C11F; flex-shrink:0; }
+
+.btt-tools__resources-label{
+  display:block;
+  font-size:12px; font-weight:700; color:#111820;
+  margin:0 0 10px;
+}
+.btt-tools__resources{
+  display:flex; flex-direction:column; gap:8px;
+  margin-bottom:22px;
+}
+.btt-tools__resource{
+  display:flex; align-items:center; gap:12px;
+  width:100%;
+  padding:12px 14px; border-radius:10px;
+  background:rgba(17,24,32,.035); text-decoration:none;
+  border:none; cursor:pointer; text-align:left;
+  font-family:'Titillium Web',sans-serif;
+  transition:background .15s ease, transform .1s ease;
+}
+.btt-tools__resource-icon{ color:#95C11F; flex-shrink:0; display:flex; }
+.btt-tools__resource-title{
+  flex:1; font-size:13px; font-weight:600; color:#111820;
+}
+.btt-tools__resource-arrow{ color:rgba(17,24,32,.4); flex-shrink:0; }
+
+.btt-tools__result-actions{ display:flex; gap:12px; flex-wrap:wrap; }
+.btt-tools__result-actions .btt-btn--ghost{ color:#111820; border-color:rgba(17,24,32,.22); }
+
+/* =====================================================
+   Hover-only enhancements — gated to real pointer devices.
+   ===================================================== */
+@media (hover:hover) and (pointer:fine){
+  .btt-tools__card-wrap:hover .btt-tools__card-glare{ opacity:1; }
+  .btt-tools__modal-close:hover{ background:rgba(17,24,32,.12); }
+  .btt-tools__modal-opt:hover{
+    border-color:#95C11F; background:rgba(149,193,31,.14);
+    transform:translateX(4px);
+  }
+  .btt-tools__modal-opt:hover .btt-tools__modal-opt-arrow{
+    opacity:1; transform:scale(1);
+  }
+  .btt-tools__back:hover{ color:#111820; }
+  .btt-tools__resource:hover{ background:rgba(149,193,31,.12); transform:translateX(2px); }
+  .btt-tools__result-actions .btt-btn--ghost:hover{ border-color:#111820; background:rgba(17,24,32,.06); }
+}
+
+/* ===== Alert ===== */
+.btt-tools__alert{
+  display:flex; align-items:flex-start; gap:12px;
+  max-width:1200px; margin:56px auto 0; padding:16px 18px;
+  background:rgba(70,190,196,.1);
+  border:1px solid rgba(70,190,196,.25);
+  border-radius:14px;
+}
+.btt-tools__alert-icon{
+  width:22px; height:22px; border-radius:50%;
+  background:#46BEC4; color:#fff; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  margin-top:1px;
+}
+.btt-tools__alert p{
+  margin:0; font-size:13px; line-height:1.6; color:rgba(17,24,32,.75);
+}
+
+/* =====================================================
+   Tablet — keep side-by-side, tighten proportions instead of stacking.
+   Same rationale as Assessment: this used to collapse to a stacked single
+   column at ≤1024px, which caught iPad Air/Mini-width devices (768–840px).
+   Only ≤768px genuinely stacks now.
+   ===================================================== */
+@media (max-width:1024px) and (min-width:769px){
+  .btt-tools{ padding:72px 32px; }
+  .btt-tools__inner{
+    grid-template-columns: 1.3fr 1fr;
+    gap:40px;
+  }
+  .btt-tools__card-wrap{ max-width:380px; justify-self:end; }
+  .btt-tools__inner--reversed{
+    grid-template-columns: 1fr 1.3fr;
+  }
+  .btt-tools__inner--reversed .btt-tools__left{ order:2; }
+  .btt-tools__inner--reversed .btt-tools__card-wrap{ order:1; justify-self:start; }
+  .btt-tools__inner--reversed .btt-tools__card{
+    transform:rotateX(4deg) rotateY(4deg);
+  }
+  .btt-tools__heading{ font-size:30px; }
+  .btt-tools__sub{ font-size:15px; }
+  .btt-tools__card{ padding:24px; }
+  .btt-tools__alert{ margin-top:40px; }
+}
+
+/* ===== Small tablet / phone — actual stack point ===== */
+@media (max-width:768px){
+  .btt-tools{ padding:80px 24px; }
+  .btt-tools__inner{
+    grid-template-columns:1fr;
+    gap:48px;
+    display:flex;
+    flex-direction:column;
+  }
+  .btt-tools__heading{ font-size:34px; }
+  .btt-tools__card{ transform:none !important; }
+  .btt-tools__alert{ margin-top:40px; }
+}
+
+/* ===== Swipe dots — mobile only ===== */
+.btt-tools__swipe-dots{
+  display:none;
+  justify-content:flex-start;
+  gap:6px;
+  margin-top:14px;
+  padding:0 2px;
+}
+.btt-tools__swipe-dot{
+  width:18px; height:4px; border-radius:2px;
+  background:rgba(17,24,32,.18);
+  transition:background .2s ease, width .2s ease;
+}
+.btt-tools__swipe-dot.is-active{
+  background:#95C11F; width:24px;
+}
+
+/* ===== Mobile ===== */
+@media (max-width:640px){
+  .btt-tools{ padding:64px 20px; }
+  .btt-tools__heading{ font-size:28px; }
+  .btt-tools__cta{ width:100%; justify-content:center; }
+
+  .btt-tools__card-wrap{ order:1; width:100%; }
+  .btt-tools__left{ order:2; }
+
+  .btt-tools__card{
+    padding:20px 0 16px;
+    background:linear-gradient(160deg, #ffffff 0%, #edf2f4 100%);
+    border-color:rgba(17,24,32,.08);
+  }
+
+  .btt-tools__panels{
+    display:flex !important;
+    flex-direction:row !important;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    gap:12px;
+    padding:0 20px 8px;
+    scroll-padding-left:20px;
+    scrollbar-width:none;
+  }
+  .btt-tools__panels::-webkit-scrollbar{ display:none; }
+  .btt-tools__panel{
+    flex:0 0 82%;
+    scroll-snap-align:start;
+    min-height:200px;
+  }
+
+  .btt-tools__swipe-dots{ display:flex; justify-content:center; padding:0; }
+
+  .btt-tools__result-top{ flex-direction:column; align-items:center; text-align:center; gap:16px; }
+  .btt-tools__result-title{ text-align:center; }
+  .btt-tools__result-body{ text-align:center; }
+  .btt-tools__result-actions{ flex-direction:column; gap:10px; }
+  .btt-tools__result-actions .btt-btn{ width:100%; justify-content:center; }
+  .btt-tools__modal-panel-frame{
+    max-height:80vh;
+    max-height:80dvh;
+    background:#fff;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+  }
+  .btt-tools__modal-panel{
+    padding:32px 20px;
+    max-height:80vh;
+    max-height:80dvh;
+  }
+  .btt-tools__modal-q{ font-size:19px; }
+  .btt-tools__alert{ margin-top:28px; }
+  .btt-tools__scroll-hint{ display:flex; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .btt-tools__card{ transition:none !important; }
+  .btt-tools__card::before, .btt-tools__modal-panel-frame::before{ animation:none; }
+  .btt-tools__modal-backdrop{ transition:none; }
+  .btt-tools__modal-panel-frame{ transition:none; }
+  .btt-tools__modal-panel{ transition:none; }
+  .btt-tools__match-chip.is-active{ animation:none; }
+  #btt-tools-question-screen[data-transitioning="true"]{ transition:none; }
+  .btt-tools__scroll-hint svg{ animation:none; }
+}
+
+/* =====================================================
+   COMING SOON MODAL — shown when a related resource has
+   no download link configured yet. Simple, no form.
+   ===================================================== */
+.btt-tools__soon-modal{
+  position:fixed; inset:0; z-index:600;
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
+}
+.btt-tools__soon-modal.is-open{ pointer-events:auto; }
+.btt-tools__soon-backdrop{
+  position:absolute; inset:0;
+  background:rgba(10,15,20,0);
+  backdrop-filter:blur(0px); -webkit-backdrop-filter:blur(0px);
+  transition:background .35s ease, backdrop-filter .35s ease, -webkit-backdrop-filter .35s ease;
+}
+.btt-tools__soon-modal.is-open .btt-tools__soon-backdrop{
+  background:rgba(10,15,20,.55);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+}
+.btt-tools__soon-panel{
+  position:relative; z-index:1;
+  background:#ffffff;
+  border:1px solid rgba(17,24,32,.10);
+  border-radius:24px;
+  padding:40px;
+  width:min(400px, 92vw);
+  text-align:center;
+  box-shadow:0 24px 64px rgba(17,24,32,.20);
+  opacity:0;
+  transform:translateY(20px) scale(.97);
+  transition:transform .35s cubic-bezier(.23,1,.32,1), opacity .3s ease;
+}
+.btt-tools__soon-modal.is-open .btt-tools__soon-panel{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+.btt-tools__soon-panel .btt-tools__modal-close{
+  position:absolute; top:20px; right:20px;
+}
+.btt-tools__soon-icon{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:52px; height:52px; border-radius:50%;
+  background:rgba(149,193,31,.14); color:#95C11F;
+  margin:0 0 18px;
+}
+.btt-tools__soon-title{
+  font-family:'Titillium Web',sans-serif; font-size:20px; font-weight:700;
+  color:#111820; margin:0 0 10px;
+}
+.btt-tools__soon-body{
+  font-size:14px; color:rgba(17,24,32,.6); line-height:1.55;
+  margin:0 0 26px;
+}
+@media (prefers-reduced-motion:reduce){
+  .btt-tools__soon-backdrop{ transition:none; }
+  .btt-tools__soon-panel{ transition:none; }
+}

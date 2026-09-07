@@ -1,0 +1,434 @@
+/* ══════════════════════════════════════════════════════════════════════
+   ANDATECH — HLTPAT010 COURSE PAGE STYLESHEET
+   ══════════════════════════════════════════════════════════════════════
+
+   Scope: the HLTPAT010 "Instructing Individuals in the Collection of Oral
+   Fluid Specimens" course page. All .at-h010-* and .at-client-* selectors.
+
+   Extracted from andatech-site.css lines 5513–5927 on 2026-09-05.
+
+   Loaded ONCE per section that uses it:
+     - sections/andatech-hltpat010-rto.liquid ("Who's Behind the Program")
+     - sections/andatech-hltpat010-glance.liquid (Course at a Glance)
+     - sections/andatech-client-story.liquid   (Testimonial / Client Story)
+
+   No JavaScript for this module.
+   No cascade dependencies on the rest of andatech-site.css — the module
+   uses design tokens (--nx-*, --at-*) declared in :root, loaded site-wide.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════════════════════
+   HLTPAT010 — "Who's Behind the Program" (RTO card section)
+   ══════════════════════════════════════════════════════════════════════ */
+
+.at-h010-rto {
+  padding: 80px 0;
+}
+
+.at-h010-rto__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.at-h010-rto__card {
+  position: relative;
+  border-radius: var(--at-r-xl);
+  overflow: hidden;
+  background: var(--at-navy);
+  color: var(--at-white);
+  box-shadow: 0 8px 32px rgba(31,41,55,.18);
+  transition:
+    transform .45s var(--at-ease-out),
+    box-shadow .45s var(--at-ease-out);
+}
+.at-h010-rto__card--link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+.at-h010-rto__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 44px rgba(31,41,55,.28);
+}
+.at-h010-rto__card:hover .at-h010-rto__card-media img { transform: scale(1.04); }
+.at-h010-rto__card-media img { transition: transform .6s var(--at-ease-out); }
+
+.at-h010-rto__arrow {
+  display: grid;
+  place-items: center;
+  width: 56px; height: 56px;
+  margin: 20px 0 4px auto;
+  border-radius: 50%;
+  border: 1.5px solid var(--at-green);
+  color: var(--at-green);
+  background: transparent;
+  transition: background .3s var(--at-ease), color .3s var(--at-ease);
+}
+.at-h010-rto__card:hover .at-h010-rto__arrow {
+  background: var(--at-green);
+  color: var(--at-navy);
+}
+
+.at-h010-rto__card-media {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.at-h010-rto__card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.at-h010-rto__card-body {
+  padding: 28px 32px 32px;
+}
+
+.at-h010-rto__card-label {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--at-green);
+  margin: 0 0 8px;
+}
+
+.at-h010-rto__card-title {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 12px;
+  color: var(--at-white);
+}
+
+.at-h010-rto__card-desc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255,255,255,.75);
+}
+.at-h010-rto__card-desc p { margin: 0; }
+
+/* -- overlay variant (image as background, text overlaid) -- */
+.at-h010-rto__card--overlay {
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+}
+.at-h010-rto__card-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.at-h010-rto__card--overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(31,41,55,.15) 0%, rgba(31,41,55,.82) 60%, rgba(31,41,55,.95) 100%);
+  pointer-events: none;
+}
+.at-h010-rto__card-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  flex: 1;
+  padding: 28px 32px 32px;
+}
+.at-h010-rto__card-pill {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.6);
+  margin: 0 0 8px;
+}
+.at-h010-rto__card-text {}
+.at-h010-rto__card--overlay:hover .at-h010-rto__card-bg {
+  transform: scale(1.04);
+}
+.at-h010-rto__card-bg {
+  transition: transform .6s var(--at-ease-out);
+}
+
+@media (max-width: 767px) {
+  .at-h010-rto__inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .at-h010-rto { padding: 48px 0; }
+  .at-h010-rto__card--overlay { min-height: 340px; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   Client Story / Testimonial
+   ══════════════════════════════════════════════════════════════════════ */
+
+.at-client-story {
+  padding: 80px 0;
+}
+.at-client-story__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+.at-client-story__media {
+  border-radius: var(--at-r-xl);
+  overflow: hidden;
+}
+.at-client-story__media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--at-r-xl);
+}
+.at-client-story__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+.at-client-story__logo {
+  max-width: 180px;
+  height: auto;
+  margin-bottom: 24px;
+}
+.at-client-story__client-name {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--at-navy);
+  margin: 0 0 24px;
+}
+.at-client-story__quote {
+  position: relative;
+  margin: 0 0 24px;
+  padding: 0;
+  border: none;
+}
+.at-client-story__mark {
+  display: block;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 64px;
+  font-weight: 700;
+  line-height: .6;
+  color: var(--at-green);
+  opacity: .35;
+  pointer-events: none;
+  user-select: none;
+  margin-bottom: 8px;
+}
+.at-client-story__quote p {
+  margin: 0;
+  font-size: clamp(28px, 3vw, 48px);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -.01em;
+  color: var(--at-navy);
+  font-style: italic;
+}
+.at-client-story__author {
+  margin-bottom: 32px;
+}
+.at-client-story__author-name {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--at-navy);
+  margin: 0 0 2px;
+}
+.at-client-story__author-title {
+  font-size: 14px;
+  color: rgba(31,41,55,.6);
+  margin: 0;
+}
+.at-client-story__stats {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 40px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(31,41,55,.1);
+}
+.at-client-story__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.at-client-story__stat-number {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--at-navy);
+}
+.at-client-story__stat-label {
+  font-size: 14px;
+  line-height: 1.4;
+  color: rgba(31,41,55,.6);
+  max-width: 180px;
+}
+@media (max-width: 767px) {
+  .at-client-story { padding: 48px 0; }
+  .at-client-story__inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .at-client-story__content {
+    text-align: center;
+    align-items: center;
+  }
+  .at-client-story__media img {
+    aspect-ratio: 4 / 3;
+  }
+  .at-client-story__quote { text-align: center; }
+  .at-client-story__author { text-align: center; }
+  .at-client-story__stats {
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  .at-client-story__stat { align-items: center; text-align: center; }
+  .at-client-story__stat-label { text-align: center; }
+  .at-client-story__stat-number { font-size: 26px; }
+  .at-client-story__mark { font-size: 48px; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   HLTPAT010 — Course at a Glance table + Before Enrolling accordion
+   ══════════════════════════════════════════════════════════════════════ */
+
+.at-h010-glance {
+  padding: 80px 0;
+}
+
+.at-h010-glance__header {
+  margin-bottom: 40px;
+}
+
+.at-h010-glance__table {
+  border: 1px solid var(--at-gray-200);
+  border-radius: var(--at-r-xl);
+  overflow: hidden;
+}
+
+.at-h010-glance__row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  border-bottom: 1px solid var(--at-gray-200);
+}
+.at-h010-glance__row:last-child { border-bottom: 0; }
+.at-h010-glance__row:nth-child(even) { background: var(--at-surface-alt); }
+
+.at-h010-glance__label {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--at-navy);
+  padding: 16px 24px;
+  margin: 0;
+}
+
+.at-h010-glance__value {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--at-body-color);
+  padding: 16px 24px;
+  margin: 0;
+}
+.at-h010-glance__value p { margin: 0; }
+
+.at-h010-glance__pending {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #B45309;
+  background: #FEF3C7;
+  border: 1px dashed #D97706;
+  border-radius: var(--at-r-sm);
+  padding: 4px 10px;
+}
+
+/* Before Enrolling */
+
+.at-h010-enroll {
+  margin-top: 48px;
+}
+
+.at-h010-enroll__title {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--at-navy);
+  margin: 0 0 8px;
+}
+
+.at-h010-enroll__desc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--at-body-color);
+  margin: 0 0 24px;
+}
+
+.at-h010-enroll__list {
+  border: 1px solid var(--at-gray-200);
+  border-radius: var(--at-r-xl);
+  overflow: hidden;
+}
+
+.at-h010-enroll__item {
+  border-bottom: 1px solid var(--at-gray-200);
+}
+.at-h010-enroll__item:last-child { border-bottom: 0; }
+
+.at-h010-enroll__summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  cursor: pointer;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--at-navy);
+  list-style: none;
+  user-select: none;
+}
+.at-h010-enroll__summary::-webkit-details-marker { display: none; }
+
+.at-h010-enroll__chevron {
+  flex-shrink: 0;
+  transition: transform .25s ease;
+  color: var(--at-muted);
+}
+.at-h010-enroll__item[open] .at-h010-enroll__chevron {
+  transform: rotate(180deg);
+}
+
+.at-h010-enroll__panel {
+  padding: 0 24px 20px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--at-body-color);
+}
+.at-h010-enroll__panel p { margin: 0; }
+
+@media (max-width: 767px) {
+  .at-h010-glance { padding: 48px 0; }
+  .at-h010-glance__row { grid-template-columns: 1fr; }
+  .at-h010-glance__label { padding-bottom: 4px; }
+  .at-h010-glance__value { padding-top: 0; }
+}
