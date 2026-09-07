@@ -75,7 +75,7 @@
 .at-hero-v3__bottom {
   grid-row: 2;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: 40px;
 }
@@ -143,6 +143,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
+  margin-top: 16px;
 }
 .at-hero-v3__cta .at-btn:focus-visible {
   outline: 3px solid var(--at-white);
