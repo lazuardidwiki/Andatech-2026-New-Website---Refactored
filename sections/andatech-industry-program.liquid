@@ -24,7 +24,7 @@
       <div class="at-industry-tabs__panel{% if forloop.first %} is-active{% endif %}" id="AtProgram{% if panel_name == 'solutions' %}Solutions{% else %}Help{% endif %}-{{ section.id }}" role="tabpanel" {% unless forloop.first %}hidden{% endunless %} data-at-panel="{{ panel_name }}">
         <div class="at-program-grid{% if panel_card_count == 3 %} at-program-grid--3{% endif %}">
           {%- for block in section.blocks -%}{%- if block.settings.tab == panel_name -%}
-            <article class="at-program-card" data-at-rise {{ block.shopify_attributes }}>
+            <article class="at-program-card{% if block.settings.link_url != blank %} is-linkable{% endif %}" data-at-rise {{ block.shopify_attributes }}>
               {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 1000 }}" alt="{{ block.settings.image.alt | default: block.settings.title | escape }}" loading="lazy">{%- endif -%}
               <div class="at-program-card__overlay" aria-hidden="true"></div>
               <div class="at-program-card__content">

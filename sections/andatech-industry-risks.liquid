@@ -36,7 +36,7 @@
         <div class="at-industry-card-grid at-industry-card-grid--{{ grid_count }}">
           {%- for block in section.blocks -%}
             {%- if block.settings.tab == tab_id -%}
-              <article class="at-industry-card" data-at-rise {{ block.shopify_attributes }}>
+              <article class="at-industry-card{% if block.settings.link_url != blank %} is-linkable{% endif %}" data-at-rise {{ block.shopify_attributes }}>
                 {%- if block.settings.image != blank -%}<img class="at-industry-card__image" src="{{ block.settings.image | image_url: width: 900 }}" alt="{{ block.settings.image.alt | default: block.settings.title | escape }}" loading="lazy">{%- endif -%}
                 <div class="at-industry-card__shade" aria-hidden="true"></div>
                 {%- assign block_title_tag = block.settings.title_tag | default: 'h4' -%}
@@ -45,6 +45,7 @@
                   <{{ block_title_tag }}>{{ block.settings.title | escape }}</{{ block_title_tag }}>
                   {%- if block.settings.desc != blank -%}<div>{{ block.settings.desc }}</div>{%- endif -%}
                 </div>
+                {%- if block.settings.link_url != blank -%}<a class="at-industry-card__link" href="{{ block.settings.link_url }}" aria-label="{{ block.settings.title | escape }}"></a>{%- endif -%}
               </article>
             {%- endif -%}
           {%- endfor -%}
@@ -140,7 +141,8 @@
         ],
         "default": "h4"
       },
-      { "type": "richtext", "id": "desc", "label": "Description", "default": "<p>Testing needs to remain consistent as workers move between projects, crews and sites.</p>" }
+      { "type": "richtext", "id": "desc", "label": "Description", "default": "<p>Testing needs to remain consistent as workers move between projects, crews and sites.</p>" },
+      { "type": "url", "id": "link_url", "label": "Card link (optional)", "info": "When set, the whole card becomes a link and the image hover effect is enabled." }
     ] }
   ],
   "presets": [{ "name": "Industry Risks", "blocks": [
