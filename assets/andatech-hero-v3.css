@@ -1,0 +1,213 @@
+/* ══════════════════════════════════════════════════════════════════════
+   ANDATECH — HERO V3
+   Rounded-card hero with swappable image/video background, Navy gradient
+   overlay, left-aligned content + bottom-right accreditation strip.
+   Isolated from V1/V2 via .at-hero-v3 namespace.
+   ══════════════════════════════════════════════════════════════════════ */
+
+.at-hero-v3 {
+  position: relative;
+  padding-block: 24px;
+  background: var(--at-white);
+}
+
+.at-hero-v3__card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 40px;
+  /* Design frame: 1632 × 877 → 877/1632 = 53.74% */
+  min-height: clamp(560px, 53.74vw, 877px);
+  color: var(--at-white);
+  isolation: isolate;
+}
+
+/* ── Media layer ────────────────────────────────────────── */
+.at-hero-v3__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.at-hero-v3__media img,
+.at-hero-v3__media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* ── Gradient overlay ───────────────────────────────────── */
+/* Figma dev-mode value: linear-gradient(34deg, #1F2937 21.96%, #FFF 96.96%)
+   with background-blend-mode: multiply against the media below.
+   Implemented here with mix-blend-mode so it works over <video> too. */
+.at-hero-v3__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(34deg, #1F2937 21.96%, #FFFFFF 96.96%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* Contrast floor: on very light media the multiply overlay alone may not
+   hit WCAG AA under the copy. This second overlay adds a subtle navy
+   wash on the copy side only. */
+.at-hero-v3__overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(31,41,55,.35) 0%, rgba(31,41,55,0) 55%);
+  mix-blend-mode: normal;
+}
+
+/* ── Inner content wrapper ──────────────────────────────── */
+.at-hero-v3__inner {
+  position: relative;
+  z-index: 2;
+  min-height: inherit;
+  padding: 48px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 24px;
+}
+
+/* Top block: eyebrow + heading */
+.at-hero-v3__top {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 900px;
+}
+
+/* Bottom block: body/CTAs on the left, certs pinned bottom-right */
+.at-hero-v3__bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+}
+.at-hero-v3__bottom-left {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 640px;
+}
+
+/* ── Typography ─────────────────────────────────────────── */
+.at-hero-v3__eyebrow {
+  margin: 0;
+  font-family: "Din Pro", "Titillium Web", system-ui, sans-serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(11px, .93vw, 14px);
+  line-height: 1.5;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--at-white);
+}
+
+.at-hero-v3__title {
+  margin: 0;
+  font-family: "Titillium Web", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(36px, 4.05vw, 70px);
+  line-height: 1.05;
+  letter-spacing: -.01em;
+  color: var(--at-white);
+  text-wrap: balance;
+}
+.at-hero-v3__title-accent {
+  color: var(--at-green);
+}
+
+.at-hero-v3__body {
+  margin: 0;
+  font-family: "Titillium Web", system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(16px, 1.11vw, 20px);
+  line-height: 1.5;
+  color: var(--at-white);
+  max-width: 560px;
+}
+.at-hero-v3__body > p { margin: 0; color: inherit; font: inherit; }
+.at-hero-v3__body > p + p { margin-top: 12px; }
+
+/* ── CTAs ────────────────────────────────────────────────── */
+.at-hero-v3__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.at-hero-v3__cta .at-btn:focus-visible {
+  outline: 3px solid var(--at-white);
+  outline-offset: 3px;
+}
+
+/* ── Accreditation strip (desktop: bottom-right) ────────── */
+.at-hero-v3__certs {
+  flex: 0 0 auto;
+  height: 120px;
+  width: auto;
+  max-width: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: right bottom;
+}
+
+/* ── Reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .at-hero-v3__media video { display: none; }
+  .at-hero-v3__media img.at-hero-v3__poster { display: block; }
+}
+
+/* ── Tablet ─────────────────────────────────────────────── */
+@media (max-width: 1279px) {
+  .at-hero-v3__inner { padding: 40px; gap: 20px; }
+  .at-hero-v3__certs { height: 96px; }
+}
+
+/* ── Mobile ─────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .at-hero-v3 { padding-block: 12px; }
+  .at-hero-v3__card {
+    border-radius: 28px;
+    min-height: clamp(560px, 130vw, 780px);
+  }
+  .at-hero-v3__inner {
+    padding: 32px 24px;
+    grid-template-rows: 1fr auto;
+    gap: 24px;
+    text-align: center;
+  }
+  .at-hero-v3__top {
+    max-width: none;
+    align-items: center;
+    margin-inline: auto;
+    margin-top: 32px;
+  }
+  .at-hero-v3__bottom {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  .at-hero-v3__bottom-left {
+    max-width: none;
+    align-items: center;
+    width: 100%;
+    gap: 24px;
+  }
+  .at-hero-v3__body { max-width: none; margin-inline: auto; }
+  .at-hero-v3__cta { justify-content: center; }
+  .at-hero-v3__cta .at-btn { width: 100%; max-width: 320px; }
+  .at-hero-v3__certs {
+    height: 72px;
+    object-position: center bottom;
+    margin-inline: auto;
+  }
+  /* On mobile the multiply blend can leave the top too light for the
+     centred copy — strengthen the wash across the whole area. */
+  .at-hero-v3__overlay::after {
+    background: linear-gradient(180deg, rgba(31,41,55,.55) 0%, rgba(31,41,55,.35) 100%);
+  }
+}
