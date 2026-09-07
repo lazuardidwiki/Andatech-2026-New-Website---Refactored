@@ -41,12 +41,13 @@
   z-index: 0;
   pointer-events: none;
 }
-/* Round the media and overlay themselves so the card stays rounded on
-   Safari/iPadOS even when the parent's overflow-clip misfires against
-   children that use mix-blend-mode. */
+/* Round + clip at EVERY layer. iOS Safari's overflow-hidden + border-radius
+   combo does not reliably clip absolutely-positioned <img>/<video> children
+   or elements with mix-blend-mode, so each layer clips its own children. */
 .at-hero-v3__media,
 .at-hero-v3__overlay {
   border-radius: inherit;
+  overflow: hidden;
 }
 .at-hero-v3__media img,
 .at-hero-v3__media video {
@@ -55,6 +56,7 @@
   object-fit: cover;
   object-position: center;
   display: block;
+  border-radius: inherit;
 }
 
 /* ── Gradient overlay ───────────────────────────────────── */
