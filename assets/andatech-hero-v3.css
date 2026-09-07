@@ -15,17 +15,23 @@
 }
 
 .at-hero-v3__card {
+  /* Radius controlled per breakpoint via this variable so border-radius
+     and clip-path stay in sync — override the variable, not both props. */
+  --at-hero-v3-radius: 24px;
+
   position: relative;
   overflow: hidden;
-  border-radius: 24px;
+  border-radius: var(--at-hero-v3-radius);
+  /* Belt & braces for iOS Safari: overflow+border-radius alone doesn't
+     reliably clip children that use mix-blend-mode (see the overlay), so
+     we also apply an explicit clip-path. clip-path clips descendants
+     unconditionally, regardless of blend modes or compositing quirks. */
+  clip-path: inset(0 round var(--at-hero-v3-radius));
+
   /* Design frame: 1632 × 877 → 877/1632 = 53.74% */
   min-height: clamp(560px, 53.74vw, 877px);
   color: var(--at-white);
   isolation: isolate;
-  /* Safari/iPadOS: force GPU compositing so absolutely-positioned children
-     with mix-blend-mode clip to the parent border-radius. Without this the
-     card can render with square corners on iPad Pro. */
-  transform: translateZ(0);
 }
 
 /* ── Media layer ────────────────────────────────────────── */
@@ -195,6 +201,7 @@
 
 /* ── Tablet ─────────────────────────────────────────────── */
 @media (max-width: 1279px) {
+  .at-hero-v3__card { --at-hero-v3-radius: 24px; }
   .at-hero-v3__inner { padding: 40px; gap: 20px; }
   .at-hero-v3__certs { height: 96px; }
 }
@@ -203,7 +210,7 @@
 @media (max-width: 767px) {
   .at-hero-v3 { padding-block: 12px; }
   .at-hero-v3__card {
-    border-radius: 28px;
+    --at-hero-v3-radius: 20px;
     min-height: clamp(560px, 130vw, 780px);
   }
   .at-hero-v3__inner {
