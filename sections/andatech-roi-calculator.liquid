@@ -74,11 +74,13 @@
     <div class="at-roi-banner__card" data-at-rise>
 
       <div class="at-roi-banner__content">
+        {%- assign eyebrow_tag = section.settings.eyebrow_tag | default: 'h2' -%}
+        {%- assign title_tag = section.settings.title_tag | default: 'h3' -%}
         {%- if section.settings.eyebrow != blank -%}
-          <p class="at-roi__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+          <{{ eyebrow_tag }} class="at-roi__eyebrow">{{ section.settings.eyebrow | escape }}</{{ eyebrow_tag }}>
         {%- endif -%}
         {%- if section.settings.title != blank -%}
-          <h2 class="at-roi__title">{{ section.settings.title }}</h2>
+          <{{ title_tag }} class="at-roi__title">{{ section.settings.title }}</{{ title_tag }}>
         {%- endif -%}
         {%- if section.settings.desc != blank -%}
           <div class="at-roi__desc">{{ section.settings.desc }}</div>
@@ -126,10 +128,11 @@
     {%- comment -%} Header — stays fixed while the body scrolls. {%- endcomment -%}
     <div class="at-roi-modal__head">
       <div>
-        <h3 class="at-roi-modal__title"
+        {%- assign modal_title_tag = section.settings.modal_title_tag | default: 'h3' -%}
+        <{{ modal_title_tag }} class="at-roi-modal__title"
             id="at-roi-modal-title-{{ section.id }}">
           {{ section.settings.modal_title }}
-        </h3>
+        </{{ modal_title_tag }}>
         {%- if section.settings.modal_sub != blank -%}
           <p class="at-roi-modal__sub">{{ section.settings.modal_sub | escape }}</p>
         {%- endif -%}
@@ -730,8 +733,28 @@
   "class": "at-section",
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "ROI Calculator" },
+    { "type": "select", "id": "eyebrow_tag", "label": "Eyebrow HTML Tag",
+      "options": [
+        { "value": "p",  "label": "Paragraph (p)" },
+        { "value": "h1", "label": "Heading 1 (h1)" },
+        { "value": "h2", "label": "Heading 2 (h2)" },
+        { "value": "h3", "label": "Heading 3 (h3)" },
+        { "value": "h4", "label": "Heading 4 (h4)" },
+        { "value": "h5", "label": "Heading 5 (h5)" },
+        { "value": "h6", "label": "Heading 6 (h6)" }
+      ], "default": "h2" },
     { "type": "html", "id": "title", "label": "Heading", "info": "Wrap words in <strong> for the bold line.",
       "default": "What could a Managed Program <strong>save you?</strong>" },
+    { "type": "select", "id": "title_tag", "label": "Heading HTML Tag",
+      "options": [
+        { "value": "p",  "label": "Paragraph (p)" },
+        { "value": "h1", "label": "Heading 1 (h1)" },
+        { "value": "h2", "label": "Heading 2 (h2)" },
+        { "value": "h3", "label": "Heading 3 (h3)" },
+        { "value": "h4", "label": "Heading 4 (h4)" },
+        { "value": "h5", "label": "Heading 5 (h5)" },
+        { "value": "h6", "label": "Heading 6 (h6)" }
+      ], "default": "h3" },
     { "type": "richtext", "id": "desc", "label": "Caption",
       "default": "<p>Assess your program readiness and then use your own costs to estimate the potential return of bringing testing in-house.</p>" },
     { "type": "image_picker", "id": "banner_image", "label": "Banner image",
@@ -741,6 +764,16 @@
     { "type": "header", "content": "Overlay" },
     { "type": "html", "id": "modal_title", "label": "Overlay heading",
       "default": "What could a Managed Program save you?" },
+    { "type": "select", "id": "modal_title_tag", "label": "Overlay Heading HTML Tag",
+      "options": [
+        { "value": "p",  "label": "Paragraph (p)" },
+        { "value": "h1", "label": "Heading 1 (h1)" },
+        { "value": "h2", "label": "Heading 2 (h2)" },
+        { "value": "h3", "label": "Heading 3 (h3)" },
+        { "value": "h4", "label": "Heading 4 (h4)" },
+        { "value": "h5", "label": "Heading 5 (h5)" },
+        { "value": "h6", "label": "Heading 6 (h6)" }
+      ], "default": "h3" },
     { "type": "text", "id": "modal_sub", "label": "Overlay subheading",
       "default": "Two steps — readiness, then your numbers. Results update live." },
     { "type": "text", "id": "close_label", "label": "Close button label", "info": "For screen readers.", "default": "Close calculator" },
