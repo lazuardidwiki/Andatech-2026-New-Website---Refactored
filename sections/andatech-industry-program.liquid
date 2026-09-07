@@ -32,8 +32,9 @@
                 {%- if block.settings.kicker != blank -%}<span>{{ block.settings.kicker | escape }}</span>{%- endif -%}
                 <{{ block_title_tag }}>{{ block.settings.title | escape }}</{{ block_title_tag }}>
                 {%- if block.settings.desc != blank -%}<div>{{ block.settings.desc }}</div>{%- endif -%}
-                {%- if block.settings.link_label != blank -%}<a href="{{ block.settings.link_url | default: '#' }}">{{ block.settings.link_label | escape }} <span aria-hidden="true">↗</span></a>{%- endif -%}
+                {%- if block.settings.link_label != blank -%}<a class="at-program-card__cta" href="{{ block.settings.link_url | default: '#' }}">{{ block.settings.link_label | escape }} <span aria-hidden="true">↗</span></a>{%- endif -%}
               </div>
+              {%- if block.settings.link_url != blank -%}<a class="at-program-card__link" href="{{ block.settings.link_url }}" aria-label="{{ block.settings.title | escape }}"></a>{%- endif -%}
             </article>
           {%- endif -%}{%- endfor -%}
         </div>
