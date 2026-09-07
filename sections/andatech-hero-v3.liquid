@@ -18,6 +18,9 @@
   assign media_alt     = section.settings.media_alt
   assign certs         = section.settings.certs_image
   assign certs_alt     = section.settings.certs_alt
+  assign eyebrow_tag   = section.settings.eyebrow_tag | default: 'h1'
+  assign heading_tag   = section.settings.heading_tag | default: 'h2'
+  assign body_tag      = section.settings.body_tag    | default: 'div'
 -%}
 
 <section class="at-hero-v3" id="{{ section.settings.anchor_id | default: section.id | handleize }}">
@@ -74,22 +77,22 @@
 
         <div class="at-hero-v3__bottom">
           {%- if section.settings.eyebrow != blank -%}
-            <h1 class="at-hero-v3__eyebrow">{{ section.settings.eyebrow | escape }}</h1>
+            <{{ eyebrow_tag }} class="at-hero-v3__eyebrow">{{ section.settings.eyebrow | escape }}</{{ eyebrow_tag }}>
           {%- endif -%}
 
           {%- if section.settings.heading != blank or section.settings.heading_accent != blank -%}
-            <h2 class="at-hero-v3__title">
+            <{{ heading_tag }} class="at-hero-v3__title">
               {%- if section.settings.heading != blank -%}
                 {{ section.settings.heading | escape }}
               {%- endif -%}
               {%- if section.settings.heading_accent != blank -%}
                 {% if section.settings.heading != blank %} {% endif %}<span class="at-hero-v3__title-accent">{{ section.settings.heading_accent | escape }}</span>
               {%- endif -%}
-            </h2>
+            </{{ heading_tag }}>
           {%- endif -%}
 
           {%- if section.settings.body != blank -%}
-            <div class="at-hero-v3__body">{{ section.settings.body }}</div>
+            <{{ body_tag }} class="at-hero-v3__body">{{ section.settings.body }}</{{ body_tag }}>
           {%- endif -%}
 
           {%- comment -%} ── Actions row: CTAs (left) + certs (right), same eye level ── {%- endcomment -%}
@@ -188,15 +191,43 @@
     {
       "type": "text",
       "id": "eyebrow",
-      "label": "Eyebrow (H1)",
-      "info": "Small uppercase caption above the heading. Rendered as the page H1 for document semantics.",
+      "label": "Eyebrow",
+      "info": "Small uppercase caption above the heading.",
       "default": "Workplace Safety & Health Compliance"
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_tag",
+      "label": "Eyebrow HTML tag",
+      "info": "Choose the semantic tag. Use H1 if this hero is the page's top-level introduction.",
+      "options": [
+        { "value": "p",  "label": "Paragraph (p)" },
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ],
+      "default": "h1"
     },
     {
       "type": "text",
       "id": "heading",
-      "label": "Main heading (H2)",
+      "label": "Main heading",
       "default": "Drug & Alcohol Testing For Workplaces."
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading HTML tag",
+      "info": "Choose the semantic tag. Keep the page's document outline in mind (only one H1 per page).",
+      "options": [
+        { "value": "p",  "label": "Paragraph (p)" },
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ],
+      "default": "h2"
     },
     {
       "type": "text",
@@ -210,6 +241,17 @@
       "id": "body",
       "label": "Body",
       "default": "<p>Testing devices, NATA-accredited calibration, reporting, training and audit readiness. Delivered as one managed program, or buy the equipment outright and run it yourself.</p>"
+    },
+    {
+      "type": "select",
+      "id": "body_tag",
+      "label": "Body container tag",
+      "info": "The outer wrapper for the body copy. Leave as div — rich-text content already emits its own <p> tags, so wrapping in <p> would nest invalidly.",
+      "options": [
+        { "value": "div",     "label": "div (default)" },
+        { "value": "section", "label": "section" }
+      ],
+      "default": "div"
     },
     {
       "type": "header",
