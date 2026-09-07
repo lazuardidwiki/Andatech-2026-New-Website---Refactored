@@ -72,25 +72,23 @@
       {%- comment -%} ── Content ──────────────────────────────────── {%- endcomment -%}
       <div class="at-hero-v3__inner">
 
-        <div class="at-hero-v3__top">
-          {%- if section.settings.eyebrow != blank -%}
-            <h1 class="at-hero-v3__eyebrow">{{ section.settings.eyebrow | escape }}</h1>
-          {%- endif -%}
-
-          {%- if section.settings.heading != blank or section.settings.heading_accent != blank -%}
-            <h2 class="at-hero-v3__title">
-              {%- if section.settings.heading != blank -%}
-                {{ section.settings.heading | escape }}
-              {%- endif -%}
-              {%- if section.settings.heading_accent != blank -%}
-                {% if section.settings.heading != blank %} {% endif %}<span class="at-hero-v3__title-accent">{{ section.settings.heading_accent | escape }}</span>
-              {%- endif -%}
-            </h2>
-          {%- endif -%}
-        </div>
-
         <div class="at-hero-v3__bottom">
           <div class="at-hero-v3__bottom-left">
+            {%- if section.settings.eyebrow != blank -%}
+              <h1 class="at-hero-v3__eyebrow">{{ section.settings.eyebrow | escape }}</h1>
+            {%- endif -%}
+
+            {%- if section.settings.heading != blank or section.settings.heading_accent != blank -%}
+              <h2 class="at-hero-v3__title">
+                {%- if section.settings.heading != blank -%}
+                  {{ section.settings.heading | escape }}
+                {%- endif -%}
+                {%- if section.settings.heading_accent != blank -%}
+                  {% if section.settings.heading != blank %} {% endif %}<span class="at-hero-v3__title-accent">{{ section.settings.heading_accent | escape }}</span>
+                {%- endif -%}
+              </h2>
+            {%- endif -%}
+
             {%- if section.settings.body != blank -%}
               <div class="at-hero-v3__body">{{ section.settings.body }}</div>
             {%- endif -%}

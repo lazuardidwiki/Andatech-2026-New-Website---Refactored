@@ -68,20 +68,12 @@
   min-height: inherit;
   padding: 48px;
   display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: 24px;
+  grid-template-rows: 1fr auto;
 }
 
-/* Top block: eyebrow + heading */
-.at-hero-v3__top {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  max-width: 900px;
-}
-
-/* Bottom block: body/CTAs on the left, certs pinned bottom-right */
+/* Bottom block: full copy stack on the left, certs pinned bottom-right */
 .at-hero-v3__bottom {
+  grid-row: 2;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -90,17 +82,17 @@
 .at-hero-v3__bottom-left {
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  max-width: 640px;
+  gap: 24px;
+  max-width: 900px;
 }
 
 /* ── Typography ─────────────────────────────────────────── */
 .at-hero-v3__eyebrow {
   margin: 0;
-  font-family: "Din Pro", "Titillium Web", system-ui, sans-serif;
-  font-weight: 400;
-  font-style: italic;
-  font-size: clamp(11px, .93vw, 14px);
+  font-family: "Titillium Web", system-ui, sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  font-size: clamp(12px, .93vw, 16px);
   line-height: 1.5;
   letter-spacing: .16em;
   text-transform: uppercase;
@@ -194,14 +186,7 @@
   .at-hero-v3__inner {
     padding: 32px 24px;
     grid-template-rows: 1fr auto;
-    gap: 24px;
     text-align: center;
-  }
-  .at-hero-v3__top {
-    max-width: none;
-    align-items: center;
-    margin-inline: auto;
-    margin-top: 32px;
   }
   .at-hero-v3__bottom {
     flex-direction: column;
@@ -212,7 +197,7 @@
     max-width: none;
     align-items: center;
     width: 100%;
-    gap: 24px;
+    gap: 20px;
   }
   .at-hero-v3__body { max-width: none; margin-inline: auto; }
   .at-hero-v3__cta { justify-content: center; }
