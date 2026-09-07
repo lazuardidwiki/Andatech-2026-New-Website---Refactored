@@ -20,12 +20,14 @@
   <div class="at-shell at-h010-rto__inner">
     <div class="at-h010-rto__text">
       {%- if section.settings.eyebrow != blank -%}
-        <p class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>
+        {%- assign eyebrow_tag = section.settings.eyebrow_tag | default: 'h2' -%}
+        <{{ eyebrow_tag }} class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</{{ eyebrow_tag }}>
       {%- endif -%}
-      <h2 class="at-industry__title" data-at-rise>
+      {%- assign heading_tag = section.settings.heading_tag | default: 'h3' -%}
+      <{{ heading_tag }} class="at-industry__title" data-at-rise>
         {{ section.settings.heading | escape }}
         {%- if section.settings.heading_bold != blank -%}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{%- endif -%}
-      </h2>
+      </{{ heading_tag }}>
       {%- if section.settings.body != blank -%}
         <div class="at-industry__desc" data-at-rise>{{ section.settings.body }}</div>
       {%- endif -%}
@@ -45,7 +47,8 @@
         {%- endif -%}
         <div class="at-h010-rto__card-text">
           {%- if section.settings.card_title != blank -%}
-            <h3 class="at-h010-rto__card-title">{{ section.settings.card_title | escape }}</h3>
+            {%- assign card_title_tag = section.settings.card_title_tag | default: 'h4' -%}
+            <{{ card_title_tag }} class="at-h010-rto__card-title">{{ section.settings.card_title | escape }}</{{ card_title_tag }}>
           {%- endif -%}
           {%- if section.settings.card_body != blank -%}
             <div class="at-h010-rto__card-desc">{{ section.settings.card_body }}</div>
@@ -68,13 +71,58 @@
     { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "whos-behind" },
     { "type": "header", "content": "Left column" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "WHO'S BEHIND THE PROGRAM" },
+    {
+      "type": "select",
+      "id": "eyebrow_tag",
+      "label": "Eyebrow HTML Tag",
+      "options": [
+        { "value": "p",  "label": "Paragraph (p)" },
+        { "value": "h1", "label": "Heading 1 (h1)" },
+        { "value": "h2", "label": "Heading 2 (h2)" },
+        { "value": "h3", "label": "Heading 3 (h3)" },
+        { "value": "h4", "label": "Heading 4 (h4)" },
+        { "value": "h5", "label": "Heading 5 (h5)" },
+        { "value": "h6", "label": "Heading 6 (h6)" }
+      ],
+      "default": "h2"
+    },
     { "type": "text", "id": "heading", "label": "Heading (light)", "default": "A nationally recognised" },
     { "type": "text", "id": "heading_bold", "label": "Heading (bold)", "default": "training partner" },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading HTML Tag",
+      "options": [
+        { "value": "p",  "label": "Paragraph (p)" },
+        { "value": "h1", "label": "Heading 1 (h1)" },
+        { "value": "h2", "label": "Heading 2 (h2)" },
+        { "value": "h3", "label": "Heading 3 (h3)" },
+        { "value": "h4", "label": "Heading 4 (h4)" },
+        { "value": "h5", "label": "Heading 5 (h5)" },
+        { "value": "h6", "label": "Heading 6 (h6)" }
+      ],
+      "default": "h3"
+    },
     { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Andatech is an authorised third-party provider delivering specified services on behalf of METEX Solutions Pty Ltd.</p>" },
     { "type": "header", "content": "Right card" },
     { "type": "image_picker", "id": "card_image", "label": "Card background image" },
     { "type": "text", "id": "card_label", "label": "Card label", "default": "RESPONSIBLE RTO" },
     { "type": "text", "id": "card_title", "label": "Card title", "default": "METEX Solutions Pty Ltd" },
+    {
+      "type": "select",
+      "id": "card_title_tag",
+      "label": "Card title HTML Tag",
+      "options": [
+        { "value": "p",  "label": "Paragraph (p)" },
+        { "value": "h1", "label": "Heading 1 (h1)" },
+        { "value": "h2", "label": "Heading 2 (h2)" },
+        { "value": "h3", "label": "Heading 3 (h3)" },
+        { "value": "h4", "label": "Heading 4 (h4)" },
+        { "value": "h5", "label": "Heading 5 (h5)" },
+        { "value": "h6", "label": "Heading 6 (h6)" }
+      ],
+      "default": "h4"
+    },
     { "type": "richtext", "id": "card_body", "label": "Card body", "default": "<p>HLTPAT010 nationally recognised training advertised through Andatech is offered and issued by METEX Solutions Pty Ltd RTO 46448.</p>" },
     { "type": "url", "id": "card_url", "label": "Card link", "info": "Optional. When set, the whole card becomes clickable and an arrow badge appears bottom-right. External URLs open in a new tab." }
   ],
