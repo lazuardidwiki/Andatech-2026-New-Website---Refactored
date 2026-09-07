@@ -118,7 +118,20 @@
   text-wrap: balance;
 }
 .at-hero-v3__title-accent {
-  color: var(--at-green);
+  font-weight: 700;
+  padding-bottom: .1em;
+  background: linear-gradient(90deg, var(--at-green) 0%, var(--at-teal) 50%, var(--at-green) 100%);
+  background-size: 300% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: at-hero-v3-accent-shift 4s ease-in-out infinite alternate;
+}
+@keyframes at-hero-v3-accent-shift {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 
 .at-hero-v3__body {
@@ -159,6 +172,10 @@
 @media (prefers-reduced-motion: reduce) {
   .at-hero-v3__media video { display: none; }
   .at-hero-v3__media img.at-hero-v3__poster { display: block; }
+  .at-hero-v3__title-accent {
+    animation: none;
+    background-position: 0% 50%;
+  }
 }
 
 /* ── Tablet ─────────────────────────────────────────────── */
