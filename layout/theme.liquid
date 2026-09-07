@@ -43,8 +43,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     
     {% render 'meta-tags' %}
 
-    <meta property="og:image" content="{{ product | image_url: width: 1200 | prepend: 'https:' }}">
-    
     {%- render 'doc-head-core' -%}
     {%- render 'doc-head-social' -%}
 

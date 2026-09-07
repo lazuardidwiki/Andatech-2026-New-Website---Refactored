@@ -46,8 +46,10 @@
         <div class="at-device-intro__signal" aria-hidden="true">
           <span></span><span></span><span></span><span></span>
         </div>
-        <p class="at-device__eyebrow">{{ section.settings.eyebrow | escape }}</p>
-        <h2 class="at-device__title" id="at-device-title-{{ section.id }}">{{ section.settings.heading }}</h2>
+        {%- assign eyebrow_tag = section.settings.eyebrow_tag | default: 'h2' -%}
+        {%- assign heading_tag = section.settings.heading_tag | default: 'h3' -%}
+        <{{ eyebrow_tag }} class="at-device__eyebrow">{{ section.settings.eyebrow | escape }}</{{ eyebrow_tag }}>
+        <{{ heading_tag }} class="at-device__title" id="at-device-title-{{ section.id }}">{{ section.settings.heading }}</{{ heading_tag }}>
         <div class="at-device__lede">{{ section.settings.intro }}</div>
         <ul class="at-device-intro__facts" aria-label="Device finder details">
           <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Less than 60 seconds</li>
@@ -207,7 +209,27 @@
   "class": "at-section at-section--overlay-only",
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Find Your Device" },
-    { "type": "html", "id": "heading", "label": "H2 — Heading", "default": "Let’s find the right testing device for <strong>your needs.</strong>" },
+    { "type": "select", "id": "eyebrow_tag", "label": "Eyebrow HTML Tag",
+      "options": [
+        { "value": "p",  "label": "Paragraph (p)" },
+        { "value": "h1", "label": "Heading 1 (h1)" },
+        { "value": "h2", "label": "Heading 2 (h2)" },
+        { "value": "h3", "label": "Heading 3 (h3)" },
+        { "value": "h4", "label": "Heading 4 (h4)" },
+        { "value": "h5", "label": "Heading 5 (h5)" },
+        { "value": "h6", "label": "Heading 6 (h6)" }
+      ], "default": "h2" },
+    { "type": "html", "id": "heading", "label": "Heading", "default": "Let’s find the right testing device for <strong>your needs.</strong>" },
+    { "type": "select", "id": "heading_tag", "label": "Heading HTML Tag",
+      "options": [
+        { "value": "p",  "label": "Paragraph (p)" },
+        { "value": "h1", "label": "Heading 1 (h1)" },
+        { "value": "h2", "label": "Heading 2 (h2)" },
+        { "value": "h3", "label": "Heading 3 (h3)" },
+        { "value": "h4", "label": "Heading 4 (h4)" },
+        { "value": "h5", "label": "Heading 5 (h5)" },
+        { "value": "h6", "label": "Heading 6 (h6)" }
+      ], "default": "h3" },
     { "type": "richtext", "id": "intro", "label": "Introduction", "default": "<p>Answer four quick questions and we’ll recommend the most suitable place to start.</p>" },
     { "type": "text", "id": "start_label", "label": "Start button", "default": "Start Device Finder" },
     { "type": "text", "id": "intro_note", "label": "Intro note", "default": "No contact details are required to see your result." },

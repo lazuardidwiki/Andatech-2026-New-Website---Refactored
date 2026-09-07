@@ -1,0 +1,145 @@
+{%- comment -%} Andatech Hero V5: scoped card marquee and mobile carousel. {%- endcomment -%}
+{{ 'andatech-site.css' | asset_url | stylesheet_tag }}
+{{ 'andatech-hero-v5.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'andatech-site.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'andatech-hero-v5.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign certs = section.settings.certs_image
+  assign eyebrow_tag = section.settings.eyebrow_tag | default: 'h2'
+  assign heading_tag = section.settings.heading_tag | default: 'h3'
+  assign heading_markup = section.settings.heading | replace: '</p><p>', '<br>' | remove: '<p>' | remove: '</p>'
+-%}
+<section class="at-hero-v5" id="{{ section.settings.anchor_id | default: section.id | handleize }}" data-at-hero-v5 data-autoplay="{{ section.settings.autoplay_seconds | times: 1000 }}">
+  {%- if section.blocks.size > 0 -%}
+    <div class="at-hero-v5__mobile-carousel" data-at-v5-carousel aria-label="Hero image carousel">
+      <div class="at-hero-v5__mobile-track">
+        {%- for repetition in (1..3) -%}
+          {%- for block in section.blocks -%}
+            {%- assign image = block.settings.image -%}
+            {%- if image != blank -%}
+              <div class="at-hero-v5__mobile-card" data-at-v5-slide data-slide-index="{{ forloop.index0 }}"{% if repetition != 2 %} aria-hidden="true"{% else %} role="button" tabindex="0" aria-label="Show hero image {{ forloop.index }}" {{ block.shopify_attributes }}{% endif %}>
+                <picture>
+                  <source media="(max-width: 1023px)" srcset="{{ image | image_url: width: 160 }} 160w, {{ image | image_url: width: 256 }} 256w, {{ image | image_url: width: 384 }} 384w" sizes="124px">
+                  <img src="{{ image | image_url: width: 32 }}" alt="{% if repetition == 2 %}{{ block.settings.alt | default: image.alt | escape }}{% endif %}" width="{{ image.width }}" height="{{ image.height }}" loading="{% if repetition == 2 and forloop.index <= 3 %}eager{% else %}lazy{% endif %}" decoding="async"{% if repetition == 2 and forloop.index <= 3 %} fetchpriority="high"{% endif %}>
+                </picture>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div>
+    <noscript><style>.at-hero-v5__mobile-carousel{opacity:1!important;pointer-events:auto!important}</style></noscript>
+  {%- endif -%}
+
+  <div class="at-hero-v5__layout">
+    <div class="at-hero-v5__left">
+      <div class="at-hero-v5__copy">
+        {%- if section.settings.eyebrow != blank -%}<{{ eyebrow_tag }} class="at-hero-v5__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</{{ eyebrow_tag }}>{%- endif -%}
+        {%- if section.settings.heading != blank -%}<{{ heading_tag }} class="at-hero-v5__title"><span data-at-rise>{{ heading_markup }}</span></{{ heading_tag }}>{%- endif -%}
+        {%- if section.settings.body != blank -%}<div class="at-hero-v5__body" data-at-rise>{{ section.settings.body }}</div>{%- endif -%}
+        {%- if section.settings.cta1_label != blank or section.settings.cta2_label != blank -%}
+          <div class="at-hero-v5__cta" data-at-rise>
+            {%- if section.settings.cta1_label != blank -%}
+              <a class="at-btn at-btn--green" href="{{ section.settings.cta1_link | default: '#' }}">{{ section.settings.cta1_label | escape }}<i class="at-btn__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>
+            {%- endif -%}
+            {%- if section.settings.cta2_label != blank -%}
+              <a class="at-btn at-btn--outline-dark" href="{{ section.settings.cta2_link | default: '#' }}"{% if section.settings.cta2_label contains 'Find Your Device' %} data-at-device-open{% endif %}>{{ section.settings.cta2_label | escape }}</a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.trust_line != blank or certs != blank -%}
+        <div class="at-hero-v5__trust-group" data-at-rise>
+          {%- if section.settings.trust_line != blank -%}<p class="at-hero-v5__trust">{{ section.settings.trust_line | escape }}</p>{%- endif -%}
+          {%- if certs != blank -%}<img class="at-hero-v5__certs" src="{{ certs | image_url: width: 696 }}" srcset="{{ certs | image_url: width: 348 }} 348w, {{ certs | image_url: width: 696 }} 696w" sizes="348px" alt="{{ certs.alt | default: section.settings.certs_alt | escape }}" width="{{ certs.width }}" height="{{ certs.height }}" loading="lazy">{%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="at-hero-v5__marquee" aria-hidden="true">
+        {%- for lane in (0..1) -%}
+          <div class="at-hero-v5__lane at-hero-v5__lane--{{ lane | plus: 1 }}"><div class="at-hero-v5__lane-track">
+            {%- for repetition in (1..2) -%}<div class="at-hero-v5__lane-group">
+              {%- for block in section.blocks -%}
+                {%- assign remainder = forloop.index0 | modulo: 2 -%}
+                {%- if remainder == lane and block.settings.image != blank -%}
+                  {%- assign image = block.settings.image -%}
+                  <div class="at-hero-v5__card"><picture><source media="(min-width: 1024px)" srcset="{{ image | image_url: width: 336 }} 336w, {{ image | image_url: width: 504 }} 504w, {{ image | image_url: width: 672 }} 672w" sizes="(min-width: 1724px) 336px, 19.5vw"><img src="{{ image | image_url: width: 32 }}" alt="" width="{{ image.width }}" height="{{ image.height }}" loading="{% if repetition == 1 and forloop.index <= 2 %}eager{% else %}lazy{% endif %}" decoding="async"></picture></div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>{%- endfor -%}
+          </div></div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Andatech Hero V5",
+  "tag": "section",
+  "class": "at-section at-section--hero-v5",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Section anchor" },
+    { "type": "header", "content": "Copy" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Workplace Safety & Health Compliance" },
+    {
+      "type": "select",
+      "id": "eyebrow_tag",
+      "label": "Eyebrow HTML Tag",
+      "options": [
+        { "value": "p", "label": "Paragraph (p)" },
+        { "value": "h1", "label": "Heading 1 (h1)" },
+        { "value": "h2", "label": "Heading 2 (h2)" },
+        { "value": "h3", "label": "Heading 3 (h3)" },
+        { "value": "h4", "label": "Heading 4 (h4)" },
+        { "value": "h5", "label": "Heading 5 (h5)" },
+        { "value": "h6", "label": "Heading 6 (h6)" }
+      ],
+      "default": "h2"
+    },
+    { "type": "richtext", "id": "heading", "label": "Title", "info": "Use Bold to apply Andatech green. Add line breaks where needed; otherwise the title wraps naturally within the hero width.", "default": "<p>Drug &amp; Alcohol Testing<br>For Workplaces.<br><strong>Simplified For You.</strong></p>" },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading HTML Tag",
+      "info": "Sets the semantic HTML tag for the complete title.",
+      "options": [
+        { "value": "p", "label": "Paragraph (p)" },
+        { "value": "h1", "label": "Heading 1 (h1)" },
+        { "value": "h2", "label": "Heading 2 (h2)" },
+        { "value": "h3", "label": "Heading 3 (h3)" },
+        { "value": "h4", "label": "Heading 4 (h4)" },
+        { "value": "h5", "label": "Heading 5 (h5)" },
+        { "value": "h6", "label": "Heading 6 (h6)" }
+      ],
+      "default": "h3"
+    },
+    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Testing devices, NATA-accredited calibration, reporting, training and audit readiness. Delivered as one managed program, or buy the equipment outright and run it yourself.</p>" },
+    { "type": "text", "id": "trust_line", "label": "Trust line", "default": "Andatech is Australia's NATA-accredited drug and alcohol testing specialist since 2003." },
+    { "type": "header", "content": "Buttons" },
+    { "type": "text", "id": "cta1_label", "label": "Primary button label", "default": "Explore Managed Programs" },
+    { "type": "url", "id": "cta1_link", "label": "Primary button link" },
+    { "type": "text", "id": "cta2_label", "label": "Secondary button label", "default": "Find Your Device", "info": "Keep this label to use the existing Device Finder trigger." },
+    { "type": "url", "id": "cta2_link", "label": "Secondary button link", "info": "Used only when the secondary label is changed." },
+    { "type": "header", "content": "Accreditation" },
+    { "type": "image_picker", "id": "certs_image", "label": "Accreditation strip" },
+    { "type": "text", "id": "certs_alt", "label": "Accreditation strip alt text", "default": "ISO 27001, ILAC-MRA, NATA, ISO 9001 and AS 3547 accreditations" },
+    { "type": "header", "content": "Carousel" },
+    { "type": "range", "id": "autoplay_seconds", "label": "Mobile image scroll interval", "info": "Time between automatic image changes.", "min": 3, "max": 8, "step": 0.5, "unit": "s", "default": 3.5 }
+  ],
+  "blocks": [{ "type": "image", "name": "Hero card image", "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "alt", "label": "Alt text", "info": "Describe the image's subject and context." }
+  ] }],
+  "presets": [{ "name": "Andatech Hero V5", "blocks": [
+    { "type": "image" }, { "type": "image" }, { "type": "image" },
+    { "type": "image" }, { "type": "image" }, { "type": "image" }
+  ] }]
+}
+{% endschema %}

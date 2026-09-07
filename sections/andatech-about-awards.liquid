@@ -4,8 +4,10 @@
 <section class="at-about-awards at-about-section" style="--about-marquee-speed: {{ section.settings.speed }}s"{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handleize }}"{% endif %}>
   <div class="at-shell">
     <header class="at-about-section__header">
-      {%- if section.settings.eyebrow != blank -%}<p class="at-about-section__eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
-      {%- if section.settings.heading != blank -%}<h2 class="at-about-section__title">{{ section.settings.heading }}</h2>{%- endif -%}
+      {%- assign eyebrow_tag = section.settings.eyebrow_tag | default: 'h2' -%}
+      {%- assign heading_tag = section.settings.heading_tag | default: 'h3' -%}
+      {%- if section.settings.eyebrow != blank -%}<{{ eyebrow_tag }} class="at-about-section__eyebrow">{{ section.settings.eyebrow | escape }}</{{ eyebrow_tag }}>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<{{ heading_tag }} class="at-about-section__title">{{ section.settings.heading }}</{{ heading_tag }}>{%- endif -%}
       {%- if section.settings.description != blank -%}<div class="at-about-section__body">{{ section.settings.description }}</div>{%- endif -%}
     </header>
   </div>
@@ -41,7 +43,37 @@
   "settings": [
     { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "about-awards" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Recognition" },
-    { "type": "html", "id": "heading", "label": "H2 — Heading", "default": "Awards & <strong>Recognition</strong>" },
+    {
+      "type": "select",
+      "id": "eyebrow_tag",
+      "label": "Eyebrow HTML Tag",
+      "options": [
+        { "value": "p",  "label": "Paragraph (p)" },
+        { "value": "h1", "label": "Heading 1 (h1)" },
+        { "value": "h2", "label": "Heading 2 (h2)" },
+        { "value": "h3", "label": "Heading 3 (h3)" },
+        { "value": "h4", "label": "Heading 4 (h4)" },
+        { "value": "h5", "label": "Heading 5 (h5)" },
+        { "value": "h6", "label": "Heading 6 (h6)" }
+      ],
+      "default": "h2"
+    },
+    { "type": "html", "id": "heading", "label": "Heading", "default": "Awards & <strong>Recognition</strong>" },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading HTML Tag",
+      "options": [
+        { "value": "p",  "label": "Paragraph (p)" },
+        { "value": "h1", "label": "Heading 1 (h1)" },
+        { "value": "h2", "label": "Heading 2 (h2)" },
+        { "value": "h3", "label": "Heading 3 (h3)" },
+        { "value": "h4", "label": "Heading 4 (h4)" },
+        { "value": "h5", "label": "Heading 5 (h5)" },
+        { "value": "h6", "label": "Heading 6 (h6)" }
+      ],
+      "default": "h3"
+    },
     { "type": "richtext", "id": "description", "label": "Description", "default": "<p>We're committed to excellent products and outstanding customer service. This has earned us recognition from multiple award agencies.</p>" },
     { "type": "text", "id": "marquee_label", "label": "Accessible marquee label", "default": "Andatech awards and recognition" },
     { "type": "range", "id": "speed", "label": "Scroll duration", "min": 16, "max": 60, "step": 2, "unit": "s", "default": 30 }

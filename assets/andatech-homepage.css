@@ -65,13 +65,26 @@
 .at-hero__title {
   margin: 48px 0 0;
   font-size: clamp(40px, 4.63vw, 80px);
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.0;
   letter-spacing: -.01em;
   color: var(--at-navy);
   text-wrap: initial;
 }
-.at-hero__title span { display: block; }
+.at-hero__title > span {
+  display: block;
+  padding-block: .12em;
+  margin-block: -.12em;
+  background: linear-gradient(90deg, var(--at-green), var(--at-teal));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.at-hero__title strong,
+.at-hero__title b {
+  font-weight: 700;
+  color: var(--at-green);
+  -webkit-text-fill-color: transparent;
+}
 .at-hero__accent {
   font-weight: 700;
   padding-bottom: .1em;

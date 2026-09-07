@@ -1,0 +1,251 @@
+/* ══════════════════════════════════════════════════════════════════════
+   ANDATECH — HERO V3
+   Rounded-card hero with swappable image/video background, Navy gradient
+   overlay, left-aligned content + bottom-right accreditation strip.
+   Isolated from V1/V2 via .at-hero-v3 namespace.
+   ══════════════════════════════════════════════════════════════════════ */
+
+.at-hero-v3 {
+  position: relative;
+  padding-block: 24px;
+  background: var(--at-white);
+}
+.at-hero-v3 .at-shell {
+  padding-inline: max(12px, 1.39vw); /* was 2.78vw ≈ 48px */
+}
+
+.at-hero-v3__card {
+  /* Radius controlled per breakpoint via this variable so border-radius
+     and clip-path stay in sync — override the variable, not both props. */
+  --at-hero-v3-radius: 24px;
+
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--at-hero-v3-radius);
+  /* Belt & braces for iOS Safari: overflow+border-radius alone doesn't
+     reliably clip children that use mix-blend-mode (see the overlay), so
+     we also apply an explicit clip-path. clip-path clips descendants
+     unconditionally, regardless of blend modes or compositing quirks. */
+  clip-path: inset(0 round var(--at-hero-v3-radius));
+
+  /* Design frame: 1632 × 877 → 877/1632 = 53.74% */
+  min-height: clamp(560px, 53.74vw, 877px);
+  color: var(--at-white);
+  isolation: isolate;
+}
+
+/* ── Media layer ────────────────────────────────────────── */
+.at-hero-v3__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+/* Round + clip at EVERY layer. iOS Safari's overflow-hidden + border-radius
+   combo does not reliably clip absolutely-positioned <img>/<video> children
+   or elements with mix-blend-mode, so each layer clips its own children. */
+.at-hero-v3__media,
+.at-hero-v3__overlay {
+  border-radius: inherit;
+  overflow: hidden;
+}
+.at-hero-v3__media img,
+.at-hero-v3__media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: inherit;
+}
+
+/* ── Gradient overlay ───────────────────────────────────── */
+/* Figma dev-mode value: linear-gradient(34deg, #1F2937 21.96%, #FFF 96.96%)
+   with background-blend-mode: multiply against the media below.
+   Implemented here with mix-blend-mode so it works over <video> too. */
+.at-hero-v3__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(34deg, #1F2937 21.96%, #FFFFFF 96.96%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* Contrast floor: on very light media the multiply overlay alone may not
+   hit WCAG AA under the copy. This second overlay adds a subtle navy
+   wash on the copy side only. */
+.at-hero-v3__overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(31,41,55,.35) 0%, rgba(31,41,55,0) 55%);
+  mix-blend-mode: normal;
+}
+
+/* ── Inner content wrapper ──────────────────────────────── */
+.at-hero-v3__inner {
+  position: relative;
+  z-index: 2;
+  min-height: inherit;
+  padding: 48px;
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+/* Bottom block: single column stack — eyebrow → heading → body → actions row.
+   Full card width so the actions row inside can push the certs to the right edge. */
+.at-hero-v3__bottom {
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Copy items keep their own readable widths, left-aligned to the card edge. */
+.at-hero-v3__bottom > .at-hero-v3__eyebrow,
+.at-hero-v3__bottom > .at-hero-v3__title { max-width: 900px; }
+
+/* Actions row: CTAs on the left, certs pinned to the right edge, vertically
+   centred so both sit on the same eye level regardless of certs height.
+   Extra top margin gives the body a bit more breathing room from the CTAs. */
+.at-hero-v3__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  margin-top: 16px;
+}
+
+/* ── Typography ─────────────────────────────────────────── */
+.at-hero-v3__eyebrow {
+  margin: 0;
+  font-family: "Titillium Web", system-ui, sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  font-size: clamp(12px, .93vw, 16px);
+  line-height: 1.5;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--at-white);
+}
+
+.at-hero-v3__title {
+  margin: 0;
+  font-family: "Titillium Web", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(36px, 4.05vw, 70px);
+  line-height: 1.05;
+  letter-spacing: -.01em;
+  color: var(--at-white);
+  text-wrap: balance;
+}
+.at-hero-v3__title-accent {
+  font-weight: 700;
+  padding-bottom: .1em;
+  background: linear-gradient(90deg, var(--at-green) 0%, var(--at-teal) 50%, var(--at-green) 100%);
+  background-size: 300% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: at-hero-v3-accent-shift 4s ease-in-out infinite alternate;
+}
+@keyframes at-hero-v3-accent-shift {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.at-hero-v3__body {
+  margin: 0;
+  font-family: "Titillium Web", system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(16px, 1.11vw, 20px);
+  line-height: 1.5;
+  color: var(--at-white);
+  max-width: 560px;
+}
+.at-hero-v3__body > p { margin: 0; color: inherit; font: inherit; }
+.at-hero-v3__body > p + p { margin-top: 12px; }
+
+/* ── CTAs ────────────────────────────────────────────────── */
+.at-hero-v3__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.at-hero-v3__cta .at-btn:focus-visible {
+  outline: 3px solid var(--at-white);
+  outline-offset: 3px;
+}
+
+/* ── Accreditation strip (desktop: bottom-right) ────────── */
+.at-hero-v3__certs {
+  flex: 0 0 auto;
+  height: 120px;
+  width: auto;
+  max-width: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: right bottom;
+}
+
+/* ── Reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .at-hero-v3__media video { display: none; }
+  .at-hero-v3__media img.at-hero-v3__poster { display: block; }
+  .at-hero-v3__title-accent {
+    animation: none;
+    background-position: 0% 50%;
+  }
+}
+
+/* ── Tablet ─────────────────────────────────────────────── */
+@media (max-width: 1279px) {
+  .at-hero-v3__card { --at-hero-v3-radius: 24px; }
+  .at-hero-v3__inner { padding: 40px; gap: 20px; }
+  .at-hero-v3__certs { height: 96px; }
+}
+
+/* ── Mobile ─────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .at-hero-v3 { padding-block: 12px; }
+  .at-hero-v3__card {
+    --at-hero-v3-radius: 20px;
+    min-height: clamp(560px, 130vw, 780px);
+  }
+  .at-hero-v3__inner {
+    padding: 32px 24px;
+    grid-template-rows: 1fr auto;
+    text-align: center;
+  }
+  .at-hero-v3__bottom {
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+  }
+  .at-hero-v3__bottom > .at-hero-v3__eyebrow,
+  .at-hero-v3__bottom > .at-hero-v3__title { max-width: none; }
+  /* Actions row stacks on mobile: CTAs on top, certs below (per spec). */
+  .at-hero-v3__actions {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 24px;
+  }
+  .at-hero-v3__body { max-width: none; margin-inline: auto; }
+  .at-hero-v3__cta { justify-content: center; }
+  /* Buttons hug their content on every breakpoint — the full-width mobile
+     stretch made the primary button's ring-arrow badge look odd. */
+  .at-hero-v3__certs {
+    height: 72px;
+    object-position: center bottom;
+    margin-inline: auto;
+  }
+  /* On mobile the multiply blend can leave the top too light for the
+     centred copy — strengthen the wash across the whole area. */
+  .at-hero-v3__overlay::after {
+    background: linear-gradient(180deg, rgba(31,41,55,.55) 0%, rgba(31,41,55,.35) 100%);
+  }
+}

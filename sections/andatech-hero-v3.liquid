@@ -1,0 +1,305 @@
+{%- comment -%}
+  Andatech — Hero V3
+  Rounded-card hero with swappable image/video background, Navy gradient
+  overlay, left-aligned content on desktop with accreditation strip pinned
+  bottom-right; centered stack on mobile with strip below CTAs.
+
+  Reuses global buttons (.at-btn / .at-btn--green / .at-btn--outline-dark)
+  and site tokens defined in andatech-site.css.
+{%- endcomment -%}
+
+{{ 'andatech-hero-v3.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign media_type    = section.settings.media_type
+  assign image_desktop = section.settings.media_image
+  assign video_file    = section.settings.media_video
+  assign poster        = section.settings.video_poster
+  assign media_alt     = section.settings.media_alt
+  assign certs         = section.settings.certs_image
+  assign certs_alt     = section.settings.certs_alt
+  assign eyebrow_tag   = section.settings.eyebrow_tag | default: 'h1'
+  assign heading_tag   = section.settings.heading_tag | default: 'h2'
+  assign body_tag      = section.settings.body_tag    | default: 'div'
+-%}
+
+<section class="at-hero-v3" id="{{ section.settings.anchor_id | default: section.id | handleize }}">
+  <div class="at-shell">
+    <div class="at-hero-v3__card">
+
+      {%- comment -%} ── Media layer (video OR image) ─────────────── {%- endcomment -%}
+      <div class="at-hero-v3__media">
+        {%- if media_type == 'video' and video_file != blank -%}
+          {%- if poster != blank -%}
+            <img
+              class="at-hero-v3__poster"
+              src="{{ poster | image_url: width: 2400 }}"
+              alt="{{ media_alt | default: poster.alt | escape }}"
+              width="{{ poster.width }}"
+              height="{{ poster.height }}"
+              loading="eager"
+              fetchpriority="high"
+              style="position:absolute;inset:0;">
+          {%- endif -%}
+          <video
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            {% if poster != blank %}poster="{{ poster | image_url: width: 2400 }}"{% endif %}
+            aria-label="{{ media_alt | escape }}">
+            {%- for source in video_file.sources -%}
+              <source src="{{ source.url }}" type="{{ source.mime_type }}">
+            {%- endfor -%}
+          </video>
+        {%- elsif image_desktop != blank -%}
+          <img
+            src="{{ image_desktop | image_url: width: 3456 }}"
+            srcset="{{ image_desktop | image_url: width: 1024 }} 1024w,
+                    {{ image_desktop | image_url: width: 1728 }} 1728w,
+                    {{ image_desktop | image_url: width: 2400 }} 2400w,
+                    {{ image_desktop | image_url: width: 3456 }} 3456w"
+            sizes="(min-width: 1280px) 1632px, 100vw"
+            alt="{{ media_alt | default: image_desktop.alt | escape }}"
+            width="{{ image_desktop.width }}"
+            height="{{ image_desktop.height }}"
+            loading="eager"
+            fetchpriority="high">
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ── Gradient overlay ─────────────────────────── {%- endcomment -%}
+      <div class="at-hero-v3__overlay" aria-hidden="true"></div>
+
+      {%- comment -%} ── Content ──────────────────────────────────── {%- endcomment -%}
+      <div class="at-hero-v3__inner">
+
+        <div class="at-hero-v3__bottom">
+          {%- if section.settings.eyebrow != blank -%}
+            <{{ eyebrow_tag }} class="at-hero-v3__eyebrow">{{ section.settings.eyebrow | escape }}</{{ eyebrow_tag }}>
+          {%- endif -%}
+
+          {%- if section.settings.heading != blank or section.settings.heading_accent != blank -%}
+            <{{ heading_tag }} class="at-hero-v3__title">
+              {%- if section.settings.heading != blank -%}
+                {{ section.settings.heading | escape }}
+              {%- endif -%}
+              {%- if section.settings.heading_accent != blank -%}
+                {% if section.settings.heading != blank %} {% endif %}<span class="at-hero-v3__title-accent">{{ section.settings.heading_accent | escape }}</span>
+              {%- endif -%}
+            </{{ heading_tag }}>
+          {%- endif -%}
+
+          {%- if section.settings.body != blank -%}
+            <{{ body_tag }} class="at-hero-v3__body">{{ section.settings.body }}</{{ body_tag }}>
+          {%- endif -%}
+
+          {%- comment -%} ── Actions row: CTAs (left) + certs (right), same eye level ── {%- endcomment -%}
+          <div class="at-hero-v3__actions">
+            {%- if section.settings.cta1_label != blank or section.settings.cta2_label != blank -%}
+              <div class="at-hero-v3__cta">
+                {%- if section.settings.cta1_label != blank -%}
+                  <a class="at-btn at-btn--green" href="{{ section.settings.cta1_link | default: '#' }}">
+                    {{ section.settings.cta1_label | escape }}
+                    <i class="at-btn__arrow" aria-hidden="true">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </i>
+                  </a>
+                {%- endif -%}
+                {%- if section.settings.cta2_label != blank -%}
+                  <a class="at-btn at-btn--ghost" href="{{ section.settings.cta2_link | default: '#' }}">
+                    {{ section.settings.cta2_label | escape }}
+                  </a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+            {%- if certs != blank -%}
+              <img
+                class="at-hero-v3__certs"
+                src="{{ certs | image_url: width: 800 }}"
+                alt="{{ certs_alt | default: certs.alt | escape }}"
+                width="{{ certs.width }}"
+                height="{{ certs.height }}"
+                loading="lazy">
+            {%- endif -%}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Andatech Hero V3",
+  "tag": "section",
+  "class": "at-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Section anchor",
+      "info": "Used for in-page navigation links."
+    },
+    {
+      "type": "header",
+      "content": "Background media"
+    },
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Media type",
+      "options": [
+        { "value": "image", "label": "Image" },
+        { "value": "video", "label": "Video" }
+      ],
+      "default": "image",
+      "info": "Choose whether the full-bleed background is an image or a video."
+    },
+    {
+      "type": "image_picker",
+      "id": "media_image",
+      "label": "Background image",
+      "info": "Used when Media type = Image."
+    },
+    {
+      "type": "video",
+      "id": "media_video",
+      "label": "Background video",
+      "info": "MP4 (H.264), muted/loop/autoplay. Used when Media type = Video."
+    },
+    {
+      "type": "image_picker",
+      "id": "video_poster",
+      "label": "Video poster / fallback image",
+      "info": "Shown before the video loads, and to viewers who have reduced-motion or autoplay blocked. Required when Media type = Video."
+    },
+    {
+      "type": "text",
+      "id": "media_alt",
+      "label": "Media alt text",
+      "info": "Describe the scene for screen-reader users.",
+      "default": "Aerial view of an open-pit mine site"
+    },
+    {
+      "type": "header",
+      "content": "Copy"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "info": "Small uppercase caption above the heading.",
+      "default": "Workplace Safety & Health Compliance"
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_tag",
+      "label": "Eyebrow HTML tag",
+      "info": "Choose the semantic tag. Use H1 if this hero is the page's top-level introduction.",
+      "options": [
+        { "value": "p",  "label": "Paragraph (p)" },
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Main heading",
+      "default": "Drug & Alcohol Testing For Workplaces."
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading HTML tag",
+      "info": "Choose the semantic tag. Keep the page's document outline in mind (only one H1 per page).",
+      "options": [
+        { "value": "p",  "label": "Paragraph (p)" },
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "Heading accent",
+      "info": "Rendered in Andatech Green, appended to the heading.",
+      "default": "Simplified For You."
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body",
+      "default": "<p>Testing devices, NATA-accredited calibration, reporting, training and audit readiness. Delivered as one managed program, or buy the equipment outright and run it yourself.</p>"
+    },
+    {
+      "type": "select",
+      "id": "body_tag",
+      "label": "Body container tag",
+      "info": "The outer wrapper for the body copy. Leave as div — rich-text content already emits its own <p> tags, so wrapping in <p> would nest invalidly.",
+      "options": [
+        { "value": "div",     "label": "div (default)" },
+        { "value": "section", "label": "section" }
+      ],
+      "default": "div"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "cta1_label",
+      "label": "Primary button label",
+      "default": "Explore Managed Programs"
+    },
+    {
+      "type": "url",
+      "id": "cta1_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "cta2_label",
+      "label": "Secondary button label",
+      "default": "Find Your Device"
+    },
+    {
+      "type": "url",
+      "id": "cta2_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "header",
+      "content": "Accreditation strip"
+    },
+    {
+      "type": "image_picker",
+      "id": "certs_image",
+      "label": "Accreditation strip image",
+      "info": "Flattened image of the accreditation / certification logo row. Sits bottom-right on desktop, below the CTAs on mobile."
+    },
+    {
+      "type": "text",
+      "id": "certs_alt",
+      "label": "Accreditation strip alt text",
+      "default": "ISO 27001, ILAC-MRA, NATA, ISO 9001 and AS 3547 accreditations"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Andatech Hero V3"
+    }
+  ]
+}
+{% endschema %}

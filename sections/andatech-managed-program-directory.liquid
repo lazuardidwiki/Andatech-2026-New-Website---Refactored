@@ -6,8 +6,8 @@
   <div class="at-shell">
     {%- if section.settings.eyebrow != blank or section.settings.heading != blank or section.settings.heading_bold != blank or section.settings.description != blank -%}
       <div class="at-mp-section-head">
-        {%- if section.settings.eyebrow != blank -%}<p class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
-        {%- if section.settings.heading != blank or section.settings.heading_bold != blank -%}<h2 class="at-industry__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</h2>{%- endif -%}
+        {%- if section.settings.eyebrow != blank -%}{%- assign eyebrow_tag = section.settings.eyebrow_tag | default: 'h2' -%}<{{ eyebrow_tag }} class="at-industry__eyebrow" data-at-rise>{{ section.settings.eyebrow | escape }}</{{ eyebrow_tag }}>{%- endif -%}
+        {%- if section.settings.heading != blank or section.settings.heading_bold != blank -%}{%- assign heading_tag = section.settings.heading_tag | default: 'h3' -%}<{{ heading_tag }} class="at-industry__title" data-at-rise>{{ section.settings.heading | escape }}{% if section.settings.heading_bold != blank %}<br><strong>{{ section.settings.heading_bold | escape }}</strong>{% endif %}</{{ heading_tag }}>{%- endif -%}
         {%- if section.settings.description != blank -%}<div class="at-industry__desc" data-at-rise>{{ section.settings.description }}</div>{%- endif -%}
       </div>
     {%- endif -%}
@@ -17,8 +17,8 @@
         {%- assign card_tag = 'div' -%}
         {%- if block.settings.link != blank -%}{%- assign card_tag = 'a' -%}{%- endif -%}
         <{{ card_tag }} class="at-mp-directory__card"{% if block.settings.link != blank %} href="{{ block.settings.link }}"{% endif %} data-at-rise {{ block.shopify_attributes }}>
-          {%- if block.settings.eyebrow != blank -%}<p class="at-mp-directory__eyebrow">{{ block.settings.eyebrow | escape }}</p>{%- endif -%}
-          {%- if block.settings.title != blank -%}<h3 class="at-mp-directory__title">{{ block.settings.title | escape }}</h3>{%- endif -%}
+          {%- if block.settings.eyebrow != blank -%}{%- assign block_eyebrow_tag = block.settings.eyebrow_tag | default: 'h2' -%}<{{ block_eyebrow_tag }} class="at-mp-directory__eyebrow">{{ block.settings.eyebrow | escape }}</{{ block_eyebrow_tag }}>{%- endif -%}
+          {%- if block.settings.title != blank -%}{%- assign block_title_tag = block.settings.title_tag | default: 'h4' -%}<{{ block_title_tag }} class="at-mp-directory__title">{{ block.settings.title | escape }}</{{ block_title_tag }}>{%- endif -%}
           {%- if block.settings.description != blank -%}<div class="at-mp-directory__desc">{{ block.settings.description }}</div>{%- endif -%}
           {%- if block.settings.link != blank -%}
             <span class="at-mp-directory__arrow" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -38,8 +38,38 @@
   "settings": [
     { "type": "text", "id": "anchor_id", "label": "Section anchor", "default": "managed-program-directory" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
-    { "type": "text", "id": "heading", "label": "H2 — Heading (light)" },
-    { "type": "text", "id": "heading_bold", "label": "H2 — Heading (bold)" },
+    {
+      "type": "select",
+      "id": "eyebrow_tag",
+      "label": "Eyebrow HTML Tag",
+      "options": [
+        { "value": "p",  "label": "Paragraph (p)" },
+        { "value": "h1", "label": "Heading 1 (h1)" },
+        { "value": "h2", "label": "Heading 2 (h2)" },
+        { "value": "h3", "label": "Heading 3 (h3)" },
+        { "value": "h4", "label": "Heading 4 (h4)" },
+        { "value": "h5", "label": "Heading 5 (h5)" },
+        { "value": "h6", "label": "Heading 6 (h6)" }
+      ],
+      "default": "h2"
+    },
+    { "type": "text", "id": "heading", "label": "Heading (light)" },
+    { "type": "text", "id": "heading_bold", "label": "Heading (bold)" },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading HTML Tag",
+      "options": [
+        { "value": "p",  "label": "Paragraph (p)" },
+        { "value": "h1", "label": "Heading 1 (h1)" },
+        { "value": "h2", "label": "Heading 2 (h2)" },
+        { "value": "h3", "label": "Heading 3 (h3)" },
+        { "value": "h4", "label": "Heading 4 (h4)" },
+        { "value": "h5", "label": "Heading 5 (h5)" },
+        { "value": "h6", "label": "Heading 6 (h6)" }
+      ],
+      "default": "h3"
+    },
     { "type": "richtext", "id": "description", "label": "Description" }
   ],
   "blocks": [
@@ -48,7 +78,37 @@
       "name": "Destination",
       "settings": [
         { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "01 - Understand" },
+        {
+          "type": "select",
+          "id": "eyebrow_tag",
+          "label": "Eyebrow HTML Tag",
+          "options": [
+            { "value": "p",  "label": "Paragraph (p)" },
+            { "value": "h1", "label": "Heading 1 (h1)" },
+            { "value": "h2", "label": "Heading 2 (h2)" },
+            { "value": "h3", "label": "Heading 3 (h3)" },
+            { "value": "h4", "label": "Heading 4 (h4)" },
+            { "value": "h5", "label": "Heading 5 (h5)" },
+            { "value": "h6", "label": "Heading 6 (h6)" }
+          ],
+          "default": "h2"
+        },
         { "type": "text", "id": "title", "label": "Title", "default": "Compliance Lifecycle" },
+        {
+          "type": "select",
+          "id": "title_tag",
+          "label": "Title HTML Tag",
+          "options": [
+            { "value": "p",  "label": "Paragraph (p)" },
+            { "value": "h1", "label": "Heading 1 (h1)" },
+            { "value": "h2", "label": "Heading 2 (h2)" },
+            { "value": "h3", "label": "Heading 3 (h3)" },
+            { "value": "h4", "label": "Heading 4 (h4)" },
+            { "value": "h5", "label": "Heading 5 (h5)" },
+            { "value": "h6", "label": "Heading 6 (h6)" }
+          ],
+          "default": "h4"
+        },
         { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Follow the six stages of a controlled workplace testing program.</p>" },
         { "type": "url", "id": "link", "label": "Page link" }
       ]

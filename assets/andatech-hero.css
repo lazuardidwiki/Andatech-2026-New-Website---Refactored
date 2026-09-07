@@ -67,13 +67,26 @@
 .at-hero__title {
   margin: 48px 0 0;
   font-size: clamp(40px, 4.63vw, 80px);
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.0;
   letter-spacing: -.01em;
   color: var(--at-navy);
   text-wrap: initial;
 }
-.at-hero__title span { display: block; }
+.at-hero__title > span {
+  display: block;
+  padding-block: .12em;
+  margin-block: -.12em;
+  background: linear-gradient(90deg, var(--at-green), var(--at-teal));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.at-hero__title strong,
+.at-hero__title b {
+  font-weight: 700;
+  color: var(--at-green);
+  -webkit-text-fill-color: transparent;
+}
 .at-hero__accent {
   font-weight: 700;
   padding-bottom: .1em;
@@ -234,7 +247,8 @@
   .at-hero__title { margin-top: 21px; font-size: 36px; line-height: 1; }
   .at-hero__body { margin-top: 20px; margin-inline: auto; font-size: 16px; line-height: 1.5; }
   .at-hero__cta { margin-top: 22px; flex-direction: column; align-items: center; gap: 12px; }
-  .at-hero__cta .at-btn { width: 252px; }
+  /* Buttons hug their content on mobile — matches Hero V3 behaviour and
+     avoids the primary button's ring-arrow badge floating on a stretched pill. */
   .at-hero__trust, .at-hero__certs { display: none; }
   .at-hero__visual { order: 2; width: 100%; margin: 4px 0 0; }
   .at-hero__visual img { width: 100%; height: auto; max-height: none; object-fit: contain; }
