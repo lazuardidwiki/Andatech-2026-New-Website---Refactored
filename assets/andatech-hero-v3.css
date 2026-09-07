@@ -10,15 +10,22 @@
   padding-block: 24px;
   background: var(--at-white);
 }
+.at-hero-v3 .at-shell {
+  padding-inline: max(12px, 1.39vw); /* was 2.78vw ≈ 48px */
+}
 
 .at-hero-v3__card {
   position: relative;
   overflow: hidden;
-  border-radius: 40px;
+  border-radius: 24px;
   /* Design frame: 1632 × 877 → 877/1632 = 53.74% */
   min-height: clamp(560px, 53.74vw, 877px);
   color: var(--at-white);
   isolation: isolate;
+  /* Safari/iPadOS: force GPU compositing so absolutely-positioned children
+     with mix-blend-mode clip to the parent border-radius. Without this the
+     card can render with square corners on iPad Pro. */
+  transform: translateZ(0);
 }
 
 /* ── Media layer ────────────────────────────────────────── */
@@ -27,6 +34,13 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
+}
+/* Round the media and overlay themselves so the card stays rounded on
+   Safari/iPadOS even when the parent's overflow-clip misfires against
+   children that use mix-blend-mode. */
+.at-hero-v3__media,
+.at-hero-v3__overlay {
+  border-radius: inherit;
 }
 .at-hero-v3__media img,
 .at-hero-v3__media video {
