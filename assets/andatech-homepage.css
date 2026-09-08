@@ -147,9 +147,11 @@
   animation: at-hero-title-fold .9s var(--at-ease-out) both;
   animation-delay: calc(var(--at-stagger, 0) * .07s);
 }
-.at-trust__intro,
-.at-mobile-cta,
-.at-btn--mobile-only { display: none; }
+.at-trust__intro { display: none; }
+@media (min-width: 768px) {
+  .at-mobile-cta,
+  .at-btn--mobile-only { display: none; }
+}
 .at-trust {
   background: var(--at-white);
   padding-block: clamp(56px, 6.25vw, 108px);
