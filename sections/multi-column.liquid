@@ -42,6 +42,14 @@
       assign image_ratio = section.settings.image_ratio
     endif
   -%}
+  {% style %}
+    #{{ section.id }} .card__rte {
+      min-height: calc(1.5em * 3);
+    }
+    #{{ section.id }} .card__info {
+      width: 100%;
+    }
+  {% endstyle %}
   {%- if carousel == false -%}
     {% style %}
       {% if section.settings.column_size == 'small' %}
