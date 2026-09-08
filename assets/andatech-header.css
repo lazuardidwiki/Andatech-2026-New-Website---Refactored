@@ -1045,7 +1045,7 @@
       overflow-x: hidden;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      padding: 0 32px;
+      padding: 0 32px calc(64px + env(safe-area-inset-bottom, 0px));
     }
   .at-mobile-nav__close { top: 10px; right: 10px; }
   .at-mobile-nav__list { padding-top: 62px; }
