@@ -63,7 +63,13 @@
           <img src="{{ block.settings.image | image_url: width: 500 }}" alt="{{ block.settings.image.alt | escape }}" loading="lazy" style="--at-trust-logo-width: {{ block.settings.display_width | default: 160 }}px" {{ block.shopify_attributes }}>
         {%- endif -%}{%- endfor -%}
       </div>
-      {%- if section.settings.more_label != blank -%}<p class="at-trust__more">{{ section.settings.more_label | escape }}</p>{%- endif -%}
+      {%- if section.settings.more_label != blank -%}
+        {%- if section.settings.more_link != blank -%}
+          <p class="at-trust__more"><a href="{{ section.settings.more_link }}" class="at-trust__more-link">{{ section.settings.more_label | escape }}</a></p>
+        {%- else -%}
+          <p class="at-trust__more">{{ section.settings.more_label | escape }}</p>
+        {%- endif -%}
+      {%- endif -%}
     </div>
   </div>
 </section>
@@ -103,7 +109,8 @@
     { "type": "image_picker", "id": "certs", "label": "Accreditation strip" },
     { "type": "header", "content": "Logos" },
     { "type": "text", "id": "logos_label", "label": "Logos heading", "default": "Trusted by organisations across Australia" },
-    { "type": "text", "id": "more_label", "label": "Trailing note", "default": "and many more" } ],
+    { "type": "text", "id": "more_label", "label": "Trailing note", "default": "and many more" },
+    { "type": "url", "id": "more_link", "label": "Trailing note link", "info": "Optional. Link the trailing note to a URL (e.g. /pages/industries#trusted-by)." } ],
   "blocks": [
     { "type": "stat", "name": "Stat", "limit": 6, "settings": [
       { "type": "text", "id": "number", "label": "Number", "default": "22+" },

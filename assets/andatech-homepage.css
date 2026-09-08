@@ -249,6 +249,14 @@
   font-style: italic;
   color: var(--at-navy);
 }
+.at-trust__more-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color .25s var(--at-ease);
+}
+.at-trust__more-link:hover { color: var(--at-teal-deep); }
 .at-trust--industry { padding-top: 0; }
 .at-trust--industry .at-trust__intro {
   text-align: center;
