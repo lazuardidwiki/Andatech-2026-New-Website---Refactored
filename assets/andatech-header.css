@@ -1226,6 +1226,13 @@ html.at-mobile-menu-open [class*="shop-ai" i] {
       width: 48px;
       height: 48px;
     }
+  .at-mobile-nav__back,
+    .at-mobile-nav__close.at-burger {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 50%;
+    }
   .at-mobile-nav__subpanel { padding-top: 96px; }
   .at-mobile-nav__view-all { margin-bottom: 38px; }
 }
