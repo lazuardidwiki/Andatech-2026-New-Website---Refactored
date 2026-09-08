@@ -703,7 +703,7 @@
     .at-search-modal__suggestion-links--searches a { min-height: 31px; gap: 16px; font-size: 16px; line-height: 1.2; }
   .at-search-modal__suggestion-links a svg { width: 22px; height: 22px; }
   .at-search-modal__results { max-height: 180px; overflow-y: auto; margin-top: 20px; }
-  .at-mobile-nav { overflow: hidden; padding-inline: 32px; }
+  .at-mobile-nav { overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-inline: 32px; }
   .at-mobile-nav__list { padding-top: 128px; }
   .at-mobile-nav__trigger,
     .at-mobile-nav__direct-link { min-height: 96px; font-size: 22px; }
