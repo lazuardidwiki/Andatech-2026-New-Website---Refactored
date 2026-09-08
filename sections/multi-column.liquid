@@ -61,6 +61,12 @@
         margin-right: auto;
       }
     {% endif %}
+    #{{ section.id }} .card__media,
+    #{{ section.id }} .card__media .media,
+    #{{ section.id }} .card__media img {
+      border-radius: 16px;
+      overflow: hidden;
+    }
   {% endstyle %}
   {%- if carousel == false -%}
     {% style %}
