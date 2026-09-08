@@ -1564,7 +1564,7 @@
       max-height: 30px;
     }
   .at-trust--industry .at-trust__logo-row img:last-child:nth-child(odd) { grid-column: 1 / -1; }
-  .at-trust__more { display: none; }
+  .at-trust__more { margin-top: 28px; font-size: 15px; text-align: center; }
   .at-industries, .at-solutions, .at-stepper, .at-andalink, .at-proof, .at-pricing, .at-cta-banner { text-align: center; }
   .at-industries__eyebrow, .at-solutions__eyebrow, .at-stepper__eyebrow,
     .at-proof__eyebrow, .at-pricing__eyebrow { font-size: 14px; letter-spacing: .12em; }
