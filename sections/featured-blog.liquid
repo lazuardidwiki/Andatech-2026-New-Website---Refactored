@@ -60,6 +60,26 @@
   .cc-featured-blog .card--article .card__info .text-theme-light {
     font-size: 16px;
   }
+  .cc-featured-blog__view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    font-size: clamp(16px, 1.16vw, 20px);
+    color: var(--at-navy);
+    transition: color .25s var(--at-ease);
+    text-decoration: none;
+  }
+  .cc-featured-blog__view-all svg {
+    color: var(--at-green);
+    transition: transform .4s var(--at-ease-out);
+  }
+  .cc-featured-blog__view-all:hover {
+    color: var(--at-teal-deep);
+  }
+  .cc-featured-blog__view-all:hover svg {
+    transform: translate(3px, 3px);
+  }
 {%- endstyle -%}
 
 <div class="section">
@@ -73,7 +93,10 @@
         {%- endif -%}
 
         {%- if section.settings.show_view_all -%}
-          <a href="{{ section.settings.blog.url }}" class="link">{{ 'sections.featured_blog.view_all' | t }}</a>
+          <a href="{{ section.settings.blog.url }}" class="cc-featured-blog__view-all">
+            {{- 'sections.featured_blog.view_all' | t -}}
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 8 16 16M16 16V9.8M16 16H9.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
         {%- endif -%}
       </div>
     </div>
