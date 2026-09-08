@@ -192,6 +192,12 @@
       </ul>
       {%- for link in main_menu.links -%}
         {%- if link.links.size > 0 -%}
+          {%- assign m_panel_block = blank -%}
+          {%- for b in section.blocks -%}
+            {%- if b.settings.link_name != blank and b.settings.link_name == link.title -%}
+              {%- assign m_panel_block = b -%}
+            {%- endif -%}
+          {%- endfor -%}
           <section class="at-mobile-nav__subpanel" data-at-mobile-nav-panel="{{ link.handle }}" hidden aria-label="{{ link.title | escape }}">
             <button class="at-mobile-nav__back" type="button" data-at-mobile-nav-back>
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 5-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -199,11 +205,37 @@
             </button>
             <p class="at-mobile-nav__subheading">{{ link.title | escape }}</p>
             <a class="at-mobile-nav__view-all" href="{{ link.url }}">View all {{ link.title | escape }}</a>
-            <ul class="at-mobile-nav__sublist" role="list">
-              {%- for child in link.links -%}
-                <li><a href="{{ child.url }}">{{ child.title | escape }}<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+            {%- if m_panel_block != blank and m_panel_block.settings.link_groups != blank -%}
+              {%- assign m_group_lines = m_panel_block.settings.link_groups | strip | newline_to_br | split: '<br />' -%}
+              {%- for gline in m_group_lines -%}
+                {%- assign gparts = gline | strip | split: '::' -%}
+                {%- if gparts.size >= 2 -%}
+                  {%- assign group_name = gparts[0] | strip -%}
+                  {%- assign titles = gparts[1] | split: ',' -%}
+                  <div class="at-mobile-nav__group">
+                    {%- if group_name != blank -%}
+                      <span class="at-mobile-nav__group-label">{{ group_name | escape }}</span>
+                    {%- endif -%}
+                    <ul class="at-mobile-nav__sublist" role="list">
+                      {%- for t in titles -%}
+                        {%- assign wanted = t | strip -%}
+                        {%- for child in link.links -%}
+                          {%- if child.title == wanted -%}
+                            <li><a href="{{ child.url }}">{{ child.title | escape }}<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+                          {%- endif -%}
+                        {%- endfor -%}
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+                {%- endif -%}
               {%- endfor -%}
-            </ul>
+            {%- else -%}
+              <ul class="at-mobile-nav__sublist" role="list">
+                {%- for child in link.links -%}
+                  <li><a href="{{ child.url }}">{{ child.title | escape }}<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
           </section>
         {%- endif -%}
       {%- endfor -%}
