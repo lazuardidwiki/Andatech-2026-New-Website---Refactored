@@ -1001,6 +1001,16 @@
       line-height: 1.12;
     }
   .at-mobile-nav__sublist svg { display: none; }
+  .at-mobile-nav__group + .at-mobile-nav__group { margin-top: 32px; }
+  .at-mobile-nav__group-label {
+      display: block;
+      margin: 0 0 12px;
+      color: #858b92;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
   .at-mobile-nav__close.at-burger {
       display: flex;
       position: fixed;
