@@ -48,7 +48,7 @@
 }
 .at-footer__list a:hover { color: var(--at-green); }
 .at-footer__aside { display: flex; flex-direction: column; align-items: flex-end; gap: 44px; }
-.at-footer__certs { width: 264px; max-width: 100%; }
+.at-footer__certs { width: 360px; max-width: 100%; }
 .at-footer__social { display: flex; gap: 26px; }
 .at-footer__social a { color: var(--at-white); transition: color .25s var(--at-ease), transform .35s var(--at-ease-out); }
 .at-footer__social a:hover { color: var(--at-green); transform: translateY(-2px); }
