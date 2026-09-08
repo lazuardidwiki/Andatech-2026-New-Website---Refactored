@@ -70,20 +70,25 @@
 .at-industry-card { position: relative; min-height: 258px; overflow: hidden; background: linear-gradient(145deg, #44505C, #1D2733); border-radius: var(--at-r-lg); color: var(--at-white); isolation: isolate; }
 .at-industry-card__image { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--at-ease-out); }
 .at-industry-card__shade { position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgba(7,14,22,.12) 8%, rgba(7,14,22,.88) 100%); }
-.at-industry-card:hover .at-industry-card__image { transform: scale(1.045); }
+.at-industry-card.is-linkable { cursor: pointer; }
+.at-industry-card.is-linkable:hover .at-industry-card__image { transform: scale(1.045); }
+.at-industry-card__link { position: absolute; inset: 0; z-index: 1; text-indent: -9999px; overflow: hidden; }
 .at-industry-card__content { position: absolute; inset: auto 0 0; padding: 22px; }
 .at-industry-card__badge { display: inline-block; margin-bottom: 10px; color: var(--at-teal); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-.at-industry-card h3 { color: var(--at-white); font-size: clamp(20px, 1.5vw, 26px); font-weight: 700; line-height: 1.15; }
+.at-industry-card :is(h1, h2, h3, h4, h5, h6) { color: var(--at-white); font-size: clamp(20px, 1.5vw, 26px); font-weight: 700; line-height: 1.15; }
 .at-industry-card__content div { margin-top: 10px; opacity: .86; font-size: 14px; line-height: 1.45; }
 .at-industry-program { background: var(--at-surface-alt); }
 .at-program-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 16px; background: #ECEEEF; border: 1px solid #DDE0E3; border-radius: var(--at-r-xl); }
 .at-program-card { position: relative; min-height: 330px; overflow: hidden; border-radius: var(--at-r-lg); background: linear-gradient(145deg, #4F5D68, #182431); isolation: isolate; }
 .at-program-card > img { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--at-ease-out); }
 .at-program-card__overlay { position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgba(12,18,25,.08), rgba(12,18,25,.93)); }
-.at-program-card:hover > img { transform: scale(1.04); }
+.at-program-card.is-linkable { cursor: pointer; }
+.at-program-card.is-linkable:hover > img { transform: scale(1.04); }
+.at-program-card__link { position: absolute; inset: 0; z-index: 2; text-indent: -9999px; overflow: hidden; }
+.at-program-card__cta { position: relative; z-index: 3; }
 .at-program-card__content { position: absolute; inset: auto 0 0; padding: 26px; color: var(--at-white); }
 .at-program-card__content > span { display: block; margin-bottom: 8px; color: var(--at-teal); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-.at-program-card h3 { color: var(--at-white); font-size: clamp(24px, 1.85vw, 32px); font-weight: 700; line-height: 1.1; }
+.at-program-card :is(h1, h2, h3, h4, h5, h6) { color: var(--at-white); font-size: clamp(24px, 1.85vw, 32px); font-weight: 700; line-height: 1.1; }
 .at-program-card__content div { margin-top: 12px; font-size: 15px; line-height: 1.45; color: rgba(255,255,255,.82); }
 .at-program-card__content a { display: inline-flex; gap: 7px; margin-top: 18px; color: var(--at-green); font-size: 14px; font-weight: 700; }
 .at-industry-resources__header { display: flex; align-items: flex-end; justify-content: space-between; gap: 48px; }
@@ -113,18 +118,20 @@
   scrollbar-width: none;
 }
 .at-resource-track::-webkit-scrollbar { display: none; }
-.at-resource-card { display: flex; flex-direction: column; min-width: 0; height: 100%; overflow: hidden; scroll-snap-align: start; background: var(--at-white); border: 1px solid #DDE0E3; border-radius: var(--at-r-lg); transition: transform .3s var(--at-ease-out), box-shadow .3s ease; }
-.at-resource-card:hover { transform: translateY(-5px); box-shadow: var(--at-shadow-md); }
+.at-resource-card { display: flex; flex-direction: column; min-width: 0; height: 100%; overflow: hidden; scroll-snap-align: start; background: var(--at-white); border: 1px solid #DDE0E3; border-radius: var(--at-r-lg); transition: border-color .2s ease, outline-color .2s ease; }
+.at-resource-card:hover,
+.at-resource-card:focus-visible { border-color: var(--at-green); outline: 1.5px solid var(--at-green); outline-offset: -1px; }
 .at-resource-card__media { position: relative; aspect-ratio: 1.45 / 1; overflow: hidden; background: #E7E9EA; }
-.at-resource-card__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--at-ease-out); }
-.at-resource-card:hover .at-resource-card__media img { transform: scale(1.04); }
+.at-resource-card__media img { width: 100%; height: 100%; object-fit: cover; }
 .at-resource-card__badge { position: absolute; top: 16px; left: 16px; padding: 7px 12px; color: var(--at-navy); background: var(--at-teal); border-radius: var(--at-r-pill); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .at-resource-card__body { display: flex; flex: 1 1 auto; flex-direction: column; padding: 22px; }
 .at-resource-card__body > p { color: var(--at-teal-deep); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .at-resource-card h3 { margin-top: 10px; font-size: clamp(20px, 1.4vw, 24px); font-weight: 700; line-height: 1.15; }
 .at-resource-card__body div { margin-top: 12px; margin-bottom: 24px; font-size: 14px; line-height: 1.45; color: var(--at-body-color); }
 .at-resource-card__meta { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 16px; border-top: 1px solid #E2E4E6; color: var(--at-muted); font-size: 12px; }
-.at-resource-card__meta svg { flex: 0 0 auto; color: var(--at-green-text); }
+.at-resource-card__meta svg { flex: 0 0 auto; color: var(--at-green-text); transition: transform .25s var(--at-ease-out), color .2s ease; }
+.at-resource-card:hover .at-resource-card__meta svg,
+.at-resource-card:focus-visible .at-resource-card__meta svg { transform: translate(3px, -3px); color: var(--at-teal-deep); }
 .at-resource-controls { display: flex; align-items: center; justify-content: space-between; margin-top: 26px; }
 .at-resource-controls__dots { display: flex; gap: 7px; }
 .at-resource-controls__dots span { width: 7px; height: 7px; background: #CDD1D7; border-radius: 50%; }

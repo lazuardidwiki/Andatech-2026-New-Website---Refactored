@@ -99,29 +99,78 @@
     {%- endif -%}
 
     <div class="at-resource-track" data-at-resource-track>
-      {%- for block in section.blocks -%}
-        {%- assign card_filter = block.settings.filter_tag | handleize -%}
-        {%- assign card_cta_type = block.settings.cta_type | default: 'download' -%}
-        <a class="at-resource-card" href="{{ block.settings.url | default: '#' }}"{% if block.settings.filter_tag != blank %} data-filter-tag="{{ card_filter }}"{% endif %}{% if card_cta_type == 'link' %} target="_blank" rel="noopener"{% endif %} data-at-rise {{ block.shopify_attributes }}>
-          {%- if block.settings.image != blank or block.settings.badge != blank -%}<div class="at-resource-card__media">
-            {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 1000 }}" alt="{{ block.settings.image.alt | default: block.settings.title | escape }}" loading="lazy">{%- endif -%}
-            {%- if block.settings.badge != blank -%}<span class="at-resource-card__badge">{{ block.settings.badge | escape }}</span>{%- endif -%}
-          </div>{%- endif -%}
-          {%- assign block_title_tag = block.settings.title_tag | default: 'h4' -%}
-          <div class="at-resource-card__body">
-            {%- if block.settings.category != blank -%}<p>{{ block.settings.category | escape }}</p>{%- endif -%}
-            <{{ block_title_tag }}>{{ block.settings.title | escape }}</{{ block_title_tag }}>
-            {%- if block.settings.desc != blank -%}<div>{{ block.settings.desc }}</div>{%- endif -%}
-            <span class="at-resource-card__meta">{{ block.settings.read_time | escape }}
-              {%- if card_cta_type == 'link' -%}
-                <svg class="at-resource-card__link-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              {%- else -%}
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      {%- if section.settings.source_mode == 'blog' and section.settings.source_blog != blank -%}
+        {%- assign source_blog = blogs[section.settings.source_blog] -%}
+        {%- assign source_tag_handle = section.settings.source_tag | handleize -%}
+        {%- assign source_limit = section.settings.source_limit | default: 4 -%}
+        {%- assign shown = 0 -%}
+        {%- assign auto_title_tag = section.settings.auto_title_tag | default: 'h4' -%}
+        {%- for article in source_blog.articles -%}
+          {%- if shown >= source_limit -%}{%- break -%}{%- endif -%}
+          {%- assign matches_tag = false -%}
+          {%- if section.settings.source_tag == blank -%}
+            {%- assign matches_tag = true -%}
+          {%- else -%}
+            {%- for t in article.tags -%}
+                            {%- assign t_handle = t | handleize -%}
+              {%- if t == section.settings.source_tag or t_handle == source_tag_handle -%}
+                {%- assign matches_tag = true -%}{%- break -%}
               {%- endif -%}
-            </span>
-          </div>
-        </a>
-      {%- endfor -%}
+            {%- endfor -%}
+          {%- endif -%}
+          {%- if matches_tag -%}
+            {%- assign article_category = section.settings.source_category_fallback -%}
+            {%- for t in article.tags -%}
+              {%- if t != section.settings.source_tag -%}{%- assign article_category = t -%}{%- break -%}{%- endif -%}
+            {%- endfor -%}
+            {%- assign word_count = article.content | strip_html | split: ' ' | size -%}
+            {%- assign read_mins = word_count | divided_by: 200 -%}
+            {%- if read_mins < 1 -%}{%- assign read_mins = 1 -%}{%- endif -%}
+            <a class="at-resource-card" href="{{ article.url }}" data-at-rise>
+              {%- if article.image != blank -%}<div class="at-resource-card__media">
+                <img src="{{ article.image | image_url: width: 1000 }}" alt="{{ article.image.alt | default: article.title | escape }}" loading="lazy">
+                {%- if shown == 0 and section.settings.source_first_badge != blank -%}<span class="at-resource-card__badge">{{ section.settings.source_first_badge | escape }}</span>{%- endif -%}
+              </div>{%- endif -%}
+              <div class="at-resource-card__body">
+                {%- if article_category != blank -%}<p>{{ article_category | escape }}</p>{%- endif -%}
+                <{{ auto_title_tag }}>{{ article.title | escape }}</{{ auto_title_tag }}>
+                {%- if article.excerpt_or_content != blank -%}<div>{{ article.excerpt_or_content | strip_html | truncatewords: 22 }}</div>{%- endif -%}
+                <span class="at-resource-card__meta">{{ read_mins }} mins read
+                  <svg class="at-resource-card__link-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              </div>
+            </a>
+            {%- assign shown = shown | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if shown == 0 -%}
+          <p class="at-resource-empty" style="padding:24px;color:var(--at-muted);font-size:14px;">No articles found for tag "{{ section.settings.source_tag | escape }}" in blog "{{ section.settings.source_blog | escape }}".</p>
+        {%- endif -%}
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          {%- assign card_filter = block.settings.filter_tag | handleize -%}
+          {%- assign card_cta_type = block.settings.cta_type | default: 'download' -%}
+          <a class="at-resource-card" href="{{ block.settings.url | default: '#' }}"{% if block.settings.filter_tag != blank %} data-filter-tag="{{ card_filter }}"{% endif %}{% if card_cta_type == 'link' %} target="_blank" rel="noopener"{% endif %} data-at-rise {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank or block.settings.badge != blank -%}<div class="at-resource-card__media">
+              {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 1000 }}" alt="{{ block.settings.image.alt | default: block.settings.title | escape }}" loading="lazy">{%- endif -%}
+              {%- if block.settings.badge != blank -%}<span class="at-resource-card__badge">{{ block.settings.badge | escape }}</span>{%- endif -%}
+            </div>{%- endif -%}
+            {%- assign block_title_tag = block.settings.title_tag | default: 'h4' -%}
+            <div class="at-resource-card__body">
+              {%- if block.settings.category != blank -%}<p>{{ block.settings.category | escape }}</p>{%- endif -%}
+              <{{ block_title_tag }}>{{ block.settings.title | escape }}</{{ block_title_tag }}>
+              {%- if block.settings.desc != blank -%}<div>{{ block.settings.desc }}</div>{%- endif -%}
+              <span class="at-resource-card__meta">{{ block.settings.read_time | escape }}
+                {%- if card_cta_type == 'link' -%}
+                  <svg class="at-resource-card__link-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {%- else -%}
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {%- endif -%}
+              </span>
+            </div>
+          </a>
+        {%- endfor -%}
+      {%- endif -%}
     </div>
     <div class="at-resource-controls" data-at-resource-controls>
       <div class="at-resource-controls__dots" data-at-resource-dots aria-hidden="true"></div>
@@ -218,7 +267,31 @@
     },
     { "type": "richtext", "id": "desc", "label": "Description", "default": "<p>Use practical guides and industry insights to strengthen policies, testing procedures and supervisor readiness.</p>" },
     { "type": "text", "id": "link_label", "label": "View all label", "default": "View Knowledge Centre" },
-    { "type": "url", "id": "link_url", "label": "View all link" }
+    { "type": "url", "id": "link_url", "label": "View all link" },
+    { "type": "header", "content": "Auto-populate from blog" },
+    { "type": "select", "id": "source_mode", "label": "Content source", "options": [
+      { "value": "manual", "label": "Manual — use the resource blocks below" },
+      { "value": "blog",   "label": "Automatic — latest articles from a blog" }
+    ], "default": "manual", "info": "Switch to 'Automatic' to have the cards refresh whenever new blog posts are published." },
+    { "type": "blog", "id": "source_blog", "label": "Source blog", "info": "Pick the blog these cards should pull articles from." },
+    { "type": "text", "id": "source_tag", "label": "Filter by tag", "info": "Only articles that carry this tag are shown. Leave blank to show the newest articles regardless of tag." },
+    { "type": "range", "id": "source_limit", "label": "How many articles", "min": 2, "max": 12, "step": 1, "default": 4 },
+    { "type": "text", "id": "source_first_badge", "label": "Badge on newest card", "info": "Optional. Shown on the first auto card only (e.g. 'Most Popular', 'Latest')." },
+    { "type": "text", "id": "source_category_fallback", "label": "Default category label", "info": "Fallback shown when an article has no secondary tag to use as a category (e.g. 'Guide')." },
+    {
+      "type": "select",
+      "id": "auto_title_tag",
+      "label": "Auto card title HTML tag",
+      "options": [
+        { "value": "p",  "label": "Paragraph (p)" },
+        { "value": "h2", "label": "Heading 2 (h2)" },
+        { "value": "h3", "label": "Heading 3 (h3)" },
+        { "value": "h4", "label": "Heading 4 (h4)" },
+        { "value": "h5", "label": "Heading 5 (h5)" },
+        { "value": "h6", "label": "Heading 6 (h6)" }
+      ],
+      "default": "h4"
+    }
   ],
   "blocks": [{ "type": "resource", "name": "Resource", "limit": 12, "settings": [
     { "type": "image_picker", "id": "image", "label": "Image" },
