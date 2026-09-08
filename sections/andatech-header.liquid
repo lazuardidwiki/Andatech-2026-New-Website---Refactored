@@ -239,6 +239,25 @@
           </section>
         {%- endif -%}
       {%- endfor -%}
+      {%- comment -%}
+        Mobile-only bottom action bar. The utility bar is hidden on ≤767px, so
+        the phone number and Book Consultation CTA are otherwise unreachable
+        from the drawer. Same section settings feed both, so editing the
+        utility bar in the theme editor updates this row too.
+      {%- endcomment -%}
+      {%- if section.settings.util_2_label != blank or section.settings.util_cta_label != blank -%}
+        <div class="at-mobile-nav__actions" data-at-mobile-nav-actions>
+          {%- if section.settings.util_2_label != blank -%}
+            <a class="at-mobile-nav__actions-link" href="{{ section.settings.util_2_url | default: '#' }}">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.5 3.5h3l1.5 4-2 1.4a12 12 0 0 0 6.1 6.1l1.4-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.7a2 2 0 0 1 2-2.2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+              <span>{{ section.settings.util_2_label | escape }}</span>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.util_cta_label != blank -%}
+            <a class="at-mobile-nav__actions-cta" href="{{ section.settings.util_cta_url | default: '#' }}">{{ section.settings.util_cta_label | escape }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
     </nav>
     {%- for link in main_menu.links -%}
       {%- if link.links.size > 0 -%}
