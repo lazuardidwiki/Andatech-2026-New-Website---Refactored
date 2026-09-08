@@ -1042,7 +1042,9 @@
   .at-mobile-nav {
       min-height: 100dvh;
       height: 100dvh;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       padding: 0 32px;
     }
   .at-mobile-nav__close { top: 10px; right: 10px; }
