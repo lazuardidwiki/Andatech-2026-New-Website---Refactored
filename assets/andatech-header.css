@@ -1058,7 +1058,7 @@
     }
   .at-mobile-nav__trigger svg { width: 22px; height: 22px; color: #858b92; }
   .at-mobile-nav__subpanel { padding-top: 70px; }
-  .at-mobile-nav__back { top: 12px; left: 12px; }
+  .at-mobile-nav__back { top: 20px; left: 18px; }
   .at-mobile-nav__view-all {
       display: block;
       margin: 0 0 34px;
