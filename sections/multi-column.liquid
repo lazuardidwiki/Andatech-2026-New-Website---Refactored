@@ -49,6 +49,11 @@
     #{{ section.id }} .card__info {
       width: 100%;
     }
+    #{{ section.id }} .card__media.text-center img,
+    #{{ section.id }} .card__media.text-center svg {
+      margin-left: auto;
+      margin-right: auto;
+    }
   {% endstyle %}
   {%- if carousel == false -%}
     {% style %}
