@@ -1234,12 +1234,14 @@ html.at-mobile-menu-open [class*="shop-ai" i] {
       border-radius: 50%;
     }
   .at-mobile-nav__back {
-      display: grid;
-      place-items: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       gap: 0;
       padding: 0;
+      line-height: 0;
     }
-  .at-mobile-nav__back svg { margin: 0; }
+  .at-mobile-nav__back svg { margin: 0; display: block; }
   .at-mobile-nav__subpanel { padding-top: 96px; }
   .at-mobile-nav__view-all { margin-bottom: 38px; }
 }
