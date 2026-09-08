@@ -112,7 +112,8 @@
             {%- assign matches_tag = true -%}
           {%- else -%}
             {%- for t in article.tags -%}
-              {%- if t == section.settings.source_tag or t | handleize == source_tag_handle -%}
+              {%- assign t_handle = t | handleize -%}
+              {%- if t == section.settings.source_tag or t_handle == source_tag_handle -%}
                 {%- assign matches_tag = true -%}{%- break -%}
               {%- endif -%}
             {%- endfor -%}
