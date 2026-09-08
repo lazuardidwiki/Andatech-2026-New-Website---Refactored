@@ -1228,6 +1228,10 @@ html.at-mobile-menu-open [class*="shop-ai" i] {
     }
   .at-mobile-nav__back,
     .at-mobile-nav__close.at-burger {
+      display: grid;
+      place-items: center;
+      gap: 0;
+      padding: 0;
       background: rgba(255, 255, 255, 0.72);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
