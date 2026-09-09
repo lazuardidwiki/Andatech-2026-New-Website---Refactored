@@ -848,12 +848,20 @@
   /* In-drawer utility bar (tablet only). The element carries the base
      .at-utility class so background, links, and CTA inherit the main
      bar's styling verbatim — this rule only positions it at the top of
-     the drawer. */
+     the drawer.
+
+     `zoom: .9` mirrors the site-wide .9 zoom that andatech-site.css
+     applies to .at-header-section / .at-section / .at-footer-section
+     at min-width: 768px. Without it the drawer utility (portalled to
+     <body> alongside .at-mega) renders at 100% while the main utility
+     inside the section renders at 90% — an ~11% visible size drift
+     between the two. Same zoom keeps them identical. */
   .at-mega__utility {
       display: block;
       position: absolute;
       top: 0; left: 0; right: 0;
       z-index: 3;
+      zoom: .9;
     }
   .at-search-modal__panel {
       position: relative;
