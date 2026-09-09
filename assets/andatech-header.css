@@ -1011,7 +1011,7 @@
   .at-mobile-nav__subpanel { padding-top: clamp(100px, 13vh, 132px); }
   .at-mobile-nav__back {
       position: fixed;
-      top: 80px;
+      top: 72px;
       left: max(var(--at-gutter), 2.78vw);
       z-index: 2;
       display: inline-flex;
@@ -1060,7 +1060,7 @@
       display: flex;
       flex-direction: column;
       position: fixed;
-      top: 80px;
+      top: 72px;
       right: max(var(--at-gutter), 2.78vw);
       z-index: 2;
       align-items: center;
@@ -1455,7 +1455,7 @@ html.at-mobile-menu-open [class*="shop-ai" i] {
   html.at-mobile-menu-open .at-mobile-nav__close.at-burger,
     html.at-mobile-menu-open .at-mobile-nav__back {
       position: fixed !important;
-      top: 80px !important;
+      top: 72px !important;
       z-index: 202 !important;
       width: 40px !important;
       height: 40px !important;
