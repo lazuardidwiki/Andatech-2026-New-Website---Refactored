@@ -29,7 +29,7 @@
         {%- if section.settings.cta_label != blank -%}<a class="at-btn at-btn--green" href="{{ section.settings.cta_url | default: '#' }}">{{ section.settings.cta_label | escape }} <i class="at-btn__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m10 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>{%- endif -%}
       </div>
       {%- if section.settings.image != blank -%}
-        <div class="at-andalink__media"><img src="{{ section.settings.image | image_url: width: 1600 }}" alt="{{ section.settings.image.alt | escape }}" loading="lazy"></div>
+        <div class="at-andalink__media"><img src="{{ section.settings.image | image_url: width: 2000 }}" alt="{{ section.settings.image.alt | escape }}" loading="lazy"></div>
       {%- endif -%}
     </div>
   </div>
