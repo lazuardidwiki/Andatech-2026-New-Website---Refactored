@@ -371,15 +371,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       {% unless product.handle == 'andatech-gt-fuel-cell-breathalyser' %}
         {%- liquid
           assign show_breadcrumbs = false
-          if settings.show_breadcrumbs_product and request.page_type == 'product'
-            assign show_breadcrumbs = true
-          elsif settings.show_breadcrumbs_collection and request.page_type == 'collection'
+          if settings.show_breadcrumbs_collection and request.page_type == 'collection'
             assign show_breadcrumbs = true
           elsif settings.show_breadcrumbs_collection_list and request.page_type == 'list-collections'
             assign show_breadcrumbs = true
           elsif settings.show_breadcrumbs_article and request.page_type == 'article'
             assign show_breadcrumbs = true
           elsif settings.show_breadcrumbs_blog and request.page_type == 'blog'
+            assign show_breadcrumbs = true
+          elsif request.page_type == 'page'
             assign show_breadcrumbs = true
           endif
         -%}

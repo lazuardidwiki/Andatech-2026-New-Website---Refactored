@@ -1508,6 +1508,30 @@
   .at-solutions__trigger { min-height: 104px; }
 }
 
+/* iPad and other touch tablets keep the desktop/tablet composition, but the
+   image stack must be a real horizontal scroller so finger swipes work. Using
+   any-pointer catches iPads even when a trackpad or keyboard is connected. */
+@media (min-width: 768px) and (max-width: 1400px) and (any-pointer: coarse) {
+  .at-solutions__stack {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .at-solutions__stack::-webkit-scrollbar { display: none; }
+  .at-solutions__stack img {
+    grid-area: auto;
+    flex: 0 0 calc(100% - 32px);
+    width: auto;
+    min-width: 0;
+    scroll-snap-align: start;
+    transform: none !important;
+  }
+  .at-solutions__stack img:only-child { flex-basis: 100%; }
+}
+
 /* — from lines 3202-3539, was inside @media (max-width: 767px) — */
 @media (max-width: 767px) {
   .at-hero { display: flex; flex-direction: column; }

@@ -17,6 +17,15 @@
 {%- liquid
   assign show_crumbs = true
   assign show_structured_data = true
+
+  if template.name == 'page'
+    assign show_crumbs = false
+    assign show_structured_data = false
+  elsif template.name == 'collection'
+    assign show_crumbs = false
+    assign show_structured_data = false
+  endif
+
   assign show_collection_listing_link = false
   assign breadcrumbs_title = 'general.breadcrumbs.title' | t
   assign home_title = 'general.breadcrumbs.home' | t
