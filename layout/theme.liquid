@@ -368,7 +368,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <main id="main-content">
       {%- comment -%}08-05-26 Itan disable GT breadcrumb  {% endcomment %}
-      {% comment %} {% unless product.handle == 'andatech-gt-fuel-cell-breathalyser' %}
+      {% unless product.handle == 'andatech-gt-fuel-cell-breathalyser' %}
         {%- liquid
           assign show_breadcrumbs = false
           if settings.show_breadcrumbs_product and request.page_type == 'product'
@@ -383,7 +383,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             assign show_breadcrumbs = true
           endif
         -%}
-      {% endunless %} {% endcomment %}
+      {% endunless %}
       {%- if show_breadcrumbs -%}
         <div class="container{% if request.page_type == 'product' %} product-breadcrumbs{% endif %}">
           {%- liquid

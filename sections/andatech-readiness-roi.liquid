@@ -17,7 +17,13 @@
 {{ 'andatech-roi.css' | asset_url | stylesheet_tag }}
 {{ 'andatech-mcp.css' | asset_url | stylesheet_tag }}
 {{ 'andatech-industry.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'andatech-roi.js' | asset_url }}" defer="defer"></script>
+{%- comment -%}
+  andatech-roi.js is intentionally NOT loaded here. Its calculator module
+  targets [data-at-roi], which does not exist in this markup (only
+  [data-roi-calculator] does). Its modal module targets [data-at-roi-modal],
+  also not present. Silent no-op since the 2026-09-05 split — removed as
+  dead weight.
+{%- endcomment -%}
 
 <style>
   /* ── Standalone calculator: field groups ─────────────────── */
@@ -53,6 +59,79 @@
   .at-mcp-readiness__result-row--summary strong { font-size: 17px; }
   .at-mcp-readiness__result-row--summary.is-negative-row strong {
     color: #9B1C12;
+  }
+
+  /* ── Optional outsourced-cost sub-fields ─────────────────── */
+  .at-roi-toggle {
+    display: flex; align-items: center; gap: 8px; margin: 4px 0 0;
+    font-size: 13px; color: var(--at-body-color, #495563);
+  }
+  .at-roi-subfields { margin-top: 14px; }
+  .at-roi-subfields[hidden] { display: none; }
+
+  /* ── Headline result (always visible, ungated) ────────────── */
+  .at-roi-headline {
+    padding: 20px 24px; border-bottom: 1px solid #E5E7EB;
+  }
+  .at-roi-headline__label {
+    font-size: 12px; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--at-body-color, #495563);
+    margin: 0 0 6px;
+  }
+  .at-roi-headline__amount {
+    font-size: clamp(26px, 3vw, 34px); font-weight: 700;
+    color: var(--at-teal-deep, #2A8F8F); line-height: 1.1;
+  }
+  .at-roi-headline__amount.is-negative { color: #9B1C12; }
+  .at-roi-headline__sub {
+    margin: 8px 0 0; font-size: 13px; color: var(--at-body-color, #495563);
+  }
+
+  /* ── Gated full breakdown ──────────────────────────────── */
+  .at-roi-gate { position: relative; }
+  .at-roi-gate[data-gate-state="locked"] .at-mcp-readiness__result-list,
+  .at-roi-gate[data-gate-state="locked"] .at-mcp-readiness__priorities {
+    filter: blur(6px); user-select: none; pointer-events: none;
+  }
+  /* Overlay: dim-tinted layer over the blurred rows, centres the card. */
+  .at-roi-gate__form {
+    position: absolute; inset: 0; z-index: 2; display: flex;
+    align-items: center; justify-content: center;
+    padding: 24px; background: rgba(15, 23, 32, .35);
+  }
+  .at-roi-gate[data-gate-state="unlocked"] .at-roi-gate__form { display: none; }
+  /* Card: bounded white surface so the gate reads as an unlock prompt,
+     not a wall of blur. */
+  .at-roi-gate__card {
+    width: 100%; max-width: 460px;
+    display: flex; flex-direction: column; gap: 14px;
+    padding: 28px;
+    background: #fff; border-radius: 16px;
+    box-shadow: 0 22px 44px -14px rgba(0, 0, 0, .35),
+                0 6px 14px -6px rgba(0, 0, 0, .18);
+  }
+  .at-roi-gate__form h3 { margin: 0; font-size: 17px; font-weight: 700; }
+  .at-roi-gate__form p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--at-body-color, #495563); }
+  /* Inner form owns its own vertical rhythm so every element sits at the
+     same distance from its neighbour. */
+  .at-roi-gate__form form { display: flex; flex-direction: column; gap: 12px; }
+  .at-roi-gate__row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .at-roi-gate__form input {
+    width: 100%; height: 44px; padding: 0 14px; border: 1px solid #D8DCE0;
+    border-radius: 8px; font-size: 14px; box-sizing: border-box;
+    background: #fff;
+  }
+  .at-roi-gate__form input:focus {
+    outline: none; border-color: var(--at-teal-deep, #2A8F8F);
+    box-shadow: 0 0 0 3px rgba(42, 143, 143, .15);
+  }
+  .at-roi-gate__form input:invalid:not(:placeholder-shown) { border-color: #9B1C12; }
+  .at-roi-gate__form .at-btn { width: 100%; margin-top: 4px; }
+  .at-roi-gate__error { font-size: 12px; color: #9B1C12; margin: 0; }
+  .at-roi-gate__note { font-size: 12px; color: var(--at-body-color, #495563); margin: 0; }
+  @media (max-width: 480px) {
+    .at-roi-gate__row { grid-template-columns: 1fr; }
+    .at-roi-gate__card { padding: 22px; border-radius: 14px; }
   }
 </style>
 
@@ -171,16 +250,16 @@
                Use zero where a cost does not apply.</p>
           </div>
 
-          {%- comment -%} Group 1 — Program scale (context, not in the formula) {%- endcomment -%}
+          {%- comment -%} Group 1 — Program scale (now drives volume + FRX units) {%- endcomment -%}
           <div class="at-roi-calc__field-group">
             <p class="at-roi-calc__group-label">Program scale</p>
             <p class="at-roi-calc__group-hint">
-              These figures provide context for your results.
-              They do not alter the financial formula.
+              Drives your testing volume and how many SoberLive FRX units
+              you'd need.
             </p>
             <div class="at-mcp-readiness__fields">
               <label class="at-mcp-readiness__field">
-                <span>Number of employees</span>
+                <span>Employees to be tested</span>
                 <input type="number" min="0" step="1" inputmode="numeric"
                        value="{{ section.settings.default_employees }}"
                        data-roi-input="employees">
@@ -192,27 +271,56 @@
                        data-roi-input="sites">
               </label>
               <label class="at-mcp-readiness__field">
-                <span>Collectors required</span>
+                <span>Tests per employee, per year</span>
                 <input type="number" min="0" step="1" inputmode="numeric"
-                       value="{{ section.settings.default_collectors }}"
-                       data-roi-input="collectors">
+                       value="{{ section.settings.default_tests_per_employee }}"
+                       data-roi-input="tests-per-employee">
               </label>
             </div>
+            <p class="at-roi-calc__group-hint" style="margin: 10px 0 0;">
+              Estimated tests per year: <strong data-roi-out="total-tests">0</strong>
+            </p>
           </div>
 
-          {%- comment -%} Group 2 — Current delivery (feeds the formula) {%- endcomment -%}
+          {%- comment -%} Group 2 — Current manual testing (staff-time cost + optional outsourced) {%- endcomment -%}
           <div class="at-roi-calc__field-group">
-            <p class="at-roi-calc__group-label">Current delivery</p>
+            <p class="at-roi-calc__group-label">Current manual testing</p>
             <p class="at-roi-calc__group-hint">
-              Enter annual testing activity and the current or estimated
-              cost of outsourced delivery.
+              The staff time your current supervised breath-testing process
+              takes — administering the test and logging the result.
             </p>
             <div class="at-mcp-readiness__fields">
               <label class="at-mcp-readiness__field">
-                <span>Estimated tests per year</span>
-                <input type="number" min="0" step="1" inputmode="numeric"
-                       value="{{ section.settings.default_tests }}"
-                       data-roi-input="tests">
+                <span>Minutes to complete one test</span>
+                <input type="number" min="0" step="1" inputmode="decimal"
+                       value="{{ section.settings.default_manual_minutes }}"
+                       data-roi-input="manual-minutes">
+              </label>
+              <label class="at-mcp-readiness__field">
+                <span>Fully-loaded hourly cost of staff testing</span>
+                <span class="at-mcp-readiness__money">
+                  <span aria-hidden="true">$</span>
+                  <input type="number" min="0" step="1" inputmode="decimal"
+                         value="{{ section.settings.default_hourly_rate }}"
+                         data-roi-input="hourly-rate">
+                </span>
+              </label>
+            </div>
+            <label class="at-roi-toggle">
+              <input type="checkbox" data-roi-toggle="outsourced">
+              <span>We also send some testing to an outsourced provider</span>
+            </label>
+            <div class="at-mcp-readiness__fields at-roi-subfields"
+                 data-roi-subfields="outsourced" hidden>
+              <label class="at-mcp-readiness__field">
+                <span>Share of testing that's outsourced</span>
+                <span class="at-mcp-readiness__percent">
+                  <input type="number" min="0" max="100" step="1"
+                         inputmode="numeric"
+                         value="{{ section.settings.default_outsourced_share }}"
+                         data-roi-input="outsourced-share">
+                  <span aria-hidden="true">%</span>
+                </span>
               </label>
               <label class="at-mcp-readiness__field">
                 <span>Average outsourced cost per test</span>
@@ -232,46 +340,70 @@
                          data-roi-input="other-cost">
                 </span>
               </label>
-              <label class="at-mcp-readiness__field">
-                <span>Testing planned to move in-house</span>
-                <span class="at-mcp-readiness__percent">
-                  <input type="number" min="0" max="100" step="1"
-                         inputmode="numeric"
-                         value="{{ section.settings.default_internal_share }}"
-                         data-roi-input="internal-share">
-                  <span aria-hidden="true">%</span>
-                </span>
-              </label>
             </div>
           </div>
 
-          {%- comment -%} Group 3 — Proposed program (feeds the formula) {%- endcomment -%}
+          {%- comment -%} Group 3 — Proposed: SoberLive FRX (unit cost + annual licence + advanced) {%- endcomment -%}
           <div class="at-roi-calc__field-group">
-            <p class="at-roi-calc__group-label">Proposed program</p>
+            <p class="at-roi-calc__group-label">Proposed: SoberLive FRX</p>
             <p class="at-roi-calc__group-hint">
-              Enter figures from your planning, a scoped proposal
-              or your own estimates.
+              Unattended wall-mounted units with facial recognition —
+              testing runs without a collector present.
             </p>
             <div class="at-mcp-readiness__fields">
               <label class="at-mcp-readiness__field">
-                <span>One-off setup, equipment and training</span>
+                <span>Cost per unit (one-off, incl. install)</span>
                 <span class="at-mcp-readiness__money">
                   <span aria-hidden="true">$</span>
                   <input type="number" min="0" step="1" inputmode="decimal"
-                         value="{{ section.settings.default_setup_cost }}"
-                         data-roi-input="setup-cost">
+                         value="{{ section.settings.default_unit_cost }}"
+                         data-roi-input="unit-cost">
                 </span>
               </label>
               <label class="at-mcp-readiness__field">
-                <span>Ongoing annual program cost</span>
+                <span>Annual licence, calibration &amp; servicing per unit</span>
                 <span class="at-mcp-readiness__money">
                   <span aria-hidden="true">$</span>
                   <input type="number" min="0" step="1" inputmode="decimal"
-                         value="{{ section.settings.default_ongoing_cost }}"
-                         data-roi-input="ongoing-cost">
+                         value="{{ section.settings.default_unit_annual_cost }}"
+                         data-roi-input="unit-annual-cost">
                 </span>
               </label>
             </div>
+
+            <details class="at-mcp-readiness__method" style="margin-top: 14px;">
+              <summary>Advanced assumptions</summary>
+              <div class="at-mcp-readiness__fields" style="margin-top: 14px;">
+                <label class="at-mcp-readiness__field">
+                  <span>Units required</span>
+                  <input type="number" min="0" step="1" inputmode="numeric"
+                         data-roi-input="units" data-roi-auto="sites"
+                         placeholder="Auto: 1 per site">
+                </label>
+                <label class="at-mcp-readiness__field">
+                  <span>Tests flagged for manual review</span>
+                  <span class="at-mcp-readiness__percent">
+                    <input type="number" min="0" max="100" step="1"
+                           inputmode="numeric"
+                           value="{{ section.settings.default_flagged_pct }}"
+                           data-roi-input="flagged-pct">
+                    <span aria-hidden="true">%</span>
+                  </span>
+                </label>
+                <label class="at-mcp-readiness__field">
+                  <span>Review minutes per flagged test</span>
+                  <input type="number" min="0" step="1" inputmode="decimal"
+                         value="{{ section.settings.default_review_minutes }}"
+                         data-roi-input="review-minutes">
+                </label>
+              </div>
+              <p class="at-roi-calc__group-hint" style="margin-top: 10px;">
+                Units default to one per site — override if a site needs
+                more than one, or fewer employees share a unit. FRX runs
+                unattended, but a small share of tests (failed or
+                inconclusive) still need a quick human review.
+              </p>
+            </details>
           </div>
         </form>
 
@@ -287,47 +419,98 @@
             <span data-readiness-label>Complete Step 1</span>
           </div>
 
-          <div class="at-mcp-readiness__result-list">
-            <div class="at-mcp-readiness__result-row">
-              <span>Current annual outsourced cost</span>
-              <strong data-roi-out="external">$0</strong>
-            </div>
-            <div class="at-mcp-readiness__result-row">
-              <span>Cost potentially avoided</span>
-              <strong data-roi-out="avoided">$0</strong>
-            </div>
-            <div class="at-mcp-readiness__result-row">
-              <span>Estimated year-one program cost</span>
-              <strong data-roi-out="year-one-cost">$0</strong>
-            </div>
-            <div class="at-mcp-readiness__result-row at-mcp-readiness__result-row--primary">
-              <span>Indicative year-one net difference</span>
-              <strong data-roi-out="year-one-net">$0</strong>
-            </div>
-            <div class="at-mcp-readiness__result-row">
-              <span>Indicative ongoing annual difference</span>
-              <strong data-roi-out="ongoing-net">$0</strong>
-            </div>
-            <div class="at-mcp-readiness__result-row">
-              <span>Indicative year-one ROI</span>
-              <strong data-roi-out="roi">&mdash;</strong>
-            </div>
-            <div class="at-mcp-readiness__result-row">
-              <span>Indicative payback period</span>
-              <strong data-roi-out="payback">&mdash;</strong>
-            </div>
-            <div class="at-mcp-readiness__result-row at-mcp-readiness__result-row--summary">
-              <span>Projected 3-year cumulative value</span>
-              <strong data-roi-out="three-year">$0</strong>
-            </div>
+          {%- comment -%} Headline — ungated, always visible once numbers are entered. {%- endcomment -%}
+          <div class="at-roi-headline">
+            <p class="at-roi-headline__label">Indicative annual savings with SoberLive FRX</p>
+            <div class="at-roi-headline__amount" data-roi-out="headline">$0</div>
+            <p class="at-roi-headline__sub" data-roi-out="headline-sub">
+              Enter your numbers to see an estimate.
+            </p>
           </div>
 
-          <div class="at-mcp-readiness__priorities">
-            <h3>Capability priorities</h3>
-            <p data-priority-summary>
-              Complete the readiness questions to see suggested priorities.
-            </p>
-            <ul data-priority-list></ul>
+          {%- comment -%} Gated — full line-by-line breakdown behind a lead-capture form. {%- endcomment -%}
+          <div class="at-roi-gate" data-roi-gate data-gate-state="locked">
+            <div class="at-roi-gate__form" data-roi-gate-form>
+              <div class="at-roi-gate__card">
+              <h3>{{ section.settings.gate_title | default: 'Get your full breakdown' }}</h3>
+              <p>{{ section.settings.gate_sub | default: "See exactly where the savings come from, plus your ROI and payback period. We'll also send a copy to your inbox." }}</p>
+              <form data-roi-lead-form novalidate>
+                <div class="at-roi-gate__row">
+                  <input type="text" name="firstname" placeholder="First name" required data-roi-lead="firstname">
+                  <input type="text" name="lastname" placeholder="Last name" data-roi-lead="lastname">
+                </div>
+                <div class="at-roi-gate__row">
+                  <input type="email" name="email" placeholder="Work email" required data-roi-lead="email">
+                  <input type="tel" name="phone" placeholder="Phone (optional)" data-roi-lead="phone">
+                </div>
+                <input type="text" name="company" placeholder="Company (optional)" data-roi-lead="company">
+                <p class="at-roi-gate__error" data-roi-lead-error hidden>
+                  Please enter your first name and a valid work email.
+                </p>
+                <button class="at-btn at-btn--green at-btn--sm" type="submit">
+                  {{ section.settings.gate_cta_label | default: 'Show my full breakdown' }}
+                </button>
+                <p class="at-roi-gate__note">
+                  {{ section.settings.gate_note | default: "We'll only use these details to follow up about your results." }}
+                </p>
+              </form>
+              </div>
+            </div>
+
+            <div class="at-mcp-readiness__result-list">
+              <div class="at-mcp-readiness__result-row">
+                <span>Current annual testing cost</span>
+                <strong data-roi-out="current-cost">$0</strong>
+              </div>
+              <div class="at-mcp-readiness__result-row">
+                <span>&nbsp;&nbsp;— of which manual staff time</span>
+                <strong data-roi-out="manual-labor">$0</strong>
+              </div>
+              <div class="at-mcp-readiness__result-row">
+                <span>&nbsp;&nbsp;— of which outsourced provider</span>
+                <strong data-roi-out="outsourced">$0</strong>
+              </div>
+              <div class="at-mcp-readiness__result-row">
+                <span>SoberLive FRX units required</span>
+                <strong data-roi-out="units-used">0</strong>
+              </div>
+              <div class="at-mcp-readiness__result-row">
+                <span>One-off setup cost</span>
+                <strong data-roi-out="setup-cost">$0</strong>
+              </div>
+              <div class="at-mcp-readiness__result-row">
+                <span>Ongoing annual program cost</span>
+                <strong data-roi-out="ongoing-cost">$0</strong>
+              </div>
+              <div class="at-mcp-readiness__result-row at-mcp-readiness__result-row--primary">
+                <span>Indicative year-one net difference</span>
+                <strong data-roi-out="year-one-net">$0</strong>
+              </div>
+              <div class="at-mcp-readiness__result-row">
+                <span>Indicative ongoing annual difference</span>
+                <strong data-roi-out="ongoing-net">$0</strong>
+              </div>
+              <div class="at-mcp-readiness__result-row">
+                <span>Indicative year-one ROI</span>
+                <strong data-roi-out="roi">&mdash;</strong>
+              </div>
+              <div class="at-mcp-readiness__result-row">
+                <span>Indicative payback period</span>
+                <strong data-roi-out="payback">&mdash;</strong>
+              </div>
+              <div class="at-mcp-readiness__result-row at-mcp-readiness__result-row--summary">
+                <span>Projected 3-year cumulative value</span>
+                <strong data-roi-out="three-year">$0</strong>
+              </div>
+            </div>
+
+            <div class="at-mcp-readiness__priorities">
+              <h3>Capability priorities</h3>
+              <p data-priority-summary>
+                Complete the readiness questions to see suggested priorities.
+              </p>
+              <ul data-priority-list></ul>
+            </div>
           </div>
         </div>
       </div>
@@ -343,24 +526,39 @@
           </svg>
         </summary>
         <div>
-          <p><strong>Current outsourced cost</strong> = annual tests
-             &times; outsourced cost per test + annual callout, travel
-             and related costs.</p>
-          <p><strong>Cost potentially avoided</strong> = current outsourced
-             cost &times; the percentage of testing planned to move
-             in-house.</p>
-          <p><strong>Year-one program cost</strong> = one-off setup cost
-             + ongoing annual program cost.</p>
-          <p><strong>Year-one net difference</strong> = cost potentially
-             avoided &minus; year-one program cost.</p>
-          <p><strong>Year-one ROI</strong> = (cost potentially avoided
-             &minus; year-one program cost) &divide; year-one program cost
+          <p><strong>Annual tests</strong> = employees &times; tests
+             per employee, per year.</p>
+          <p><strong>Manual staff time cost</strong> = tests done
+             manually &times; minutes per test &divide; 60 &times;
+             hourly staff cost.</p>
+          <p><strong>Outsourced cost</strong> (only if that option is
+             ticked) = outsourced tests &times; cost per test + annual
+             callout and related costs.</p>
+          <p><strong>Current annual testing cost</strong> = manual
+             staff time cost + outsourced cost.</p>
+          <p><strong>Units required</strong> defaults to one SoberLive
+             FRX unit per site, and can be overridden.</p>
+          <p><strong>One-off setup cost</strong> = units &times; cost
+             per unit.</p>
+          <p><strong>Ongoing annual program cost</strong> = (units
+             &times; annual licence/servicing per unit) + review cost.
+             <strong>Review cost</strong> = annual tests &times; the
+             flagged-for-review share &times; review minutes &divide;
+             60 &times; hourly staff cost — the residual human time
+             FRX still needs for flagged results.</p>
+          <p><strong>Year-one net difference</strong> = current annual
+             testing cost &minus; (setup cost + ongoing annual program
+             cost).</p>
+          <p><strong>Ongoing annual difference</strong> = current annual
+             testing cost &minus; ongoing annual program cost.</p>
+          <p><strong>Year-one ROI</strong> = year-one net difference
+             &divide; (setup cost + ongoing annual program cost)
              &times; 100.</p>
-          <p><strong>Payback period</strong> = one-off setup cost &divide;
+          <p><strong>Payback period</strong> = setup cost &divide;
              (ongoing annual difference &divide; 12). Shown only when
              the ongoing annual difference is positive.</p>
-          <p><strong>3-year cumulative value</strong> = (cost potentially
-             avoided &times; 3) &minus; one-off setup cost &minus;
+          <p><strong>3-year cumulative value</strong> = (current annual
+             testing cost &times; 3) &minus; setup cost &minus;
              (ongoing annual program cost &times; 3).</p>
           <p>The estimator does not assign a financial value to safety,
              compliance, incident avoidance or productivity. Those
@@ -410,20 +608,43 @@
 {%- comment -%} ═══════════════════════════════════════════════════
   JavaScript — readiness scoring + transparent ROI calculation.
 
+  Compares the current manual, supervised breath-testing process
+  (staff time + any outsourced provider fees) against an unattended
+  SoberLive FRX wall-mounted, facial-recognition program. Employees
+  size the annual test volume; sites size the number of FRX units
+  required (editable in Advanced assumptions). Outsourced-provider
+  costs are optional (behind the "we also use an outsourced provider"
+  toggle) rather than mandatory.
+
   Formulas (all disclosed to the visitor):
-    external      = tests × costPerTest + otherCosts
-    avoided       = external × (inHouseShare / 100)
-    yearOneCost   = setupCost + ongoingCost
-    yearOneNet    = avoided − yearOneCost
-    ongoingNet    = avoided − ongoingCost
-    roi           = yearOneNet / yearOneCost × 100
-    payback       = setupCost / (ongoingNet / 12)        [months]
-    threeYearNet  = (avoided × 3) − setupCost − (ongoingCost × 3)
+    totalTests         = employees × testsPerEmployee
+    outsourcedTests    = totalTests × outsourcedShare      (only if toggled on)
+    manualTests        = totalTests − outsourcedTests
+    manualLabor        = manualTests × manualMinutes/60 × hourlyRate
+    outsourcedCost     = (outsourcedTests × testCost) + otherCost   (0 if toggled off)
+    currentCost        = manualLabor + outsourcedCost
+    units              = user override, otherwise sites (1 per site)
+    setupCost          = units × unitCost
+    reviewCost         = totalTests × flaggedPct × reviewMinutes/60 × hourlyRate
+    ongoingProgramCost = (units × unitAnnualCost) + reviewCost
+    yearOneCost        = setupCost + ongoingProgramCost
+    yearOneNet         = currentCost − yearOneCost
+    ongoingNet         = currentCost − ongoingProgramCost
+    roi                = yearOneNet / yearOneCost × 100
+    payback            = setupCost / (ongoingNet / 12)     [months]
+    threeYearNet       = (currentCost × 3) − setupCost − (ongoingProgramCost × 3)
 
   Readiness scoring:
     Yes = 2, Unsure = 1, No = 0.
     Score = (sum / maxPossible) × 100, rounded.
     Gaps (No or Unsure) surface as capability priorities.
+
+  Lead-capture gate: full row-by-row breakdown is CSS-blurred and pointer-
+  events disabled until the visitor submits a valid name + email. On unlock
+  we POST to HubSpot's Forms API using Andatech's site-wide portal + form
+  GUID (Vivien's call — one form across every CTA). The ROI figures ride
+  along in the standard "message" field so they land in the sales
+  notification email without needing custom HubSpot properties.
 ═══════════════════════════════════════════════════ {%- endcomment -%}
 <script>
 (function () {
@@ -448,6 +669,11 @@
     var el = root.querySelector('[data-roi-input="' + name + '"]');
     var v = el ? Number(el.value) : 0;
     return Number.isFinite(v) && v > 0 ? v : 0;
+  }
+
+  function checked(name) {
+    var el = root.querySelector('[data-roi-toggle="' + name + '"]');
+    return !!(el && el.checked);
   }
 
   function setOutput(name, text, negative) {
@@ -525,12 +751,13 @@
       });
 
       var sites = numeric('sites');
-      var collectors = numeric('collectors');
-      if ((collectors || sites) && r.answered === questions.length) {
+      var unitsField = root.querySelector('[data-roi-input="units"]');
+      var units = (unitsField && Number(unitsField.value) > 0) ? Number(unitsField.value) : sites;
+      if (sites && r.answered === questions.length) {
         var coverage = document.createElement('li');
         coverage.textContent =
-          'Plan role coverage for ' + collectors +
-          (collectors === 1 ? ' collector' : ' collectors') +
+          'Plan install and coverage for ' + units +
+          (units === 1 ? ' SoberLive FRX unit' : ' SoberLive FRX units') +
           ' across ' + sites +
           (sites === 1 ? ' site.' : ' sites.');
         list.appendChild(coverage);
@@ -540,40 +767,59 @@
 
   /* ── ROI calculation ───────────────────────────────────── */
   function compute() {
-    var tests         = numeric('tests');
-    var testCost      = numeric('test-cost');
-    var otherCost     = numeric('other-cost');
-    var internalShare = Math.min(100, numeric('internal-share')) / 100;
-    var setupCost     = numeric('setup-cost');
-    var ongoingCost   = numeric('ongoing-cost');
+    var employees         = numeric('employees');
+    var sites             = numeric('sites');
+    var testsPerEmployee  = numeric('tests-per-employee');
+    var manualMinutes     = numeric('manual-minutes');
+    var hourlyRate        = numeric('hourly-rate');
 
-    var external    = (tests * testCost) + otherCost;
-    var avoided     = external * internalShare;
-    var yearOneCost = setupCost + ongoingCost;
-    var yearOneNet  = avoided - yearOneCost;
-    var ongoingNet  = avoided - ongoingCost;
+    var usesOutsourced    = checked('outsourced');
+    var outsourcedShare   = usesOutsourced ? Math.min(100, numeric('outsourced-share')) / 100 : 0;
+    var testCost          = numeric('test-cost');
+    var otherCost         = usesOutsourced ? numeric('other-cost') : 0;
+
+    var unitsInput        = numeric('units');
+    var units             = unitsInput > 0 ? unitsInput : sites;
+    var unitCost          = numeric('unit-cost');
+    var unitAnnualCost    = numeric('unit-annual-cost');
+    var flaggedPct        = Math.min(100, numeric('flagged-pct')) / 100;
+    var reviewMinutes     = numeric('review-minutes');
+
+    var totalTests        = employees * testsPerEmployee;
+    var outsourcedTests   = totalTests * outsourcedShare;
+    var manualTests       = totalTests - outsourcedTests;
+
+    var manualLabor       = manualTests * (manualMinutes / 60) * hourlyRate;
+    var outsourcedCost    = usesOutsourced ? (outsourcedTests * testCost) + otherCost : 0;
+    var currentCost       = manualLabor + outsourcedCost;
+
+    var setupCost         = units * unitCost;
+    var ongoingUnitCost   = units * unitAnnualCost;
+    var reviewCost        = totalTests * flaggedPct * (reviewMinutes / 60) * hourlyRate;
+    var ongoingProgramCost= ongoingUnitCost + reviewCost;
+    var yearOneCost       = setupCost + ongoingProgramCost;
+
+    var ongoingNet        = currentCost - ongoingProgramCost;
+    var yearOneNet        = currentCost - yearOneCost;
 
     var roi;
-    if (yearOneCost > 0)       roi = (yearOneNet / yearOneCost) * 100;
-    else if (avoided > 0)      roi = Infinity;
-    else                       roi = null;
+    if (yearOneCost > 0)        roi = (yearOneNet / yearOneCost) * 100;
+    else if (currentCost > 0)   roi = Infinity;
+    else                        roi = null;
 
     var payback;
     if (setupCost === 0 && ongoingNet > 0) payback = 0;
     else if (ongoingNet > 0)               payback = setupCost / (ongoingNet / 12);
     else                                   payback = null;
 
-    var threeYearNet = (avoided * 3) - setupCost - (ongoingCost * 3);
+    var threeYearNet = (currentCost * 3) - setupCost - (ongoingProgramCost * 3);
 
     return {
-      external:     external,
-      avoided:      avoided,
-      yearOneCost:  yearOneCost,
-      yearOneNet:   yearOneNet,
-      ongoingNet:   ongoingNet,
-      roi:          roi,
-      payback:      payback,
-      threeYearNet: threeYearNet
+      totalTests: totalTests, units: units,
+      manualLabor: manualLabor, outsourcedCost: outsourcedCost, currentCost: currentCost,
+      setupCost: setupCost, ongoingProgramCost: ongoingProgramCost, yearOneCost: yearOneCost,
+      yearOneNet: yearOneNet, ongoingNet: ongoingNet, roi: roi,
+      payback: payback, threeYearNet: threeYearNet
     };
   }
 
@@ -581,9 +827,17 @@
     updateReadiness();
     var c = compute();
 
-    setOutput('external',      currency.format(c.external));
-    setOutput('avoided',       currency.format(c.avoided));
-    setOutput('year-one-cost', currency.format(c.yearOneCost));
+    /* Live tests-per-year hint under Program scale — plain text, no
+       negative/row treatment. */
+    var totalTestsEl = root.querySelector('[data-roi-out="total-tests"]');
+    if (totalTestsEl) totalTestsEl.textContent = Math.round(c.totalTests).toLocaleString('en-AU');
+
+    setOutput('current-cost',  currency.format(c.currentCost));
+    setOutput('manual-labor',  currency.format(c.manualLabor));
+    setOutput('outsourced',    currency.format(c.outsourcedCost));
+    setOutput('units-used',    Math.round(c.units).toLocaleString('en-AU'));
+    setOutput('setup-cost',    currency.format(c.setupCost));
+    setOutput('ongoing-cost',  currency.format(c.ongoingProgramCost));
     setOutput('year-one-net',  currency.format(c.yearOneNet),  c.yearOneNet < 0);
     setOutput('ongoing-net',   currency.format(c.ongoingNet),  c.ongoingNet < 0);
 
@@ -605,6 +859,154 @@
 
     /* 3-year projection */
     setOutput('three-year', currency.format(c.threeYearNet), c.threeYearNet < 0);
+
+    /* Headline — the one ungated number. */
+    var headlineEl = root.querySelector('[data-roi-out="headline"]');
+    var headlineSubEl = root.querySelector('[data-roi-out="headline-sub"]');
+    if (headlineEl) {
+      headlineEl.textContent = currency.format(c.ongoingNet);
+      headlineEl.classList.toggle('is-negative', c.ongoingNet < 0);
+    }
+    if (headlineSubEl) {
+      headlineSubEl.textContent = c.totalTests > 0
+        ? 'Based on ' + Math.round(c.totalTests).toLocaleString('en-AU') + ' tests a year across ' + c.units + (c.units === 1 ? ' unit.' : ' units.')
+        : 'Enter your numbers to see an estimate.';
+    }
+  }
+
+  /* ── Optional outsourced-cost sub-fields ───────────────── */
+  var outsourcedToggle = root.querySelector('[data-roi-toggle="outsourced"]');
+  var outsourcedFields = root.querySelector('[data-roi-subfields="outsourced"]');
+  if (outsourcedToggle && outsourcedFields) {
+    outsourcedToggle.addEventListener('change', function () {
+      outsourcedFields.hidden = !outsourcedToggle.checked;
+      updateResults();
+    });
+  }
+
+  /* ── Units auto-suggested from sites, until the visitor overrides it ── */
+  var sitesField = root.querySelector('[data-roi-input="sites"]');
+  var unitsField = root.querySelector('[data-roi-input="units"]');
+  if (sitesField && unitsField) {
+    sitesField.addEventListener('input', function () {
+      if (!unitsField.dataset.touched) unitsField.value = sitesField.value;
+    });
+    unitsField.addEventListener('input', function () { unitsField.dataset.touched = '1'; });
+  }
+
+  /* ── Lead-gated full breakdown ──────────────────────────── */
+  var gate     = root.querySelector('[data-roi-gate]');
+  var leadForm = root.querySelector('[data-roi-lead-form]');
+  if (gate && leadForm) {
+    var leadError = root.querySelector('[data-roi-lead-error]');
+    leadForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var firstEl = root.querySelector('[data-roi-lead="firstname"]');
+      var emailEl = root.querySelector('[data-roi-lead="email"]');
+      var validEmail = emailEl && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value);
+      if (!firstEl || !firstEl.value.trim() || !validEmail) {
+        if (leadError) leadError.hidden = false;
+        return;
+      }
+      if (leadError) leadError.hidden = true;
+
+      var lead = {
+        firstname: firstEl.value.trim(),
+        lastname: (root.querySelector('[data-roi-lead="lastname"]') || {}).value || '',
+        email: emailEl.value.trim(),
+        phone: (root.querySelector('[data-roi-lead="phone"]') || {}).value || '',
+        company: (root.querySelector('[data-roi-lead="company"]') || {}).value || ''
+      };
+
+      /* Reveal the breakdown immediately so the visitor isn't blocked on
+         the network call. Fire a custom event with the lead + current
+         results so this can be wired into HubSpot (portal/form IDs are
+         theme settings below) or any other CRM without touching this
+         calculation logic again. */
+      var r = compute();
+      gate.setAttribute('data-gate-state', 'unlocked');
+      root.dispatchEvent(new CustomEvent('at:roi-lead', {
+        detail: { lead: lead, results: r }
+      }));
+
+      {%- if section.settings.hubspot_portal_id != blank and section.settings.hubspot_form_id != blank -%}
+      /* Andatech uses one HubSpot form GUID across every CTA (Vivien's call).
+         ROI-specific figures are transient per-submission facts, not stable
+         attributes of the contact, so we deliberately do NOT write them to
+         custom contact properties (those would overwrite on a returning
+         visitor's next submission and clutter the record with calc noise).
+         Instead we pack the inputs + results into the standard "message"
+         field. Every HubSpot form has it, sales already reads it, and the
+         submission timeline preserves each historical value per submission.
+         The [ROI Calculator …] header at the top gives sales / workflows a
+         reliable string to filter on inside the shared form. */
+      function fmtMoney(n) {
+        return currency.format(Math.round(Number(n) || 0));
+      }
+      function fmtNum(n) {
+        return Math.round(Number(n) || 0).toLocaleString('en-AU');
+      }
+      function fmtPct(n) {
+        return (Math.round(Number(n) || 0)) + '%';
+      }
+      var paybackLine;
+      if (r.payback == null)      paybackLine = 'Not recoverable from these inputs';
+      else if (r.payback === 0)   paybackLine = 'Immediate';
+      else if (r.payback < 1)     paybackLine = 'Under 1 month';
+      else if (r.payback > 120)   paybackLine = '10+ years';
+      else                        paybackLine = r.payback.toFixed(1) + ' months';
+      var roiLine;
+      if (r.roi == null)          roiLine = '—';
+      else if (!isFinite(r.roi))  roiLine = '∞';
+      else                        roiLine = Math.round(r.roi) + '%';
+
+      var messageLines = [
+        '[ROI Calculator submission from andatech.com.au]',
+        '',
+        'Their inputs:',
+        '• Employees to be tested: '     + fmtNum(numeric('employees')),
+        '• Number of sites: '            + fmtNum(numeric('sites')),
+        '• Tests per employee/year: '    + fmtNum(numeric('tests-per-employee')),
+        '• Minutes per manual test: '    + fmtNum(numeric('manual-minutes')),
+        '• Hourly staff cost: '          + fmtMoney(numeric('hourly-rate')),
+        '• Uses outsourced provider: '   + (checked('outsourced') ? 'Yes' : 'No')
+      ];
+      if (checked('outsourced')) {
+        messageLines.push('  – Outsourced share: '     + fmtPct(numeric('outsourced-share')));
+        messageLines.push('  – Cost per outsourced test: ' + fmtMoney(numeric('test-cost')));
+        messageLines.push('  – Annual callout / travel: ' + fmtMoney(numeric('other-cost')));
+      }
+      messageLines.push('• FRX unit cost (one-off): '  + fmtMoney(numeric('unit-cost')));
+      messageLines.push('• FRX annual licence/unit: '  + fmtMoney(numeric('unit-annual-cost')));
+      messageLines.push('');
+      messageLines.push('Their computed results:');
+      messageLines.push('• Indicative annual savings with SoberLive FRX: ' + fmtMoney(r.ongoingNet));
+      messageLines.push('• Total tests per year: '     + fmtNum(r.totalTests));
+      messageLines.push('• FRX units required: '       + fmtNum(r.units));
+      messageLines.push('• Current annual testing cost: ' + fmtMoney(r.currentCost));
+      messageLines.push('• One-off setup cost: '       + fmtMoney(r.setupCost));
+      messageLines.push('• Ongoing annual program cost: ' + fmtMoney(r.ongoingProgramCost));
+      messageLines.push('• Year-one net difference: '  + fmtMoney(r.yearOneNet));
+      messageLines.push('• Year-one ROI: '             + roiLine);
+      messageLines.push('• Payback period: '           + paybackLine);
+      messageLines.push('• Projected 3-year cumulative value: ' + fmtMoney(r.threeYearNet));
+
+      fetch('https://api.hsforms.com/submissions/v3/integration/submit/{{ section.settings.hubspot_portal_id }}/{{ section.settings.hubspot_form_id }}', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fields: [
+            { name: 'firstname', value: lead.firstname },
+            { name: 'lastname',  value: lead.lastname },
+            { name: 'email',     value: lead.email },
+            { name: 'phone',     value: lead.phone },
+            { name: 'company',   value: lead.company },
+            { name: 'message',   value: messageLines.join('\n') }
+          ]
+        })
+      }).catch(function () { /* Breakdown already revealed; fail silently. */ });
+      {%- endif -%}
+    });
   }
 
   /* ── Step navigation ───────────────────────────────────── */
@@ -727,17 +1129,33 @@
     { "type": "url", "id": "results_cta_url", "label": "Results CTA link" },
     { "type": "richtext", "id": "disclaimer", "label": "Calculator disclaimer",
       "default": "<p>This self-assessment is general information only. Results are indicative, depend entirely on the figures entered, and do not guarantee financial, safety, legal or compliance outcomes. Confirm program scope, applicable laws, standards and costs with qualified advisers and an Andatech compliance specialist.</p>" },
+    { "type": "header", "content": "Full breakdown gate (lead capture)" },
+    { "type": "text", "id": "gate_title", "label": "Gate heading", "default": "Get your full breakdown" },
+    { "type": "text", "id": "gate_sub", "label": "Gate subheading",
+      "default": "See exactly where the savings come from, plus your ROI and payback period. We'll also send a copy to your inbox." },
+    { "type": "text", "id": "gate_cta_label", "label": "Gate button label", "default": "Show my full breakdown" },
+    { "type": "text", "id": "gate_note", "label": "Gate fine print", "default": "We'll only use these details to follow up about your results." },
+    { "type": "text", "id": "hubspot_portal_id", "label": "HubSpot portal ID",
+      "default": "7005767",
+      "info": "Prefilled with Andatech's site-wide HubSpot portal — leave as-is unless routing ROI leads to a different portal. Clear the field to skip HubSpot and only reveal the breakdown locally." },
+    { "type": "text", "id": "hubspot_form_id", "label": "HubSpot form GUID",
+      "default": "f0baeb4a-1bdb-4183-b45a-8d24f713a117",
+      "info": "Prefilled with the site-wide form GUID so ROI submissions land in the same list as every other CTA. The visitor's inputs and computed results are packed into the standard `message` field (prefixed with `[ROI Calculator submission from andatech.com.au]` so sales / workflows can filter). No custom HubSpot properties needed." },
+
     { "type": "header", "content": "Starting values" },
-    { "type": "paragraph", "content": "Keep monetary values at zero unless Andatech has approved customer-facing assumptions. Visitors enter their own figures in the calculator." },
+    { "type": "paragraph", "content": "Keep monetary values at zero unless Andatech has approved customer-facing assumptions. Visitors enter their own figures; the values below only set defaults." },
     { "type": "number", "id": "default_employees", "label": "Employees", "default": 0 },
     { "type": "number", "id": "default_sites", "label": "Sites", "default": 0 },
-    { "type": "number", "id": "default_collectors", "label": "Collectors required", "default": 0 },
-    { "type": "number", "id": "default_tests", "label": "Tests per year", "default": 0 },
+    { "type": "number", "id": "default_tests_per_employee", "label": "Tests per employee, per year", "default": 12 },
+    { "type": "number", "id": "default_manual_minutes", "label": "Minutes to complete one test", "default": 5 },
+    { "type": "number", "id": "default_hourly_rate", "label": "Fully-loaded hourly staff cost ($)", "default": 0 },
+    { "type": "number", "id": "default_outsourced_share", "label": "Share of testing outsourced (%)", "default": 0 },
     { "type": "number", "id": "default_test_cost", "label": "Outsourced cost per test ($)", "default": 0 },
     { "type": "number", "id": "default_other_cost", "label": "Annual callout and related costs ($)", "default": 0 },
-    { "type": "number", "id": "default_internal_share", "label": "Testing planned to move in-house (%)", "default": 0 },
-    { "type": "number", "id": "default_setup_cost", "label": "One-off setup cost ($)", "default": 0 },
-    { "type": "number", "id": "default_ongoing_cost", "label": "Ongoing annual program cost ($)", "default": 0 }
+    { "type": "number", "id": "default_unit_cost", "label": "SoberLive FRX cost per unit ($, one-off)", "default": 0 },
+    { "type": "number", "id": "default_unit_annual_cost", "label": "SoberLive FRX annual licence/servicing per unit ($)", "default": 0 },
+    { "type": "number", "id": "default_flagged_pct", "label": "Tests flagged for manual review (%)", "default": 3 },
+    { "type": "number", "id": "default_review_minutes", "label": "Review minutes per flagged test", "default": 5 }
   ],
   "blocks": [
     {

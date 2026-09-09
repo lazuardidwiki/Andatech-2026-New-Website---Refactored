@@ -471,6 +471,8 @@
 .at-search-modal__result-link:hover { color: var(--at-teal-deep); }
 .at-search-modal__empty { margin: 0; color: var(--at-muted); font-size: 16px; }
 .at-mobile-nav { display: none; }
+.at-mobile-nav__actions { display: none; }
+.at-mega__utility { display: none; }
 @media (max-width: 767px) {
   .at-search-modal__panel { padding: 20px; }
   .at-search-modal__input { height: 52px; font-size: 17px; }
@@ -665,7 +667,7 @@
   .at-mobile-nav { min-height: 100dvh; padding: 0 32px 48px; }
   .at-mobile-nav__topbar { position: static; display: block; min-height: 0; border: 0; }
   .at-mobile-nav__title { display: none; }
-  .at-mobile-nav__close { position: fixed; top: 30px; right: 24px; z-index: 1; width: 48px; height: 48px; color: #000; }
+  .at-mobile-nav__close { position: fixed; top: 16px; right: max(var(--at-gutter), 2.78vw); z-index: 1; width: 40px; height: 40px; color: #000; }
   .at-mobile-nav__close svg { width: 30px; height: 30px; }
   .at-mobile-nav__list { padding-top: 154px; }
   .at-mobile-nav__item { border: 0; }
@@ -673,8 +675,8 @@
     .at-mobile-nav__direct-link { min-height: 122px; padding: 0; color: var(--at-navy); font-size: 27px; font-weight: 600; line-height: 1.08; }
   .at-mobile-nav__trigger svg { width: 28px; height: 28px; color: #888e95; }
   .at-mobile-nav__subpanel { padding-top: 128px; }
-  .at-mobile-nav__back { position: fixed; top: 36px; left: 28px; z-index: 1; width: 40px; height: 40px; margin: 0; color: #000; font-size: 0; }
-  .at-mobile-nav__back svg { width: 30px; height: 30px; }
+  .at-mobile-nav__back { position: fixed; top: 16px; left: max(var(--at-gutter), 2.78vw); z-index: 1; width: 40px; height: 40px; margin: 0; color: #000; font-size: 0; }
+  .at-mobile-nav__back svg { width: 24px; height: 24px; }
   .at-mobile-nav__subheading { display: none; }
   .at-mobile-nav__view-all { margin: 0 0 70px; color: #858b92; font-size: 22px; font-weight: 500; }
   .at-mobile-nav__sublist { border: 0; }
@@ -767,10 +769,10 @@
 }
 @media (max-width: 767px) {
   .at-mobile-nav__back {
-      top: 20px;
-      left: 18px;
-      width: 48px;
-      height: 48px;
+      top: 16px;
+      left: max(var(--at-gutter), 2.78vw);
+      width: 40px;
+      height: 40px;
     }
   .at-mobile-nav__subpanel { padding-top: 96px; }
   .at-mobile-nav__view-all { margin-bottom: 38px; }
@@ -785,15 +787,21 @@
     .at-no-motion .at-mobile-nav__frame-out { animation: none; }
 }
 @media (max-width: 767px) {
-  .at-search-modal__close,
-    .at-mobile-nav__close.at-burger {
+  .at-search-modal__close {
       top: 20px;
       right: 18px;
       width: 48px;
       height: 48px;
     }
   .at-mobile-nav__close.at-burger {
+      top: 16px;
+      right: max(var(--at-gutter), 2.78vw);
+      width: 40px;
+      height: 40px;
+    }
+  .at-mobile-nav__close.at-burger {
       display: flex;
+      flex-direction: column;
       position: fixed;
       z-index: 2;
       align-items: center;
@@ -809,7 +817,7 @@
       height: 2px;
       border-radius: 999px;
       background: currentColor;
-      transition: transform .28s cubic-bezier(.22, 1, .36, 1), opacity .2s ease;
+      transition: transform .4s var(--at-ease-out), opacity .3s var(--at-ease);
     }
   .at-mobile-nav__close.at-burger[aria-expanded="true"] span:nth-child(1) {
       transform: translateY(7px) rotate(45deg);
@@ -837,6 +845,37 @@
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
     }
+  /* In-drawer utility bar (tablet only). The element carries the base
+     .at-utility class so background, links, and CTA inherit the main
+     bar's styling verbatim — this rule only positions and scales it.
+
+     `zoom: .9` mirrors the site-wide .9 zoom that andatech-site.css
+     applies to .at-header-section / .at-section / .at-footer-section
+     at min-width: 768px. Without it the drawer utility (portalled to
+     <body> alongside .at-mega) renders at 100% while the main utility
+     inside the section renders at 90% — an ~11% visible size drift.
+
+     We use `zoom` (not `transform: scale`) because zoom scales through
+     the browser's native rendering — text and pill outlines stay
+     crisp with proper subpixel anti-aliasing. `transform: scale`
+     scales through the GPU compositor, which softens edges and made
+     content read as slightly smaller than the main utility bar.
+
+     The earlier shift-on-open was Chrome auto-interpolating `zoom`
+     across the drawer's opacity fade. Killing that fade (rule below)
+     removes the animation the zoom change was interpolating across,
+     so zoom now applies discretely — crisp AND no shift. */
+  .at-mega__utility {
+      display: block;
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 3;
+      zoom: .9;
+    }
+  /* Cut the drawer's opacity fade on tablet — no fade for Chrome to
+     interpolate `zoom` across, no fade for iPad Safari to pixel-snap
+     differently across at each opacity step. The drawer just pops in. */
+  .at-mega { transition: none !important; }
   .at-search-modal__panel {
       position: relative;
       width: min(760px, calc(100% - 80px));
@@ -972,17 +1011,23 @@
   .at-mobile-nav__subpanel { padding-top: clamp(100px, 13vh, 132px); }
   .at-mobile-nav__back {
       position: fixed;
-      top: 26px;
-      left: 30px;
+      top: 72px;
+      left: max(var(--at-gutter), 2.78vw);
       z-index: 2;
-      width: 48px;
-      height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      width: 40px;
+      height: 40px;
       margin: 0;
+      padding: 0;
       color: #000;
       background: transparent;
       font-size: 0;
+      line-height: 0;
     }
-  .at-mobile-nav__back svg { width: 29px; height: 29px; }
+  .at-mobile-nav__back svg { width: 24px; height: 24px; margin: 0; display: block; }
   .at-mobile-nav__view-all {
       display: block;
       margin: 0 0 40px;
@@ -1001,17 +1046,28 @@
       line-height: 1.12;
     }
   .at-mobile-nav__sublist svg { display: none; }
+  .at-mobile-nav__group + .at-mobile-nav__group { margin-top: 32px; }
+  .at-mobile-nav__group-label {
+      display: block;
+      margin: 0 0 12px;
+      color: #858b92;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
   .at-mobile-nav__close.at-burger {
       display: flex;
+      flex-direction: column;
       position: fixed;
-      top: 26px;
-      right: 30px;
+      top: 72px;
+      right: max(var(--at-gutter), 2.78vw);
       z-index: 2;
       align-items: center;
       justify-content: center;
       gap: 5px;
-      width: 48px;
-      height: 48px;
+      width: 40px;
+      height: 40px;
       padding: 0;
       border: 0;
       color: #000;
@@ -1022,7 +1078,7 @@
       height: 2px;
       border-radius: 999px;
       background: currentColor;
-      transition: transform .28s cubic-bezier(.22, 1, .36, 1), opacity .2s ease;
+      transition: transform .4s var(--at-ease-out), opacity .3s var(--at-ease);
     }
   .at-mobile-nav__close.at-burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
   .at-mobile-nav__close.at-burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
@@ -1045,9 +1101,52 @@
       overflow-x: hidden;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      padding: 0 32px calc(64px + env(safe-area-inset-bottom, 0px));
+      padding: 0 32px calc(120px + env(safe-area-inset-bottom, 0px));
     }
-  .at-mobile-nav__close { top: 20px; right: 18px; }
+  .at-mobile-nav__actions {
+      display: flex;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 3;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px max(var(--at-gutter), 2.78vw) calc(16px + env(safe-area-inset-bottom, 0px));
+      background: var(--at-white);
+      border-top: 1px solid var(--at-gray-200);
+    }
+  .at-mobile-nav__actions-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      color: var(--at-navy);
+      font-size: 16px;
+      font-weight: 600;
+    }
+  .at-mobile-nav__actions-link svg {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      color: var(--at-navy);
+    }
+  .at-mobile-nav__actions-cta {
+      display: inline-flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      height: 48px;
+      padding-inline: 26px;
+      border-radius: var(--at-r-pill);
+      background: var(--at-navy);
+      color: var(--at-white);
+      font-size: 15px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+  .at-mobile-nav__close { top: 16px; right: max(var(--at-gutter), 2.78vw); }
   .at-mobile-nav__list { padding-top: 62px; }
   .at-mobile-nav__trigger,
     .at-mobile-nav__direct-link {
@@ -1058,7 +1157,7 @@
     }
   .at-mobile-nav__trigger svg { width: 22px; height: 22px; color: #858b92; }
   .at-mobile-nav__subpanel { padding-top: 70px; }
-  .at-mobile-nav__back { top: 20px; left: 18px; }
+  .at-mobile-nav__back { top: 16px; left: max(var(--at-gutter), 2.78vw); }
   .at-mobile-nav__view-all {
       display: block;
       margin: 0 0 34px;
@@ -1221,10 +1320,10 @@ html.at-mobile-menu-open [class*="shop-ai" i] {
 }
 @media (max-width: 767px) {
   .at-mobile-nav__back {
-      top: 20px;
-      left: 18px;
-      width: 48px;
-      height: 48px;
+      top: 16px;
+      left: max(var(--at-gutter), 2.78vw);
+      width: 40px;
+      height: 40px;
     }
   .at-mobile-nav__back,
     .at-mobile-nav__close.at-burger {
@@ -1300,12 +1399,6 @@ html.at-mobile-menu-open [class*="shop-ai" i] {
       width: 100% !important;
       zoom: 1 !important;
     }
-  html.at-mobile-menu-open:not(.at-mobile-menu-at-page-top) .at-header-section {
-      top: -56px !important;
-    }
-  html.at-mobile-menu-open:not(.at-mobile-menu-at-page-top) .at-utility {
-      visibility: hidden !important;
-    }
   html.at-search-open:not(.at-search-at-page-top) .at-header-section {
       top: -56px !important;
     }
@@ -1349,8 +1442,7 @@ html.at-mobile-menu-open [class*="shop-ai" i] {
       height: 100% !important;
       margin: 0 !important;
     }
-  html.at-search-open .at-search-modal__close,
-    html.at-mobile-menu-open .at-mobile-nav__close.at-burger {
+  html.at-search-open .at-search-modal__close {
       position: fixed !important;
       top: 26px !important;
       right: 30px !important;
@@ -1360,6 +1452,18 @@ html.at-mobile-menu-open [class*="shop-ai" i] {
       margin: 0 !important;
       transform: none !important;
     }
+  html.at-mobile-menu-open .at-mobile-nav__close.at-burger,
+    html.at-mobile-menu-open .at-mobile-nav__back {
+      position: fixed !important;
+      top: 72px !important;
+      z-index: 202 !important;
+      width: 40px !important;
+      height: 40px !important;
+      margin: 0 !important;
+      transform: none !important;
+    }
+  html.at-mobile-menu-open .at-mobile-nav__close.at-burger { right: max(var(--at-gutter), 2.78vw) !important; }
+  html.at-mobile-menu-open .at-mobile-nav__back { left: max(var(--at-gutter), 2.78vw) !important; }
 }
 html.at-search-open #shopify-chat,
 html.at-search-open shopify-chat,
