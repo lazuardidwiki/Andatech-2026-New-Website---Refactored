@@ -875,7 +875,17 @@
       z-index: 3;
       transform-origin: top left;
       transform: scale(.9);
+      /* Force iPad Safari to promote this to its own compositor layer from
+         first paint, so it doesn't shift by a subpixel when Safari decides
+         to promote it mid-animation as the drawer fades in. */
+      will-change: transform;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
+  /* Cut the drawer's opacity fade on tablet — even with the scale composited
+     up front, iPad Safari can pixel-snap differently at each opacity step,
+     which reads as a shift. The drawer just pops in now. */
+  .at-mega { transition: none !important; }
   .at-search-modal__panel {
       position: relative;
       width: min(760px, calc(100% - 80px));
