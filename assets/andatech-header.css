@@ -846,22 +846,35 @@
       -webkit-backdrop-filter: none;
     }
   /* In-drawer utility bar (tablet only). The element carries the base
-     .at-utility class so background, links, and CTA inherit the main
-     bar's styling verbatim — this rule only positions it at the top of
-     the drawer.
-
-     `zoom: .9` mirrors the site-wide .9 zoom that andatech-site.css
+     .at-utility class so background and colour inherit the main bar —
+     the rules below scale the sizing values down by 0.9 natively (no
+     CSS zoom / transform), matching the .9 zoom that andatech-site.css
      applies to .at-header-section / .at-section / .at-footer-section
-     at min-width: 768px. Without it the drawer utility (portalled to
-     <body> alongside .at-mega) renders at 100% while the main utility
-     inside the section renders at 90% — an ~11% visible size drift
-     between the two. Same zoom keeps them identical. */
+     at min-width: 768px. Using explicit sizes instead of `zoom: .9`
+     avoids Chrome interpolating zoom across the drawer's opacity fade,
+     which read as a subtle "zoom in" animation. */
   .at-mega__utility {
       display: block;
       position: absolute;
       top: 0; left: 0; right: 0;
       z-index: 3;
-      zoom: .9;
+    }
+  .at-mega__utility .at-utility__inner {
+      gap: 36px;          /* 40 * 0.9 */
+      height: 50px;       /* 56 * 0.9 */
+    }
+  .at-mega__utility .at-utility__link {
+      gap: 9px;           /* 10 * 0.9 */
+      font-size: 14px;    /* 16 * 0.9 */
+    }
+  .at-mega__utility .at-utility__link svg {
+      width: 16px;        /* 18 * 0.9 */
+      height: 16px;
+    }
+  .at-mega__utility .at-utility__cta {
+      height: 32px;       /* 36 * 0.9 */
+      padding-inline: 22px; /* 24 * 0.9 */
+      font-size: 14px;    /* 16 * 0.9 */
     }
   .at-search-modal__panel {
       position: relative;
