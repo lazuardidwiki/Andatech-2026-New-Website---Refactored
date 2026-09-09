@@ -26,10 +26,21 @@
   position: relative;
   display: grid;
   /* 56.3vw is the design's 1728×973 ratio. Below ~1400 the copy is taller than
-     the scaled image, so without a floor the image drops out from behind it. */
+     the scaled image, so without a floor the image drops out from behind it.
+     At ≥1280px the desktop rule below takes over so utility bar + header + hero
+     fills the viewport exactly (matches Hero V5 sizing). */
   min-height: clamp(560px, 56.3vw, 973px);
   background: var(--at-white);
   overflow: hidden;
+}
+@media (min-width: 1280px) {
+  .at-hero {
+    /* Utility bar + header + hero == viewport (matches Hero V5 sizing).
+       111.112 = 100/0.9 compensates for the .at-section zoom:.9 on desktop.
+       144px = utility bar (56px) + .at-header__inner (88px), both unzoomed. */
+    min-height: calc(111.112vh - 144px);
+    min-height: calc(111.112dvh - 144px);
+  }
 }
 .at-hero__visual {
   grid-area: 1 / 1;
@@ -1410,8 +1421,9 @@
 /* — from lines 3068-3111, was inside @media (min-width: 768px) and (max-width: 1279px) — */
 @media (min-width: 768px) and (max-width: 1279px) {
   .at-hero {
-      min-height: calc(111.112vh - 136px);
-      min-height: calc(111.112dvh - 136px);
+      /* Utility bar + header + hero == viewport (matches Hero V5 sizing). */
+      min-height: calc(111.112vh - 144px);
+      min-height: calc(111.112dvh - 144px);
     }
   .at-pricing__card .at-btn--green {
       gap: 8px;
