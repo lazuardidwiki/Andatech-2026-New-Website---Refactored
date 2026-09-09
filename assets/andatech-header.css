@@ -849,42 +849,32 @@
      .at-utility class so background, links, and CTA inherit the main
      bar's styling verbatim — this rule only positions and scales it.
 
-     transform: scale(.9) mirrors the site-wide .9 zoom that
-     andatech-site.css applies to .at-header-section / .at-section /
-     .at-footer-section at min-width: 768px. Without it the drawer
-     utility (portalled to <body> alongside .at-mega) renders at 100%
-     while the main utility inside the section renders at 90% — an
-     ~11% visible size drift.
+     `zoom: .9` mirrors the site-wide .9 zoom that andatech-site.css
+     applies to .at-header-section / .at-section / .at-footer-section
+     at min-width: 768px. Without it the drawer utility (portalled to
+     <body> alongside .at-mega) renders at 100% while the main utility
+     inside the section renders at 90% — an ~11% visible size drift.
 
-     Using `transform` instead of `zoom` because Chrome now interpolates
-     `zoom` as an animatable property, which read as a subtle jump-in
-     as the drawer's opacity faded from 0 to 1. `transform` isn't in
-     any transition-property list here, so the scale applies discretely —
-     no interpolation, clean fade. The `explicit-sizes` alternative
-     (14px / 50px / etc) could only hit integer px values, so it landed
-     0.4px off the main bar's 14.4px visual size — visible drift.
+     We use `zoom` (not `transform: scale`) because zoom scales through
+     the browser's native rendering — text and pill outlines stay
+     crisp with proper subpixel anti-aliasing. `transform: scale`
+     scales through the GPU compositor, which softens edges and made
+     content read as slightly smaller than the main utility bar.
 
-     `width: calc(100% / .9)` = ~111.11% keeps the scaled box filling
-     the drawer's full width; `transform-origin: top left` anchors the
-     scale to the corner so left/right edges align with the drawer. */
+     The earlier shift-on-open was Chrome auto-interpolating `zoom`
+     across the drawer's opacity fade. Killing that fade (rule below)
+     removes the animation the zoom change was interpolating across,
+     so zoom now applies discretely — crisp AND no shift. */
   .at-mega__utility {
       display: block;
       position: absolute;
-      top: 0; left: 0;
-      width: calc(100% / .9);
+      top: 0; left: 0; right: 0;
       z-index: 3;
-      transform-origin: top left;
-      transform: scale(.9);
-      /* Force iPad Safari to promote this to its own compositor layer from
-         first paint, so it doesn't shift by a subpixel when Safari decides
-         to promote it mid-animation as the drawer fades in. */
-      will-change: transform;
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
+      zoom: .9;
     }
-  /* Cut the drawer's opacity fade on tablet — even with the scale composited
-     up front, iPad Safari can pixel-snap differently at each opacity step,
-     which reads as a shift. The drawer just pops in now. */
+  /* Cut the drawer's opacity fade on tablet — no fade for Chrome to
+     interpolate `zoom` across, no fade for iPad Safari to pixel-snap
+     differently across at each opacity step. The drawer just pops in. */
   .at-mega { transition: none !important; }
   .at-search-modal__panel {
       position: relative;
