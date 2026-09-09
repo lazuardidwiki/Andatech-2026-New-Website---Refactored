@@ -943,14 +943,67 @@
       }));
 
       {%- if section.settings.hubspot_portal_id != blank and section.settings.hubspot_form_id != blank -%}
-      /* The site uses a single HubSpot form GUID across every CTA. To keep
-         ROI leads distinguishable — and to let a HubSpot workflow email the
-         result back — we pass hidden context fields alongside the contact:
-           - source: constant "roi-calculator" (filter on this in HubSpot)
-           - roi_*: the current computed figures, so the workflow's marketing
-             email can reference them as personalization tokens.
-         Marketing must create matching custom contact properties in HubSpot
-         first; without them, HubSpot silently drops the values. */
+      /* Andatech uses one HubSpot form GUID across every CTA (Vivien's call).
+         ROI-specific figures are transient per-submission facts, not stable
+         attributes of the contact, so we deliberately do NOT write them to
+         custom contact properties (those would overwrite on a returning
+         visitor's next submission and clutter the record with calc noise).
+         Instead we pack the inputs + results into the standard "message"
+         field. Every HubSpot form has it, sales already reads it, and the
+         submission timeline preserves each historical value per submission.
+         The [ROI Calculator …] header at the top gives sales / workflows a
+         reliable string to filter on inside the shared form. */
+      function fmtMoney(n) {
+        return currency.format(Math.round(Number(n) || 0));
+      }
+      function fmtNum(n) {
+        return Math.round(Number(n) || 0).toLocaleString('en-AU');
+      }
+      function fmtPct(n) {
+        return (Math.round(Number(n) || 0)) + '%';
+      }
+      var paybackLine;
+      if (r.payback == null)      paybackLine = 'Not recoverable from these inputs';
+      else if (r.payback === 0)   paybackLine = 'Immediate';
+      else if (r.payback < 1)     paybackLine = 'Under 1 month';
+      else if (r.payback > 120)   paybackLine = '10+ years';
+      else                        paybackLine = r.payback.toFixed(1) + ' months';
+      var roiLine;
+      if (r.roi == null)          roiLine = '—';
+      else if (!isFinite(r.roi))  roiLine = '∞';
+      else                        roiLine = Math.round(r.roi) + '%';
+
+      var messageLines = [
+        '[ROI Calculator submission from andatech.com.au]',
+        '',
+        'Their inputs:',
+        '• Employees to be tested: '     + fmtNum(numeric('employees')),
+        '• Number of sites: '            + fmtNum(numeric('sites')),
+        '• Tests per employee/year: '    + fmtNum(numeric('tests-per-employee')),
+        '• Minutes per manual test: '    + fmtNum(numeric('manual-minutes')),
+        '• Hourly staff cost: '          + fmtMoney(numeric('hourly-rate')),
+        '• Uses outsourced provider: '   + (checked('outsourced') ? 'Yes' : 'No')
+      ];
+      if (checked('outsourced')) {
+        messageLines.push('  – Outsourced share: '     + fmtPct(numeric('outsourced-share')));
+        messageLines.push('  – Cost per outsourced test: ' + fmtMoney(numeric('test-cost')));
+        messageLines.push('  – Annual callout / travel: ' + fmtMoney(numeric('other-cost')));
+      }
+      messageLines.push('• FRX unit cost (one-off): '  + fmtMoney(numeric('unit-cost')));
+      messageLines.push('• FRX annual licence/unit: '  + fmtMoney(numeric('unit-annual-cost')));
+      messageLines.push('');
+      messageLines.push('Their computed results:');
+      messageLines.push('• Indicative annual savings with SoberLive FRX: ' + fmtMoney(r.ongoingNet));
+      messageLines.push('• Total tests per year: '     + fmtNum(r.totalTests));
+      messageLines.push('• FRX units required: '       + fmtNum(r.units));
+      messageLines.push('• Current annual testing cost: ' + fmtMoney(r.currentCost));
+      messageLines.push('• One-off setup cost: '       + fmtMoney(r.setupCost));
+      messageLines.push('• Ongoing annual program cost: ' + fmtMoney(r.ongoingProgramCost));
+      messageLines.push('• Year-one net difference: '  + fmtMoney(r.yearOneNet));
+      messageLines.push('• Year-one ROI: '             + roiLine);
+      messageLines.push('• Payback period: '           + paybackLine);
+      messageLines.push('• Projected 3-year cumulative value: ' + fmtMoney(r.threeYearNet));
+
       fetch('https://api.hsforms.com/submissions/v3/integration/submit/{{ section.settings.hubspot_portal_id }}/{{ section.settings.hubspot_form_id }}', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -961,12 +1014,7 @@
             { name: 'email',     value: lead.email },
             { name: 'phone',     value: lead.phone },
             { name: 'company',   value: lead.company },
-            { name: 'source',                  value: 'roi-calculator' },
-            { name: 'roi_headline_savings',    value: String(Math.round(r.ongoingNet)) },
-            { name: 'roi_tests_per_year',      value: String(Math.round(r.totalTests)) },
-            { name: 'roi_units_required',      value: String(r.units) },
-            { name: 'roi_year_one_net',        value: String(Math.round(r.yearOneNet)) },
-            { name: 'roi_payback_months',      value: r.payback == null ? '' : r.payback.toFixed(1) }
+            { name: 'message',   value: messageLines.join('\n') }
           ]
         })
       }).catch(function () { /* Breakdown already revealed; fail silently. */ });
@@ -1121,7 +1169,7 @@
       "info": "Prefilled with Andatech's site-wide HubSpot portal — leave as-is unless routing ROI leads to a different portal. Clear the field to skip HubSpot and only reveal the breakdown locally." },
     { "type": "text", "id": "hubspot_form_id", "label": "HubSpot form GUID",
       "default": "f0baeb4a-1bdb-4183-b45a-8d24f713a117",
-      "info": "Prefilled with the site-wide form GUID so ROI submissions land in the same list as every other CTA. Change if the marketing team spins up a dedicated ROI form. The hidden `source` field on the submission is set to `roi-calculator`, so a HubSpot workflow can still filter ROI leads separately." },
+      "info": "Prefilled with the site-wide form GUID so ROI submissions land in the same list as every other CTA. The visitor's inputs and computed results are packed into the standard `message` field (prefixed with `[ROI Calculator submission from andatech.com.au]` so sales / workflows can filter). No custom HubSpot properties needed." },
 
     { "type": "header", "content": "Starting values" },
     { "type": "paragraph", "content": "Keep monetary values at zero unless Andatech has approved customer-facing assumptions. Visitors enter their own figures; the values below only set defaults." },
