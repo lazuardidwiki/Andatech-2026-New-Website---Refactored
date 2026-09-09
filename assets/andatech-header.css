@@ -979,7 +979,7 @@
   .at-mobile-nav__subpanel { padding-top: clamp(100px, 13vh, 132px); }
   .at-mobile-nav__back {
       position: fixed;
-      top: 24px;
+      top: 80px;
       left: max(var(--at-gutter), 2.78vw);
       z-index: 2;
       display: inline-flex;
@@ -1028,7 +1028,7 @@
       display: flex;
       flex-direction: column;
       position: fixed;
-      top: 24px;
+      top: 80px;
       right: max(var(--at-gutter), 2.78vw);
       z-index: 2;
       align-items: center;
@@ -1051,8 +1051,6 @@
   .at-mobile-nav__close.at-burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
   .at-mobile-nav__close.at-burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
   .at-mobile-nav__close.at-burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-  html.at-mobile-menu-at-page-top .at-mobile-nav__back,
-    html.at-mobile-menu-at-page-top .at-mobile-nav__close.at-burger { top: 80px; }
   .at-mobile-nav__frame-in { animation: at-mobile-nav-frame-in .3s cubic-bezier(.16, 1, .3, 1) both; }
   .at-mobile-nav__frame-out { animation: at-mobile-nav-frame-out .18s ease-in both; pointer-events: none; }
 }
@@ -1369,11 +1367,17 @@ html.at-mobile-menu-open [class*="shop-ai" i] {
       width: 100% !important;
       zoom: 1 !important;
     }
-  html.at-mobile-menu-open:not(.at-mobile-menu-at-page-top) .at-header-section {
-      top: -56px !important;
-    }
-  html.at-mobile-menu-open:not(.at-mobile-menu-at-page-top) .at-utility {
-      visibility: hidden !important;
+  /* Fill the top of the drawer with the utility bar instead of dead space.
+     Lift ONLY the utility (position: fixed, z-index above .at-mega's 200) —
+     lifting the whole header would hide the drawer's back chevron behind
+     the logo. The header row stays under the drawer, so the drawer's own
+     close X and back chevron at top: 80px sit clear of the 56px utility. */
+  html.at-mobile-menu-open .at-utility {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 210 !important;
     }
   html.at-search-open:not(.at-search-at-page-top) .at-header-section {
       top: -56px !important;
@@ -1431,7 +1435,7 @@ html.at-mobile-menu-open [class*="shop-ai" i] {
   html.at-mobile-menu-open .at-mobile-nav__close.at-burger,
     html.at-mobile-menu-open .at-mobile-nav__back {
       position: fixed !important;
-      top: 24px !important;
+      top: 80px !important;
       z-index: 202 !important;
       width: 40px !important;
       height: 40px !important;
@@ -1440,10 +1444,6 @@ html.at-mobile-menu-open [class*="shop-ai" i] {
     }
   html.at-mobile-menu-open .at-mobile-nav__close.at-burger { right: max(var(--at-gutter), 2.78vw) !important; }
   html.at-mobile-menu-open .at-mobile-nav__back { left: max(var(--at-gutter), 2.78vw) !important; }
-  html.at-mobile-menu-open.at-mobile-menu-at-page-top .at-mobile-nav__close.at-burger,
-    html.at-mobile-menu-open.at-mobile-menu-at-page-top .at-mobile-nav__back {
-      top: 80px !important;
-    }
 }
 html.at-search-open #shopify-chat,
 html.at-search-open shopify-chat,
