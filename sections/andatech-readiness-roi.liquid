@@ -93,17 +93,27 @@
   .at-roi-gate[data-gate-state="locked"] .at-mcp-readiness__priorities {
     filter: blur(2.5px); user-select: none; pointer-events: none;
   }
+  /* Overlay: dim-tinted layer over the blurred rows, centres the card. */
   .at-roi-gate__form {
     position: absolute; inset: 0; z-index: 2; display: flex;
-    flex-direction: column; justify-content: center; gap: 14px;
-    padding: 28px; background: rgba(255,255,255,.92);
+    align-items: center; justify-content: center;
+    padding: 24px; background: rgba(15, 23, 32, .35);
   }
   .at-roi-gate[data-gate-state="unlocked"] .at-roi-gate__form { display: none; }
+  /* Card: bounded white surface so the gate reads as an unlock prompt,
+     not a wall of blur. */
+  .at-roi-gate__card {
+    width: 100%; max-width: 460px;
+    display: flex; flex-direction: column; gap: 14px;
+    padding: 28px;
+    background: #fff; border-radius: 16px;
+    box-shadow: 0 22px 44px -14px rgba(0, 0, 0, .35),
+                0 6px 14px -6px rgba(0, 0, 0, .18);
+  }
   .at-roi-gate__form h3 { margin: 0; font-size: 17px; font-weight: 700; }
   .at-roi-gate__form p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--at-body-color, #495563); }
   /* Inner form owns its own vertical rhythm so every element sits at the
-     same distance from its neighbour — the outer overlay's gap only
-     spaces title / subtitle / <form> as three chunks. */
+     same distance from its neighbour. */
   .at-roi-gate__form form { display: flex; flex-direction: column; gap: 12px; }
   .at-roi-gate__row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .at-roi-gate__form input {
@@ -121,6 +131,7 @@
   .at-roi-gate__note { font-size: 12px; color: var(--at-body-color, #495563); margin: 0; }
   @media (max-width: 480px) {
     .at-roi-gate__row { grid-template-columns: 1fr; }
+    .at-roi-gate__card { padding: 22px; border-radius: 14px; }
   }
 </style>
 
@@ -420,6 +431,7 @@
           {%- comment -%} Gated — full line-by-line breakdown behind a lead-capture form. {%- endcomment -%}
           <div class="at-roi-gate" data-roi-gate data-gate-state="locked">
             <div class="at-roi-gate__form" data-roi-gate-form>
+              <div class="at-roi-gate__card">
               <h3>{{ section.settings.gate_title | default: 'Get your full breakdown' }}</h3>
               <p>{{ section.settings.gate_sub | default: "See exactly where the savings come from, plus your ROI and payback period. We'll also send a copy to your inbox." }}</p>
               <form data-roi-lead-form novalidate>
@@ -442,6 +454,7 @@
                   {{ section.settings.gate_note | default: "We'll only use these details to follow up about your results." }}
                 </p>
               </form>
+              </div>
             </div>
 
             <div class="at-mcp-readiness__result-list">
