@@ -846,35 +846,35 @@
       -webkit-backdrop-filter: none;
     }
   /* In-drawer utility bar (tablet only). The element carries the base
-     .at-utility class so background and colour inherit the main bar —
-     the rules below scale the sizing values down by 0.9 natively (no
-     CSS zoom / transform), matching the .9 zoom that andatech-site.css
-     applies to .at-header-section / .at-section / .at-footer-section
-     at min-width: 768px. Using explicit sizes instead of `zoom: .9`
-     avoids Chrome interpolating zoom across the drawer's opacity fade,
-     which read as a subtle "zoom in" animation. */
+     .at-utility class so background, links, and CTA inherit the main
+     bar's styling verbatim — this rule only positions and scales it.
+
+     transform: scale(.9) mirrors the site-wide .9 zoom that
+     andatech-site.css applies to .at-header-section / .at-section /
+     .at-footer-section at min-width: 768px. Without it the drawer
+     utility (portalled to <body> alongside .at-mega) renders at 100%
+     while the main utility inside the section renders at 90% — an
+     ~11% visible size drift.
+
+     Using `transform` instead of `zoom` because Chrome now interpolates
+     `zoom` as an animatable property, which read as a subtle jump-in
+     as the drawer's opacity faded from 0 to 1. `transform` isn't in
+     any transition-property list here, so the scale applies discretely —
+     no interpolation, clean fade. The `explicit-sizes` alternative
+     (14px / 50px / etc) could only hit integer px values, so it landed
+     0.4px off the main bar's 14.4px visual size — visible drift.
+
+     `width: calc(100% / .9)` = ~111.11% keeps the scaled box filling
+     the drawer's full width; `transform-origin: top left` anchors the
+     scale to the corner so left/right edges align with the drawer. */
   .at-mega__utility {
       display: block;
       position: absolute;
-      top: 0; left: 0; right: 0;
+      top: 0; left: 0;
+      width: calc(100% / .9);
       z-index: 3;
-    }
-  .at-mega__utility .at-utility__inner {
-      gap: 36px;          /* 40 * 0.9 */
-      height: 50px;       /* 56 * 0.9 */
-    }
-  .at-mega__utility .at-utility__link {
-      gap: 9px;           /* 10 * 0.9 */
-      font-size: 14px;    /* 16 * 0.9 */
-    }
-  .at-mega__utility .at-utility__link svg {
-      width: 16px;        /* 18 * 0.9 */
-      height: 16px;
-    }
-  .at-mega__utility .at-utility__cta {
-      height: 32px;       /* 36 * 0.9 */
-      padding-inline: 22px; /* 24 * 0.9 */
-      font-size: 14px;    /* 16 * 0.9 */
+      transform-origin: top left;
+      transform: scale(.9);
     }
   .at-search-modal__panel {
       position: relative;
