@@ -845,43 +845,15 @@
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
     }
-  /* In-drawer utility bar (tablet only). Absolutely positioned inside the
-     drawer so it always shows above the scrollable menu — same green look
-     as the main utility bar. */
+  /* In-drawer utility bar (tablet only). The element carries the base
+     .at-utility class so background, links, and CTA inherit the main
+     bar's styling verbatim — this rule only positions it at the top of
+     the drawer. */
   .at-mega__utility {
       display: block;
       position: absolute;
       top: 0; left: 0; right: 0;
       z-index: 3;
-      background: var(--at-green);
-      color: var(--at-navy);
-    }
-  .at-mega__utility-inner {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      height: 56px;
-    }
-  .at-mega__utility .at-utility__link {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--at-navy);
-    }
-  .at-mega__utility .at-utility__link svg { flex-shrink: 0; width: 18px; height: 18px; }
-  .at-mega__utility .at-utility__cta {
-      margin-left: auto;
-      display: inline-flex;
-      align-items: center;
-      height: 36px;
-      padding-inline: 24px;
-      border-radius: var(--at-r-pill);
-      background: var(--at-navy);
-      color: var(--at-white);
-      font-size: 15px;
-      font-weight: 700;
     }
   .at-search-modal__panel {
       position: relative;

@@ -174,8 +174,8 @@
       desktop (main utility bar is visible, drawer isn't shown).
     {%- endcomment -%}
     {%- if section.settings.show_utility -%}
-      <div class="at-mega__utility" aria-hidden="true">
-        <div class="at-shell at-mega__utility-inner">
+      <div class="at-utility at-mega__utility" aria-hidden="true">
+        <div class="at-shell at-utility__inner">
           {%- if section.settings.util_1_label != blank -%}
             <a class="at-utility__link" href="{{ section.settings.util_1_url | default: '#' }}">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4.5M12 17.2v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
