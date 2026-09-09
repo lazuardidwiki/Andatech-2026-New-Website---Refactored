@@ -472,6 +472,7 @@
 .at-search-modal__empty { margin: 0; color: var(--at-muted); font-size: 16px; }
 .at-mobile-nav { display: none; }
 .at-mobile-nav__actions { display: none; }
+.at-mega__utility { display: none; }
 @media (max-width: 767px) {
   .at-search-modal__panel { padding: 20px; }
   .at-search-modal__input { height: 52px; font-size: 17px; }
@@ -843,6 +844,44 @@
       box-shadow: none;
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
+    }
+  /* In-drawer utility bar (tablet only). Absolutely positioned inside the
+     drawer so it always shows above the scrollable menu — same green look
+     as the main utility bar. */
+  .at-mega__utility {
+      display: block;
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 3;
+      background: var(--at-green);
+      color: var(--at-navy);
+    }
+  .at-mega__utility-inner {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      height: 56px;
+    }
+  .at-mega__utility .at-utility__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--at-navy);
+    }
+  .at-mega__utility .at-utility__link svg { flex-shrink: 0; width: 18px; height: 18px; }
+  .at-mega__utility .at-utility__cta {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      height: 36px;
+      padding-inline: 24px;
+      border-radius: var(--at-r-pill);
+      background: var(--at-navy);
+      color: var(--at-white);
+      font-size: 15px;
+      font-weight: 700;
     }
   .at-search-modal__panel {
       position: relative;
@@ -1366,18 +1405,6 @@ html.at-mobile-menu-open [class*="shop-ai" i] {
       top: 0 !important;
       width: 100% !important;
       zoom: 1 !important;
-    }
-  /* Fill the top of the drawer with the utility bar instead of dead space.
-     Lift ONLY the utility (position: fixed, z-index above .at-mega's 200) —
-     lifting the whole header would hide the drawer's back chevron behind
-     the logo. The header row stays under the drawer, so the drawer's own
-     close X and back chevron at top: 80px sit clear of the 56px utility. */
-  html.at-mobile-menu-open .at-utility {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      z-index: 210 !important;
     }
   html.at-search-open:not(.at-search-at-page-top) .at-header-section {
       top: -56px !important;
