@@ -35,15 +35,18 @@
 }
 @media (min-width: 1280px) {
   .at-hero {
-    /* Utility bar + header + hero == viewport (matches Hero V5 sizing).
+    /* Utility bar + header + hero == viewport, on any desktop size (matches
+       Hero V5 sizing). Fixed height + overflow:hidden from the base rule pins
+       the section exactly, so tall content is clipped rather than stretching
+       the section past the viewport.
        111.112 = 100/0.9 compensates for the .at-section zoom:.9 on desktop.
        144px = utility bar (56px) + .at-header__inner (88px), both unzoomed. */
-    min-height: calc(111.112vh - 144px);
-    min-height: calc(111.112dvh - 144px);
+    height: calc(111.112vh - 144px);
+    height: calc(111.112dvh - 144px);
+    min-height: 0;
   }
   /* Tighter vertical rhythm on desktop so all content (eyebrow → certs) fits
-     inside the reduced min-height cleanly. Total ~84px saved vs the base
-     spacing, matching Hero V5's compact rhythm. */
+     inside the fixed height cleanly, matching Hero V5's compact rhythm. */
   .at-hero__inner  { padding-top: 40px; padding-bottom: 24px; }
   .at-hero__title  { margin-top: 40px; }
   .at-hero__body   { margin-top: 32px; }
