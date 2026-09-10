@@ -27,6 +27,15 @@
     min-height: calc(111.112vh - 144px);
     min-height: calc(111.112dvh - 144px);
   }
+  /* Tighter vertical rhythm on desktop so all content (eyebrow → certs) fits
+     inside the reduced min-height cleanly. Total ~84px saved vs the base
+     spacing, matching Hero V5's compact rhythm. */
+  .at-hero__inner  { padding-top: 40px; padding-bottom: 24px; }
+  .at-hero__title  { margin-top: 40px; }
+  .at-hero__body   { margin-top: 32px; }
+  .at-hero__cta    { margin-top: 32px; }
+  .at-hero__trust  { margin-top: 40px; }
+  .at-hero__certs  { margin-top: 24px; }
 }
 .at-hero__visual {
   grid-area: 1 / 1;
